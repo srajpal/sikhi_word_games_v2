@@ -67,4 +67,34 @@ class GuessGame {
     }
     return GuessSubmission.accepted(turn);
   }
+
+  Map<String, Object> toJson() => {
+    'schemaVersion': 1,
+    'solution': solution,
+    'maximumAttempts': maximumAttempts,
+    'guesses': [for (final turn in _turns) turn.guess],
+  };
+
+  static GuessGame restore({
+    required Map<String, Object?> json,
+    required Set<String> acceptedGuesses,
+  }) {
+    if (json['schemaVersion'] != 1 ||
+        json['solution'] is! String ||
+        json['maximumAttempts'] is! int ||
+        json['guesses'] is! List) {
+      throw const FormatException('Unsupported or malformed game snapshot.');
+    }
+    final game = GuessGame(
+      solution: json['solution']! as String,
+      acceptedGuesses: acceptedGuesses,
+      maximumAttempts: json['maximumAttempts']! as int,
+    );
+    for (final guess in json['guesses']! as List<Object?>) {
+      if (guess is! String || !game.submit(guess).isAccepted) {
+        throw const FormatException('Snapshot contains an invalid guess.');
+      }
+    }
+    return game;
+  }
 }

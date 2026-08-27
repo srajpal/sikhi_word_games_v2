@@ -1,26 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../core/themes/app_theme.dart';
+import '../features/game_library/presentation/game_library_page.dart';
 import '../features/guess_the_word/presentation/guess_the_word_page.dart';
+import '../features/settings/data/app_settings_repository.dart';
 
 class SikhiWordGamesApp extends StatefulWidget {
-  const SikhiWordGamesApp({super.key});
+  const SikhiWordGamesApp({required this.settingsRepository, super.key});
+
+  final AppSettingsRepository settingsRepository;
 
   @override
   State<SikhiWordGamesApp> createState() => _SikhiWordGamesAppState();
 }
 
 class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
-  AppThemeChoice _choice = AppThemeChoice.modern;
+  late AppThemeChoice _choice;
+  late final GoRouter _router;
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
+  void initState() {
+    super.initState();
+    _choice = widget.settingsRepository.load().theme;
+    _router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const GameLibraryPage(),
+          routes: [
+            GoRoute(
+              path: 'guess-the-word',
+              builder: (context, state) => GuessTheWordPage(
+                themeChoice: _choice,
+                onThemeChanged: _changeTheme,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Future<void> _changeTheme(AppThemeChoice choice) async {
+    setState(() => _choice = choice);
+    _router.refresh();
+    await widget.settingsRepository.save(
+      widget.settingsRepository.load().copyWith(theme: choice),
+    );
+  }
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => MaterialApp.router(
     debugShowCheckedModeBanner: false,
     title: 'Sikhi Word Games V2',
     theme: AppThemes.forChoice(_choice),
-    home: GuessTheWordPage(
-      themeChoice: _choice,
-      onThemeChanged: (choice) => setState(() => _choice = choice),
-    ),
+    routerConfig: _router,
   );
 }

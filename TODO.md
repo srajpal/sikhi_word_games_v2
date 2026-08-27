@@ -23,11 +23,11 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 ## Application foundation
 
 - [x] Establish initial feature-based folders and dependency boundaries.
-- [ ] Add routing and the game-library home screen.
-- [ ] Add offline persistence interfaces and schema versioning.
+- [x] Add routing and the initial game-library home screen.
+- [x] Add offline persistence interfaces and schema versioning.
 - [x] Add initial semantic theme tokens.
 - [x] Add initial user-selectable Modern and Sketch themes.
-- [ ] Make layouts responsive for phones, tablets, and browsers.
+- [ ] Complete responsive game layouts; the game library now adapts to narrow phones and wide screens.
 - [ ] Add accessibility conventions for semantics, focus, contrast, and text scaling.
 
 ## Vocabulary and definitions
@@ -55,7 +55,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Support Gurmukhi grapheme filtering and game evaluation in the domain layer.
 - [x] Add seeded, non-repeating solution selection with exhaustion reset.
 - [x] Model game progress, accepted turns, rejections, and win/loss states explicitly.
-- [ ] Add serialization for interrupted-game restoration.
+- [x] Add versioned serialization and offline storage for interrupted-game restoration.
 
 ## Guess the Word interface
 
@@ -77,7 +77,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [ ] Complete Unicode grapheme entry/deletion tests; initial counting tests pass.
 - [x] Test the initial language and grapheme-length filters.
 - [x] Test accepted guesses versus curated solutions.
-- [ ] Complete game-boundary, statistics, and restoration coverage; seeded selection and core boundaries pass.
+- [ ] Complete statistics coverage; seeded selection, core boundaries, and restoration now pass.
 - [x] Add initial content-import and validation tests.
 - [ ] Add responsive widget tests.
 - [ ] Add Modern and Sketch golden tests.

@@ -21,6 +21,8 @@ Each game owns its domain rules, application/controller state, presentation widg
 
 Small implementations for local storage, sharing, haptics, and other platform-specific capabilities. Domain code depends on interfaces rather than plugins.
 
+The first persistence adapter wraps `SharedPreferences` behind a small key-value interface. App settings and active-game snapshots carry explicit schema versions and fall back safely when stored data is malformed or from an unsupported schema. Tests use an in-memory implementation of the same interface.
+
 ## Initial feature boundaries
 
 ```text
@@ -59,4 +61,3 @@ lib/
 - Bundle only content that may safely be distributed publicly.
 - Treat compiled mobile code and web assets as inspectable by a determined user.
 - Introduce networking only through a reviewed HTTPS adapter if future scope requires it.
-

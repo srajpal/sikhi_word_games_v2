@@ -38,4 +38,28 @@ void main() {
     expect(game.submit('ਬਾਗ').isAccepted, isTrue);
     expect(game.status, GuessGameStatus.won);
   });
+
+  test('round-trips an interrupted game through a versioned snapshot', () {
+    final original = GuessGame(
+      solution: 'APPLE',
+      acceptedGuesses: {'APPLE', 'AMPLE'},
+    )..submit('AMPLE');
+    final restored = GuessGame.restore(
+      json: original.toJson(),
+      acceptedGuesses: {'APPLE', 'AMPLE'},
+    );
+    expect(restored.solution, 'APPLE');
+    expect(restored.turns.single.guess, 'AMPLE');
+    expect(restored.status, GuessGameStatus.playing);
+  });
+
+  test('rejects unsupported snapshot schemas', () {
+    expect(
+      () => GuessGame.restore(
+        json: const {'schemaVersion': 2},
+        acceptedGuesses: const {},
+      ),
+      throwsFormatException,
+    );
+  });
 }
