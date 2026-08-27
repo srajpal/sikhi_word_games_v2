@@ -38,7 +38,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Detect malformed rows, duplicate IDs, mismatched keys, missing definitions, and script anomalies.
 - [x] Record English, romanized Panjabi, and available Gurmukhi forms separately.
 - [x] Maintain a broad accepted-guess pool.
-- [ ] Curate the smaller solution pool; imported records default to ineligible.
+- [ ] Expand and editorially approve the solution pool; an explicit machine-checked starter set now drives the app.
 - [x] Enforce accepted guesses and curated solutions as separate domain collections.
 - [x] Track V1 source version and editorial review status.
 - [x] Produce a reproducible human-readable content review report.
@@ -60,10 +60,12 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 ## Guess the Word interface
 
 - [x] Build a minimal playable screen for fast iteration using temporary content.
+- [x] Replace temporary `APPLE` content with the offline vocabulary repository and explicit starter solutions.
+- [x] Connect English, romanized Panjabi, Mixed Latin, and initial Gurmukhi mode/length selection.
 - [ ] Add the shared Latin keyboard for English, romanized Panjabi, and Mixed Latin.
 - [ ] Add a purpose-built Gurmukhi keyboard.
 - [ ] Add tile feedback that does not rely on color alone.
-- [ ] Add definitions after guesses and at game completion.
+- [ ] Add definitions after accepted guesses; solution definitions now appear at game completion.
 - [ ] Add help and language-mode explanations.
 - [ ] Add statistics stored completely offline.
 - [ ] Add spoiler-safe sharing.

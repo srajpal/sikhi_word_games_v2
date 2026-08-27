@@ -63,6 +63,7 @@ flutter:
 
   assets:
     - assets/content/generated/
+    - assets/content/curation/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

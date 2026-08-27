@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:sikhi_word_games_v2/app/app.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
+import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
+import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/features/settings/data/app_settings_repository.dart';
 
 void main() {
@@ -9,6 +11,7 @@ void main() {
     await tester.pumpWidget(
       SikhiWordGamesApp(
         settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
       ),
     );
     expect(find.text('Choose a game'), findsOneWidget);
@@ -26,6 +29,7 @@ void main() {
     await tester.pumpWidget(
       SikhiWordGamesApp(
         settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
       ),
     );
     await tester.pumpAndSettle();
@@ -33,3 +37,19 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 }
+
+const _vocabulary = MemoryVocabularyRepository([
+  VocabularyEntry(
+    id: 'english_apple',
+    language: VocabularyLanguage.english,
+    latin: 'APPLE',
+    gurmukhi: null,
+    englishDefinition: 'A round fruit',
+    latinLength: 5,
+    gurmukhiLength: null,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'test',
+  ),
+]);

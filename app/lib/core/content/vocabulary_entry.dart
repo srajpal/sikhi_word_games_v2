@@ -36,6 +36,44 @@ class VocabularyEntry {
   final ReviewStatus reviewStatus;
   final String source;
 
+  VocabularyEntry copyWith({
+    bool? acceptedGuess,
+    bool? solutionEligible,
+    ReviewStatus? reviewStatus,
+  }) => VocabularyEntry(
+    id: id,
+    language: language,
+    latin: latin,
+    gurmukhi: gurmukhi,
+    englishDefinition: englishDefinition,
+    latinLength: latinLength,
+    gurmukhiLength: gurmukhiLength,
+    acceptedGuess: acceptedGuess ?? this.acceptedGuess,
+    solutionEligible: solutionEligible ?? this.solutionEligible,
+    reviewStatus: reviewStatus ?? this.reviewStatus,
+    source: source,
+  );
+
+  factory VocabularyEntry.fromJson(Map<String, Object?> json) {
+    final definitions = json['definitions']! as Map<String, Object?>;
+    final englishDefinitions = definitions['en']! as List<Object?>;
+    final lengths = json['lengths']! as Map<String, Object?>;
+    final sources = json['sources']! as List<Object?>;
+    return VocabularyEntry(
+      id: json['id']! as String,
+      language: VocabularyLanguage.values.byName(json['language']! as String),
+      latin: json['latin']! as String,
+      gurmukhi: json['gurmukhi'] as String?,
+      englishDefinition: englishDefinitions.first as String,
+      latinLength: lengths['latin']! as int,
+      gurmukhiLength: lengths['gurmukhi'] as int?,
+      acceptedGuess: json['acceptedGuess']! as bool,
+      solutionEligible: json['solutionEligible']! as bool,
+      reviewStatus: ReviewStatus.values.byName(json['reviewStatus']! as String),
+      source: sources.first as String,
+    );
+  }
+
   Map<String, Object?> toJson() => {
     'id': id,
     'language': language.name,

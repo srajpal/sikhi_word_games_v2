@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/themes/app_theme.dart';
+import '../core/content/vocabulary_repository.dart';
 import '../features/game_library/presentation/game_library_page.dart';
 import '../features/guess_the_word/presentation/guess_the_word_page.dart';
 import '../features/settings/data/app_settings_repository.dart';
 
 class SikhiWordGamesApp extends StatefulWidget {
-  const SikhiWordGamesApp({required this.settingsRepository, super.key});
+  SikhiWordGamesApp({
+    required this.settingsRepository,
+    VocabularyRepository? vocabularyRepository,
+    super.key,
+  }) : vocabularyRepository =
+           vocabularyRepository ?? AssetVocabularyRepository();
 
   final AppSettingsRepository settingsRepository;
+  final VocabularyRepository vocabularyRepository;
 
   @override
   State<SikhiWordGamesApp> createState() => _SikhiWordGamesAppState();
@@ -34,6 +41,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
               builder: (context, state) => GuessTheWordPage(
                 themeChoice: _choice,
                 onThemeChanged: _changeTheme,
+                vocabularyRepository: widget.vocabularyRepository,
               ),
             ),
           ],

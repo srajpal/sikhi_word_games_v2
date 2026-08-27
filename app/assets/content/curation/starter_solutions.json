@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "note": "Starter machine-checked solution set. Requires later editorial review.",
+  "solutionIds": [
+    "english_book",
+    "english_hero",
+    "english_love",
+    "english_apple",
+    "english_house",
+    "english_light",
+    "english_music",
+    "english_water",
+    "english_family",
+    "english_flower",
+    "english_friend",
+    "panjabi_baag",
+    "panjabi_bani",
+    "panjabi_guru",
+    "panjabi_naam",
+    "panjabi_seva",
+    "panjabi_giani",
+    "panjabi_karma",
+    "panjabi_sikhi",
+    "panjabi_ardaas",
+    "panjabi_khalsa",
+    "panjabi_kirtan",
+    "panjabi_langar",
+    "panjabi_pangat",
+    "panjabi_sangat",
+    "panjabi_shabad",
+    "panjabi_simran"
+  ]
+}
