@@ -1,0 +1,67 @@
+import 'dart:math';
+
+import 'package:characters/characters.dart';
+
+import '../../../core/content/vocabulary_entry.dart';
+import 'language_mode.dart';
+
+class WordPool {
+  WordPool(Iterable<VocabularyEntry> entries)
+    : _entries = List.unmodifiable(entries);
+
+  final List<VocabularyEntry> _entries;
+
+  List<VocabularyEntry> solutions({
+    required LanguageMode mode,
+    required int wordLength,
+  }) => _entries
+      .where((entry) => entry.solutionEligible)
+      .where((entry) => _supportsLanguage(entry, mode))
+      .where((entry) => spelling(entry, mode)?.characters.length == wordLength)
+      .toList(growable: false);
+
+  Set<String> acceptedGuesses({
+    required LanguageMode mode,
+    required int wordLength,
+  }) => {
+    for (final entry in _entries)
+      if (entry.acceptedGuess &&
+          _supportsLanguage(entry, mode) &&
+          spelling(entry, mode)?.characters.length == wordLength)
+        spelling(entry, mode)!.toUpperCase(),
+  };
+
+  static String? spelling(VocabularyEntry entry, LanguageMode mode) =>
+      mode == LanguageMode.gurmukhi ? entry.gurmukhi : entry.latin;
+
+  static bool _supportsLanguage(VocabularyEntry entry, LanguageMode mode) =>
+      switch (mode) {
+        LanguageMode.english => entry.language == VocabularyLanguage.english,
+        LanguageMode.romanizedPanjabi ||
+        LanguageMode.gurmukhi => entry.language == VocabularyLanguage.panjabi,
+        LanguageMode.mixedLatin => true,
+      };
+}
+
+class NonRepeatingWordSelector {
+  NonRepeatingWordSelector({Random? random}) : _random = random ?? Random();
+
+  final Random _random;
+  final Set<String> _usedIds = {};
+
+  VocabularyEntry select(List<VocabularyEntry> candidates) {
+    if (candidates.isEmpty) {
+      throw StateError('No eligible solutions are available.');
+    }
+    var available = candidates
+        .where((entry) => !_usedIds.contains(entry.id))
+        .toList();
+    if (available.isEmpty) {
+      _usedIds.clear();
+      available = List.of(candidates);
+    }
+    final selected = available[_random.nextInt(available.length)];
+    _usedIds.add(selected.id);
+    return selected;
+  }
+}

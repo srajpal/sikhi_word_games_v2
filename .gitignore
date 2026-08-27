@@ -1,0 +1,35 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+.idea/
+*.iml
+
+# Secrets and machine-local configuration
+**/.env
+**/.env.*
+!**/.env.example
+**/local.properties
+**/*.jks
+**/*.keystore
+**/*.p12
+**/*.pem
+**/*password*
+**/*credentials*
+
+# Flutter/Dart generated files
+**/.dart_tool/
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+**/build/
+**/coverage/
+**/ios/Flutter/ephemeral/
+
+# V1 remains available locally as a migration/reference source but is not
+# published with the V2 repository.
+sikhi_word_games-main/
+
+# Redundant V1 source archive.
+sikhi_word_games-main.zip
