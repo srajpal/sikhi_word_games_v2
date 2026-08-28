@@ -42,19 +42,22 @@ class SikhiWordGamesApp extends StatefulWidget {
 }
 
 class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
-  late AppThemeChoice _choice;
+  late AppSettings _settings;
   late final GoRouter _router;
 
   @override
   void initState() {
     super.initState();
-    _choice = widget.settingsRepository.load().theme;
+    _settings = widget.settingsRepository.load();
     _router = GoRouter(
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) =>
-              GameLibraryPage(onThemeChanged: _changeTheme),
+          builder: (context, state) => GameLibraryPage(
+            onThemeChanged: _changeTheme,
+            settings: _settings,
+            onFeedbackSettingsChanged: _changeFeedbackSettings,
+          ),
           routes: [
             GoRoute(
               path: 'guess-the-word',
@@ -63,6 +66,8 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 statisticsRepository: widget.statisticsRepository,
                 gameRepository: widget.gameRepository,
                 solutionHistoryRepository: widget.solutionHistoryRepository,
+                hapticsEnabled: _settings.hapticsEnabled,
+                reducedMotion: _settings.reducedMotion,
               ),
             ),
             GoRoute(
@@ -78,11 +83,15 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
   }
 
   Future<void> _changeTheme(AppThemeChoice choice) async {
-    setState(() => _choice = choice);
+    setState(() => _settings = _settings.copyWith(theme: choice));
     _router.refresh();
-    await widget.settingsRepository.save(
-      widget.settingsRepository.load().copyWith(theme: choice),
-    );
+    await widget.settingsRepository.save(_settings);
+  }
+
+  Future<void> _changeFeedbackSettings(AppSettings settings) async {
+    setState(() => _settings = settings);
+    _router.refresh();
+    await widget.settingsRepository.save(_settings);
   }
 
   @override
@@ -95,7 +104,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
   Widget build(BuildContext context) => MaterialApp.router(
     debugShowCheckedModeBanner: false,
     title: 'Sikhi Word Games V2',
-    theme: AppThemes.forChoice(_choice),
+    theme: AppThemes.forChoice(_settings.theme),
     routerConfig: _router,
   );
 }

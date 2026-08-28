@@ -34,6 +34,8 @@ class GuessTheWordPage extends StatefulWidget {
     required this.statisticsRepository,
     required this.gameRepository,
     required this.solutionHistoryRepository,
+    required this.hapticsEnabled,
+    required this.reducedMotion,
     super.key,
   });
 
@@ -41,6 +43,8 @@ class GuessTheWordPage extends StatefulWidget {
   final GuessStatisticsRepository statisticsRepository;
   final GuessGameRepository gameRepository;
   final SolutionHistoryRepository solutionHistoryRepository;
+  final bool hapticsEnabled;
+  final bool reducedMotion;
 
   @override
   State<GuessTheWordPage> createState() => _GuessTheWordPageState();
@@ -194,6 +198,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     final guess = _controller.text;
     final result = game.submit(guess);
     if (!result.isAccepted) {
+      if (widget.hapticsEnabled) HapticFeedback.vibrate();
       final notice = switch (result.rejection!) {
         GuessRejection.wrongLength =>
           'Enter exactly ${game.wordLength} visible letters.',
@@ -220,6 +225,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       _controller.clear();
       _message = null;
     });
+    if (widget.hapticsEnabled) HapticFeedback.lightImpact();
     if (game.status == GuessGameStatus.won) {
       _showNotice('You found it!');
     } else if (game.status == GuessGameStatus.lost) {
@@ -237,6 +243,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       selection: TextSelection.collapsed(offset: candidate.length),
     );
     setState(() => _message = null);
+    if (widget.hapticsEnabled) HapticFeedback.selectionClick();
     _focusInput();
   }
 
@@ -248,6 +255,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       selection: TextSelection.collapsed(offset: shortened.length),
     );
     setState(() => _message = null);
+    if (widget.hapticsEnabled) HapticFeedback.selectionClick();
     _focusInput();
   }
 
@@ -413,7 +421,11 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
             const Text('Guess the Word'),
             Text(
               '${_mode.label} · $_wordLength letters',
-              style: Theme.of(context).textTheme.labelMedium,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color:
+                    Theme.of(context).appBarTheme.foregroundColor ??
+                    Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ],
         ),
@@ -501,6 +513,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                   turns: game.turns,
                                   wordLength: game.wordLength,
                                   maximumAttempts: game.maximumAttempts,
+                                  reducedMotion: widget.reducedMotion,
                                 ),
                               ),
                               SizedBox(height: compact ? 6 : 12),
@@ -760,11 +773,13 @@ class _Board extends StatelessWidget {
     required this.turns,
     required this.wordLength,
     required this.maximumAttempts,
+    required this.reducedMotion,
   });
 
   final List<GuessTurn> turns;
   final int wordLength;
   final int maximumAttempts;
+  final bool reducedMotion;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -799,6 +814,7 @@ class _Board extends StatelessWidget {
                       size: size,
                       row: row,
                       column: column,
+                      reducedMotion: reducedMotion,
                       letter: row < turns.length
                           ? turns[row].evaluation[column]
                           : null,
@@ -819,6 +835,7 @@ class _Tile extends StatelessWidget {
     required this.size,
     required this.row,
     required this.column,
+    required this.reducedMotion,
     this.letter,
     super.key,
   });
@@ -826,6 +843,7 @@ class _Tile extends StatelessWidget {
   final double size;
   final int row;
   final int column;
+  final bool reducedMotion;
   final EvaluatedLetter? letter;
 
   @override
@@ -855,46 +873,53 @@ class _Tile extends StatelessWidget {
           : 'Attempt ${row + 1}, letter ${column + 1}, '
                 '${letter!.grapheme}, $status',
       excludeSemantics: true,
-      child: Container(
+      child: SizedBox(
         width: size,
         height: size,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: tokens.tileRadius,
-          boxShadow: tokens.sikhiStyle
-              ? const [
-                  BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
-                ]
-              : null,
-          border: Border.all(
-            color: letter == null ? tokens.tileBorder : color,
-            width: tokens.tileBorderWidth,
+        child: AnimatedContainer(
+          duration: reducedMotion
+              ? Duration.zero
+              : const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: tokens.tileRadius,
+            boxShadow: tokens.sikhiStyle
+                ? const [
+                    BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
+                  ]
+                : null,
+            border: Border.all(
+              color: letter == null ? tokens.tileBorder : color,
+              width: tokens.tileBorderWidth,
+            ),
           ),
-        ),
-        child: statusIcon == null
-            ? const SizedBox.shrink()
-            : Column(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        letter!.grapheme,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
+          child: statusIcon == null
+              ? const SizedBox.shrink()
+              : Column(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          letter!.grapheme,
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                              ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 17,
-                    child: Center(
-                      child: Icon(statusIcon, size: 13, color: Colors.white),
+                    SizedBox(
+                      height: 17,
+                      child: Center(
+                        child: Icon(statusIcon, size: 13, color: Colors.white),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+        ),
       ),
     );
   }

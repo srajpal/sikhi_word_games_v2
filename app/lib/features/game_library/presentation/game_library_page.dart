@@ -2,11 +2,66 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/themes/app_theme.dart';
+import '../../settings/data/app_settings_repository.dart';
 
 class GameLibraryPage extends StatelessWidget {
-  const GameLibraryPage({required this.onThemeChanged, super.key});
+  const GameLibraryPage({
+    required this.onThemeChanged,
+    required this.settings,
+    required this.onFeedbackSettingsChanged,
+    super.key,
+  });
 
   final ValueChanged<AppThemeChoice> onThemeChanged;
+  final AppSettings settings;
+  final ValueChanged<AppSettings> onFeedbackSettingsChanged;
+
+  Future<void> _showFeedbackSettings(BuildContext context) async {
+    var haptics = settings.hapticsEnabled;
+    var reducedMotion = settings.reducedMotion;
+    final updated = await showDialog<AppSettings>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Feedback settings'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SwitchListTile(
+                title: const Text('Haptic feedback'),
+                subtitle: const Text('Vibrate for keys, guesses, and errors'),
+                value: haptics,
+                onChanged: (value) => setDialogState(() => haptics = value),
+              ),
+              SwitchListTile(
+                title: const Text('Reduce motion'),
+                subtitle: const Text('Minimize tile and interface animation'),
+                value: reducedMotion,
+                onChanged: (value) =>
+                    setDialogState(() => reducedMotion = value),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(
+                settings.copyWith(
+                  hapticsEnabled: haptics,
+                  reducedMotion: reducedMotion,
+                ),
+              ),
+              child: const Text('Save'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (updated != null) onFeedbackSettingsChanged(updated);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +75,11 @@ class GameLibraryPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Sikhi Word Games'),
         actions: [
+          IconButton(
+            tooltip: 'Feedback settings',
+            onPressed: () => _showFeedbackSettings(context),
+            icon: const Icon(Icons.accessibility_new),
+          ),
           PopupMenuButton<AppThemeChoice>(
             key: const ValueKey('app-theme-menu'),
             tooltip: 'Choose app theme',
