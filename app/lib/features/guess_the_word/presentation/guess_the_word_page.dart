@@ -32,6 +32,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   WordPool? _pool;
   GuessGame? _game;
   VocabularyEntry? _solutionEntry;
+  VocabularyEntry? _lastGuessEntry;
   LanguageMode _mode = LanguageMode.english;
   int _wordLength = 5;
   String? _message;
@@ -104,6 +105,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     final accepted = pool.acceptedGuesses(mode: _mode, wordLength: _wordLength);
     setState(() {
       _solutionEntry = entry;
+      _lastGuessEntry = null;
       _game = GuessGame(solution: spelling, acceptedGuesses: accepted);
       _controller.clear();
       _message = null;
@@ -114,7 +116,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   void _submit() {
     final game = _game;
     if (game == null) return;
-    final result = game.submit(_controller.text);
+    final guess = _controller.text;
+    final result = game.submit(guess);
     setState(() {
       if (!result.isAccepted) {
         _message = switch (result.rejection!) {
@@ -125,6 +128,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         };
         return;
       }
+      _lastGuessEntry = _pool?.entryForGuess(mode: _mode, guess: guess);
       _controller.clear();
       _message = switch (game.status) {
         GuessGameStatus.won => 'You found it!',
@@ -316,6 +320,27 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
+                          if (_lastGuessEntry != null && !isComplete)
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Last guess: ${WordPool.spelling(_lastGuessEntry!, _mode)}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _lastGuessEntry!.englishDefinition,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -391,8 +416,15 @@ class _Tile extends StatelessWidget {
       LetterResult.absent => 'not in the word',
       null => 'blank',
     };
+    final statusIcon = switch (letter?.result) {
+      LetterResult.correct => Icons.check,
+      LetterResult.present => Icons.swap_horiz,
+      LetterResult.absent => Icons.close,
+      null => null,
+    };
     return Semantics(
       label: letter == null ? 'Blank tile' : '${letter!.grapheme}, $status',
+      excludeSemantics: true,
       child: Container(
         width: size,
         height: size,
@@ -405,12 +437,23 @@ class _Tile extends StatelessWidget {
             width: tokens.tileBorderWidth,
           ),
         ),
-        child: Text(
-          letter?.grapheme ?? '',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: letter == null ? null : Colors.white,
-            fontWeight: FontWeight.w800,
-          ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Text(
+              letter?.grapheme ?? '',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: letter == null ? null : Colors.white,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            if (statusIcon != null)
+              Positioned(
+                right: 3,
+                bottom: 3,
+                child: Icon(statusIcon, size: 13, color: Colors.white),
+              ),
+          ],
         ),
       ),
     );

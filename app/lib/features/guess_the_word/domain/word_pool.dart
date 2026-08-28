@@ -31,6 +31,21 @@ class WordPool {
         spelling(entry, mode)!.toUpperCase(),
   };
 
+  VocabularyEntry? entryForGuess({
+    required LanguageMode mode,
+    required String guess,
+  }) {
+    final normalizedGuess = guess.trim().toUpperCase();
+    for (final entry in _entries) {
+      if (entry.acceptedGuess &&
+          _supportsLanguage(entry, mode) &&
+          spelling(entry, mode)?.toUpperCase() == normalizedGuess) {
+        return entry;
+      }
+    }
+    return null;
+  }
+
   static String? spelling(VocabularyEntry entry, LanguageMode mode) =>
       mode == LanguageMode.gurmukhi ? entry.gurmukhi : entry.latin;
 

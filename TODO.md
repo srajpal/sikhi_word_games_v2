@@ -64,8 +64,8 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Connect English, romanized Panjabi, Mixed Latin, and initial Gurmukhi mode/length selection.
 - [x] Add the shared Latin keyboard for English, romanized Panjabi, and Mixed Latin.
 - [x] Add the initial purpose-built Gurmukhi keyboard with vowel signs and extended letters.
-- [ ] Add tile feedback that does not rely on color alone.
-- [ ] Add definitions after accepted guesses; solution definitions now appear at game completion.
+- [x] Add tile feedback symbols and semantic labels that do not rely on color alone.
+- [x] Show definitions after accepted guesses and reveal the solution definition at completion.
 - [ ] Add help and language-mode explanations.
 - [ ] Add statistics stored completely offline.
 - [ ] Add spoiler-safe sharing.

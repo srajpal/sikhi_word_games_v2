@@ -48,6 +48,11 @@ void main() {
     );
     await tester.tap(find.text('Play prototype'));
     await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'GRAPE');
+    await _tapVisible(tester, find.widgetWithText(FilledButton, 'Enter'));
+    expect(find.text('Last guess: GRAPE'), findsOneWidget);
+    expect(find.text('A small fruit that grows in bunches'), findsOneWidget);
+
     for (final letter in ['A', 'P', 'P', 'L', 'E']) {
       await _tapVisible(tester, find.byKey(ValueKey('key-$letter')));
     }
@@ -55,6 +60,9 @@ void main() {
     await tester.pump();
     expect(find.text('You found it!'), findsOneWidget);
     expect(find.text('A round fruit'), findsOneWidget);
+    expect(find.byIcon(Icons.check), findsNWidgets(6));
+    expect(find.byIcon(Icons.swap_horiz), findsNWidgets(2));
+    expect(find.byIcon(Icons.close), findsNWidgets(2));
   });
 
   testWidgets('Gurmukhi keyboard composes and deletes visible graphemes', (
@@ -109,6 +117,19 @@ const _vocabulary = MemoryVocabularyRepository([
     gurmukhiLength: null,
     acceptedGuess: true,
     solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'test',
+  ),
+  VocabularyEntry(
+    id: 'english_grape',
+    language: VocabularyLanguage.english,
+    latin: 'GRAPE',
+    gurmukhi: null,
+    englishDefinition: 'A small fruit that grows in bunches',
+    latinLength: 5,
+    gurmukhiLength: null,
+    acceptedGuess: true,
+    solutionEligible: false,
     reviewStatus: ReviewStatus.machineChecked,
     source: 'test',
   ),

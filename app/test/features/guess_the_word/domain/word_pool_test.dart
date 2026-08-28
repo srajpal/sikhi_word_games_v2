@@ -53,6 +53,22 @@ void main() {
     );
   });
 
+  test('finds definition entries using the active language mode', () {
+    final pool = WordPool(entries);
+    expect(
+      pool.entryForGuess(mode: LanguageMode.english, guess: ' hero ')?.id,
+      'english_hero',
+    );
+    expect(
+      pool.entryForGuess(mode: LanguageMode.gurmukhi, guess: 'ਬਾਗ')?.id,
+      'panjabi_baag',
+    );
+    expect(
+      pool.entryForGuess(mode: LanguageMode.english, guess: 'BAAG'),
+      isNull,
+    );
+  });
+
   test('seeded selector does not repeat until the pool is exhausted', () {
     final selector = NonRepeatingWordSelector(random: Random(7));
     final first = selector.select(entries);
