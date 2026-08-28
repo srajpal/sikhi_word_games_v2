@@ -96,7 +96,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add initial content-import and validation tests.
 - [x] Add responsive widget tests for narrow library and fixed-viewport gameplay layouts.
 - [ ] Add Modern, Sikhi, and Dark golden tests.
-- [ ] Add representative integration flows.
+- [x] Add representative integration flows for preferences and interrupted-game restoration.
 - [x] Establish a clean `flutter analyze` and test-suite baseline; keep both clean.
 
 ## Platform and release work
