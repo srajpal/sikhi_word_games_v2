@@ -200,35 +200,41 @@ class _DictionaryPageState extends State<DictionaryPage> {
                               ],
                             ),
                             const SizedBox(height: 6),
-                            GestureDetector(
-                              key: const ValueKey('dictionary-search'),
+                            Semantics(
+                              textField: true,
+                              label: 'Dictionary search word',
+                              value: _controller.text,
                               onTap: _focusNode.requestFocus,
-                              child: InputDecorator(
-                                isFocused: _focusNode.hasFocus,
-                                decoration: InputDecoration(
-                                  labelText: 'Search word',
-                                  prefixIcon: const Icon(Icons.search),
-                                  suffixIcon: _controller.text.isEmpty
-                                      ? null
-                                      : IconButton(
-                                          tooltip: 'Clear search',
-                                          onPressed: _clear,
-                                          icon: const Icon(Icons.clear),
-                                        ),
-                                  border: const OutlineInputBorder(),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 8,
+                              child: GestureDetector(
+                                key: const ValueKey('dictionary-search'),
+                                onTap: _focusNode.requestFocus,
+                                child: InputDecorator(
+                                  isFocused: _focusNode.hasFocus,
+                                  decoration: InputDecoration(
+                                    labelText: 'Search word',
+                                    prefixIcon: const Icon(Icons.search),
+                                    suffixIcon: _controller.text.isEmpty
+                                        ? null
+                                        : IconButton(
+                                            tooltip: 'Clear search',
+                                            onPressed: _clear,
+                                            icon: const Icon(Icons.clear),
+                                          ),
+                                    border: const OutlineInputBorder(),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 8,
+                                    ),
                                   ),
-                                ),
-                                child: Text(
-                                  _controller.text.isEmpty
-                                      ? ' '
-                                      : _controller.text,
-                                  key: const ValueKey('dictionary-query'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium,
+                                  child: Text(
+                                    _controller.text.isEmpty
+                                        ? ' '
+                                        : _controller.text,
+                                    key: const ValueKey('dictionary-query'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium,
+                                  ),
                                 ),
                               ),
                             ),

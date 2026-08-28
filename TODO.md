@@ -28,7 +28,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add initial semantic theme tokens.
 - [x] Add initial user-selectable Modern and Sketch themes.
 - [x] Complete initial responsive library and fixed-viewport gameplay layouts for phones and wide screens.
-- [ ] Add accessibility conventions for semantics, focus, contrast, and text scaling.
+- [x] Add initial accessibility conventions for semantics, focus, contrast, and text scaling.
 
 ## Vocabulary and definitions
 

@@ -45,6 +45,7 @@ class GameKeyboard extends StatelessWidget {
       label: mode == LanguageMode.gurmukhi
           ? 'Gurmukhi game keyboard'
           : 'Latin game keyboard',
+      container: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -135,18 +136,25 @@ class _KeyboardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Semantics(
     button: true,
+    enabled: onPressed != null,
     label: semanticLabel ?? label,
-    child: SizedBox(
-      height: height,
-      child: FilledButton.tonal(
-        style: FilledButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 2),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+    excludeSemantics: true,
+    child: Tooltip(
+      message: semanticLabel ?? label ?? '',
+      child: SizedBox(
+        height: height,
+        child: FilledButton.tonal(
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7),
+            ),
+          ),
+          onPressed: onPressed,
+          child:
+              child ??
+              Text(label!, style: const TextStyle(fontWeight: FontWeight.w700)),
         ),
-        onPressed: onPressed,
-        child:
-            child ??
-            Text(label!, style: const TextStyle(fontWeight: FontWeight.w700)),
       ),
     ),
   );

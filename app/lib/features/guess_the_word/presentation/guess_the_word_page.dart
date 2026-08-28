@@ -807,6 +807,8 @@ class _Board extends StatelessWidget {
                     _Tile(
                       key: ValueKey('tile-$row-$column'),
                       size: size,
+                      row: row,
+                      column: column,
                       letter: row < turns.length
                           ? turns[row].evaluation[column]
                           : null,
@@ -823,9 +825,17 @@ class _Board extends StatelessWidget {
 }
 
 class _Tile extends StatelessWidget {
-  const _Tile({required this.size, this.letter, super.key});
+  const _Tile({
+    required this.size,
+    required this.row,
+    required this.column,
+    this.letter,
+    super.key,
+  });
 
   final double size;
+  final int row;
+  final int column;
   final EvaluatedLetter? letter;
 
   @override
@@ -850,7 +860,10 @@ class _Tile extends StatelessWidget {
       null => null,
     };
     return Semantics(
-      label: letter == null ? 'Blank tile' : '${letter!.grapheme}, $status',
+      label: letter == null
+          ? 'Attempt ${row + 1}, letter ${column + 1}, blank'
+          : 'Attempt ${row + 1}, letter ${column + 1}, '
+                '${letter!.grapheme}, $status',
       excludeSemantics: true,
       child: Container(
         width: size,
