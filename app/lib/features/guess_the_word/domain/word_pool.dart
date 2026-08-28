@@ -46,6 +46,29 @@ class WordPool {
     return null;
   }
 
+  List<VocabularyEntry> search({
+    required LanguageMode mode,
+    required String query,
+    int limit = 50,
+  }) {
+    final normalized = query.trim().toLowerCase();
+    if (normalized.length < 2 || limit <= 0) return const [];
+    final matches = <VocabularyEntry>[];
+    for (final entry in _entries) {
+      if (!_supportsLanguage(entry, mode)) continue;
+      final activeSpelling = spelling(entry, mode)?.toLowerCase();
+      if (activeSpelling == null) continue;
+      if (activeSpelling.contains(normalized) ||
+          entry.latin.toLowerCase().contains(normalized) ||
+          (entry.gurmukhi?.contains(normalized) ?? false) ||
+          entry.englishDefinition.toLowerCase().contains(normalized)) {
+        matches.add(entry);
+        if (matches.length == limit) break;
+      }
+    }
+    return List.unmodifiable(matches);
+  }
+
   static String? spelling(VocabularyEntry entry, LanguageMode mode) =>
       mode == LanguageMode.gurmukhi ? entry.gurmukhi : entry.latin;
 

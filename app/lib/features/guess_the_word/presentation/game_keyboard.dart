@@ -9,6 +9,8 @@ class GameKeyboard extends StatelessWidget {
     required this.onBackspace,
     required this.onEnter,
     required this.enabled,
+    required this.disabledCharacters,
+    this.compact = false,
     super.key,
   });
 
@@ -17,6 +19,8 @@ class GameKeyboard extends StatelessWidget {
   final VoidCallback onBackspace;
   final VoidCallback onEnter;
   final bool enabled;
+  final Set<String> disabledCharacters;
+  final bool compact;
 
   static const _latinRows = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -55,9 +59,14 @@ class GameKeyboard extends StatelessWidget {
                         child: _KeyboardButton(
                           key: ValueKey('key-$character'),
                           label: character,
-                          onPressed: enabled
+                          semanticLabel: disabledCharacters.contains(character)
+                              ? '$character, not in the word'
+                              : character,
+                          onPressed:
+                              enabled && !disabledCharacters.contains(character)
                               ? () => onCharacter(character)
                               : null,
+                          height: compact ? 31 : 43,
                         ),
                       ),
                     ),
@@ -72,6 +81,7 @@ class GameKeyboard extends StatelessWidget {
                   key: const ValueKey('key-backspace'),
                   semanticLabel: 'Delete last letter',
                   onPressed: enabled ? onBackspace : null,
+                  height: compact ? 31 : 43,
                   child: const Icon(Icons.backspace_outlined, size: 20),
                 ),
               ),
@@ -83,6 +93,7 @@ class GameKeyboard extends StatelessWidget {
                   label: 'ENTER',
                   semanticLabel: 'Submit guess',
                   onPressed: enabled ? onEnter : null,
+                  height: compact ? 31 : 43,
                 ),
               ),
             ],
@@ -99,6 +110,7 @@ class _KeyboardButton extends StatelessWidget {
     this.semanticLabel,
     this.onPressed,
     this.child,
+    required this.height,
     super.key,
   });
 
@@ -106,13 +118,14 @@ class _KeyboardButton extends StatelessWidget {
   final String? semanticLabel;
   final VoidCallback? onPressed;
   final Widget? child;
+  final double height;
 
   @override
   Widget build(BuildContext context) => Semantics(
     button: true,
     label: semanticLabel ?? label,
     child: SizedBox(
-      height: 43,
+      height: height,
       child: FilledButton.tonal(
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 2),

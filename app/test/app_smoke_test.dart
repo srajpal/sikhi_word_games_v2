@@ -47,8 +47,7 @@ void main() {
     );
     await tester.tap(find.text('Play prototype'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('guess-help')));
-    await tester.pumpAndSettle();
+    await _chooseGameMenu(tester, 'How to play');
 
     expect(find.text('How to play'), findsOneWidget);
     expect(find.text('Tile clues'), findsOneWidget);
@@ -59,6 +58,73 @@ void main() {
     await tester.tap(find.text('Got it'));
     await tester.pumpAndSettle();
     expect(find.text('How to play'), findsNothing);
+
+    await _chooseGameMenu(tester, 'Dictionary');
+    expect(find.text('English dictionary'), findsOneWidget);
+    await tester.enterText(
+      find.byKey(const ValueKey('dictionary-search')),
+      'apple',
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('APPLE'), findsOneWidget);
+    expect(find.text('A round fruit'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets(
+    'gameplay fits a phone without a system text field or scrolling',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        SikhiWordGamesApp(
+          settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+          vocabularyRepository: _vocabulary,
+        ),
+      );
+      await tester.tap(find.text('Play prototype'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('English'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Gurmukhi').last);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TextField), findsNothing);
+      expect(find.byType(SingleChildScrollView), findsNothing);
+      expect(find.byKey(const ValueKey('key-enter')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('four-letter board leaves space above the guess display', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.tap(find.text('Play prototype'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('5 letters'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('4 letters').last);
+    await tester.pumpAndSettle();
+
+    final lastTile = tester.getRect(find.byKey(const ValueKey('tile-5-0')));
+    final guessDisplay = tester.getRect(
+      find.byKey(const ValueKey('guess-display')),
+    );
+    expect(guessDisplay.top - lastTile.bottom, greaterThanOrEqualTo(6));
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('submits a physical keyboard or IME guess with Enter', (
@@ -73,10 +139,8 @@ void main() {
     await tester.tap(find.text('Play prototype'));
     await tester.pumpAndSettle();
 
-    final input = find.byType(TextField);
-    expect(tester.widget<TextField>(input).focusNode!.hasFocus, isTrue);
-    await tester.enterText(input, 'APPLE');
-    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await _typeHardwareWord(tester, 'APPLE');
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pumpAndSettle();
 
     expect(find.text('You found it!'), findsOneWidget);
@@ -110,10 +174,33 @@ void main() {
     );
     await tester.tap(find.text('Play prototype'));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), 'GRAPE');
-    await _tapVisible(tester, find.widgetWithText(FilledButton, 'Enter'));
-    expect(find.text('Last guess: GRAPE'), findsOneWidget);
-    expect(find.text('A small fruit that grows in bunches'), findsOneWidget);
+    for (final letter in 'GRAPE'.characters) {
+      await _tapVisible(tester, find.byKey(ValueKey('key-$letter')));
+    }
+    await _tapVisible(tester, find.byKey(const ValueKey('key-enter')));
+    expect(find.textContaining('A small fruit that grows'), findsNothing);
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.descendant(
+              of: find.byKey(const ValueKey('key-G')),
+              matching: find.byType(FilledButton),
+            ),
+          )
+          .onPressed,
+      isNull,
+    );
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.descendant(
+              of: find.byKey(const ValueKey('key-A')),
+              matching: find.byType(FilledButton),
+            ),
+          )
+          .onPressed,
+      isNotNull,
+    );
 
     for (final letter in ['A', 'P', 'P', 'L', 'E']) {
       await _tapVisible(tester, find.byKey(ValueKey('key-$letter')));
@@ -126,13 +213,12 @@ void main() {
     expect(find.byIcon(Icons.swap_horiz), findsNWidgets(2));
     expect(find.byIcon(Icons.close), findsNWidgets(2));
 
-    await _tapVisible(tester, find.byKey(const ValueKey('copy-result')));
+    await _chooseGameMenu(tester, 'Copy result');
     expect(find.text('Spoiler-free result copied'), findsOneWidget);
     expect(clipboardText, contains('English · 5 letters · 2/6'));
     expect(clipboardText, isNot(contains('APPLE')));
 
-    await tester.tap(find.byKey(const ValueKey('guess-statistics')));
-    await tester.pumpAndSettle();
+    await _chooseGameMenu(tester, 'Statistics');
     expect(find.text('English · 5 letters'), findsOneWidget);
     expect(
       tester.widget<Text>(find.byKey(const ValueKey('stat-Played'))).data,
@@ -162,11 +248,11 @@ void main() {
 
     await _tapVisible(tester, find.byKey(const ValueKey('key-ਕ')));
     await _tapVisible(tester, find.byKey(const ValueKey('key-ੀ')));
-    var field = tester.widget<TextField>(find.byType(TextField));
-    expect(field.controller!.text, 'ਕੀ');
+    var value = tester.widget<Text>(find.byKey(const ValueKey('guess-value')));
+    expect(value.data, 'ਕੀ');
     await _tapVisible(tester, find.byKey(const ValueKey('key-backspace')));
-    field = tester.widget<TextField>(find.byType(TextField));
-    expect(field.controller!.text, isEmpty);
+    value = tester.widget<Text>(find.byKey(const ValueKey('guess-value')));
+    expect(value.data, ' ');
 
     for (final character in ['ਕ', 'ੀ', 'ਰ', 'ਤ', 'ਨ']) {
       await _tapVisible(tester, find.byKey(ValueKey('key-$character')));
@@ -185,6 +271,27 @@ Future<void> _tapVisible(WidgetTester tester, Finder finder) async {
   await tester.pump();
 }
 
+Future<void> _chooseGameMenu(WidgetTester tester, String item) async {
+  await tester.tap(find.byKey(const ValueKey('game-menu')));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(item).last);
+  await tester.pumpAndSettle();
+}
+
+Future<void> _typeHardwareWord(WidgetTester tester, String word) async {
+  for (final character in word.characters) {
+    final key = switch (character) {
+      'A' => LogicalKeyboardKey.keyA,
+      'E' => LogicalKeyboardKey.keyE,
+      'L' => LogicalKeyboardKey.keyL,
+      'P' => LogicalKeyboardKey.keyP,
+      _ => throw ArgumentError.value(character, 'word'),
+    };
+    await tester.sendKeyDownEvent(key, character: character);
+    await tester.sendKeyUpEvent(key);
+  }
+}
+
 const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_apple',
@@ -193,6 +300,19 @@ const _vocabulary = MemoryVocabularyRepository([
     gurmukhi: null,
     englishDefinition: 'A round fruit',
     latinLength: 5,
+    gurmukhiLength: null,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'test',
+  ),
+  VocabularyEntry(
+    id: 'english_jump',
+    language: VocabularyLanguage.english,
+    latin: 'JUMP',
+    gurmukhi: null,
+    englishDefinition: 'A quick movement off the ground',
+    latinLength: 4,
     gurmukhiLength: null,
     acceptedGuess: true,
     solutionEligible: true,

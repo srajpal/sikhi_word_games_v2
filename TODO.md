@@ -27,7 +27,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add offline persistence interfaces and schema versioning.
 - [x] Add initial semantic theme tokens.
 - [x] Add initial user-selectable Modern and Sketch themes.
-- [ ] Complete responsive game layouts; the game library now adapts to narrow phones and wide screens.
+- [x] Complete initial responsive library and fixed-viewport gameplay layouts for phones and wide screens.
 - [ ] Add accessibility conventions for semantics, focus, contrast, and text scaling.
 
 ## Vocabulary and definitions
@@ -64,9 +64,11 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Connect English, romanized Panjabi, Mixed Latin, and initial Gurmukhi mode/length selection.
 - [x] Add the shared Latin keyboard for English, romanized Panjabi, and Mixed Latin.
 - [x] Add the initial purpose-built Gurmukhi keyboard with vowel signs and extended letters.
+- [x] Disable keyboard symbols proven absent without breaking repeated-letter cases.
 - [x] Add tile feedback symbols and semantic labels that do not rely on color alone.
-- [x] Show definitions after accepted guesses and reveal the solution definition at completion.
+- [x] Reveal the answer and its definition at game completion.
 - [x] Add in-app gameplay help and language-mode explanations.
+- [x] Add searchable offline dictionary access from the game menu.
 - [x] Add versioned per-mode and per-length statistics stored completely offline.
 - [x] Add offline, clipboard-based spoiler-safe result sharing.
 - [x] Support physical keyboards and IME submission with persistent input focus.
@@ -81,7 +83,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Test accepted guesses versus curated solutions.
 - [x] Cover offline statistics totals, streaks, distributions, isolation, persistence, and malformed-data fallback.
 - [x] Add initial content-import and validation tests.
-- [ ] Add responsive widget tests.
+- [x] Add responsive widget tests for narrow library and fixed-viewport gameplay layouts.
 - [ ] Add Modern and Sketch golden tests.
 - [ ] Add representative integration flows.
 - [x] Establish a clean `flutter analyze` and test-suite baseline; keep both clean.

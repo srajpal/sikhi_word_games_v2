@@ -69,6 +69,21 @@ void main() {
     );
   });
 
+  test('searches active-mode words and definitions with a result limit', () {
+    final pool = WordPool(entries);
+    expect(
+      pool
+          .search(mode: LanguageMode.mixedLatin, query: 'definition', limit: 2)
+          .map((entry) => entry.id),
+      ['english_hero', 'panjabi_baag'],
+    );
+    expect(
+      pool.search(mode: LanguageMode.gurmukhi, query: 'ਬਾਗ').single.id,
+      'panjabi_baag',
+    );
+    expect(pool.search(mode: LanguageMode.english, query: 'b'), isEmpty);
+  });
+
   test('seeded selector does not repeat until the pool is exhausted', () {
     final selector = NonRepeatingWordSelector(random: Random(7));
     final first = selector.select(entries);
