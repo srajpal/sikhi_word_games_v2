@@ -3,34 +3,45 @@ import 'dart:convert';
 import '../../../core/persistence/key_value_store.dart';
 import '../../../core/themes/app_theme.dart';
 
+enum HapticFeedbackLevel { off, light, medium, strong }
+
+extension HapticFeedbackLevelLabel on HapticFeedbackLevel {
+  String get label => switch (this) {
+    HapticFeedbackLevel.off => 'Off',
+    HapticFeedbackLevel.light => 'Light',
+    HapticFeedbackLevel.medium => 'Medium',
+    HapticFeedbackLevel.strong => 'Strong',
+  };
+}
+
 class AppSettings {
   const AppSettings({
     this.schemaVersion = currentSchemaVersion,
     this.theme = AppThemeChoice.modern,
-    this.hapticsEnabled = true,
+    this.hapticLevel = HapticFeedbackLevel.medium,
     this.reducedMotion = false,
   });
 
   static const currentSchemaVersion = 1;
   final int schemaVersion;
   final AppThemeChoice theme;
-  final bool hapticsEnabled;
+  final HapticFeedbackLevel hapticLevel;
   final bool reducedMotion;
 
   AppSettings copyWith({
     AppThemeChoice? theme,
-    bool? hapticsEnabled,
+    HapticFeedbackLevel? hapticLevel,
     bool? reducedMotion,
   }) => AppSettings(
     theme: theme ?? this.theme,
-    hapticsEnabled: hapticsEnabled ?? this.hapticsEnabled,
+    hapticLevel: hapticLevel ?? this.hapticLevel,
     reducedMotion: reducedMotion ?? this.reducedMotion,
   );
 
   Map<String, Object> toJson() => {
     'schemaVersion': currentSchemaVersion,
     'theme': theme.name,
-    'hapticsEnabled': hapticsEnabled,
+    'hapticLevel': hapticLevel.name,
     'reducedMotion': reducedMotion,
   };
 
@@ -48,9 +59,18 @@ class AppSettings {
           : matchingThemes.isEmpty
           ? AppThemeChoice.modern
           : matchingThemes.first,
-      hapticsEnabled: json['hapticsEnabled'] as bool? ?? true,
+      hapticLevel: _hapticLevelFromJson(json),
       reducedMotion: json['reducedMotion'] as bool? ?? false,
     );
+  }
+
+  static HapticFeedbackLevel _hapticLevelFromJson(Map<String, Object?> json) {
+    final stored = json['hapticLevel'];
+    for (final level in HapticFeedbackLevel.values) {
+      if (level.name == stored) return level;
+    }
+    if (json['hapticsEnabled'] == false) return HapticFeedbackLevel.off;
+    return HapticFeedbackLevel.medium;
   }
 }
 

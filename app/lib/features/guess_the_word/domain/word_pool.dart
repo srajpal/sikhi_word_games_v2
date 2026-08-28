@@ -82,11 +82,13 @@ class NonRepeatingWordSelector {
   NonRepeatingWordSelector({
     Random? random,
     Iterable<String> usedIds = const [],
+    this.lastSelectedId,
   }) : _random = random ?? Random.secure(),
        _usedIds = {...usedIds};
 
   final Random _random;
   final Set<String> _usedIds;
+  String? lastSelectedId;
 
   Set<String> get usedIds => Set.unmodifiable(_usedIds);
 
@@ -98,11 +100,21 @@ class NonRepeatingWordSelector {
         .where((entry) => !_usedIds.contains(entry.id))
         .toList();
     if (available.isEmpty) {
-      _usedIds.clear();
-      available = List.of(candidates);
+      final candidateIds = candidates.map((entry) => entry.id).toSet();
+      _usedIds.removeAll(candidateIds);
+      available = candidates
+          .where((entry) => entry.id != lastSelectedId)
+          .toList();
+      if (available.isEmpty) available = List.of(candidates);
     }
     final selected = available[_random.nextInt(available.length)];
     _usedIds.add(selected.id);
+    lastSelectedId = selected.id;
     return selected;
+  }
+
+  void markUsed(String id) {
+    _usedIds.add(id);
+    lastSelectedId = id;
   }
 }

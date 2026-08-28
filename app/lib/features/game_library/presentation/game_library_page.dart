@@ -17,7 +17,7 @@ class GameLibraryPage extends StatelessWidget {
   final ValueChanged<AppSettings> onFeedbackSettingsChanged;
 
   Future<void> _showFeedbackSettings(BuildContext context) async {
-    var haptics = settings.hapticsEnabled;
+    var hapticLevel = settings.hapticLevel;
     var reducedMotion = settings.reducedMotion;
     final updated = await showDialog<AppSettings>(
       context: context,
@@ -27,12 +27,23 @@ class GameLibraryPage extends StatelessWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SwitchListTile(
-                title: const Text('Haptic feedback'),
-                subtitle: const Text('Vibrate for keys, guesses, and errors'),
-                value: haptics,
-                onChanged: (value) => setDialogState(() => haptics = value),
+              DropdownButtonFormField<HapticFeedbackLevel>(
+                initialValue: hapticLevel,
+                decoration: const InputDecoration(
+                  labelText: 'Haptic feedback',
+                  helperText: 'Strength for keys, guesses, and errors',
+                ),
+                items: [
+                  for (final level in HapticFeedbackLevel.values)
+                    DropdownMenuItem(value: level, child: Text(level.label)),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setDialogState(() => hapticLevel = value);
+                  }
+                },
               ),
+              const SizedBox(height: 12),
               SwitchListTile(
                 title: const Text('Reduce motion'),
                 subtitle: const Text('Minimize tile and interface animation'),
@@ -50,7 +61,7 @@ class GameLibraryPage extends StatelessWidget {
             FilledButton(
               onPressed: () => Navigator.of(context).pop(
                 settings.copyWith(
-                  hapticsEnabled: haptics,
+                  hapticLevel: hapticLevel,
                   reducedMotion: reducedMotion,
                 ),
               ),

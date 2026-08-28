@@ -58,6 +58,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Support Gurmukhi grapheme filtering and game evaluation in the domain layer.
 - [x] Add seeded, non-repeating solution selection with exhaustion reset.
 - [x] Persist non-repeating solution history across launches and use secure randomness.
+- [x] Preserve pool-specific rotation history and prevent cycle-boundary repeats.
 - [x] Model game progress, accepted turns, rejections, and win/loss states explicitly.
 - [x] Add versioned serialization and offline storage for interrupted-game restoration.
 
@@ -81,6 +82,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add offline, clipboard-based spoiler-safe result sharing.
 - [x] Support physical keyboards and IME submission with persistent input focus.
 - [x] Add animations and haptics with reduced-motion/haptics settings.
+- [x] Offer Off, Light, Medium, and Strong haptic feedback levels.
 
 ## Automated verification
 

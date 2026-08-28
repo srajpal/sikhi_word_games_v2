@@ -17,6 +17,7 @@ import '../domain/keyboard_feedback.dart';
 import '../data/guess_statistics_repository.dart';
 import '../data/guess_game_repository.dart';
 import '../data/solution_history_repository.dart';
+import '../../settings/data/app_settings_repository.dart';
 import 'game_keyboard.dart';
 
 enum _GameMenuAction {
@@ -34,7 +35,7 @@ class GuessTheWordPage extends StatefulWidget {
     required this.statisticsRepository,
     required this.gameRepository,
     required this.solutionHistoryRepository,
-    required this.hapticsEnabled,
+    required this.hapticLevel,
     required this.reducedMotion,
     super.key,
   });
@@ -43,7 +44,7 @@ class GuessTheWordPage extends StatefulWidget {
   final GuessStatisticsRepository statisticsRepository;
   final GuessGameRepository gameRepository;
   final SolutionHistoryRepository solutionHistoryRepository;
-  final bool hapticsEnabled;
+  final HapticFeedbackLevel hapticLevel;
   final bool reducedMotion;
 
   @override
@@ -67,8 +68,10 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   void initState() {
     super.initState();
     _statistics = widget.statisticsRepository.load();
+    final history = widget.solutionHistoryRepository.load();
     _selector = NonRepeatingWordSelector(
-      usedIds: widget.solutionHistoryRepository.load(),
+      usedIds: history.usedIds,
+      lastSelectedId: history.lastSelectedId,
     );
     _loadVocabulary();
   }
@@ -136,6 +139,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         _startGame();
         return;
       }
+      _selector.markUsed(solutionEntry.id);
+      _saveSolutionHistory();
       setState(() {
         _mode = restored.mode;
         _wordLength = restored.game.wordLength;
@@ -178,7 +183,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       return;
     }
     final entry = _selector.select(solutions);
-    widget.solutionHistoryRepository.save(_selector.usedIds);
+    _saveSolutionHistory();
     final spelling = WordPool.spelling(entry, _mode)!;
     final accepted = pool.acceptedGuesses(mode: _mode, wordLength: _wordLength);
     setState(() {
@@ -192,13 +197,22 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
   }
 
+  void _saveSolutionHistory() {
+    widget.solutionHistoryRepository.save(
+      SolutionHistory(
+        usedIds: _selector.usedIds,
+        lastSelectedId: _selector.lastSelectedId,
+      ),
+    );
+  }
+
   void _submit() {
     final game = _game;
     if (game == null) return;
     final guess = _controller.text;
     final result = game.submit(guess);
     if (!result.isAccepted) {
-      if (widget.hapticsEnabled) HapticFeedback.vibrate();
+      _performHaptic(isError: true);
       final notice = switch (result.rejection!) {
         GuessRejection.wrongLength =>
           'Enter exactly ${game.wordLength} visible letters.',
@@ -225,7 +239,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       _controller.clear();
       _message = null;
     });
-    if (widget.hapticsEnabled) HapticFeedback.lightImpact();
+    _performHaptic();
     if (game.status == GuessGameStatus.won) {
       _showNotice('You found it!');
     } else if (game.status == GuessGameStatus.lost) {
@@ -243,7 +257,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       selection: TextSelection.collapsed(offset: candidate.length),
     );
     setState(() => _message = null);
-    if (widget.hapticsEnabled) HapticFeedback.selectionClick();
+    _performHaptic(isKey: true);
     _focusInput();
   }
 
@@ -255,7 +269,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       selection: TextSelection.collapsed(offset: shortened.length),
     );
     setState(() => _message = null);
-    if (widget.hapticsEnabled) HapticFeedback.selectionClick();
+    _performHaptic(isKey: true);
     _focusInput();
   }
 
@@ -272,6 +286,30 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       ],
     ),
   );
+
+  void _performHaptic({bool isKey = false, bool isError = false}) {
+    switch (widget.hapticLevel) {
+      case HapticFeedbackLevel.off:
+        return;
+      case HapticFeedbackLevel.light:
+        HapticFeedback.selectionClick();
+        return;
+      case HapticFeedbackLevel.medium:
+        if (isKey) {
+          HapticFeedback.selectionClick();
+        } else {
+          HapticFeedback.mediumImpact();
+        }
+        return;
+      case HapticFeedbackLevel.strong:
+        if (isError) {
+          HapticFeedback.vibrate();
+        } else {
+          HapticFeedback.heavyImpact();
+        }
+        return;
+    }
+  }
 
   void _showNotice(String message) {
     final messenger = ScaffoldMessenger.of(context);

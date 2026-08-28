@@ -106,6 +106,28 @@ void main() {
     expect(selected.id, isNot('english_hero'));
     expect(selector.usedIds, containsAll(['english_hero', selected.id]));
   });
+
+  test('a new cycle does not repeat the previous cycle boundary', () {
+    final selector = NonRepeatingWordSelector(
+      random: Random(7),
+      usedIds: entries.map((entry) => entry.id),
+      lastSelectedId: 'english_hero',
+    );
+
+    expect(selector.select(entries).id, isNot('english_hero'));
+  });
+
+  test('exhausting one candidate pool preserves other pool history', () {
+    final selector = NonRepeatingWordSelector(
+      random: Random(7),
+      usedIds: {'english_hero', 'panjabi_baag'},
+      lastSelectedId: 'english_hero',
+    );
+
+    selector.select([entries.first]);
+
+    expect(selector.usedIds, contains('panjabi_baag'));
+  });
 }
 
 VocabularyEntry _entry(

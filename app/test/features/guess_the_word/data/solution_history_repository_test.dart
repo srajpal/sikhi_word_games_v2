@@ -7,15 +7,21 @@ void main() {
     final store = MemoryKeyValueStore();
     final repository = SolutionHistoryRepository(store);
 
-    await repository.save({'english_hero', 'english_book'});
+    await repository.save(
+      const SolutionHistory(
+        usedIds: {'english_hero', 'english_book'},
+        lastSelectedId: 'english_book',
+      ),
+    );
 
-    expect(repository.load(), {'english_hero', 'english_book'});
+    expect(repository.load().usedIds, {'english_hero', 'english_book'});
+    expect(repository.load().lastSelectedId, 'english_book');
   });
 
   test('malformed history falls back to an empty rotation', () {
     final store = MemoryKeyValueStore()
       ..values[SolutionHistoryRepository.storageKey] = 'not json';
 
-    expect(SolutionHistoryRepository(store).load(), isEmpty);
+    expect(SolutionHistoryRepository(store).load().usedIds, isEmpty);
   });
 }

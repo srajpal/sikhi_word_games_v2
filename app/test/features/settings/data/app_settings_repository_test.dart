@@ -12,13 +12,13 @@ void main() {
     await repository.save(
       const AppSettings(
         theme: AppThemeChoice.sikhi,
-        hapticsEnabled: false,
+        hapticLevel: HapticFeedbackLevel.strong,
         reducedMotion: true,
       ),
     );
     final restored = repository.load();
     expect(restored.theme, AppThemeChoice.sikhi);
-    expect(restored.hapticsEnabled, isFalse);
+    expect(restored.hapticLevel, HapticFeedbackLevel.strong);
     expect(restored.reducedMotion, isTrue);
   });
 
@@ -29,6 +29,19 @@ void main() {
         'theme': 'sketch',
       });
     expect(AppSettingsRepository(store).load().theme, AppThemeChoice.sikhi);
+  });
+
+  test('migrates the former disabled haptics setting to Off', () {
+    final store = MemoryKeyValueStore()
+      ..values[AppSettingsRepository.storageKey] = jsonEncode({
+        'schemaVersion': 1,
+        'theme': 'modern',
+        'hapticsEnabled': false,
+      });
+    expect(
+      AppSettingsRepository(store).load().hapticLevel,
+      HapticFeedbackLevel.off,
+    );
   });
 
   test('uses safe defaults for an unsupported schema', () {

@@ -66,7 +66,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 statisticsRepository: widget.statisticsRepository,
                 gameRepository: widget.gameRepository,
                 solutionHistoryRepository: widget.solutionHistoryRepository,
-                hapticsEnabled: _settings.hapticsEnabled,
+                hapticLevel: _settings.hapticLevel,
                 reducedMotion: _settings.reducedMotion,
               ),
             ),
