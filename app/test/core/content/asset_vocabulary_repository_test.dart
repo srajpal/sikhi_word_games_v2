@@ -14,6 +14,10 @@ void main() {
 
       expect(entries, hasLength(38510));
       expect(
+        pool.solutions(mode: LanguageMode.english, wordLength: 4),
+        hasLength(greaterThanOrEqualTo(20)),
+      );
+      expect(
         pool.solutions(mode: LanguageMode.english, wordLength: 5),
         isNotEmpty,
       );

@@ -42,6 +42,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Record English, romanized Panjabi, and available Gurmukhi forms separately.
 - [x] Maintain a broad accepted-guess pool.
 - [ ] Expand and editorially approve the solution pool; an explicit machine-checked starter set now drives the app.
+- [x] Expand the machine-checked English four-letter starter rotation beyond BOOK, HERO, and LOVE.
 - [x] Enforce accepted guesses and curated solutions as separate domain collections.
 - [x] Track V1 source version and editorial review status.
 - [x] Produce a reproducible human-readable content review report.
