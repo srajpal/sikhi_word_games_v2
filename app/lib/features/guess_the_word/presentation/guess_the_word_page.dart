@@ -9,6 +9,7 @@ import '../domain/guess_game.dart';
 import '../domain/language_mode.dart';
 import '../domain/word_pool.dart';
 import '../domain/guess_statistics.dart';
+import '../domain/guess_share.dart';
 import '../data/guess_statistics_repository.dart';
 import 'game_keyboard.dart';
 
@@ -205,6 +206,20 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     );
   }
 
+  Future<void> _copyResult() async {
+    final game = _game;
+    if (game == null || game.status == GuessGameStatus.playing) return;
+    await Clipboard.setData(
+      ClipboardData(
+        text: buildSpoilerSafeResult(game: game, mode: _mode),
+      ),
+    );
+    if (!mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Spoiler-free result copied')));
+  }
+
   @override
   Widget build(BuildContext context) {
     final game = _game;
@@ -326,6 +341,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                             Text(
                               _solutionEntry!.englishDefinition,
                               textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 12),
+                            OutlinedButton.icon(
+                              key: const ValueKey('copy-result'),
+                              onPressed: _copyResult,
+                              icon: const Icon(Icons.copy),
+                              label: const Text('Copy result'),
                             ),
                             const SizedBox(height: 12),
                           ],

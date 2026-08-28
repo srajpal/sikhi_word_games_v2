@@ -68,7 +68,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Show definitions after accepted guesses and reveal the solution definition at completion.
 - [x] Add in-app gameplay help and language-mode explanations.
 - [x] Add versioned per-mode and per-length statistics stored completely offline.
-- [ ] Add spoiler-safe sharing.
+- [x] Add offline, clipboard-based spoiler-safe result sharing.
 - [ ] Add physical-keyboard support where appropriate.
 - [ ] Add animations and haptics with reduced-motion/haptics settings.
 

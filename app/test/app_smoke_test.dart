@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sikhi_word_games_v2/app/app.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
@@ -63,6 +64,23 @@ void main() {
   testWidgets('plays a complete game with the on-screen keyboard', (
     tester,
   ) async {
+    String? clipboardText;
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'Clipboard.setData') {
+          clipboardText =
+              (call.arguments as Map<Object?, Object?>)['text'] as String?;
+        }
+        return null;
+      },
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        null,
+      ),
+    );
     await tester.pumpWidget(
       SikhiWordGamesApp(
         settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
@@ -86,6 +104,11 @@ void main() {
     expect(find.byIcon(Icons.check), findsNWidgets(6));
     expect(find.byIcon(Icons.swap_horiz), findsNWidgets(2));
     expect(find.byIcon(Icons.close), findsNWidgets(2));
+
+    await _tapVisible(tester, find.byKey(const ValueKey('copy-result')));
+    expect(find.text('Spoiler-free result copied'), findsOneWidget);
+    expect(clipboardText, contains('English · 5 letters · 2/6'));
+    expect(clipboardText, isNot(contains('APPLE')));
 
     await tester.tap(find.byKey(const ValueKey('guess-statistics')));
     await tester.pumpAndSettle();
