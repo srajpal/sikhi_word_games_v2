@@ -62,8 +62,8 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Build a minimal playable screen for fast iteration using temporary content.
 - [x] Replace temporary `APPLE` content with the offline vocabulary repository and explicit starter solutions.
 - [x] Connect English, romanized Panjabi, Mixed Latin, and initial Gurmukhi mode/length selection.
-- [ ] Add the shared Latin keyboard for English, romanized Panjabi, and Mixed Latin.
-- [ ] Add a purpose-built Gurmukhi keyboard.
+- [x] Add the shared Latin keyboard for English, romanized Panjabi, and Mixed Latin.
+- [x] Add the initial purpose-built Gurmukhi keyboard with vowel signs and extended letters.
 - [ ] Add tile feedback that does not rely on color alone.
 - [ ] Add definitions after accepted guesses; solution definitions now appear at game completion.
 - [ ] Add help and language-mode explanations.
@@ -76,7 +76,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 
 - [x] Test exact, present, and absent letter evaluation.
 - [x] Test the initial repeated-letter cases in guesses and solutions.
-- [ ] Complete Unicode grapheme entry/deletion tests; initial counting tests pass.
+- [x] Test Unicode grapheme counting plus Gurmukhi keyboard composition and visible-grapheme deletion.
 - [x] Test the initial language and grapheme-length filters.
 - [x] Test accepted guesses versus curated solutions.
 - [ ] Complete statistics coverage; seeded selection, core boundaries, and restoration now pass.

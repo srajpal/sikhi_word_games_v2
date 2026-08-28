@@ -36,6 +36,66 @@ void main() {
     expect(find.text('Choose a game'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('plays a complete game with the on-screen keyboard', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.tap(find.text('Play prototype'));
+    await tester.pumpAndSettle();
+    for (final letter in ['A', 'P', 'P', 'L', 'E']) {
+      await _tapVisible(tester, find.byKey(ValueKey('key-$letter')));
+    }
+    await _tapVisible(tester, find.byKey(const ValueKey('key-enter')));
+    await tester.pump();
+    expect(find.text('You found it!'), findsOneWidget);
+    expect(find.text('A round fruit'), findsOneWidget);
+  });
+
+  testWidgets('Gurmukhi keyboard composes and deletes visible graphemes', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.tap(find.text('Play prototype'));
+    await tester.pumpAndSettle();
+    await _tapVisible(tester, find.text('English'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Gurmukhi').last);
+    await tester.pumpAndSettle();
+
+    await _tapVisible(tester, find.byKey(const ValueKey('key-ਕ')));
+    await _tapVisible(tester, find.byKey(const ValueKey('key-ੀ')));
+    var field = tester.widget<TextField>(find.byType(TextField));
+    expect(field.controller!.text, 'ਕੀ');
+    await _tapVisible(tester, find.byKey(const ValueKey('key-backspace')));
+    field = tester.widget<TextField>(find.byType(TextField));
+    expect(field.controller!.text, isEmpty);
+
+    for (final character in ['ਕ', 'ੀ', 'ਰ', 'ਤ', 'ਨ']) {
+      await _tapVisible(tester, find.byKey(ValueKey('key-$character')));
+    }
+    await _tapVisible(tester, find.byKey(const ValueKey('key-enter')));
+    await tester.pump();
+    expect(find.text('You found it!'), findsOneWidget);
+    expect(find.text('Sikh devotional music'), findsOneWidget);
+  });
+}
+
+Future<void> _tapVisible(WidgetTester tester, Finder finder) async {
+  await tester.ensureVisible(finder);
+  await tester.pumpAndSettle();
+  await tester.tap(finder);
+  await tester.pump();
 }
 
 const _vocabulary = MemoryVocabularyRepository([
@@ -47,6 +107,19 @@ const _vocabulary = MemoryVocabularyRepository([
     englishDefinition: 'A round fruit',
     latinLength: 5,
     gurmukhiLength: null,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'test',
+  ),
+  VocabularyEntry(
+    id: 'panjabi_kirtan',
+    language: VocabularyLanguage.panjabi,
+    latin: 'KIRTAN',
+    gurmukhi: 'ਕੀਰਤਨ',
+    englishDefinition: 'Sikh devotional music',
+    latinLength: 6,
+    gurmukhiLength: 4,
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,

@@ -8,6 +8,7 @@ import '../domain/guess_evaluator.dart';
 import '../domain/guess_game.dart';
 import '../domain/language_mode.dart';
 import '../domain/word_pool.dart';
+import 'game_keyboard.dart';
 
 class GuessTheWordPage extends StatefulWidget {
   const GuessTheWordPage({
@@ -133,6 +134,27 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     });
   }
 
+  void _appendCharacter(String character) {
+    final current = _controller.text;
+    final candidate = '$current$character';
+    if (candidate.characters.length > _wordLength) return;
+    _controller.value = TextEditingValue(
+      text: candidate,
+      selection: TextSelection.collapsed(offset: candidate.length),
+    );
+    setState(() => _message = null);
+  }
+
+  void _backspace() {
+    if (_controller.text.isEmpty) return;
+    final shortened = _controller.text.characters.skipLast(1).toString();
+    _controller.value = TextEditingValue(
+      text: shortened,
+      selection: TextSelection.collapsed(offset: shortened.length),
+    );
+    setState(() => _message = null);
+  }
+
   @override
   Widget build(BuildContext context) {
     final game = _game;
@@ -174,113 +196,128 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
               padding: const EdgeInsets.all(20),
               child: _loading
                   ? const Center(child: CircularProgressIndicator())
-                  : Column(
-                      children: [
-                        Wrap(
-                          spacing: 16,
-                          runSpacing: 8,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            DropdownButton<LanguageMode>(
-                              value: _mode,
-                              onChanged: (value) {
-                                if (value != null) _changeMode(value);
-                              },
-                              items: [
-                                for (final mode in LanguageMode.values)
-                                  DropdownMenuItem(
-                                    value: mode,
-                                    child: Text(mode.label),
-                                  ),
-                              ],
-                            ),
-                            DropdownButton<int>(
-                              value: _wordLength,
-                              onChanged: (value) {
-                                if (value != null) _startGame(length: value);
-                              },
-                              items: [
-                                for (final length in _availableLengths(_mode))
-                                  DropdownMenuItem(
-                                    value: length,
-                                    child: Text('$length letters'),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Expanded(
-                          child: game == null
-                              ? const SizedBox.shrink()
-                              : _Board(
-                                  turns: game.turns,
-                                  wordLength: game.wordLength,
-                                  maximumAttempts: game.maximumAttempts,
-                                ),
-                        ),
-                        if (_message != null)
-                          Semantics(
-                            liveRegion: true,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: Text(
-                                _message!,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                          ),
-                        if (game != null && isComplete) ...[
-                          Text(
-                            game.solution,
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _solutionEntry!.englishDefinition,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 12),
-                        ],
-                        if (game != null)
-                          Row(
+                  : SingleChildScrollView(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      child: Column(
+                        children: [
+                          Wrap(
+                            spacing: 16,
+                            runSpacing: 8,
+                            alignment: WrapAlignment.center,
                             children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: _controller,
-                                  enabled: !isComplete,
-                                  maxLength: game.wordLength,
-                                  autofocus: true,
-                                  textCapitalization:
-                                      TextCapitalization.characters,
-                                  inputFormatters: inputFormatters,
-                                  decoration: InputDecoration(
-                                    labelText: _mode == LanguageMode.gurmukhi
-                                        ? 'Gurmukhi guess'
-                                        : 'Your guess',
-                                    counterText: '',
-                                    border: const OutlineInputBorder(),
-                                  ),
-                                  onSubmitted: (_) => _submit(),
-                                ),
+                              DropdownButton<LanguageMode>(
+                                value: _mode,
+                                onChanged: (value) {
+                                  if (value != null) _changeMode(value);
+                                },
+                                items: [
+                                  for (final mode in LanguageMode.values)
+                                    DropdownMenuItem(
+                                      value: mode,
+                                      child: Text(mode.label),
+                                    ),
+                                ],
                               ),
-                              const SizedBox(width: 12),
-                              FilledButton(
-                                onPressed: isComplete
-                                    ? () => _startGame()
-                                    : _submit,
-                                child: Text(isComplete ? 'New game' : 'Enter'),
+                              DropdownButton<int>(
+                                value: _wordLength,
+                                onChanged: (value) {
+                                  if (value != null) _startGame(length: value);
+                                },
+                                items: [
+                                  for (final length in _availableLengths(_mode))
+                                    DropdownMenuItem(
+                                      value: length,
+                                      child: Text('$length letters'),
+                                    ),
+                                ],
                               ),
                             ],
                           ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Offline starter solution set — editorial review pending',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
+                          const SizedBox(height: 12),
+                          if (game != null)
+                            _Board(
+                              turns: game.turns,
+                              wordLength: game.wordLength,
+                              maximumAttempts: game.maximumAttempts,
+                            ),
+                          if (_message != null)
+                            Semantics(
+                              liveRegion: true,
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  _message!,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium,
+                                ),
+                              ),
+                            ),
+                          if (game != null && isComplete) ...[
+                            Text(
+                              game.solution,
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              _solutionEntry!.englishDefinition,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 12),
+                          ],
+                          if (game != null)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _controller,
+                                    enabled: !isComplete,
+                                    maxLength: game.wordLength,
+                                    autofocus: true,
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    inputFormatters: inputFormatters,
+                                    decoration: InputDecoration(
+                                      labelText: _mode == LanguageMode.gurmukhi
+                                          ? 'Gurmukhi guess'
+                                          : 'Your guess',
+                                      counterText: '',
+                                      border: const OutlineInputBorder(),
+                                    ),
+                                    onSubmitted: (_) => _submit(),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                FilledButton(
+                                  onPressed: isComplete
+                                      ? () => _startGame()
+                                      : _submit,
+                                  child: Text(
+                                    isComplete ? 'New game' : 'Enter',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          if (game != null) ...[
+                            const SizedBox(height: 10),
+                            GameKeyboard(
+                              mode: _mode,
+                              enabled: !isComplete,
+                              onCharacter: _appendCharacter,
+                              onBackspace: _backspace,
+                              onEnter: _submit,
+                            ),
+                          ],
+                          const SizedBox(height: 8),
+                          Text(
+                            'Offline starter solution set — editorial review pending',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
                     ),
             ),
           ),
@@ -307,29 +344,27 @@ class _Board extends StatelessWidget {
       final spacing = wordLength == 6 ? 5.0 : 8.0;
       final available = constraints.maxWidth - ((wordLength - 1) * spacing);
       final size = (available / wordLength).clamp(34.0, 68.0);
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            for (var row = 0; row < maximumAttempts; row++)
-              Padding(
-                padding: EdgeInsets.only(bottom: spacing),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (var column = 0; column < wordLength; column++) ...[
-                      _Tile(
-                        size: size,
-                        letter: row < turns.length
-                            ? turns[row].evaluation[column]
-                            : null,
-                      ),
-                      if (column < wordLength - 1) SizedBox(width: spacing),
-                    ],
+      return Column(
+        children: [
+          for (var row = 0; row < maximumAttempts; row++)
+            Padding(
+              padding: EdgeInsets.only(bottom: spacing),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var column = 0; column < wordLength; column++) ...[
+                    _Tile(
+                      size: size,
+                      letter: row < turns.length
+                          ? turns[row].evaluation[column]
+                          : null,
+                    ),
+                    if (column < wordLength - 1) SizedBox(width: spacing),
                   ],
-                ),
+                ],
               ),
-          ],
-        ),
+            ),
+        ],
       );
     },
   );
