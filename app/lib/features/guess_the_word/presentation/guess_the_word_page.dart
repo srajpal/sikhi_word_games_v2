@@ -15,6 +15,7 @@ import '../domain/guess_statistics.dart';
 import '../domain/guess_share.dart';
 import '../domain/keyboard_feedback.dart';
 import '../data/guess_statistics_repository.dart';
+import '../data/guess_game_repository.dart';
 import 'game_keyboard.dart';
 
 enum _GameMenuAction { settings, help, statistics, dictionary, copyResult }
@@ -25,6 +26,7 @@ class GuessTheWordPage extends StatefulWidget {
     required this.onThemeChanged,
     required this.vocabularyRepository,
     required this.statisticsRepository,
+    required this.gameRepository,
     super.key,
   });
 
@@ -32,6 +34,7 @@ class GuessTheWordPage extends StatefulWidget {
   final ValueChanged<AppThemeChoice> onThemeChanged;
   final VocabularyRepository vocabularyRepository;
   final GuessStatisticsRepository statisticsRepository;
+  final GuessGameRepository gameRepository;
 
   @override
   State<GuessTheWordPage> createState() => _GuessTheWordPageState();
@@ -103,7 +106,33 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       final entries = await widget.vocabularyRepository.load();
       if (!mounted) return;
       _pool = WordPool(entries);
-      _startGame();
+      final restored = widget.gameRepository.restore(
+        (mode, length) =>
+            _pool!.acceptedGuesses(mode: mode, wordLength: length),
+      );
+      if (restored == null) {
+        _startGame();
+        return;
+      }
+      final solutionEntry = _pool!.entryForGuess(
+        mode: restored.mode,
+        guess: restored.game.solution,
+      );
+      if (solutionEntry == null) {
+        widget.gameRepository.clear();
+        _startGame();
+        return;
+      }
+      setState(() {
+        _mode = restored.mode;
+        _wordLength = restored.game.wordLength;
+        _solutionEntry = solutionEntry;
+        _game = restored.game;
+        _controller.clear();
+        _message = null;
+        _loading = false;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
     } on Object catch (error) {
       if (!mounted) return;
       setState(() {
@@ -145,6 +174,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       _message = null;
       _loading = false;
     });
+    widget.gameRepository.save(game: _game!, mode: _mode);
     WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
   }
 
@@ -173,6 +203,9 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           attempts: game.turns.length,
         );
         widget.statisticsRepository.save(_statistics);
+        widget.gameRepository.clear();
+      } else {
+        widget.gameRepository.save(game: game, mode: _mode);
       }
       _controller.clear();
       _message = null;

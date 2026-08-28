@@ -62,6 +62,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Build a minimal playable screen for fast iteration using temporary content.
 - [x] Replace temporary `APPLE` content with the offline vocabulary repository and explicit starter solutions.
 - [x] Connect English, romanized Panjabi, Mixed Latin, and initial Gurmukhi mode/length selection.
+- [x] Restore interrupted games with their mode, length, turns, and keyboard feedback.
 - [x] Add the shared Latin keyboard for English, romanized Panjabi, and Mixed Latin.
 - [x] Add the initial purpose-built Gurmukhi keyboard with vowel signs and extended letters.
 - [x] Disable keyboard symbols proven absent without breaking repeated-letter cases.

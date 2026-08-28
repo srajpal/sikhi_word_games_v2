@@ -6,6 +6,7 @@ import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/features/settings/data/app_settings_repository.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/data/guess_game_repository.dart';
 
 void main() {
   testWidgets('opens Guess the Word from the game library', (tester) async {
@@ -149,6 +150,61 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('You found it!'), findsOneWidget);
+  });
+
+  testWidgets('restores an interrupted game from offline storage', (
+    tester,
+  ) async {
+    final store = MemoryKeyValueStore();
+    final settings = AppSettingsRepository(store);
+    final games = GuessGameRepository(store);
+
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: settings,
+        gameRepository: games,
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.tap(find.text('Play prototype'));
+    await tester.pumpAndSettle();
+    for (final letter in 'GRAPE'.characters) {
+      await tester.tap(find.byKey(ValueKey('key-$letter')));
+      await tester.pump();
+    }
+    await tester.tap(find.byKey(const ValueKey('key-enter')));
+    await tester.pump();
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: settings,
+        gameRepository: games,
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.tap(find.text('Play prototype'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('tile-0-0')),
+        matching: find.text('G'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.descendant(
+              of: find.byKey(const ValueKey('key-G')),
+              matching: find.byType(FilledButton),
+            ),
+          )
+          .onPressed,
+      isNull,
+    );
   });
 
   testWidgets('plays a complete game with the on-screen keyboard', (
