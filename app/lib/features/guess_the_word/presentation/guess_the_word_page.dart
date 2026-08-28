@@ -8,6 +8,8 @@ import '../domain/guess_evaluator.dart';
 import '../domain/guess_game.dart';
 import '../domain/language_mode.dart';
 import '../domain/word_pool.dart';
+import '../domain/guess_statistics.dart';
+import '../data/guess_statistics_repository.dart';
 import 'game_keyboard.dart';
 
 class GuessTheWordPage extends StatefulWidget {
@@ -15,12 +17,14 @@ class GuessTheWordPage extends StatefulWidget {
     required this.themeChoice,
     required this.onThemeChanged,
     required this.vocabularyRepository,
+    required this.statisticsRepository,
     super.key,
   });
 
   final AppThemeChoice themeChoice;
   final ValueChanged<AppThemeChoice> onThemeChanged;
   final VocabularyRepository vocabularyRepository;
+  final GuessStatisticsRepository statisticsRepository;
 
   @override
   State<GuessTheWordPage> createState() => _GuessTheWordPageState();
@@ -37,10 +41,12 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   int _wordLength = 5;
   String? _message;
   bool _loading = true;
+  late GuessStatisticsBook _statistics;
 
   @override
   void initState() {
     super.initState();
+    _statistics = widget.statisticsRepository.load();
     _loadVocabulary();
   }
 
@@ -129,6 +135,15 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         return;
       }
       _lastGuessEntry = _pool?.entryForGuess(mode: _mode, guess: guess);
+      if (game.status != GuessGameStatus.playing) {
+        _statistics = _statistics.record(
+          mode: _mode,
+          wordLength: game.wordLength,
+          won: game.status == GuessGameStatus.won,
+          attempts: game.turns.length,
+        );
+        widget.statisticsRepository.save(_statistics);
+      }
       _controller.clear();
       _message = switch (game.status) {
         GuessGameStatus.won => 'You found it!',
@@ -173,6 +188,23 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     ),
   );
 
+  Future<void> _showStatistics() {
+    final statistics = _statistics.forGame(_mode, _wordLength);
+    return showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('${_mode.label} · $_wordLength letters'),
+        content: _StatisticsContent(statistics: statistics),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final game = _game;
@@ -186,6 +218,12 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       appBar: AppBar(
         title: const Text('Guess the Word'),
         actions: [
+          IconButton(
+            key: const ValueKey('guess-statistics'),
+            tooltip: 'Statistics',
+            onPressed: _showStatistics,
+            icon: const Icon(Icons.bar_chart),
+          ),
           IconButton(
             key: const ValueKey('guess-help'),
             tooltip: 'How to play',
@@ -447,6 +485,96 @@ class _HelpRow extends StatelessWidget {
         Icon(icon, semanticLabel: label),
         const SizedBox(width: 10),
         Expanded(child: Text('$label — $description')),
+      ],
+    ),
+  );
+}
+
+class _StatisticsContent extends StatelessWidget {
+  const _StatisticsContent({required this.statistics});
+
+  final GuessStatistics statistics;
+
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 420),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Wrap(
+            alignment: WrapAlignment.spaceAround,
+            spacing: 16,
+            runSpacing: 12,
+            children: [
+              _StatisticValue(value: statistics.gamesPlayed, label: 'Played'),
+              _StatisticValue(value: statistics.winPercentage, label: 'Win %'),
+              _StatisticValue(value: statistics.currentStreak, label: 'Streak'),
+              _StatisticValue(value: statistics.bestStreak, label: 'Best'),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Guess distribution',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          for (var attempt = 1; attempt <= 6; attempt++)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Row(
+                children: [
+                  SizedBox(width: 24, child: Text('$attempt')),
+                  Expanded(
+                    child: Semantics(
+                      label:
+                          '$attempt guesses, '
+                          '${statistics.winDistribution[attempt] ?? 0} wins',
+                      child: ExcludeSemantics(
+                        child: LinearProgressIndicator(
+                          minHeight: 18,
+                          value: statistics.gamesWon == 0
+                              ? 0
+                              : (statistics.winDistribution[attempt] ?? 0) /
+                                    statistics.gamesWon,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 32,
+                    child: Text(
+                      '${statistics.winDistribution[attempt] ?? 0}',
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
+class _StatisticValue extends StatelessWidget {
+  const _StatisticValue({required this.value, required this.label});
+
+  final int value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: 64,
+    child: Column(
+      children: [
+        Text(
+          '$value',
+          key: ValueKey('stat-$label'),
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        Text(label, textAlign: TextAlign.center),
       ],
     ),
   );

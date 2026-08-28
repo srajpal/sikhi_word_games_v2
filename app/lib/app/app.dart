@@ -5,18 +5,25 @@ import '../core/themes/app_theme.dart';
 import '../core/content/vocabulary_repository.dart';
 import '../features/game_library/presentation/game_library_page.dart';
 import '../features/guess_the_word/presentation/guess_the_word_page.dart';
+import '../features/guess_the_word/data/guess_statistics_repository.dart';
+import '../core/persistence/key_value_store.dart';
 import '../features/settings/data/app_settings_repository.dart';
 
 class SikhiWordGamesApp extends StatefulWidget {
   SikhiWordGamesApp({
     required this.settingsRepository,
     VocabularyRepository? vocabularyRepository,
+    GuessStatisticsRepository? statisticsRepository,
     super.key,
   }) : vocabularyRepository =
-           vocabularyRepository ?? AssetVocabularyRepository();
+           vocabularyRepository ?? AssetVocabularyRepository(),
+       statisticsRepository =
+           statisticsRepository ??
+           GuessStatisticsRepository(MemoryKeyValueStore());
 
   final AppSettingsRepository settingsRepository;
   final VocabularyRepository vocabularyRepository;
+  final GuessStatisticsRepository statisticsRepository;
 
   @override
   State<SikhiWordGamesApp> createState() => _SikhiWordGamesAppState();
@@ -42,6 +49,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 themeChoice: _choice,
                 onThemeChanged: _changeTheme,
                 vocabularyRepository: widget.vocabularyRepository,
+                statisticsRepository: widget.statisticsRepository,
               ),
             ),
           ],

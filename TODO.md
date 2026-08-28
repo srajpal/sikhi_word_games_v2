@@ -67,7 +67,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add tile feedback symbols and semantic labels that do not rely on color alone.
 - [x] Show definitions after accepted guesses and reveal the solution definition at completion.
 - [x] Add in-app gameplay help and language-mode explanations.
-- [ ] Add statistics stored completely offline.
+- [x] Add versioned per-mode and per-length statistics stored completely offline.
 - [ ] Add spoiler-safe sharing.
 - [ ] Add physical-keyboard support where appropriate.
 - [ ] Add animations and haptics with reduced-motion/haptics settings.
@@ -79,7 +79,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Test Unicode grapheme counting plus Gurmukhi keyboard composition and visible-grapheme deletion.
 - [x] Test the initial language and grapheme-length filters.
 - [x] Test accepted guesses versus curated solutions.
-- [ ] Complete statistics coverage; seeded selection, core boundaries, and restoration now pass.
+- [x] Cover offline statistics totals, streaks, distributions, isolation, persistence, and malformed-data fallback.
 - [x] Add initial content-import and validation tests.
 - [ ] Add responsive widget tests.
 - [ ] Add Modern and Sketch golden tests.

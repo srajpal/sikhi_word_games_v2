@@ -86,6 +86,18 @@ void main() {
     expect(find.byIcon(Icons.check), findsNWidgets(6));
     expect(find.byIcon(Icons.swap_horiz), findsNWidgets(2));
     expect(find.byIcon(Icons.close), findsNWidgets(2));
+
+    await tester.tap(find.byKey(const ValueKey('guess-statistics')));
+    await tester.pumpAndSettle();
+    expect(find.text('English · 5 letters'), findsOneWidget);
+    expect(
+      tester.widget<Text>(find.byKey(const ValueKey('stat-Played'))).data,
+      '1',
+    );
+    expect(
+      tester.widget<Text>(find.byKey(const ValueKey('stat-Win %'))).data,
+      '100',
+    );
   });
 
   testWidgets('Gurmukhi keyboard composes and deletes visible graphemes', (
