@@ -53,13 +53,12 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => const GameLibraryPage(),
+          builder: (context, state) =>
+              GameLibraryPage(onThemeChanged: _changeTheme),
           routes: [
             GoRoute(
               path: 'guess-the-word',
               builder: (context, state) => GuessTheWordPage(
-                themeChoice: _choice,
-                onThemeChanged: _changeTheme,
                 vocabularyRepository: widget.vocabularyRepository,
                 statisticsRepository: widget.statisticsRepository,
                 gameRepository: widget.gameRepository,
@@ -69,8 +68,6 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             GoRoute(
               path: 'dictionary',
               builder: (context, state) => DictionaryPage(
-                themeChoice: _choice,
-                onThemeChanged: _changeTheme,
                 vocabularyRepository: widget.vocabularyRepository,
               ),
             ),

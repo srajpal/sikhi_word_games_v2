@@ -11,15 +11,24 @@ void main() {
     final repository = AppSettingsRepository(store);
     await repository.save(
       const AppSettings(
-        theme: AppThemeChoice.sketch,
+        theme: AppThemeChoice.sikhi,
         hapticsEnabled: false,
         reducedMotion: true,
       ),
     );
     final restored = repository.load();
-    expect(restored.theme, AppThemeChoice.sketch);
+    expect(restored.theme, AppThemeChoice.sikhi);
     expect(restored.hapticsEnabled, isFalse);
     expect(restored.reducedMotion, isTrue);
+  });
+
+  test('migrates the former Sketch choice to Sikhi', () {
+    final store = MemoryKeyValueStore()
+      ..values[AppSettingsRepository.storageKey] = jsonEncode({
+        'schemaVersion': 1,
+        'theme': 'sketch',
+      });
+    expect(AppSettingsRepository(store).load().theme, AppThemeChoice.sikhi);
   });
 
   test('uses safe defaults for an unsupported schema', () {

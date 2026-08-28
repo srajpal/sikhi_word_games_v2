@@ -30,8 +30,6 @@ enum _GameMenuAction {
 
 class GuessTheWordPage extends StatefulWidget {
   const GuessTheWordPage({
-    required this.themeChoice,
-    required this.onThemeChanged,
     required this.vocabularyRepository,
     required this.statisticsRepository,
     required this.gameRepository,
@@ -39,8 +37,6 @@ class GuessTheWordPage extends StatefulWidget {
     super.key,
   });
 
-  final AppThemeChoice themeChoice;
-  final ValueChanged<AppThemeChoice> onThemeChanged;
   final VocabularyRepository vocabularyRepository;
   final GuessStatisticsRepository statisticsRepository;
   final GuessGameRepository gameRepository;
@@ -284,7 +280,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   Future<void> _showGameSettings() async {
     var selectedMode = _mode;
     var selectedLength = _wordLength;
-    var selectedTheme = widget.themeChoice;
     final applied = await showDialog<bool>(
       context: context,
       builder: (context) => StatefulBuilder(
@@ -331,30 +326,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                       if (value != null) selectedLength = value;
                     },
                   ),
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<AppThemeChoice>(
-                    key: const ValueKey('settings-theme'),
-                    initialValue: selectedTheme,
-                    isExpanded: true,
-                    decoration: const InputDecoration(labelText: 'Theme'),
-                    items: const [
-                      DropdownMenuItem(
-                        value: AppThemeChoice.modern,
-                        child: Text('Modern'),
-                      ),
-                      DropdownMenuItem(
-                        value: AppThemeChoice.sketch,
-                        child: Text('Sketch'),
-                      ),
-                      DropdownMenuItem(
-                        value: AppThemeChoice.dark,
-                        child: Text('Dark'),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) selectedTheme = value;
-                    },
-                  ),
                 ],
               ),
             ),
@@ -375,9 +346,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       ),
     );
     if (applied != true || !mounted) return;
-    if (selectedTheme != widget.themeChoice) {
-      widget.onThemeChanged(selectedTheme);
-    }
     if (selectedMode != _mode || selectedLength != _wordLength) {
       _mode = selectedMode;
       _startGame(length: selectedLength);
@@ -894,7 +862,7 @@ class _Tile extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: tokens.tileRadius,
-          boxShadow: tokens.sketchStyle
+          boxShadow: tokens.sikhiStyle
               ? const [
                   BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
                 ]

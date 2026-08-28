@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
-enum AppThemeChoice { modern, sketch, dark }
+enum AppThemeChoice { modern, sikhi, dark }
+
+extension AppThemeChoiceLabel on AppThemeChoice {
+  String get label => switch (this) {
+    AppThemeChoice.modern => 'Modern',
+    AppThemeChoice.sikhi => 'Sikhi',
+    AppThemeChoice.dark => 'Dark',
+  };
+}
 
 @immutable
 class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
@@ -11,7 +19,7 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
     required this.tileBorder,
     required this.tileRadius,
     required this.tileBorderWidth,
-    required this.sketchStyle,
+    required this.sikhiStyle,
   });
 
   final Color correct;
@@ -20,7 +28,7 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
   final Color tileBorder;
   final BorderRadius tileRadius;
   final double tileBorderWidth;
-  final bool sketchStyle;
+  final bool sikhiStyle;
 
   @override
   GameThemeTokens copyWith({
@@ -30,7 +38,7 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
     Color? tileBorder,
     BorderRadius? tileRadius,
     double? tileBorderWidth,
-    bool? sketchStyle,
+    bool? sikhiStyle,
   }) => GameThemeTokens(
     correct: correct ?? this.correct,
     present: present ?? this.present,
@@ -38,7 +46,7 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
     tileBorder: tileBorder ?? this.tileBorder,
     tileRadius: tileRadius ?? this.tileRadius,
     tileBorderWidth: tileBorderWidth ?? this.tileBorderWidth,
-    sketchStyle: sketchStyle ?? this.sketchStyle,
+    sikhiStyle: sikhiStyle ?? this.sikhiStyle,
   );
 
   @override
@@ -52,7 +60,7 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
       tileRadius: BorderRadius.lerp(tileRadius, other.tileRadius, t)!,
       tileBorderWidth:
           tileBorderWidth + (other.tileBorderWidth - tileBorderWidth) * t,
-      sketchStyle: t < 0.5 ? sketchStyle : other.sketchStyle,
+      sikhiStyle: t < 0.5 ? sikhiStyle : other.sikhiStyle,
     );
   }
 }
@@ -64,22 +72,22 @@ abstract final class AppThemes {
       background: const Color(0xFFF6F7FB),
       radius: 12,
       borderWidth: 1.5,
-      sketchStyle: false,
+      sikhiStyle: false,
     ),
-    AppThemeChoice.sketch => _theme(
-      seed: const Color(0xFF53604A),
-      background: const Color(0xFFF3EBD8),
-      radius: 1,
-      borderWidth: 3,
-      sketchStyle: true,
-      fontFamily: 'monospace',
+    AppThemeChoice.sikhi => _theme(
+      seed: const Color(0xFFE28A16),
+      background: const Color(0xFFFFF8E8),
+      radius: 6,
+      borderWidth: 2.5,
+      sikhiStyle: true,
+      fontFamily: 'serif',
     ),
     AppThemeChoice.dark => _theme(
       seed: const Color(0xFF8FB4FF),
       background: const Color(0xFF111318),
       radius: 12,
       borderWidth: 1.5,
-      sketchStyle: false,
+      sikhiStyle: false,
       brightness: Brightness.dark,
     ),
   };
@@ -89,7 +97,7 @@ abstract final class AppThemes {
     required Color background,
     required double radius,
     required double borderWidth,
-    required bool sketchStyle,
+    required bool sikhiStyle,
     Brightness brightness = Brightness.light,
     String? fontFamily,
   }) => ThemeData(
@@ -98,12 +106,38 @@ abstract final class AppThemes {
     colorScheme: ColorScheme.fromSeed(seedColor: seed, brightness: brightness),
     scaffoldBackgroundColor: background,
     fontFamily: fontFamily,
-    filledButtonTheme: sketchStyle
+    appBarTheme: sikhiStyle
+        ? const AppBarTheme(
+            centerTitle: true,
+            backgroundColor: Color(0xFF173A67),
+            foregroundColor: Color(0xFFFFF8E8),
+          )
+        : null,
+    cardTheme: sikhiStyle
+        ? const CardThemeData(
+            color: Color(0xFFFFFCF4),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(22),
+                topRight: Radius.circular(22),
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(5),
+              ),
+              side: BorderSide(color: Color(0xFF173A67), width: 1.5),
+            ),
+          )
+        : null,
+    filledButtonTheme: sikhiStyle
         ? FilledButtonThemeData(
             style: FilledButton.styleFrom(
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(2)),
-                side: BorderSide(color: Color(0xFF30342F), width: 1.5),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(14),
+                  topRight: Radius.circular(14),
+                  bottomLeft: Radius.circular(4),
+                  bottomRight: Radius.circular(4),
+                ),
+                side: BorderSide(color: Color(0xFF173A67), width: 1.5),
               ),
             ),
           )
@@ -116,7 +150,7 @@ abstract final class AppThemes {
         tileBorder: const Color(0xFF34383E),
         tileRadius: BorderRadius.all(Radius.circular(radius)),
         tileBorderWidth: borderWidth,
-        sketchStyle: sketchStyle,
+        sikhiStyle: sikhiStyle,
       ),
     ],
   );

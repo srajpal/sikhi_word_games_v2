@@ -3,21 +3,13 @@ import 'package:flutter/services.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
-import '../../../core/themes/app_theme.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../guess_the_word/domain/word_pool.dart';
 import '../../guess_the_word/presentation/game_keyboard.dart';
 
 class DictionaryPage extends StatefulWidget {
-  const DictionaryPage({
-    required this.themeChoice,
-    required this.onThemeChanged,
-    required this.vocabularyRepository,
-    super.key,
-  });
+  const DictionaryPage({required this.vocabularyRepository, super.key});
 
-  final AppThemeChoice themeChoice;
-  final ValueChanged<AppThemeChoice> onThemeChanged;
   final VocabularyRepository vocabularyRepository;
 
   @override
@@ -143,30 +135,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text('Dictionary'),
-      actions: [
-        DropdownButton<AppThemeChoice>(
-          value: widget.themeChoice,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          underline: const SizedBox.shrink(),
-          onChanged: (value) {
-            if (value != null) widget.onThemeChanged(value);
-          },
-          items: const [
-            DropdownMenuItem(
-              value: AppThemeChoice.modern,
-              child: Text('Modern'),
-            ),
-            DropdownMenuItem(
-              value: AppThemeChoice.sketch,
-              child: Text('Sketch'),
-            ),
-            DropdownMenuItem(value: AppThemeChoice.dark, child: Text('Dark')),
-          ],
-        ),
-      ],
-    ),
+    appBar: AppBar(title: const Text('Dictionary')),
     body: SafeArea(
       child: Center(
         child: ConstrainedBox(

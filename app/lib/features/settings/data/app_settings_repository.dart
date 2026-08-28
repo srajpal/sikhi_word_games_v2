@@ -38,11 +38,14 @@ class AppSettings {
     if (json['schemaVersion'] != currentSchemaVersion) {
       return const AppSettings();
     }
+    final storedTheme = json['theme'];
     final matchingThemes = AppThemeChoice.values.where(
-      (value) => value.name == json['theme'],
+      (value) => value.name == storedTheme,
     );
     return AppSettings(
-      theme: matchingThemes.isEmpty
+      theme: storedTheme == 'sketch'
+          ? AppThemeChoice.sikhi
+          : matchingThemes.isEmpty
           ? AppThemeChoice.modern
           : matchingThemes.first,
       hapticsEnabled: json['hapticsEnabled'] as bool? ?? true,

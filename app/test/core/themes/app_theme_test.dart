@@ -3,14 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 
 void main() {
-  test('Sketch uses distinct typography and game-board treatment', () {
+  test('Sikhi uses distinct typography and game-board treatment', () {
     final modern = AppThemes.forChoice(AppThemeChoice.modern);
-    final sketch = AppThemes.forChoice(AppThemeChoice.sketch);
+    final sketch = AppThemes.forChoice(AppThemeChoice.sikhi);
     final modernTokens = modern.extension<GameThemeTokens>()!;
     final sketchTokens = sketch.extension<GameThemeTokens>()!;
 
-    expect(sketch.textTheme.bodyMedium?.fontFamily, 'monospace');
-    expect(sketchTokens.sketchStyle, isTrue);
+    expect(sketch.textTheme.bodyMedium?.fontFamily, 'serif');
+    expect(sketchTokens.sikhiStyle, isTrue);
     expect(sketchTokens.tileRadius, isNot(modernTokens.tileRadius));
     expect(
       sketchTokens.tileBorderWidth,

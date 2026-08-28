@@ -39,6 +39,28 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('changes the app-wide theme from the game library', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('app-theme-menu')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sikhi'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('ੴ'), findsOneWidget);
+    expect(
+      Theme.of(tester.element(find.text('Choose a game'))).brightness,
+      Brightness.light,
+    );
+  });
+
   testWidgets('explains gameplay and every language mode', (tester) async {
     await tester.pumpWidget(
       SikhiWordGamesApp(

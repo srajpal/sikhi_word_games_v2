@@ -26,8 +26,9 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add routing and the initial game-library home screen.
 - [x] Add offline persistence interfaces and schema versioning.
 - [x] Add initial semantic theme tokens.
-- [x] Add initial user-selectable Modern and Sketch themes.
-- [x] Differentiate the Sketch design and add a Dark theme.
+- [x] Add initial user-selectable Modern and Sikhi themes.
+- [x] Build a distinctive Sikhi design and add a Dark theme.
+- [x] Move the app-wide theme selector to the game-library home page.
 - [x] Lock phones to portrait while retaining adaptive tablet and web orientation.
 - [x] Complete initial responsive library and fixed-viewport gameplay layouts for phones and wide screens.
 - [x] Add initial accessibility conventions for semantics, focus, contrast, and text scaling.
@@ -91,7 +92,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Cover offline statistics totals, streaks, distributions, isolation, persistence, and malformed-data fallback.
 - [x] Add initial content-import and validation tests.
 - [x] Add responsive widget tests for narrow library and fixed-viewport gameplay layouts.
-- [ ] Add Modern and Sketch golden tests.
+- [ ] Add Modern, Sikhi, and Dark golden tests.
 - [ ] Add representative integration flows.
 - [x] Establish a clean `flutter analyze` and test-suite baseline; keep both clean.
 
