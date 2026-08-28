@@ -11,6 +11,7 @@ class GameKeyboard extends StatelessWidget {
     required this.enabled,
     required this.disabledCharacters,
     this.compact = false,
+    this.enterLabel = 'ENTER',
     super.key,
   });
 
@@ -21,6 +22,7 @@ class GameKeyboard extends StatelessWidget {
   final bool enabled;
   final Set<String> disabledCharacters;
   final bool compact;
+  final String enterLabel;
 
   static const _latinRows = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -90,7 +92,7 @@ class GameKeyboard extends StatelessWidget {
                 flex: 3,
                 child: _KeyboardButton(
                   key: const ValueKey('key-enter'),
-                  label: 'ENTER',
+                  label: enterLabel,
                   semanticLabel: 'Submit guess',
                   onPressed: enabled ? onEnter : null,
                   height: compact ? 31 : 43,

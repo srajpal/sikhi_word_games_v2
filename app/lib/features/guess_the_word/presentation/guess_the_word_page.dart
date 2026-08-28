@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
@@ -262,20 +263,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     ).showSnackBar(const SnackBar(content: Text('Spoiler-free result copied')));
   }
 
-  Future<void> _showDictionary() => showDialog<void>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('${_mode.label} dictionary'),
-      content: _DictionaryContent(pool: _pool!, mode: _mode),
-      actions: [
-        FilledButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Close'),
-        ),
-      ],
-    ),
-  );
-
   void _handleMenuAction(_GameMenuAction action) {
     switch (action) {
       case _GameMenuAction.help:
@@ -283,7 +270,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       case _GameMenuAction.statistics:
         _showStatistics();
       case _GameMenuAction.dictionary:
-        _showDictionary();
+        context.push('/dictionary');
       case _GameMenuAction.copyResult:
         _copyResult();
     }
@@ -520,77 +507,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       ),
     );
   }
-}
-
-class _DictionaryContent extends StatefulWidget {
-  const _DictionaryContent({required this.pool, required this.mode});
-
-  final WordPool pool;
-  final LanguageMode mode;
-
-  @override
-  State<_DictionaryContent> createState() => _DictionaryContentState();
-}
-
-class _DictionaryContentState extends State<_DictionaryContent> {
-  final _searchController = TextEditingController();
-  List<VocabularyEntry> _results = const [];
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  void _search(String query) {
-    setState(() {
-      _results = widget.pool.search(mode: widget.mode, query: query);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) => SizedBox(
-    width: 480,
-    height: math.min(MediaQuery.sizeOf(context).height * 0.6, 520),
-    child: Column(
-      children: [
-        TextField(
-          key: const ValueKey('dictionary-search'),
-          controller: _searchController,
-          autofocus: true,
-          onChanged: _search,
-          decoration: const InputDecoration(
-            labelText: 'Search words or definitions',
-            prefixIcon: Icon(Icons.search),
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Expanded(
-          child: _searchController.text.trim().length < 2
-              ? const Center(child: Text('Enter at least two characters.'))
-              : _results.isEmpty
-              ? const Center(child: Text('No matching words.'))
-              : ListView.separated(
-                  itemCount: _results.length,
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: (context, index) {
-                    final entry = _results[index];
-                    final spelling = WordPool.spelling(entry, widget.mode)!;
-                    final secondarySpelling =
-                        widget.mode == LanguageMode.gurmukhi
-                        ? ' · ${entry.latin}'
-                        : '';
-                    return ListTile(
-                      title: Text('$spelling$secondarySpelling'),
-                      subtitle: Text(entry.englishDefinition),
-                    );
-                  },
-                ),
-        ),
-      ],
-    ),
-  );
 }
 
 class _GuessHelpContent extends StatelessWidget {

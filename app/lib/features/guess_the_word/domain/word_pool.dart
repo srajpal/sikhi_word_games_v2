@@ -58,10 +58,7 @@ class WordPool {
       if (!_supportsLanguage(entry, mode)) continue;
       final activeSpelling = spelling(entry, mode)?.toLowerCase();
       if (activeSpelling == null) continue;
-      if (activeSpelling.contains(normalized) ||
-          entry.latin.toLowerCase().contains(normalized) ||
-          (entry.gurmukhi?.contains(normalized) ?? false) ||
-          entry.englishDefinition.toLowerCase().contains(normalized)) {
+      if (activeSpelling.contains(normalized)) {
         matches.add(entry);
         if (matches.length == limit) break;
       }

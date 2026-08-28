@@ -60,15 +60,21 @@ void main() {
     expect(find.text('How to play'), findsNothing);
 
     await _chooseGameMenu(tester, 'Dictionary');
-    expect(find.text('English dictionary'), findsOneWidget);
-    await tester.enterText(
-      find.byKey(const ValueKey('dictionary-search')),
-      'apple',
+    expect(find.text('Dictionary'), findsOneWidget);
+    for (final letter in 'APPLE'.characters) {
+      await tester.tap(find.byKey(ValueKey('key-$letter')));
+      await tester.pump();
+    }
+    expect(
+      find.descendant(
+        of: find.byType(ListTile),
+        matching: find.text('APPLE'),
+      ),
+      findsOneWidget,
     );
-    await tester.pumpAndSettle();
-    expect(find.text('APPLE'), findsOneWidget);
+    expect(find.text('English'), findsWidgets);
     expect(find.text('A round fruit'), findsOneWidget);
-    await tester.tap(find.text('Close'));
+    await tester.pageBack();
     await tester.pumpAndSettle();
   });
 

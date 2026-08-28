@@ -68,7 +68,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add tile feedback symbols and semantic labels that do not rely on color alone.
 - [x] Reveal the answer and its definition at game completion.
 - [x] Add in-app gameplay help and language-mode explanations.
-- [x] Add searchable offline dictionary access from the game menu.
+- [x] Add a dedicated offline dictionary page with English, Romanized Panjabi, and Gurmukhi word-only search.
 - [x] Add versioned per-mode and per-length statistics stored completely offline.
 - [x] Add offline, clipboard-based spoiler-safe result sharing.
 - [x] Support physical keyboards and IME submission with persistent input focus.

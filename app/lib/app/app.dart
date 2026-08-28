@@ -5,6 +5,7 @@ import '../core/themes/app_theme.dart';
 import '../core/content/vocabulary_repository.dart';
 import '../features/game_library/presentation/game_library_page.dart';
 import '../features/guess_the_word/presentation/guess_the_word_page.dart';
+import '../features/dictionary/presentation/dictionary_page.dart';
 import '../features/guess_the_word/data/guess_statistics_repository.dart';
 import '../core/persistence/key_value_store.dart';
 import '../features/settings/data/app_settings_repository.dart';
@@ -50,6 +51,14 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 onThemeChanged: _changeTheme,
                 vocabularyRepository: widget.vocabularyRepository,
                 statisticsRepository: widget.statisticsRepository,
+              ),
+            ),
+            GoRoute(
+              path: 'dictionary',
+              builder: (context, state) => DictionaryPage(
+                themeChoice: _choice,
+                onThemeChanged: _changeTheme,
+                vocabularyRepository: widget.vocabularyRepository,
               ),
             ),
           ],
