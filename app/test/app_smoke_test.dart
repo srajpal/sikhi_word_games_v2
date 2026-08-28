@@ -66,10 +66,7 @@ void main() {
       await tester.pump();
     }
     expect(
-      find.descendant(
-        of: find.byType(ListTile),
-        matching: find.text('APPLE'),
-      ),
+      find.descendant(of: find.byType(ListTile), matching: find.text('APPLE')),
       findsOneWidget,
     );
     expect(find.text('English'), findsWidgets);
@@ -101,6 +98,10 @@ void main() {
       expect(find.byType(TextField), findsNothing);
       expect(find.byType(SingleChildScrollView), findsNothing);
       expect(find.byKey(const ValueKey('key-enter')), findsOneWidget);
+      expect(
+        tester.getCenter(find.byKey(const ValueKey('key-backspace'))).dx,
+        greaterThan(tester.getCenter(find.byKey(const ValueKey('key-ੱ'))).dx),
+      );
       expect(tester.takeException(), isNull);
     },
   );
@@ -180,6 +181,10 @@ void main() {
     );
     await tester.tap(find.text('Play prototype'));
     await tester.pumpAndSettle();
+    expect(
+      tester.getCenter(find.byKey(const ValueKey('key-backspace'))).dx,
+      greaterThan(tester.getCenter(find.byKey(const ValueKey('key-M'))).dx),
+    );
     for (final letter in 'GRAPE'.characters) {
       await _tapVisible(tester, find.byKey(ValueKey('key-$letter')));
     }

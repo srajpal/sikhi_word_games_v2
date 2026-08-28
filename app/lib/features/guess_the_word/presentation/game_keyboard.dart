@@ -48,13 +48,17 @@ class GameKeyboard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (final row in rows)
+          for (var rowIndex = 0; rowIndex < rows.length; rowIndex++)
             Padding(
-              padding: const EdgeInsets.only(bottom: 5),
+              padding: EdgeInsets.only(
+                left: _rowInset(rowIndex, rows.length),
+                right: _rowInset(rowIndex, rows.length),
+                bottom: 5,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for (final character in row)
+                  for (final character in rows[rowIndex])
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -72,37 +76,43 @@ class GameKeyboard extends StatelessWidget {
                         ),
                       ),
                     ),
+                  if (rowIndex == rows.length - 1) ...[
+                    const SizedBox(width: 3),
+                    Expanded(
+                      child: _KeyboardButton(
+                        key: const ValueKey('key-backspace'),
+                        semanticLabel: 'Delete last letter',
+                        onPressed: enabled ? onBackspace : null,
+                        height: compact ? 31 : 43,
+                        child: const Icon(Icons.backspace_outlined, size: 20),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: _KeyboardButton(
-                  key: const ValueKey('key-backspace'),
-                  semanticLabel: 'Delete last letter',
-                  onPressed: enabled ? onBackspace : null,
-                  height: compact ? 31 : 43,
-                  child: const Icon(Icons.backspace_outlined, size: 20),
-                ),
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                flex: 3,
-                child: _KeyboardButton(
-                  key: const ValueKey('key-enter'),
-                  label: enterLabel,
-                  semanticLabel: 'Submit guess',
-                  onPressed: enabled ? onEnter : null,
-                  height: compact ? 31 : 43,
-                ),
-              ),
-            ],
+          SizedBox(
+            width: double.infinity,
+            child: _KeyboardButton(
+              key: const ValueKey('key-enter'),
+              label: enterLabel,
+              semanticLabel: enterLabel == 'ENTER'
+                  ? 'Submit guess'
+                  : enterLabel.toLowerCase(),
+              onPressed: enabled ? onEnter : null,
+              height: compact ? 31 : 43,
+            ),
           ),
         ],
       ),
     );
+  }
+
+  double _rowInset(int rowIndex, int rowCount) {
+    if (mode == LanguageMode.gurmukhi) return 0;
+    if (rowIndex == 1) return 14;
+    if (rowIndex == rowCount - 1) return 24;
+    return 0;
   }
 }
 
