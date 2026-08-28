@@ -37,6 +37,29 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('explains gameplay and every language mode', (tester) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.tap(find.text('Play prototype'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('guess-help')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('How to play'), findsOneWidget);
+    expect(find.text('Tile clues'), findsOneWidget);
+    expect(find.text('Language modes'), findsOneWidget);
+    expect(find.textContaining('Mixed Latin accepts both'), findsOneWidget);
+    expect(find.textContaining('work completely offline'), findsOneWidget);
+
+    await tester.tap(find.text('Got it'));
+    await tester.pumpAndSettle();
+    expect(find.text('How to play'), findsNothing);
+  });
+
   testWidgets('plays a complete game with the on-screen keyboard', (
     tester,
   ) async {

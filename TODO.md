@@ -66,7 +66,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add the initial purpose-built Gurmukhi keyboard with vowel signs and extended letters.
 - [x] Add tile feedback symbols and semantic labels that do not rely on color alone.
 - [x] Show definitions after accepted guesses and reveal the solution definition at completion.
-- [ ] Add help and language-mode explanations.
+- [x] Add in-app gameplay help and language-mode explanations.
 - [ ] Add statistics stored completely offline.
 - [ ] Add spoiler-safe sharing.
 - [ ] Add physical-keyboard support where appropriate.

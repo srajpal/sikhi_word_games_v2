@@ -159,6 +159,20 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     setState(() => _message = null);
   }
 
+  Future<void> _showHelp() => showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('How to play'),
+      content: const SingleChildScrollView(child: _GuessHelpContent()),
+      actions: [
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Got it'),
+        ),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final game = _game;
@@ -172,6 +186,12 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       appBar: AppBar(
         title: const Text('Guess the Word'),
         actions: [
+          IconButton(
+            key: const ValueKey('guess-help'),
+            tooltip: 'How to play',
+            onPressed: _showHelp,
+            icon: const Icon(Icons.help_outline),
+          ),
           DropdownButton<AppThemeChoice>(
             value: widget.themeChoice,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -352,6 +372,86 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   }
 }
 
+class _GuessHelpContent extends StatelessWidget {
+  const _GuessHelpContent();
+
+  @override
+  Widget build(BuildContext context) => ConstrainedBox(
+    constraints: const BoxConstraints(maxWidth: 460),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'Find the hidden word in six accepted guesses. Choose a four-, '
+          'five-, or six-letter game when that length is available.',
+        ),
+        const SizedBox(height: 16),
+        Text('Tile clues', style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 8),
+        const _HelpRow(
+          icon: Icons.check,
+          label: 'Correct',
+          description: 'The letter is in the correct position.',
+        ),
+        const _HelpRow(
+          icon: Icons.swap_horiz,
+          label: 'Present',
+          description: 'The letter belongs somewhere else in the word.',
+        ),
+        const _HelpRow(
+          icon: Icons.close,
+          label: 'Absent',
+          description: 'The letter is not used in the answer.',
+        ),
+        const SizedBox(height: 16),
+        Text('Language modes', style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 8),
+        const Text(
+          'English uses English words. Romanized Panjabi uses Panjabi words '
+          'written with Latin letters. Mixed Latin accepts both. Gurmukhi '
+          'uses Panjabi words and the custom Gurmukhi keyboard.',
+        ),
+        const SizedBox(height: 12),
+        const Text(
+          'Gurmukhi length counts visible letter groups, so a consonant and '
+          'its vowel sign count together. Backspace removes one visible group.',
+        ),
+        const SizedBox(height: 12),
+        const Text(
+          'Definitions appear after accepted guesses. Games and vocabulary '
+          'work completely offline.',
+        ),
+      ],
+    ),
+  );
+}
+
+class _HelpRow extends StatelessWidget {
+  const _HelpRow({
+    required this.icon,
+    required this.label,
+    required this.description,
+  });
+
+  final IconData icon;
+  final String label;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, semanticLabel: label),
+        const SizedBox(width: 10),
+        Expanded(child: Text('$label — $description')),
+      ],
+    ),
+  );
+}
+
 class _Board extends StatelessWidget {
   const _Board({
     required this.turns,
@@ -437,24 +537,29 @@ class _Tile extends StatelessWidget {
             width: tokens.tileBorderWidth,
           ),
         ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Text(
-              letter?.grapheme ?? '',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: letter == null ? null : Colors.white,
-                fontWeight: FontWeight.w800,
+        child: statusIcon == null
+            ? const SizedBox.shrink()
+            : Column(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        letter!.grapheme,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 17,
+                    child: Center(
+                      child: Icon(statusIcon, size: 13, color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            if (statusIcon != null)
-              Positioned(
-                right: 3,
-                bottom: 3,
-                child: Icon(statusIcon, size: 13, color: Colors.white),
-              ),
-          ],
-        ),
       ),
     );
   }
