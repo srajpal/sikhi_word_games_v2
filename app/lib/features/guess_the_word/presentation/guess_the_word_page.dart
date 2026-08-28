@@ -17,7 +17,7 @@ import '../domain/keyboard_feedback.dart';
 import '../data/guess_statistics_repository.dart';
 import 'game_keyboard.dart';
 
-enum _GameMenuAction { help, statistics, dictionary, copyResult }
+enum _GameMenuAction { settings, help, statistics, dictionary, copyResult }
 
 class GuessTheWordPage extends StatefulWidget {
   const GuessTheWordPage({
@@ -122,19 +122,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     ];
   }
 
-  void _changeMode(LanguageMode mode) {
-    final lengths = _availableLengths(mode);
-    if (lengths.isEmpty) {
-      setState(
-        () => _message = 'No reviewed starter solutions for ${mode.label}.',
-      );
-      return;
-    }
-    _mode = mode;
-    if (!lengths.contains(_wordLength)) _wordLength = lengths.first;
-    _startGame();
-  }
-
   void _startGame({int? length}) {
     final pool = _pool;
     if (pool == null) return;
@@ -166,16 +153,18 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     if (game == null) return;
     final guess = _controller.text;
     final result = game.submit(guess);
+    if (!result.isAccepted) {
+      final notice = switch (result.rejection!) {
+        GuessRejection.wrongLength =>
+          'Enter exactly ${game.wordLength} visible letters.',
+        GuessRejection.notAccepted => 'Not in the accepted-guess list.',
+        GuessRejection.gameOver => 'This game is already complete.',
+      };
+      _showNotice(notice);
+      _focusInput();
+      return;
+    }
     setState(() {
-      if (!result.isAccepted) {
-        _message = switch (result.rejection!) {
-          GuessRejection.wrongLength =>
-            'Enter exactly ${game.wordLength} visible letters.',
-          GuessRejection.notAccepted => 'Not in the accepted-guess list.',
-          GuessRejection.gameOver => 'This game is already complete.',
-        };
-        return;
-      }
       if (game.status != GuessGameStatus.playing) {
         _statistics = _statistics.record(
           mode: _mode,
@@ -186,12 +175,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         widget.statisticsRepository.save(_statistics);
       }
       _controller.clear();
-      _message = switch (game.status) {
-        GuessGameStatus.won => 'You found it!',
-        GuessGameStatus.lost => 'No guesses remain.',
-        GuessGameStatus.playing => null,
-      };
+      _message = null;
     });
+    if (game.status == GuessGameStatus.won) {
+      _showNotice('You found it!');
+    } else if (game.status == GuessGameStatus.lost) {
+      _showNotice('No guesses remain.');
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
   }
 
@@ -232,6 +222,119 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     ),
   );
 
+  void _showNotice(String message) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+        content: Text(message, textAlign: TextAlign.center),
+      ),
+    );
+  }
+
+  Future<void> _showGameSettings() async {
+    var selectedMode = _mode;
+    var selectedLength = _wordLength;
+    var selectedTheme = widget.themeChoice;
+    final applied = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          final lengths = _availableLengths(selectedMode);
+          if (!lengths.contains(selectedLength) && lengths.isNotEmpty) {
+            selectedLength = lengths.first;
+          }
+          return AlertDialog(
+            title: const Text('Game settings'),
+            content: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButtonFormField<LanguageMode>(
+                    key: const ValueKey('settings-language'),
+                    initialValue: selectedMode,
+                    isExpanded: true,
+                    decoration: const InputDecoration(labelText: 'Language'),
+                    items: [
+                      for (final mode in LanguageMode.values)
+                        DropdownMenuItem(value: mode, child: Text(mode.label)),
+                    ],
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setDialogState(() => selectedMode = value);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<int>(
+                    key: ValueKey('settings-length-$selectedMode'),
+                    initialValue: selectedLength,
+                    isExpanded: true,
+                    decoration: const InputDecoration(labelText: 'Word size'),
+                    items: [
+                      for (final length in lengths)
+                        DropdownMenuItem(
+                          value: length,
+                          child: Text('$length letters'),
+                        ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) selectedLength = value;
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<AppThemeChoice>(
+                    key: const ValueKey('settings-theme'),
+                    initialValue: selectedTheme,
+                    isExpanded: true,
+                    decoration: const InputDecoration(labelText: 'Theme'),
+                    items: const [
+                      DropdownMenuItem(
+                        value: AppThemeChoice.modern,
+                        child: Text('Modern'),
+                      ),
+                      DropdownMenuItem(
+                        value: AppThemeChoice.sketch,
+                        child: Text('Sketch'),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) selectedTheme = value;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              FilledButton(
+                onPressed: lengths.isEmpty
+                    ? null
+                    : () => Navigator.of(context).pop(true),
+                child: const Text('Apply'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+    if (applied != true || !mounted) return;
+    if (selectedTheme != widget.themeChoice) {
+      widget.onThemeChanged(selectedTheme);
+    }
+    if (selectedMode != _mode || selectedLength != _wordLength) {
+      _mode = selectedMode;
+      _startGame(length: selectedLength);
+    } else {
+      _focusInput();
+    }
+  }
+
   Future<void> _showStatistics() {
     final statistics = _statistics.forGame(_mode, _wordLength);
     return showDialog<void>(
@@ -258,13 +361,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       ),
     );
     if (!mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Spoiler-free result copied')));
+    _showNotice('Spoiler-free result copied');
   }
 
   void _handleMenuAction(_GameMenuAction action) {
     switch (action) {
+      case _GameMenuAction.settings:
+        _showGameSettings();
       case _GameMenuAction.help:
         _showHelp();
       case _GameMenuAction.statistics:
@@ -282,13 +385,30 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     final isComplete = game?.status != GuessGameStatus.playing;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Guess the Word'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Guess the Word'),
+            Text(
+              '${_mode.label} · $_wordLength letters',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+          ],
+        ),
         actions: [
           PopupMenuButton<_GameMenuAction>(
             key: const ValueKey('game-menu'),
             tooltip: 'Game menu',
             onSelected: _handleMenuAction,
             itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: _GameMenuAction.settings,
+                child: ListTile(
+                  leading: Icon(Icons.tune),
+                  title: Text('Game settings'),
+                ),
+              ),
               const PopupMenuItem(
                 value: _GameMenuAction.help,
                 child: ListTile(
@@ -320,24 +440,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
               ),
             ],
           ),
-          DropdownButton<AppThemeChoice>(
-            value: widget.themeChoice,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            underline: const SizedBox.shrink(),
-            onChanged: (value) {
-              if (value != null) widget.onThemeChanged(value);
-            },
-            items: const [
-              DropdownMenuItem(
-                value: AppThemeChoice.modern,
-                child: Text('Modern'),
-              ),
-              DropdownMenuItem(
-                value: AppThemeChoice.sketch,
-                child: Text('Sketch'),
-              ),
-            ],
-          ),
         ],
       ),
       body: SafeArea(
@@ -348,6 +450,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
               padding: const EdgeInsets.all(20),
               child: _loading
                   ? const Center(child: CircularProgressIndicator())
+                  : game == null
+                  ? Center(
+                      child: Text(
+                        _message ?? 'No game is available.',
+                        textAlign: TextAlign.center,
+                      ),
+                    )
                   : LayoutBuilder(
                       builder: (context, constraints) {
                         final compact = constraints.maxHeight < 650;
@@ -357,70 +466,15 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                           onKeyEvent: _handleHardwareKey,
                           child: Column(
                             children: [
-                              Wrap(
-                                spacing: 16,
-                                runSpacing: 8,
-                                alignment: WrapAlignment.center,
-                                children: [
-                                  DropdownButton<LanguageMode>(
-                                    value: _mode,
-                                    onChanged: (value) {
-                                      if (value != null) _changeMode(value);
-                                    },
-                                    items: [
-                                      for (final mode in LanguageMode.values)
-                                        DropdownMenuItem(
-                                          value: mode,
-                                          child: Text(mode.label),
-                                        ),
-                                    ],
-                                  ),
-                                  DropdownButton<int>(
-                                    value: _wordLength,
-                                    onChanged: (value) {
-                                      if (value != null) {
-                                        _startGame(length: value);
-                                      }
-                                    },
-                                    items: [
-                                      for (final length in _availableLengths(
-                                        _mode,
-                                      ))
-                                        DropdownMenuItem(
-                                          value: length,
-                                          child: Text('$length letters'),
-                                        ),
-                                    ],
-                                  ),
-                                ],
+                              Expanded(
+                                child: _Board(
+                                  turns: game.turns,
+                                  wordLength: game.wordLength,
+                                  maximumAttempts: game.maximumAttempts,
+                                ),
                               ),
-                              SizedBox(height: compact ? 4 : 10),
-                              if (game != null)
-                                Expanded(
-                                  child: _Board(
-                                    turns: game.turns,
-                                    wordLength: game.wordLength,
-                                    maximumAttempts: game.maximumAttempts,
-                                  ),
-                                ),
                               SizedBox(height: compact ? 6 : 12),
-                              if (_message != null)
-                                Semantics(
-                                  liveRegion: true,
-                                  child: SizedBox(
-                                    height: compact ? 34 : 44,
-                                    child: Text(
-                                      _message!,
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                  ),
-                                ),
-                              if (game != null && isComplete) ...[
+                              if (isComplete) ...[
                                 Text(
                                   game.solution,
                                   style: Theme.of(context).textTheme.titleLarge,
@@ -433,7 +487,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                 ),
                                 const SizedBox(height: 6),
                               ],
-                              if (game != null && !isComplete)
+                              if (!isComplete)
                                 Semantics(
                                   textField: true,
                                   readOnly: true,
@@ -470,7 +524,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                     ),
                                   ),
                                 ),
-                              if (game != null && !isComplete) ...[
+                              if (!isComplete) ...[
                                 SizedBox(height: compact ? 4 : 8),
                                 GameKeyboard(
                                   mode: _mode,
@@ -483,19 +537,11 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                   onEnter: _submit,
                                 ),
                               ],
-                              if (game != null && isComplete)
+                              if (isComplete)
                                 FilledButton(
                                   onPressed: () => _startGame(),
                                   child: const Text('New game'),
                                 ),
-                              if (!compact) ...[
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Works completely offline',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
                             ],
                           ),
                         );

@@ -90,10 +90,11 @@ void main() {
       );
       await tester.tap(find.text('Play prototype'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('English'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Gurmukhi').last);
-      await tester.pumpAndSettle();
+      await _applyGameSettings(
+        tester,
+        language: 'Gurmukhi',
+        length: '4 letters',
+      );
 
       expect(find.byType(TextField), findsNothing);
       expect(find.byType(SingleChildScrollView), findsNothing);
@@ -121,10 +122,7 @@ void main() {
     );
     await tester.tap(find.text('Play prototype'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('5 letters'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('4 letters').last);
-    await tester.pumpAndSettle();
+    await _applyGameSettings(tester, length: '4 letters');
 
     final lastTile = tester.getRect(find.byKey(const ValueKey('tile-5-0')));
     final guessDisplay = tester.getRect(
@@ -181,6 +179,15 @@ void main() {
     );
     await tester.tap(find.text('Play prototype'));
     await tester.pumpAndSettle();
+    final boardBeforeNotice = tester.getRect(
+      find.byKey(const ValueKey('tile-5-0')),
+    );
+    await _tapVisible(tester, find.byKey(const ValueKey('key-enter')));
+    expect(find.text('Enter exactly 5 visible letters.'), findsOneWidget);
+    expect(
+      tester.getRect(find.byKey(const ValueKey('tile-5-0'))),
+      boardBeforeNotice,
+    );
     expect(
       tester.getCenter(find.byKey(const ValueKey('key-backspace'))).dx,
       greaterThan(tester.getCenter(find.byKey(const ValueKey('key-M'))).dx),
@@ -224,13 +231,23 @@ void main() {
     expect(find.byIcon(Icons.swap_horiz), findsNWidgets(2));
     expect(find.byIcon(Icons.close), findsNWidgets(2));
 
-    await _chooseGameMenu(tester, 'Copy result');
+    await tester.tap(find.byKey(const ValueKey('game-menu')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Copy result').last);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Spoiler-free result copied'), findsOneWidget);
     expect(clipboardText, contains('English · 5 letters · 2/6'));
     expect(clipboardText, isNot(contains('APPLE')));
 
     await _chooseGameMenu(tester, 'Statistics');
-    expect(find.text('English · 5 letters'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.text('English · 5 letters'),
+      ),
+      findsOneWidget,
+    );
     expect(
       tester.widget<Text>(find.byKey(const ValueKey('stat-Played'))).data,
       '1',
@@ -252,10 +269,7 @@ void main() {
     );
     await tester.tap(find.text('Play prototype'));
     await tester.pumpAndSettle();
-    await _tapVisible(tester, find.text('English'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Gurmukhi').last);
-    await tester.pumpAndSettle();
+    await _applyGameSettings(tester, language: 'Gurmukhi', length: '4 letters');
 
     await _tapVisible(tester, find.byKey(const ValueKey('key-ਕ')));
     await _tapVisible(tester, find.byKey(const ValueKey('key-ੀ')));
@@ -286,6 +300,33 @@ Future<void> _chooseGameMenu(WidgetTester tester, String item) async {
   await tester.tap(find.byKey(const ValueKey('game-menu')));
   await tester.pumpAndSettle();
   await tester.tap(find.text(item).last);
+  await tester.pumpAndSettle();
+}
+
+Future<void> _applyGameSettings(
+  WidgetTester tester, {
+  String? language,
+  String? length,
+}) async {
+  await _chooseGameMenu(tester, 'Game settings');
+  if (language != null) {
+    await tester.tap(find.byKey(const ValueKey('settings-language')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(language).last);
+    await tester.pumpAndSettle();
+  }
+  if (length != null) {
+    final lengthField = find.byWidgetPredicate(
+      (widget) =>
+          widget is DropdownButtonFormField<int> &&
+          widget.key.toString().contains('settings-length'),
+    );
+    await tester.tap(lengthField);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(length).last);
+    await tester.pumpAndSettle();
+  }
+  await tester.tap(find.text('Apply'));
   await tester.pumpAndSettle();
 }
 
