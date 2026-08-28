@@ -29,6 +29,12 @@ void main() {
         pool.solutions(mode: LanguageMode.gurmukhi, wordLength: 4),
         isNotEmpty,
       );
+      expect(
+        pool
+            .entryForGuess(mode: LanguageMode.english, guess: 'HOME')
+            ?.englishDefinition,
+        'The place where a person lives.',
+      );
     },
   );
 }

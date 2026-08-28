@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "note": "Human editorial decisions. Generated vocabulary files must not be edited directly.",
+  "entries": [
+    {"id": "english_book", "englishDefinition": "A written or printed work made of pages.", "reviewStatus": "machineChecked"},
+    {"id": "english_calm", "englishDefinition": "Peaceful and free from agitation.", "reviewStatus": "machineChecked"},
+    {"id": "english_care", "englishDefinition": "Concern for the well-being of someone or something.", "reviewStatus": "machineChecked"},
+    {"id": "english_game", "englishDefinition": "An activity played for enjoyment or competition.", "reviewStatus": "machineChecked"},
+    {"id": "english_gift", "englishDefinition": "Something freely given to another person.", "reviewStatus": "machineChecked"},
+    {"id": "english_good", "englishDefinition": "Having desirable, beneficial, or moral qualities.", "reviewStatus": "machineChecked"},
+    {"id": "english_hand", "englishDefinition": "The part of the body at the end of the arm.", "reviewStatus": "machineChecked"},
+    {"id": "english_hero", "englishDefinition": "A person admired for courage or outstanding actions.", "reviewStatus": "machineChecked"},
+    {"id": "english_home", "englishDefinition": "The place where a person lives.", "reviewStatus": "machineChecked"},
+    {"id": "english_hope", "englishDefinition": "A feeling of expectation for something good.", "reviewStatus": "machineChecked"},
+    {"id": "english_kind", "englishDefinition": "Caring, helpful, and considerate toward others.", "reviewStatus": "machineChecked"},
+    {"id": "english_life", "englishDefinition": "The state of being alive.", "reviewStatus": "machineChecked"},
+    {"id": "english_love", "englishDefinition": "A deep feeling of affection or care.", "reviewStatus": "machineChecked"},
+    {"id": "english_mind", "englishDefinition": "The part of a person that thinks, feels, and remembers.", "reviewStatus": "machineChecked"},
+    {"id": "english_path", "englishDefinition": "A route or track used for walking or travel.", "reviewStatus": "machineChecked"},
+    {"id": "english_play", "englishDefinition": "To take part in an activity for enjoyment.", "reviewStatus": "machineChecked"},
+    {"id": "english_song", "englishDefinition": "Words and music intended to be sung.", "reviewStatus": "machineChecked"},
+    {"id": "english_soul", "englishDefinition": "The spiritual or inner essence of a person.", "reviewStatus": "machineChecked"},
+    {"id": "english_true", "englishDefinition": "In agreement with fact or reality.", "reviewStatus": "machineChecked"},
+    {"id": "english_wise", "englishDefinition": "Showing sound judgment and understanding.", "reviewStatus": "machineChecked"},
+    {"id": "english_work", "englishDefinition": "Effort directed toward completing a task.", "reviewStatus": "machineChecked"}
+  ]
+}

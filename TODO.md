@@ -43,9 +43,12 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Maintain a broad accepted-guess pool.
 - [ ] Expand and editorially approve the solution pool; an explicit machine-checked starter set now drives the app.
 - [x] Expand the machine-checked English four-letter starter rotation beyond BOOK, HERO, and LOVE.
+- [x] Replace obsolete or misleading definitions for all active English four-letter solutions.
 - [x] Enforce accepted guesses and curated solutions as separate domain collections.
 - [x] Track V1 source version and editorial review status.
 - [x] Produce a reproducible human-readable content review report.
+- [x] Add a reproducible JSON dictionary audit queue and editorial override layer.
+- [x] Document the JSON-versus-SQLite runtime storage decision and review triggers.
 - [ ] Replace pretty-printed review assets with compact/indexed release assets and measure startup/download performance.
 
 ## Guess the Word engine

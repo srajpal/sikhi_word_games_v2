@@ -37,6 +37,8 @@ class VocabularyEntry {
   final String source;
 
   VocabularyEntry copyWith({
+    String? englishDefinition,
+    String? gurmukhi,
     bool? acceptedGuess,
     bool? solutionEligible,
     ReviewStatus? reviewStatus,
@@ -44,8 +46,8 @@ class VocabularyEntry {
     id: id,
     language: language,
     latin: latin,
-    gurmukhi: gurmukhi,
-    englishDefinition: englishDefinition,
+    gurmukhi: gurmukhi ?? this.gurmukhi,
+    englishDefinition: englishDefinition ?? this.englishDefinition,
     latinLength: latinLength,
     gurmukhiLength: gurmukhiLength,
     acceptedGuess: acceptedGuess ?? this.acceptedGuess,
