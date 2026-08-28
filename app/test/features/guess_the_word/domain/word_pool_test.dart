@@ -96,6 +96,16 @@ void main() {
     expect({first.id, second.id, third.id}, hasLength(3));
     expect(() => selector.select(const []), throwsStateError);
   });
+
+  test('selector resumes a persisted non-repeating rotation', () {
+    final selector = NonRepeatingWordSelector(
+      random: Random(7),
+      usedIds: {'english_hero'},
+    );
+    final selected = selector.select(entries);
+    expect(selected.id, isNot('english_hero'));
+    expect(selector.usedIds, containsAll(['english_hero', selected.id]));
+  });
 }
 
 VocabularyEntry _entry(

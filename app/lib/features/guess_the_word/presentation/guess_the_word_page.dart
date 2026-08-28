@@ -16,6 +16,7 @@ import '../domain/guess_share.dart';
 import '../domain/keyboard_feedback.dart';
 import '../data/guess_statistics_repository.dart';
 import '../data/guess_game_repository.dart';
+import '../data/solution_history_repository.dart';
 import 'game_keyboard.dart';
 
 enum _GameMenuAction { settings, help, statistics, dictionary, copyResult }
@@ -27,6 +28,7 @@ class GuessTheWordPage extends StatefulWidget {
     required this.vocabularyRepository,
     required this.statisticsRepository,
     required this.gameRepository,
+    required this.solutionHistoryRepository,
     super.key,
   });
 
@@ -35,6 +37,7 @@ class GuessTheWordPage extends StatefulWidget {
   final VocabularyRepository vocabularyRepository;
   final GuessStatisticsRepository statisticsRepository;
   final GuessGameRepository gameRepository;
+  final SolutionHistoryRepository solutionHistoryRepository;
 
   @override
   State<GuessTheWordPage> createState() => _GuessTheWordPageState();
@@ -43,7 +46,7 @@ class GuessTheWordPage extends StatefulWidget {
 class _GuessTheWordPageState extends State<GuessTheWordPage> {
   final _controller = TextEditingController();
   final _gameFocusNode = FocusNode(debugLabel: 'Guess game keyboard');
-  final _selector = NonRepeatingWordSelector();
+  late final NonRepeatingWordSelector _selector;
   WordPool? _pool;
   GuessGame? _game;
   VocabularyEntry? _solutionEntry;
@@ -57,6 +60,9 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   void initState() {
     super.initState();
     _statistics = widget.statisticsRepository.load();
+    _selector = NonRepeatingWordSelector(
+      usedIds: widget.solutionHistoryRepository.load(),
+    );
     _loadVocabulary();
   }
 
@@ -165,6 +171,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       return;
     }
     final entry = _selector.select(solutions);
+    widget.solutionHistoryRepository.save(_selector.usedIds);
     final spelling = WordPool.spelling(entry, _mode)!;
     final accepted = pool.acceptedGuesses(mode: _mode, wordLength: _wordLength);
     setState(() {

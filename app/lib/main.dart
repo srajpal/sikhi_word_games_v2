@@ -7,6 +7,7 @@ import 'core/persistence/key_value_store.dart';
 import 'features/settings/data/app_settings_repository.dart';
 import 'features/guess_the_word/data/guess_statistics_repository.dart';
 import 'features/guess_the_word/data/guess_game_repository.dart';
+import 'features/guess_the_word/data/solution_history_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,12 +16,14 @@ Future<void> main() async {
   final settings = AppSettingsRepository(store);
   final statistics = GuessStatisticsRepository(store);
   final gameRepository = GuessGameRepository(store);
+  final solutionHistoryRepository = SolutionHistoryRepository(store);
   runApp(
     ProviderScope(
       child: SikhiWordGamesApp(
         settingsRepository: settings,
         statisticsRepository: statistics,
         gameRepository: gameRepository,
+        solutionHistoryRepository: solutionHistoryRepository,
       ),
     ),
   );

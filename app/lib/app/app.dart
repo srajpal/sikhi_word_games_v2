@@ -8,6 +8,7 @@ import '../features/guess_the_word/presentation/guess_the_word_page.dart';
 import '../features/dictionary/presentation/dictionary_page.dart';
 import '../features/guess_the_word/data/guess_statistics_repository.dart';
 import '../features/guess_the_word/data/guess_game_repository.dart';
+import '../features/guess_the_word/data/solution_history_repository.dart';
 import '../core/persistence/key_value_store.dart';
 import '../features/settings/data/app_settings_repository.dart';
 
@@ -17,6 +18,7 @@ class SikhiWordGamesApp extends StatefulWidget {
     VocabularyRepository? vocabularyRepository,
     GuessStatisticsRepository? statisticsRepository,
     GuessGameRepository? gameRepository,
+    SolutionHistoryRepository? solutionHistoryRepository,
     super.key,
   }) : vocabularyRepository =
            vocabularyRepository ?? AssetVocabularyRepository(),
@@ -24,12 +26,16 @@ class SikhiWordGamesApp extends StatefulWidget {
            statisticsRepository ??
            GuessStatisticsRepository(MemoryKeyValueStore()),
        gameRepository =
-           gameRepository ?? GuessGameRepository(MemoryKeyValueStore());
+           gameRepository ?? GuessGameRepository(MemoryKeyValueStore()),
+       solutionHistoryRepository =
+           solutionHistoryRepository ??
+           SolutionHistoryRepository(MemoryKeyValueStore());
 
   final AppSettingsRepository settingsRepository;
   final VocabularyRepository vocabularyRepository;
   final GuessStatisticsRepository statisticsRepository;
   final GuessGameRepository gameRepository;
+  final SolutionHistoryRepository solutionHistoryRepository;
 
   @override
   State<SikhiWordGamesApp> createState() => _SikhiWordGamesAppState();
@@ -57,6 +63,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 vocabularyRepository: widget.vocabularyRepository,
                 statisticsRepository: widget.statisticsRepository,
                 gameRepository: widget.gameRepository,
+                solutionHistoryRepository: widget.solutionHistoryRepository,
               ),
             ),
             GoRoute(

@@ -54,6 +54,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Support Mixed Latin with English and romanized guesses accepted in the domain layer.
 - [x] Support Gurmukhi grapheme filtering and game evaluation in the domain layer.
 - [x] Add seeded, non-repeating solution selection with exhaustion reset.
+- [x] Persist non-repeating solution history across launches and use secure randomness.
 - [x] Model game progress, accepted turns, rejections, and win/loss states explicitly.
 - [x] Add versioned serialization and offline storage for interrupted-game restoration.
 

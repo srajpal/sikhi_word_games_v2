@@ -79,10 +79,16 @@ class WordPool {
 }
 
 class NonRepeatingWordSelector {
-  NonRepeatingWordSelector({Random? random}) : _random = random ?? Random();
+  NonRepeatingWordSelector({
+    Random? random,
+    Iterable<String> usedIds = const [],
+  }) : _random = random ?? Random.secure(),
+       _usedIds = {...usedIds};
 
   final Random _random;
-  final Set<String> _usedIds = {};
+  final Set<String> _usedIds;
+
+  Set<String> get usedIds => Set.unmodifiable(_usedIds);
 
   VocabularyEntry select(List<VocabularyEntry> candidates) {
     if (candidates.isEmpty) {
