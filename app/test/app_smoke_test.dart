@@ -61,6 +61,27 @@ void main() {
     expect(find.text('How to play'), findsNothing);
   });
 
+  testWidgets('submits a physical keyboard or IME guess with Enter', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.tap(find.text('Play prototype'));
+    await tester.pumpAndSettle();
+
+    final input = find.byType(TextField);
+    expect(tester.widget<TextField>(input).focusNode!.hasFocus, isTrue);
+    await tester.enterText(input, 'APPLE');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+
+    expect(find.text('You found it!'), findsOneWidget);
+  });
+
   testWidgets('plays a complete game with the on-screen keyboard', (
     tester,
   ) async {

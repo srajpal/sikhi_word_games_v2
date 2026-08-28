@@ -69,7 +69,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add in-app gameplay help and language-mode explanations.
 - [x] Add versioned per-mode and per-length statistics stored completely offline.
 - [x] Add offline, clipboard-based spoiler-safe result sharing.
-- [ ] Add physical-keyboard support where appropriate.
+- [x] Support physical keyboards and IME submission with persistent input focus.
 - [ ] Add animations and haptics with reduced-motion/haptics settings.
 
 ## Automated verification

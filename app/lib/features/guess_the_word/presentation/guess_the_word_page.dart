@@ -33,6 +33,7 @@ class GuessTheWordPage extends StatefulWidget {
 
 class _GuessTheWordPageState extends State<GuessTheWordPage> {
   final _controller = TextEditingController();
+  final _inputFocusNode = FocusNode(debugLabel: 'Guess input');
   final _selector = NonRepeatingWordSelector();
   WordPool? _pool;
   GuessGame? _game;
@@ -54,7 +55,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   @override
   void dispose() {
     _controller.dispose();
+    _inputFocusNode.dispose();
     super.dispose();
+  }
+
+  void _focusInput() {
+    if (!mounted || _game?.status != GuessGameStatus.playing) return;
+    _inputFocusNode.requestFocus();
   }
 
   Future<void> _loadVocabulary() async {
@@ -118,6 +125,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       _message = null;
       _loading = false;
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
   }
 
   void _submit() {
@@ -152,6 +160,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         GuessGameStatus.playing => null,
       };
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
   }
 
   void _appendCharacter(String character) {
@@ -163,6 +172,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       selection: TextSelection.collapsed(offset: candidate.length),
     );
     setState(() => _message = null);
+    _focusInput();
   }
 
   void _backspace() {
@@ -173,6 +183,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       selection: TextSelection.collapsed(offset: shortened.length),
     );
     setState(() => _message = null);
+    _focusInput();
   }
 
   Future<void> _showHelp() => showDialog<void>(
@@ -357,9 +368,11 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                 Expanded(
                                   child: TextField(
                                     controller: _controller,
+                                    focusNode: _inputFocusNode,
                                     enabled: !isComplete,
                                     maxLength: game.wordLength,
                                     autofocus: true,
+                                    textInputAction: TextInputAction.done,
                                     textCapitalization:
                                         TextCapitalization.characters,
                                     inputFormatters: inputFormatters,
