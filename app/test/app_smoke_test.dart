@@ -152,6 +152,43 @@ void main() {
     expect(find.text('You found it!'), findsOneWidget);
   });
 
+  testWidgets('menu starts a fresh game with the current settings', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.tap(find.text('Play prototype'));
+    await tester.pumpAndSettle();
+    for (final letter in 'GRAPE'.characters) {
+      await tester.tap(find.byKey(ValueKey('key-$letter')));
+      await tester.pump();
+    }
+    await tester.tap(find.byKey(const ValueKey('key-enter')));
+    await tester.pump();
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('tile-0-0')),
+        matching: find.text('G'),
+      ),
+      findsOneWidget,
+    );
+
+    await _chooseGameMenu(tester, 'New game');
+
+    expect(find.text('English · 5 letters'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('tile-0-0')),
+        matching: find.text('G'),
+      ),
+      findsNothing,
+    );
+  });
+
   testWidgets('restores an interrupted game from offline storage', (
     tester,
   ) async {

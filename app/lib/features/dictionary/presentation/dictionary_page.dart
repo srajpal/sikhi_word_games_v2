@@ -162,6 +162,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               value: AppThemeChoice.sketch,
               child: Text('Sketch'),
             ),
+            DropdownMenuItem(value: AppThemeChoice.dark, child: Text('Dark')),
           ],
         ),
       ],

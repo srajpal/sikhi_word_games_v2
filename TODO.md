@@ -27,6 +27,8 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Add offline persistence interfaces and schema versioning.
 - [x] Add initial semantic theme tokens.
 - [x] Add initial user-selectable Modern and Sketch themes.
+- [x] Differentiate the Sketch design and add a Dark theme.
+- [x] Lock phones to portrait while retaining adaptive tablet and web orientation.
 - [x] Complete initial responsive library and fixed-viewport gameplay layouts for phones and wide screens.
 - [x] Add initial accessibility conventions for semantics, focus, contrast, and text scaling.
 
@@ -71,6 +73,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Reveal the answer and its definition at game completion.
 - [x] Add in-app gameplay help and language-mode explanations.
 - [x] Consolidate language, word size, and theme controls into compact game settings.
+- [x] Add a menu action that starts a new game with the current settings.
 - [x] Show validation and status notices without resizing the gameplay layout.
 - [x] Add a dedicated offline dictionary page with English, Romanized Panjabi, and Gurmukhi word-only search.
 - [x] Add versioned per-mode and per-length statistics stored completely offline.

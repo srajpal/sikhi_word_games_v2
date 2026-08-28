@@ -19,7 +19,14 @@ import '../data/guess_game_repository.dart';
 import '../data/solution_history_repository.dart';
 import 'game_keyboard.dart';
 
-enum _GameMenuAction { settings, help, statistics, dictionary, copyResult }
+enum _GameMenuAction {
+  newGame,
+  settings,
+  help,
+  statistics,
+  dictionary,
+  copyResult,
+}
 
 class GuessTheWordPage extends StatefulWidget {
   const GuessTheWordPage({
@@ -339,6 +346,10 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                         value: AppThemeChoice.sketch,
                         child: Text('Sketch'),
                       ),
+                      DropdownMenuItem(
+                        value: AppThemeChoice.dark,
+                        child: Text('Dark'),
+                      ),
                     ],
                     onChanged: (value) {
                       if (value != null) selectedTheme = value;
@@ -406,6 +417,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
 
   void _handleMenuAction(_GameMenuAction action) {
     switch (action) {
+      case _GameMenuAction.newGame:
+        _startGame();
       case _GameMenuAction.settings:
         _showGameSettings();
       case _GameMenuAction.help:
@@ -442,6 +455,15 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
             tooltip: 'Game menu',
             onSelected: _handleMenuAction,
             itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: _GameMenuAction.newGame,
+                child: ListTile(
+                  leading: Icon(Icons.refresh),
+                  title: Text('New game'),
+                  subtitle: Text('Keep current settings'),
+                ),
+              ),
+              const PopupMenuDivider(),
               const PopupMenuItem(
                 value: _GameMenuAction.settings,
                 child: ListTile(
@@ -872,6 +894,11 @@ class _Tile extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: tokens.tileRadius,
+          boxShadow: tokens.sketchStyle
+              ? const [
+                  BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
+                ]
+              : null,
           border: Border.all(
             color: letter == null ? tokens.tileBorder : color,
             width: tokens.tileBorderWidth,

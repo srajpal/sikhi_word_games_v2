@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +13,7 @@ import 'features/guess_the_word/data/solution_history_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await _configureOrientations();
   final preferences = await SharedPreferences.getInstance();
   final store = SharedPreferencesKeyValueStore(preferences);
   final settings = AppSettingsRepository(store);
@@ -26,5 +29,20 @@ Future<void> main() async {
         solutionHistoryRepository: solutionHistoryRepository,
       ),
     ),
+  );
+}
+
+Future<void> _configureOrientations() async {
+  if (kIsWeb ||
+      (defaultTargetPlatform != TargetPlatform.android &&
+          defaultTargetPlatform != TargetPlatform.iOS)) {
+    return;
+  }
+  final view = WidgetsBinding.instance.platformDispatcher.views.first;
+  final shortestSide = view.physicalSize.shortestSide / view.devicePixelRatio;
+  await SystemChrome.setPreferredOrientations(
+    shortestSide < 600
+        ? const [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+        : DeviceOrientation.values,
   );
 }
