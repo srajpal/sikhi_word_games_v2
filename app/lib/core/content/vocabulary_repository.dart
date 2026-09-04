@@ -67,6 +67,28 @@ class AssetVocabularyRepository implements VocabularyRepository {
         entries.add(entry);
       }
     }
+    final supplementalDocument = jsonDecode(
+      await rootBundle.loadString(
+        'assets/content/curation/supplemental_entries.json',
+      ),
+    ) as Map<String, Object?>;
+    if (supplementalDocument['schemaVersion'] != 1 ||
+        supplementalDocument['entries'] is! List<Object?>) {
+      throw const FormatException('Unsupported supplemental entry schema.');
+    }
+    for (final item in supplementalDocument['entries']! as List<Object?>) {
+      entries.add(VocabularyEntry.fromJson(item! as Map<String, Object?>));
+    }
+    final duplicateIds = <String>{};
+    final seenIds = <String>{};
+    for (final entry in entries) {
+      if (!seenIds.add(entry.id)) duplicateIds.add(entry.id);
+    }
+    if (duplicateIds.isNotEmpty) {
+      throw FormatException(
+        'Duplicate vocabulary IDs: ${duplicateIds.join(', ')}',
+      );
+    }
     final missingIds = solutionIds.difference(
       entries.map((entry) => entry.id).toSet(),
     );

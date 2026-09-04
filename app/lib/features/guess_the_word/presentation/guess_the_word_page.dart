@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/themes/app_theme.dart';
+import '../../../core/themes/game_ui.dart';
 import '../domain/guess_evaluator.dart';
 import '../domain/guess_game.dart';
 import '../domain/language_mode.dart';
@@ -522,112 +523,133 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 620),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: _loading
-                  ? const Center(child: CircularProgressIndicator())
-                  : game == null
-                  ? Center(
-                      child: Text(
-                        _message ?? 'No game is available.',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  : LayoutBuilder(
-                      builder: (context, constraints) {
-                        final compact = constraints.maxHeight < 650;
-                        return KeyboardListener(
-                          focusNode: _gameFocusNode,
-                          autofocus: true,
-                          onKeyEvent: _handleHardwareKey,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: _Board(
-                                  turns: game.turns,
-                                  wordLength: game.wordLength,
-                                  maximumAttempts: game.maximumAttempts,
-                                  reducedMotion: widget.reducedMotion,
+      body: GameBackdrop(
+        child: SafeArea(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 620),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: _loading
+                    ? const Center(child: CircularProgressIndicator())
+                    : game == null
+                    ? Center(
+                        child: Text(
+                          _message ?? 'No game is available.',
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : LayoutBuilder(
+                        builder: (context, constraints) {
+                          final tokens = Theme.of(context)
+                              .extension<GameThemeTokens>()!;
+                          final compact = constraints.maxHeight < 650;
+                          return KeyboardListener(
+                            focusNode: _gameFocusNode,
+                            autofocus: true,
+                            onKeyEvent: _handleHardwareKey,
+                            child: Column(
+                              children: [
+                                GameStatusPill(
+                                  icon: Icons.translate,
+                                  child: Text(
+                                    '${_mode.label} · Round ${game.wordLength} · '
+                                    '${game.maximumAttempts - game.turns.length} tries',
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: compact ? 6 : 12),
-                              if (isComplete) ...[
-                                Text(
-                                  game.solution,
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                Text(
-                                  _solutionEntry!.englishDefinition,
-                                  textAlign: TextAlign.center,
-                                  maxLines: compact ? 1 : 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 6),
-                              ],
-                              if (!isComplete)
-                                Semantics(
-                                  textField: true,
-                                  readOnly: true,
-                                  label: _mode == LanguageMode.gurmukhi
-                                      ? 'Gurmukhi guess'
-                                      : 'Your guess',
-                                  value: _controller.text,
-                                  child: GestureDetector(
-                                    key: const ValueKey('guess-display'),
-                                    onTap: _focusInput,
-                                    child: InputDecorator(
-                                      isFocused: _gameFocusNode.hasFocus,
-                                      decoration: InputDecoration(
-                                        labelText:
-                                            _mode == LanguageMode.gurmukhi
-                                            ? 'Gurmukhi guess'
-                                            : 'Your guess',
-                                        border: const OutlineInputBorder(),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 8,
-                                            ),
-                                      ),
-                                      child: Text(
-                                        _controller.text.isEmpty
-                                            ? ' '
-                                            : _controller.text,
-                                        key: const ValueKey('guess-value'),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                      ),
+                                SizedBox(height: compact ? 8 : 14),
+                                Expanded(
+                                  child: GamePanel(
+                                    padding: const EdgeInsets.all(10),
+                                    child: _Board(
+                                      turns: game.turns,
+                                      wordLength: game.wordLength,
+                                      maximumAttempts: game.maximumAttempts,
+                                      reducedMotion: widget.reducedMotion,
                                     ),
                                   ),
                                 ),
-                              if (!isComplete) ...[
-                                SizedBox(height: compact ? 4 : 8),
-                                GameKeyboard(
-                                  mode: _mode,
-                                  enabled: true,
-                                  disabledCharacters:
-                                      unavailableKeyboardCharacters(game.turns),
-                                  compact: compact,
-                                  onCharacter: _appendCharacter,
-                                  onBackspace: _backspace,
-                                  onEnter: _submit,
-                                ),
+                                SizedBox(height: compact ? 6 : 12),
+                                if (isComplete) ...[
+                                  Text(
+                                    game.solution,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge,
+                                  ),
+                                  Text(
+                                    _solutionEntry!.englishDefinition,
+                                    textAlign: TextAlign.center,
+                                    maxLines: compact ? 1 : 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 6),
+                                ],
+                                if (!isComplete)
+                                  Semantics(
+                                    textField: true,
+                                    readOnly: true,
+                                    label: _mode == LanguageMode.gurmukhi
+                                        ? 'Gurmukhi guess'
+                                        : 'Your guess',
+                                    value: _controller.text,
+                                    child: GestureDetector(
+                                      key: const ValueKey('guess-display'),
+                                      onTap: _focusInput,
+                                      child: InputDecorator(
+                                        isFocused: _gameFocusNode.hasFocus,
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              _mode == LanguageMode.gurmukhi
+                                              ? 'Gurmukhi guess'
+                                              : 'Your guess',
+                                          border: OutlineInputBorder(
+                                            borderRadius: tokens.tileRadius,
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 12,
+                                                vertical: 8,
+                                              ),
+                                        ),
+                                        child: Text(
+                                          _controller.text.isEmpty
+                                              ? ' '
+                                              : _controller.text,
+                                          key: const ValueKey('guess-value'),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                if (!isComplete) ...[
+                                  SizedBox(height: compact ? 4 : 8),
+                                  GameKeyboard(
+                                    mode: _mode,
+                                    enabled: true,
+                                    disabledCharacters:
+                                        unavailableKeyboardCharacters(
+                                          game.turns,
+                                        ),
+                                    compact: compact,
+                                    onCharacter: _appendCharacter,
+                                    onBackspace: _backspace,
+                                    onEnter: _submit,
+                                  ),
+                                ],
+                                if (isComplete)
+                                  FilledButton(
+                                    onPressed: () => _startGame(),
+                                    child: const Text('New game'),
+                                  ),
                               ],
-                              if (isComplete)
-                                FilledButton(
-                                  onPressed: () => _startGame(),
-                                  child: const Text('New game'),
-                                ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
             ),
           ),
         ),
@@ -923,11 +945,11 @@ class _Tile extends StatelessWidget {
           decoration: BoxDecoration(
             color: color,
             borderRadius: tokens.tileRadius,
-            boxShadow: tokens.sikhiStyle
-                ? const [
-                    BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
-                  ]
-                : null,
+            boxShadow: [
+              ...tokens.elevationShadow,
+              if (tokens.sikhiStyle)
+                const BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
+            ],
             border: Border.all(
               color: letter == null ? tokens.tileBorder : color,
               width: tokens.tileBorderWidth,

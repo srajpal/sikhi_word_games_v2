@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/themes/game_ui.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../guess_the_word/domain/word_pool.dart';
 import '../../guess_the_word/presentation/game_keyboard.dart';
@@ -136,96 +137,121 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: const Text('Dictionary')),
-    body: SafeArea(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 620),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: _error != null
-                ? Center(child: Text(_error!, textAlign: TextAlign.center))
-                : _pool == null
-                ? const Center(child: CircularProgressIndicator())
-                : LayoutBuilder(
-                    builder: (context, constraints) {
-                      final compact = constraints.maxHeight < 650;
-                      return KeyboardListener(
-                        focusNode: _focusNode,
-                        autofocus: true,
-                        onKeyEvent: _handleHardwareKey,
-                        child: Column(
-                          children: [
-                            DropdownButton<LanguageMode>(
-                              value: _mode,
-                              isExpanded: true,
-                              onChanged: (value) {
-                                if (value != null) _changeMode(value);
-                              },
-                              items: [
-                                for (final mode in _modes)
-                                  DropdownMenuItem(
-                                    value: mode,
-                                    child: Text(mode.label),
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Semantics(
-                              textField: true,
-                              label: 'Dictionary search word',
-                              value: _controller.text,
-                              onTap: _focusNode.requestFocus,
-                              child: GestureDetector(
-                                key: const ValueKey('dictionary-search'),
-                                onTap: _focusNode.requestFocus,
-                                child: InputDecorator(
-                                  isFocused: _focusNode.hasFocus,
-                                  decoration: InputDecoration(
-                                    labelText: 'Search word',
-                                    prefixIcon: const Icon(Icons.search),
-                                    suffixIcon: _controller.text.isEmpty
-                                        ? null
-                                        : IconButton(
-                                            tooltip: 'Clear search',
-                                            onPressed: _clear,
-                                            icon: const Icon(Icons.clear),
-                                          ),
-                                    border: const OutlineInputBorder(),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 8,
+    body: GameBackdrop(
+      child: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 620),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: _error != null
+                  ? Center(child: Text(_error!, textAlign: TextAlign.center))
+                  : _pool == null
+                  ? const Center(child: CircularProgressIndicator())
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        final compact = constraints.maxHeight < 650;
+                        return KeyboardListener(
+                          focusNode: _focusNode,
+                          autofocus: true,
+                          onKeyEvent: _handleHardwareKey,
+                          child: Column(
+                            children: [
+                              GamePanel(
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.auto_stories_rounded,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary,
                                     ),
-                                  ),
-                                  child: Text(
-                                    _controller.text.isEmpty
-                                        ? ' '
-                                        : _controller.text,
-                                    key: const ValueKey('dictionary-query'),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium,
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
+                                        'Explore the living vocabulary of Sikhi',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              DropdownButton<LanguageMode>(
+                                value: _mode,
+                                isExpanded: true,
+                                onChanged: (value) {
+                                  if (value != null) _changeMode(value);
+                                },
+                                items: [
+                                  for (final mode in _modes)
+                                    DropdownMenuItem(
+                                      value: mode,
+                                      child: Text(mode.label),
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Semantics(
+                                textField: true,
+                                label: 'Dictionary search word',
+                                value: _controller.text,
+                                onTap: _focusNode.requestFocus,
+                                child: GestureDetector(
+                                  key: const ValueKey('dictionary-search'),
+                                  onTap: _focusNode.requestFocus,
+                                  child: InputDecorator(
+                                    isFocused: _focusNode.hasFocus,
+                                    decoration: InputDecoration(
+                                      labelText: 'Search word',
+                                      prefixIcon: const Icon(Icons.search),
+                                      suffixIcon: _controller.text.isEmpty
+                                          ? null
+                                          : IconButton(
+                                              tooltip: 'Clear search',
+                                              onPressed: _clear,
+                                              icon: const Icon(Icons.clear),
+                                            ),
+                                      border: const OutlineInputBorder(),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 8,
+                                          ),
+                                    ),
+                                    child: Text(
+                                      _controller.text.isEmpty
+                                          ? ' '
+                                          : _controller.text,
+                                      key: const ValueKey('dictionary-query'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 6),
-                            Expanded(child: _buildResults(context)),
-                            const SizedBox(height: 6),
-                            GameKeyboard(
-                              mode: _mode,
-                              enabled: true,
-                              disabledCharacters: const {},
-                              compact: compact,
-                              enterLabel: 'SEARCH',
-                              onCharacter: _appendCharacter,
-                              onBackspace: _backspace,
-                              onEnter: _runSearch,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                              const SizedBox(height: 6),
+                              Expanded(child: _buildResults(context)),
+                              const SizedBox(height: 6),
+                              GameKeyboard(
+                                mode: _mode,
+                                enabled: true,
+                                disabledCharacters: const {},
+                                compact: compact,
+                                enterLabel: 'SEARCH',
+                                onCharacter: _appendCharacter,
+                                onBackspace: _backspace,
+                                onEnter: _runSearch,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
           ),
         ),
       ),

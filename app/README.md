@@ -1,5 +1,10 @@
 # sikhi_word_games_v2
 
+## Dictionary review
+
+The local four-letter editorial interface and guarded apply workflow are
+documented in `../docs/dictionary_review_tool.md`.
+
 A new Flutter project.
 
 ## Getting Started

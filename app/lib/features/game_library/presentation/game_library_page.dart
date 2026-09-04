@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/themes/app_theme.dart';
+import '../../../core/themes/game_ui.dart';
 import '../../settings/data/app_settings_repository.dart';
 
 class GameLibraryPage extends StatelessWidget {
@@ -117,60 +118,87 @@ class GameLibraryPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 900),
-            child: ListView(
-              padding: const EdgeInsets.all(24),
-              children: [
-                if (activeTheme == AppThemeChoice.sikhi) ...[
-                  Semantics(
-                    label: 'Ik Onkar',
-                    child: ExcludeSemantics(
-                      child: Text(
-                        'ੴ',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.displayMedium
-                            ?.copyWith(
-                              color: const Color(0xFFE28A16),
-                              fontWeight: FontWeight.w700,
-                            ),
+      body: GameBackdrop(
+        child: SafeArea(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 900),
+              child: ListView(
+                padding: const EdgeInsets.all(24),
+                children: [
+                  if (activeTheme == AppThemeChoice.sikhi) ...[
+                    Semantics(
+                      label: 'Ik Onkar',
+                      child: ExcludeSemantics(
+                        child: Text(
+                          'ੴ',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.displayMedium
+                              ?.copyWith(
+                                color: const Color(0xFFE28A16),
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
                       ),
                     ),
+                    const SizedBox(height: 4),
+                  ],
+                  GamePanel(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Choose a game',
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Choose your path • learn, play, and grow',
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Play offline in English, romanized Panjabi, and Gurmukhi.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 24),
+                  _GameCard(
+                    icon: Icons.grid_view_rounded,
+                    title: 'Guess the Word',
+                    description: 'Find the hidden word using colored clues.',
+                    actionLabel: 'Play prototype',
+                    onPressed: () => context.push('/guess-the-word'),
+                  ),
+                  const SizedBox(height: 16),
+                  _GameCard(
+                    icon: Icons.search_rounded,
+                    title: 'Word Search',
+                    description: 'Find offline words hidden in a letter grid.',
+                    actionLabel: 'Play',
+                    onPressed: () => context.push('/word-search'),
+                  ),
+                  const SizedBox(height: 16),
+                  _GameCard(
+                    icon: Icons.local_florist_outlined,
+                    title: 'Chardi Kala: Word Quest',
+                    description: 'A gentle letter game for kids—uncover a word and help a garden grow.',
+                    actionLabel: 'Start quest',
+                    onPressed: () => context.push('/word-quest'),
+                  ),
+                  const SizedBox(height: 16),
+                  const _GameCard(
+                    icon: Icons.keyboard_rounded,
+                    title: 'Typing Challenge',
+                    description: 'Practice accurate English, Panjabi, and Gurmukhi typing.',
+                  ),
                 ],
-                Text(
-                  'Choose a game',
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Play offline in English, romanized Panjabi, and Gurmukhi.',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 24),
-                _GameCard(
-                  icon: Icons.grid_view_rounded,
-                  title: 'Guess the Word',
-                  description: 'Find the hidden word using colored clues.',
-                  actionLabel: 'Play prototype',
-                  onPressed: () => context.push('/guess-the-word'),
-                ),
-                const SizedBox(height: 16),
-                const _GameCard(
-                  icon: Icons.search_rounded,
-                  title: 'Word Search',
-                  description: 'Find themed words hidden in a letter grid.',
-                ),
-                const SizedBox(height: 16),
-                const _GameCard(
-                  icon: Icons.keyboard_rounded,
-                  title: 'Typing Challenge',
-                  description: 'Practice accurate English, Panjabi, and Gurmukhi typing.',
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -195,8 +223,8 @@ class _GameCard extends StatelessWidget {
   final VoidCallback? onPressed;
 
   @override
-  Widget build(BuildContext context) => Card(
-    clipBehavior: Clip.antiAlias,
+  Widget build(BuildContext context) => GamePanel(
+    padding: EdgeInsets.zero,
     child: Padding(
       padding: const EdgeInsets.all(20),
       child: LayoutBuilder(
@@ -204,7 +232,28 @@ class _GameCard extends StatelessWidget {
           final details = Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, size: 42),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.secondary,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: Theme.of(context)
+                      .extension<GameThemeTokens>()!
+                      .elevationShadow,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Icon(
+                    icon,
+                    size: 28,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
               const SizedBox(width: 20),
               Expanded(
                 child: Column(
@@ -218,9 +267,9 @@ class _GameCard extends StatelessWidget {
               ),
             ],
           );
-          final action = FilledButton.tonal(
+          final action = GameGradientButton(
             onPressed: onPressed,
-            child: Text(actionLabel),
+            label: actionLabel,
           );
           if (constraints.maxWidth < 560) {
             return Column(

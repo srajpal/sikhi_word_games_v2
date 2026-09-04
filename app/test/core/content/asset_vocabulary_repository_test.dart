@@ -12,10 +12,10 @@ void main() {
       final entries = await AssetVocabularyRepository().load();
       final pool = WordPool(entries);
 
-      expect(entries, hasLength(38510));
+      expect(entries, hasLength(46995));
       expect(
         pool.solutions(mode: LanguageMode.english, wordLength: 4),
-        hasLength(greaterThanOrEqualTo(20)),
+        hasLength(greaterThanOrEqualTo(1200)),
       );
       expect(
         pool.solutions(mode: LanguageMode.english, wordLength: 5),
@@ -30,10 +30,24 @@ void main() {
         isNotEmpty,
       );
       expect(
+        pool.solutions(mode: LanguageMode.gurmukhi, wordLength: 5),
+        isNotEmpty,
+      );
+      expect(
+        pool.solutions(mode: LanguageMode.gurmukhi, wordLength: 6),
+        isNotEmpty,
+      );
+      expect(
         pool
             .entryForGuess(mode: LanguageMode.english, guess: 'HOME')
             ?.englishDefinition,
         'The place where a person lives.',
+      );
+      expect(
+        pool
+            .entryForGuess(mode: LanguageMode.english, guess: 'WORD')
+            ?.englishDefinition,
+        'A unit of language that carries meaning.',
       );
     },
   );

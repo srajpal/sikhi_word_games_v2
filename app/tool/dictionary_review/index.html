@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sikhi Word Games — Dictionary Review</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">Sikhi Word Games V2</p>
+      <h1>Dictionary review</h1>
+      <p class="subtitle">Review every language and word size: approve fair answers, retain uncommon guesses, and reject unsuitable words.</p>
+    </div>
+    <div id="save-status" class="save-status">Ready</div>
+  </header>
+
+  <main>
+    <section id="stats" class="stats" aria-label="Review progress"></section>
+    <section class="toolbar" aria-label="Candidate filters">
+      <label class="search">Search <input id="search" type="search" placeholder="Word or definition"></label>
+      <label>Status <select id="decision-filter">
+        <option value="pending">Pending</option><option value="all">All</option>
+        <option value="approve">Approved</option><option value="guess_only">Guess only</option>
+        <option value="reject">Rejected</option>
+      </select></label>
+      <label>Priority <select id="priority-filter">
+        <option value="all">All priorities</option><option value="high_priority_review">High priority</option>
+        <option value="standard_review">Standard</option><option value="specialist_review">Specialist</option>
+        <option value="guess_only_or_reject">Guess/reject</option><option value="active">Already active</option>
+      </select></label>
+      <label>Source <select id="source-filter">
+        <option value="all">All words</option><option value="existing">Already in app</option>
+        <option value="missing">Missing from app</option>
+      </select></label>
+      <label>Language <select id="language-filter">
+        <option value="all">All languages</option><option value="english">English</option><option value="romanized_panjabi">Romanized Panjabi</option><option value="gurmukhi">Gurmukhi</option>
+      </select></label>
+      <label>Word size <select id="length-filter">
+        <option value="all">All sizes</option><option value="4">4 letters</option><option value="5">5 letters</option><option value="6">6 letters</option>
+      </select></label>
+      <label>Sort <select id="sort">
+        <option value="rank">Best ranked</option><option value="word">A–Z</option>
+        <option value="frequency">Most frequent</option>
+      </select></label>
+    </section>
+
+    <section class="batch-bar">
+      <label><input id="select-page" type="checkbox"> Select this page</label>
+      <span id="selected-count">0 selected</span>
+      <button data-bulk="approve" class="approve">Approve selected</button>
+      <button data-bulk="guess_only" class="guess">Guess only</button>
+      <button data-bulk="reject" class="reject">Reject selected</button>
+    </section>
+
+    <section id="candidate-list" class="candidate-list" aria-live="polite"></section>
+    <nav class="pagination" aria-label="Candidate pages">
+      <button id="previous">Previous</button><span id="page-label"></span><button id="next">Next</button>
+    </nav>
+  </main>
+
+  <template id="candidate-template">
+    <article class="candidate">
+      <div class="candidate-heading">
+        <input class="select-candidate" type="checkbox" aria-label="Select candidate">
+        <div><h2 class="word"></h2><p class="meta"></p></div>
+        <span class="decision-badge"></span>
+      </div>
+      <label>Definition<textarea class="definition" rows="2"></textarea></label>
+      <label>Review notes<input class="notes" type="text" placeholder="Optional reason or source note"></label>
+      <div class="actions">
+        <button data-decision="approve" class="approve">Approve answer</button>
+        <button data-decision="guess_only" class="guess">Guess only</button>
+        <button data-decision="reject" class="reject">Reject</button>
+        <button data-decision="pending" class="pending">Clear decision</button>
+      </div>
+    </article>
+  </template>
+  <script src="/app.js"></script>
+</body>
+</html>

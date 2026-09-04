@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "source": "app/assets/content/generated/vocabulary_4.json, vocabulary_5.json, vocabulary_6.json",
+  "criteria": "language=panjabi, solutionEligible=true, and first English definition begins with See, Same as, or The same as",
+  "count": 0,
+  "ids": []
+}

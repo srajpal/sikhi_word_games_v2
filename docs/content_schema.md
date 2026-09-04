@@ -42,12 +42,22 @@ stable imported ID and may replace its definition or Gurmukhi spelling, change
 guess/solution eligibility, and advance its review status. This keeps human
 decisions separate from reproducible V1 imports.
 
+Editor-approved words that do not exist in V1 live in
+`app/assets/content/curation/supplemental_entries.json`. They use the same
+runtime record shape, retain their external source attribution, and are loaded
+after generated imports. Stable IDs must remain unique across both sources.
+
+The four-letter English review queue cross-references Open English WordNet,
+SCOWL, and modern usage frequency. Its numeric score only prioritizes human
+review; it never grants editorial approval by itself. The reproducible JSON and
+Markdown results live under `reports/content/four_letter_candidates.*`.
+
 The generated dictionary audit is JSON so it can be filtered or imported into a
 spreadsheet/review tool, with a short Markdown summary for humans.
 
 ## Runtime storage decision
 
-Use JSON for canonical content and editorial review. For the current 38,510-record
+Use JSON for canonical content and editorial review. For the current 39,004-record
 offline dataset, prefer compact, sharded, indexed JSON runtime assets shared by
 Android, iOS, and web. Do not introduce SQLite yet:
 
@@ -64,6 +74,6 @@ need complex relational queries.
 
 ## Initial V1 import findings
 
-The first reproducible import produced 38,510 accepted-guess records: 20,859 English and 17,651 Panjabi. All V1 word and definition keys align and no duplicate stable IDs were found. Imported entries default to `solutionEligible: false` until curated.
+The reproducible V1 import produced 38,510 accepted-guess records: 20,859 English and 17,651 Panjabi. Curated supplements currently bring the runtime total to 39,004. All V1 word and definition keys align and no duplicate stable IDs were found. Imported entries default to `solutionEligible: false` until curated.
 
 The review queue currently contains two empty English definitions, eight Panjabi records without a valid Gurmukhi form, and six of those eight containing Gujarati rather than Gurmukhi script. See `reports/content/v1_import_report.md` for exact records.

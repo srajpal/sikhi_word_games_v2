@@ -5,6 +5,8 @@ import '../core/themes/app_theme.dart';
 import '../core/content/vocabulary_repository.dart';
 import '../features/game_library/presentation/game_library_page.dart';
 import '../features/guess_the_word/presentation/guess_the_word_page.dart';
+import '../features/word_search/presentation/word_search_page.dart';
+import '../features/word_quest/presentation/word_quest_page.dart';
 import '../features/dictionary/presentation/dictionary_page.dart';
 import '../features/guess_the_word/data/guess_statistics_repository.dart';
 import '../features/guess_the_word/data/guess_game_repository.dart';
@@ -74,6 +76,20 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
               path: 'dictionary',
               builder: (context, state) => DictionaryPage(
                 vocabularyRepository: widget.vocabularyRepository,
+              ),
+            ),
+            GoRoute(
+              path: 'word-search',
+              builder: (context, state) => WordSearchPage(
+                vocabularyRepository: widget.vocabularyRepository,
+              ),
+            ),
+            GoRoute(
+              path: 'word-quest',
+              builder: (context, state) => WordQuestPage(
+                vocabularyRepository: widget.vocabularyRepository,
+                hapticLevel: _settings.hapticLevel,
+                reducedMotion: _settings.reducedMotion,
               ),
             ),
           ],

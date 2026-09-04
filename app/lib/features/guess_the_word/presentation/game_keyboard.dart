@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/themes/app_theme.dart';
 import '../domain/language_mode.dart';
 
 class GameKeyboard extends StatelessWidget {
@@ -143,19 +144,73 @@ class _KeyboardButton extends StatelessWidget {
       message: semanticLabel ?? label ?? '',
       child: SizedBox(
         height: height,
-        child: FilledButton.tonal(
-          style: FilledButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(7),
-            ),
-          ),
+        child: _KeyboardSurface(
           onPressed: onPressed,
           child:
               child ??
-              Text(label!, style: const TextStyle(fontWeight: FontWeight.w700)),
+              Text(
+                label!,
+                style: Theme.of(context).textTheme.labelLarge
+                    ?.copyWith(fontWeight: FontWeight.w800),
+              ),
         ),
       ),
     ),
   );
+}
+
+class _KeyboardSurface extends StatelessWidget {
+  const _KeyboardSurface({required this.onPressed, required this.child});
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final tokens = theme.extension<GameThemeTokens>()!;
+    final radius = BorderRadius.circular(9);
+    final enabled = onPressed != null;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: enabled ? tokens.panelGradient : null,
+        color: enabled ? null : theme.colorScheme.surfaceContainerHighest,
+        borderRadius: radius,
+        border: Border.all(
+          color: enabled
+              ? tokens.tileBorder
+              : theme.colorScheme.outline.withValues(alpha: .4),
+          width: enabled ? tokens.tileBorderWidth : 1,
+        ),
+        boxShadow: enabled
+            ? [
+                ...tokens.elevationShadow,
+                const BoxShadow(
+                  color: Color(0x332D3B55),
+                  blurRadius: 0,
+                  offset: Offset(0, 4),
+                ),
+              ]
+            : null,
+      ),
+      child: FilledButton(
+        onPressed: onPressed,
+        style: FilledButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          disabledBackgroundColor: Colors.transparent,
+          foregroundColor: theme.colorScheme.onSurface,
+          disabledForegroundColor: theme.colorScheme.onSurface.withValues(
+            alpha: .45,
+          ),
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: radius),
+        ),
+        child: child,
+      ),
+    );
+  }
 }

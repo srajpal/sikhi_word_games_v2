@@ -22,6 +22,58 @@ void main() {
     expect(find.text('Guess the Word'), findsOneWidget);
   });
 
+  testWidgets('opens Word Search and changes its language', (tester) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+
+    await tester.tap(find.text('Play'));
+    await tester.pumpAndSettle();
+    expect(find.text('Word Search'), findsOneWidget);
+    expect(find.text('English'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Word Search menu'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Language'));
+    await tester.pumpAndSettle();
+    final gurmukhi = find.text('Gurmukhi').last;
+    await tester.ensureVisible(gurmukhi);
+    await tester.tap(gurmukhi);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Gurmukhi'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('opens the child-friendly Word Quest mode', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.byType(ListView), const Offset(0, -420));
+    await tester.pumpAndSettle();
+    final startQuest = find.text('Start quest');
+    await tester.tap(startQuest);
+    await tester.pumpAndSettle();
+
+    expect(find.text('CHARDI KALA'), findsOneWidget);
+    expect(find.text('WORD QUEST'), findsOneWidget);
+    expect(find.text('8'), findsOneWidget);
+    expect(find.textContaining('HINT'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('game library fits a narrow phone viewport', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;

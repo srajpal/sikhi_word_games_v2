@@ -32,6 +32,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Lock phones to portrait while retaining adaptive tablet and web orientation.
 - [x] Complete initial responsive library and fixed-viewport gameplay layouts for phones and wide screens.
 - [x] Add initial accessibility conventions for semantics, focus, contrast, and text scaling.
+- [x] Align all playable game shells with the shared Word Quest visual language using theme-driven backdrops and panels.
 
 ## Vocabulary and definitions
 
@@ -42,13 +43,33 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Record English, romanized Panjabi, and available Gurmukhi forms separately.
 - [x] Maintain a broad accepted-guess pool.
 - [ ] Expand and editorially approve the solution pool; an explicit machine-checked starter set now drives the app.
+- [x] Cross-reference every four-letter English entry against Open English WordNet, SCOWL, and modern usage frequency.
+- [x] Classify every ranked four-letter English candidate as an answer, accepted guess, or rejection.
+- [x] Classify every five-letter English entry as an answer, accepted guess, or rejection using neutral OEWN senses.
+- [x] Complete an explicit answer/guess/reject decision for every remaining bundled 4-, 5-, and 6-letter entry across English and Panjabi/Gurmukhi.
+- [x] Build a local dictionary review tool with durable decisions, filters, bulk actions, and a guarded apply workflow.
+- [x] Run the conservative automatic four-letter English triage and preserve uncertain entries for manual review.
+- [x] Add an initial set of verified common four-letter English words missing from the V1 import.
+- [ ] Confirm four-letter Panjabi entries against an authoritative licensed source and record manual decisions.
+- [x] Build a native Gurmukhi expansion pipeline targeting real five- and six-grapheme headwords.
+- [x] Evaluate open-license Gurmukhi sources (including Mahan Kosh data) and document provenance/attribution before bundling.
+- [x] Import, normalize, deduplicate, and rank native Gurmukhi candidates separately from Romanized transliterations.
+- [x] Expose native Gurmukhi candidates in the local review tool with provenance and length filters.
+- [x] Add an idempotent apply step for reviewed native Gurmukhi decisions.
+- [x] Review Gurmukhi candidates for standalone definitions, appropriate game usage, names, and offensive terms (project-owner bulk approval recorded; follow-up cleanup remains tracked by the content audit).
+- [x] Add enough verified five- and six-grapheme Gurmukhi answers for balanced random rotation and regression-test pool counts.
 - [x] Expand the machine-checked English four-letter starter rotation beyond BOOK, HERO, and LOVE.
 - [x] Replace obsolete or misleading definitions for all active English four-letter solutions.
 - [x] Enforce accepted guesses and curated solutions as separate domain collections.
+- [x] Prevent Word Quest from selecting guess-only entries and reject cross-reference, circular, fragmentary, or answer-leaking clues at runtime.
+- [x] Audit accepted Panjabi definitions separately (17,651 scanned; 1,005 cross-reference-only and 2,039 broader OCR/editorial candidates queued).
 - [x] Track V1 source version and editorial review status.
 - [x] Produce a reproducible human-readable content review report.
 - [x] Add a reproducible JSON dictionary audit queue and editorial override layer.
 - [x] Document the JSON-versus-SQLite runtime storage decision and review triggers.
+- [ ] Reassess every bundled English definition against an authoritative, legally usable offline source and retain only neutral, standalone game definitions.
+- [ ] Define source provenance and an editorial policy for imported definitions, including sensitive-sense selection and review rules.
+- [ ] Triage and replace the existing 1,596 long and 2,016 reference-only definitions before expanding the active answer pools further.
 - [ ] Replace pretty-printed review assets with compact/indexed release assets and measure startup/download performance.
 
 ## Guess the Word engine
@@ -116,7 +137,12 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 ## Later game modules
 
 - [ ] Define the reusable game-module contract.
-- [ ] Design and implement Word Search.
-- [ ] Design and implement Hangman or a themed equivalent.
+- [x] Design and implement an offline Word Search using the full playable vocabulary, language modes, randomized grids, and drag selection.
+- [x] Build Chardi Kala: Word Quest as the kid-friendly themed alternative to Hangman.
+  - [x] Implement Unicode-safe letter guessing, try tokens, hints, and win/loss states.
+  - [x] Select age-appropriate words from every existing language mode.
+  - [x] Build the respectful Sikh-inspired word-garden scene and child-friendly keyboard.
+  - [x] Add new-game, language/word-size difficulty, help, haptics, and reduced-motion behavior.
+  - [ ] Add domain, widget, responsive-layout, and navigation tests.
 - [ ] Design and implement a timed typing/accuracy game.
 - [ ] Reuse the shared content repository, themes, settings, and statistics.

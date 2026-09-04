@@ -20,6 +20,17 @@ void main() {
     ) as List<Object?>;
     entries.addAll(decoded.cast<Map<String, Object?>>());
   }
+  final supplementalDocument = jsonDecode(
+    File(
+      '${appDirectory.path}${Platform.pathSeparator}assets'
+      '${Platform.pathSeparator}content${Platform.pathSeparator}curation'
+      '${Platform.pathSeparator}supplemental_entries.json',
+    ).readAsStringSync(),
+  ) as Map<String, Object?>;
+  entries.addAll(
+    (supplementalDocument['entries']! as List<Object?>)
+        .cast<Map<String, Object?>>(),
+  );
   final overridesDocument = jsonDecode(
     File(
       '${appDirectory.path}${Platform.pathSeparator}assets'
@@ -132,8 +143,8 @@ void main() {
   File('${reportDirectory.path}${Platform.pathSeparator}dictionary_audit.json')
       .writeAsStringSync(
         pretty.convert({
-      'schemaVersion': 1,
-      'entryCount': entries.length,
+          'schemaVersion': 1,
+          'entryCount': entries.length,
           'issueCount': queue.length,
           'counts': counts,
           'reviewQueue': queue,

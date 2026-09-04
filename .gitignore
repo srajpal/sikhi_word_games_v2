@@ -33,3 +33,8 @@ sikhi_word_games-main/
 
 # Redundant V1 source archive.
 sikhi_word_games-main.zip
+
+# Temporary dictionary source downloads used by local import tools.
+mahan-kosh-*.json
+mahan-kosh-*.tar.gz
+mahan-kosh-source/
