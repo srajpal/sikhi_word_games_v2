@@ -11,9 +11,13 @@ Download: <https://en-word.net/downloads>
 
 ## Selection policy
 
-For each English word, collect every OEWN sense and select a concise,
-self-contained, ordinary modern sense. Never display a sense labelled or
-described as offensive, vulgar, a slur, derogatory, sexual, or otherwise
+For each English word, collect every OEWN sense for its lowercase lemma. The
+automated baseline takes the first neutral, standalone sense in OEWN's order,
+preferring noun, verb, adjective, adjective satellite, then adverb. This keeps
+ordinary lowercase words separate from title-cased name and title senses. The
+baseline is marked `machineChecked`; editors may replace it with a more concise,
+self-contained, ordinary modern clue when needed. Never display a sense labelled
+or described as offensive, vulgar, a slur, derogatory, sexual, or otherwise
 unsuitable for the game. A word remains eligible when it has an ordinary,
 neutral sense; only the unsafe sense is excluded.
 
@@ -31,8 +35,10 @@ become rejected merely because they are not ideal answers.
    ```
 
 3. Review `reports/content/english_definition_reassessment.json`.
-4. Put final concise definitions in `editorial_overrides.json` or
-   `supplemental_entries.json`, with source provenance.
+4. Run `dart run tool/apply_oewn_definitions.dart --write` to apply available
+   OEWN baseline definitions to the curated runtime assets. Put later concise
+   editorial revisions in `editorial_overrides.json` or
+   `supplemental_entries.json`, retaining source provenance.
 5. Run `dart run tool/audit_content.dart`, then Flutter analysis and tests.
 
 ## Other sources

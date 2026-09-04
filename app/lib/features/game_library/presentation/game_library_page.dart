@@ -153,8 +153,8 @@ class GameLibraryPage extends StatelessWidget {
   }
 
   String _gameName(GameKind kind) => switch (kind) {
-    GameKind.guessTheWord => 'Guess the Word',
-    GameKind.wordSearch => 'Word Search',
+    GameKind.guessTheWord => 'Bujho: Guess the Word',
+    GameKind.wordSearch => 'Khoj: Word Search',
     GameKind.wordQuest => 'Word Quest',
   };
 
@@ -302,7 +302,7 @@ class GameLibraryPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Play offline in English, romanized Panjabi, and Gurmukhi.',
+                          'Play offline in English, romanized Punjabi, and Gurmukhi.',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
@@ -311,7 +311,7 @@ class GameLibraryPage extends StatelessWidget {
                   const SizedBox(height: 24),
                   _GameCard(
                     icon: Icons.grid_view_rounded,
-                    title: 'Guess the Word',
+                    title: 'Bujho: Guess the Word',
                     description: 'Find the hidden word using colored clues.',
                     gameKind: GameKind.guessTheWord,
                     hasActiveGame: _hasActiveGame(GameKind.guessTheWord),
@@ -325,7 +325,7 @@ class GameLibraryPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   _GameCard(
                     icon: Icons.search_rounded,
-                    title: 'Word Search',
+                    title: 'Khoj: Word Search',
                     description: 'Find offline words hidden in a letter grid.',
                     gameKind: GameKind.wordSearch,
                     hasActiveGame: _hasActiveGame(GameKind.wordSearch),
@@ -353,7 +353,14 @@ class GameLibraryPage extends StatelessWidget {
                   const _GameCard(
                     icon: Icons.keyboard_rounded,
                     title: 'Typing Challenge',
-                    description: 'Practice accurate English, Panjabi, and Gurmukhi typing.',
+                    description: 'Practice accurate English, Punjabi, and Gurmukhi typing.',
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'English definition data adapted from Open English '
+                    'WordNet 2025, licensed CC BY 4.0.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),

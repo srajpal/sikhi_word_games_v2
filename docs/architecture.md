@@ -60,13 +60,13 @@ lib/
     statistics/
 ```
 
-## Guess the Word rules
+## Bujho: Guess the Word rules
 
 - Evaluation uses a two-pass algorithm: mark exact matches first, then consume remaining solution-letter counts for present matches.
 - Text processing uses Unicode grapheme clusters rather than code units.
 - Accepted guesses and eligible solutions are different collections.
 - Random selection can be seeded for deterministic tests.
-- Mixed Latin accepts both English and romanized Panjabi guesses.
+- Mixed English/Punjabi accepts both English and romanized Punjabi guesses.
 - Gurmukhi remains a separate mode.
 
 ## Security and privacy

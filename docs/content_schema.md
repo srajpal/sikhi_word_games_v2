@@ -74,6 +74,6 @@ need complex relational queries.
 
 ## Initial V1 import findings
 
-The reproducible V1 import produced 38,510 accepted-guess records: 20,859 English and 17,651 Panjabi. Curated supplements currently bring the runtime total to 39,004. All V1 word and definition keys align and no duplicate stable IDs were found. Imported entries default to `solutionEligible: false` until curated.
+The reproducible V1 import produced 38,510 accepted-guess records: 20,859 English and 17,651 Punjabi. Curated supplements currently bring the runtime total to 39,004. All V1 word and definition keys align and no duplicate stable IDs were found. Imported entries default to `solutionEligible: false` until curated.
 
-The review queue currently contains two empty English definitions, eight Panjabi records without a valid Gurmukhi form, and six of those eight containing Gujarati rather than Gurmukhi script. See `reports/content/v1_import_report.md` for exact records.
+The review queue currently contains two empty English definitions, eight Punjabi records without a valid Gurmukhi form, and six of those eight containing Gujarati rather than Gurmukhi script. See `reports/content/v1_import_report.md` for exact records.

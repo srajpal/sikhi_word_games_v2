@@ -3,7 +3,7 @@ import 'package:sikhi_word_games_v2/core/content/v1_vocabulary_importer.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 
 void main() {
-  test('imports aligned English and Panjabi V1 rows', () {
+  test('imports aligned English and Punjabi V1 rows', () {
     final result = V1VocabularyImporter.import(
       wordLines: const ['HERO,E', 'BAAG,S'],
       definitionLines: const [
@@ -48,7 +48,7 @@ void main() {
     expect(result.issues.single.type, ImportIssueType.keyMismatch);
   });
 
-  test('flags Panjabi rows without a Gurmukhi form for review', () {
+  test('flags Punjabi rows without a Gurmukhi form for review', () {
     final result = V1VocabularyImporter.import(
       wordLines: const ['TELL,S'],
       definitionLines: const ['TELL;S;das - ten'],

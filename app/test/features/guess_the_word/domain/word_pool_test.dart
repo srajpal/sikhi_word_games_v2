@@ -37,7 +37,7 @@ void main() {
     );
   });
 
-  test('Mixed Latin accepts both English and romanized Panjabi', () {
+  test('Mixed English/Punjabi accepts both English and romanized Punjabi', () {
     expect(
       WordPool(entries)
           .acceptedGuesses(mode: LanguageMode.mixedLatin, wordLength: 4),

@@ -34,22 +34,23 @@ void main() {
       final game = WordQuestGame(solution: 'SEVA');
 
       expect(game.guess('x').result, WordQuestGuessResult.incorrect);
-      expect(game.triesRemaining, 6);
+      expect(game.triesRemaining, 4);
       expect(game.guess('X').result, WordQuestGuessResult.repeated);
-      expect(game.triesRemaining, 6);
+      expect(game.triesRemaining, 4);
       expect(game.guess('s').result, WordQuestGuessResult.correct);
       expect(game.guess('S').result, WordQuestGuessResult.repeated);
-      expect(game.triesRemaining, 6);
+      expect(game.triesRemaining, 4);
     });
 
-    test('uses exactly seven tries and ends a lost game', () {
+    test('uses an adaptive try budget and ends a learning round', () {
       final game = WordQuestGame(solution: 'SEVA');
 
-      for (final letter in const ['B', 'C', 'D', 'F', 'G', 'H', 'I']) {
+      expect(game.maximumTries, 5);
+      for (final letter in const ['B', 'C', 'D', 'F', 'G']) {
         game.guess(letter);
       }
 
-      expect(game.incorrectGuesses, 7);
+      expect(game.incorrectGuesses, 5);
       expect(game.triesRemaining, 0);
       expect(game.status, WordQuestStatus.lost);
       expect(game.guess('S').result, WordQuestGuessResult.gameOver);
@@ -60,7 +61,7 @@ void main() {
 
       expect(game.guess('SE').result, WordQuestGuessResult.invalid);
       expect(game.guess(' ').result, WordQuestGuessResult.invalid);
-      expect(game.triesRemaining, 7);
+      expect(game.triesRemaining, 5);
     });
 
     test(
@@ -74,7 +75,7 @@ void main() {
         expect(hint.revealedGrapheme, 'S');
         expect(game.hintsUsed, 1);
         expect(game.hintedGraphemes, {'S'});
-        expect(game.triesRemaining, 7);
+        expect(game.triesRemaining, 5);
         game.guess('E');
         game.guess('V');
         expect(game.useHint().revealedGrapheme, 'A');
@@ -82,6 +83,13 @@ void main() {
         expect(game.useHint().result, WordQuestHintResult.gameOver);
       },
     );
+
+    test('assigns 5, 6, and 7 tries to 4-, 5-, and 6-grapheme words', () {
+      expect(WordQuestGame(solution: 'SEVA').maximumTries, 5);
+      expect(WordQuestGame(solution: 'APPLE').maximumTries, 6);
+      expect(WordQuestGame(solution: 'PLANET').maximumTries, 7);
+      expect(WordQuestGame(solution: 'ਕੀਰਤਨ').maximumTries, 5);
+    });
 
     test('round-trips its snapshot and rejects malformed snapshots', () {
       final game = WordQuestGame(solution: 'ਕਿਤਾਬ');

@@ -22,8 +22,8 @@ void main() {
     await tester.pumpAndSettle();
 
     for (final title in [
-      'Guess the Word',
-      'Word Search',
+      'Bujho: Guess the Word',
+      'Khoj: Word Search',
       'Chardi Kala: Word Quest',
     ]) {
       final titleFinder = find.text(title);
@@ -76,7 +76,9 @@ void main() {
     expect(find.text('Random size'), findsOneWidget);
   });
 
-  testWidgets('opens Guess the Word from the game library', (tester) async {
+  testWidgets('opens Bujho: Guess the Word from the game library', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       SikhiWordGamesApp(
         settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
@@ -86,10 +88,12 @@ void main() {
     expect(find.text('Choose a game'), findsOneWidget);
     await _startNewGame(tester);
     await tester.pumpAndSettle();
-    expect(find.text('Guess the Word'), findsOneWidget);
+    expect(find.text('Bujho: Guess the Word'), findsOneWidget);
   });
 
-  testWidgets('opens Word Search and changes its language', (tester) async {
+  testWidgets('opens Khoj: Word Search and changes its language', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       SikhiWordGamesApp(
         settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
@@ -99,10 +103,10 @@ void main() {
 
     await _startNewGame(tester, cardIndex: 1);
     await tester.pumpAndSettle();
-    expect(find.text('Word Search'), findsOneWidget);
+    expect(find.text('Khoj: Word Search'), findsOneWidget);
     expect(find.text('English'), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Word Search menu'));
+    await tester.tap(find.byTooltip('Khoj: Word Search menu'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Language'));
     await tester.pumpAndSettle();
@@ -134,8 +138,109 @@ void main() {
 
     expect(find.text('CHARDI KALA'), findsOneWidget);
     expect(find.text('WORD QUEST'), findsOneWidget);
-    expect(find.text('8'), findsOneWidget);
-    expect(find.textContaining('HINT'), findsOneWidget);
+    expect(find.text('6'), findsOneWidget);
+    expect(find.byKey(const ValueKey('word-quest-hint')), findsOneWidget);
+    final keyboardToggle = find.byKey(
+      const ValueKey('word-quest-keyboard-toggle'),
+    );
+    expect(find.text('Choose a letter to begin your quest.'), findsNothing);
+    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+    await tester.tap(keyboardToggle);
+    await tester.pump();
+    expect(find.byIcon(Icons.keyboard_hide_outlined), findsOneWidget);
+    await tester.tap(keyboardToggle);
+    await tester.pump();
+    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('word-quest-menu')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dictionary').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Dictionary'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Word Quest keeps six answer tiles on one row at 320 px', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.byType(ListView), const Offset(0, -500));
+    await tester.pumpAndSettle();
+    await _openNewGameOptions(tester, cardIndex: 2);
+    await tester.tap(find.text('5 letters').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('6 letters').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start new game'));
+    await tester.pumpAndSettle();
+
+    tester.view.physicalSize = const Size(320, 568);
+    await tester.pumpAndSettle();
+
+    final centers = [
+      for (var i = 0; i < 6; i++)
+        tester.getCenter(find.byKey(ValueKey('word-quest-answer-tile-$i'))),
+    ];
+    expect(centers.map((center) => center.dy).toSet(), hasLength(1));
+    expect(centers.first.dx, greaterThan(0));
+    expect(centers.last.dx, lessThan(320));
+    expect(find.text('7'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Word Quest shows Gurmukhi sounds and keyboard choices', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.byType(ListView), const Offset(0, -420));
+    await tester.pumpAndSettle();
+    await _openNewGameOptions(tester, cardIndex: 2);
+    await tester.tap(find.text('English').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Gurmukhi').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('5 letters').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('4 letters').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start new game'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Kee'), findsWidgets);
+    final keyboardToggle = find.byKey(
+      const ValueKey('word-quest-keyboard-toggle'),
+    );
+    await tester.tap(keyboardToggle);
+    await tester.pump();
+    expect(find.byIcon(Icons.keyboard_hide_outlined), findsOneWidget);
+    expect(find.byKey(const ValueKey('word-quest-key-ਅ')), findsOneWidget);
+    await tester.tap(keyboardToggle);
+    await tester.pump();
+    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -192,7 +297,10 @@ void main() {
     expect(find.text('How to play'), findsOneWidget);
     expect(find.text('Tile clues'), findsOneWidget);
     expect(find.text('Language modes'), findsOneWidget);
-    expect(find.textContaining('Mixed Latin accepts both'), findsOneWidget);
+    expect(
+      find.textContaining('Mixed English/Punjabi accepts both'),
+      findsOneWidget,
+    );
     expect(find.textContaining('work completely offline'), findsOneWidget);
 
     await tester.tap(find.text('Got it'));
@@ -538,7 +646,11 @@ Future<void> _openNewGameOptions(
   WidgetTester tester, {
   int cardIndex = 0,
 }) async {
-  const titles = ['Guess the Word', 'Word Search', 'Chardi Kala: Word Quest'];
+  const titles = [
+    'Bujho: Guess the Word',
+    'Khoj: Word Search',
+    'Chardi Kala: Word Quest',
+  ];
   final titleFinder = find.text(titles[cardIndex]);
   await tester.ensureVisible(titleFinder);
   await tester.pumpAndSettle();
@@ -607,6 +719,19 @@ const _vocabulary = MemoryVocabularyRepository([
     gurmukhi: null,
     englishDefinition: 'A round fruit',
     latinLength: 5,
+    gurmukhiLength: null,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'test',
+  ),
+  VocabularyEntry(
+    id: 'english_planet',
+    language: VocabularyLanguage.english,
+    latin: 'PLANET',
+    gurmukhi: null,
+    englishDefinition: 'A world that travels around a star',
+    latinLength: 6,
     gurmukhiLength: null,
     acceptedGuess: true,
     solutionEligible: true,

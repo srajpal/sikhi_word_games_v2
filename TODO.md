@@ -42,17 +42,17 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Convert parallel text files into structured vocabulary records.
 - [x] Normalize processing and use grapheme clusters for generated visible letter counts.
 - [x] Detect malformed rows, duplicate IDs, mismatched keys, missing definitions, and script anomalies.
-- [x] Record English, romanized Panjabi, and available Gurmukhi forms separately.
+- [x] Record English, romanized Punjabi, and available Gurmukhi forms separately.
 - [x] Maintain a broad accepted-guess pool.
 - [ ] Expand and editorially approve the solution pool; an explicit machine-checked starter set now drives the app.
 - [x] Cross-reference every four-letter English entry against Open English WordNet, SCOWL, and modern usage frequency.
 - [x] Classify every ranked four-letter English candidate as an answer, accepted guess, or rejection.
 - [x] Classify every five-letter English entry as an answer, accepted guess, or rejection using neutral OEWN senses.
-- [x] Complete an explicit answer/guess/reject decision for every remaining bundled 4-, 5-, and 6-letter entry across English and Panjabi/Gurmukhi.
+- [x] Complete an explicit answer/guess/reject decision for every remaining bundled 4-, 5-, and 6-letter entry across English and Punjabi/Gurmukhi.
 - [x] Build a local dictionary review tool with durable decisions, filters, bulk actions, and a guarded apply workflow.
 - [x] Run the conservative automatic four-letter English triage and preserve uncertain entries for manual review.
 - [x] Add an initial set of verified common four-letter English words missing from the V1 import.
-- [ ] Confirm four-letter Panjabi entries against an authoritative licensed source and record manual decisions.
+- [ ] Confirm four-letter Punjabi entries against an authoritative licensed source and record manual decisions.
 - [x] Build a native Gurmukhi expansion pipeline targeting real five- and six-grapheme headwords.
 - [x] Evaluate open-license Gurmukhi sources (including Mahan Kosh data) and document provenance/attribution before bundling.
 - [x] Import, normalize, deduplicate, and rank native Gurmukhi candidates separately from Romanized transliterations.
@@ -64,24 +64,24 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Replace obsolete or misleading definitions for all active English four-letter solutions.
 - [x] Enforce accepted guesses and curated solutions as separate domain collections.
 - [x] Prevent Word Quest from selecting guess-only entries and reject cross-reference, circular, fragmentary, or answer-leaking clues at runtime.
-- [x] Audit accepted Panjabi definitions separately (17,651 scanned; 1,005 cross-reference-only and 2,039 broader OCR/editorial candidates queued).
+- [x] Audit accepted Punjabi definitions separately (17,651 scanned; 1,005 cross-reference-only and 2,039 broader OCR/editorial candidates queued).
 - [x] Track V1 source version and editorial review status.
 - [x] Produce a reproducible human-readable content review report.
 - [x] Add a reproducible JSON dictionary audit queue and editorial override layer.
 - [x] Document the JSON-versus-SQLite runtime storage decision and review triggers.
 - [ ] Reassess every bundled English definition against an authoritative, legally usable offline source and retain only neutral, standalone game definitions.
-- [ ] Define source provenance and an editorial policy for imported definitions, including sensitive-sense selection and review rules.
+- [x] Define source provenance and an editorial policy for imported definitions, including sensitive-sense selection and review rules.
 - [ ] Triage and replace the existing 1,596 long and 2,016 reference-only definitions before expanding the active answer pools further.
 - [ ] Replace pretty-printed review assets with compact/indexed release assets and measure startup/download performance.
 
-## Guess the Word engine
+## Bujho: Guess the Word engine
 
 - [x] Build the first pure Dart engine component independent of Flutter widgets.
 - [x] Implement correct two-pass repeated-letter evaluation.
 - [x] Support configurable word lengths, including four, five, and six graphemes, in the domain layer.
 - [x] Support English filtering in the domain layer.
-- [x] Support romanized Panjabi filtering in the domain layer.
-- [x] Support Mixed Latin with English and romanized guesses accepted in the domain layer.
+- [x] Support romanized Punjabi filtering in the domain layer.
+- [x] Support Mixed English/Punjabi with English and romanized guesses accepted in the domain layer.
 - [x] Support Gurmukhi grapheme filtering and game evaluation in the domain layer.
 - [x] Add seeded, non-repeating solution selection with exhaustion reset.
 - [x] Persist non-repeating solution history across launches and use secure randomness.
@@ -89,13 +89,13 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Model game progress, accepted turns, rejections, and win/loss states explicitly.
 - [x] Add versioned serialization and offline storage for interrupted-game restoration.
 
-## Guess the Word interface
+## Bujho: Guess the Word interface
 
 - [x] Build a minimal playable screen for fast iteration using temporary content.
 - [x] Replace temporary `APPLE` content with the offline vocabulary repository and explicit starter solutions.
-- [x] Connect English, romanized Panjabi, Mixed Latin, and initial Gurmukhi mode/length selection.
+- [x] Connect English, romanized Punjabi, Mixed English/Punjabi, and initial Gurmukhi mode/length selection.
 - [x] Restore interrupted games with their mode, length, turns, and keyboard feedback.
-- [x] Add the shared Latin keyboard for English, romanized Panjabi, and Mixed Latin.
+- [x] Add the shared Latin keyboard for English, romanized Punjabi, and Mixed English/Punjabi.
 - [x] Add the initial purpose-built Gurmukhi keyboard with vowel signs and extended letters.
 - [x] Disable keyboard symbols proven absent without breaking repeated-letter cases.
 - [x] Add tile feedback symbols and semantic labels that do not rely on color alone.
@@ -104,7 +104,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Consolidate language, word size, and theme controls into compact game settings.
 - [x] Add a menu action that starts a new game with the current settings.
 - [x] Show validation and status notices without resizing the gameplay layout.
-- [x] Add a dedicated offline dictionary page with English, Romanized Panjabi, and Gurmukhi word-only search.
+- [x] Add a dedicated offline dictionary page with English, Romanized Punjabi, and Gurmukhi word-only search.
 - [x] Add versioned per-mode and per-length statistics stored completely offline.
 - [x] Add offline, clipboard-based spoiler-safe result sharing.
 - [x] Support physical keyboards and IME submission with persistent input focus.
@@ -139,12 +139,16 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 ## Later game modules
 
 - [ ] Define the reusable game-module contract.
-- [x] Design and implement an offline Word Search using the full playable vocabulary, language modes, randomized grids, and drag selection.
+- [x] Design and implement Khoj: Word Search using the full playable vocabulary, language modes, randomized grids, and drag selection.
 - [x] Build Chardi Kala: Word Quest as the kid-friendly themed alternative to Hangman.
   - [x] Implement Unicode-safe letter guessing, try tokens, hints, and win/loss states.
   - [x] Select age-appropriate words from every existing language mode.
   - [x] Build the respectful Sikh-inspired word-garden scene and child-friendly keyboard.
   - [x] Add new-game, language/word-size difficulty, help, haptics, and reduced-motion behavior.
-  - [ ] Add domain, widget, responsive-layout, and navigation tests.
+  - [x] Keep 4–6 answer tiles on one row and move the hint beside the adaptive heart counter.
+  - [x] Add reversible simple/full keyboards and romanized pronunciation on Gurmukhi tiles.
+  - [x] Move the keyboard toggle beside Hint and use floating gameplay feedback to preserve vertical space.
+  - [x] Shorten long source definitions to a concise first sense and expose the offline Dictionary from Word Quest.
+  - [x] Add domain, widget, responsive-layout, and navigation tests.
 - [ ] Design and implement a timed typing/accuracy game.
 - [ ] Reuse the shared content repository, themes, settings, and statistics.

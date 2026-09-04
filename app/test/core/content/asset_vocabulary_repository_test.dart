@@ -41,13 +41,13 @@ void main() {
         pool
             .entryForGuess(mode: LanguageMode.english, guess: 'HOME')
             ?.englishDefinition,
-        'The place where a person lives.',
+        'where you live at a particular time',
       );
       expect(
         pool
             .entryForGuess(mode: LanguageMode.english, guess: 'WORD')
             ?.englishDefinition,
-        'A unit of language that carries meaning.',
+        'a unit of language that native speakers can identify',
       );
     },
   );

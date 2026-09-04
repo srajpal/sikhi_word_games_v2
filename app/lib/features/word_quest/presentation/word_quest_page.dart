@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/themes/app_theme.dart';
@@ -9,8 +10,52 @@ import '../../../core/themes/game_ui.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../settings/data/app_settings_repository.dart';
 import '../domain/word_quest_game.dart';
+import '../domain/gurmukhi_romanization.dart';
 import '../domain/word_quest_vocabulary.dart';
 import '../data/word_quest_session_repository.dart';
+
+const _gurmukhiAlphabet = <String>[
+  'ੳ',
+  'ਅ',
+  'ੲ',
+  'ਸ',
+  'ਹ',
+  'ਕ',
+  'ਖ',
+  'ਗ',
+  'ਘ',
+  'ਙ',
+  'ਚ',
+  'ਛ',
+  'ਜ',
+  'ਝ',
+  'ਞ',
+  'ਟ',
+  'ਠ',
+  'ਡ',
+  'ਢ',
+  'ਣ',
+  'ਤ',
+  'ਥ',
+  'ਦ',
+  'ਧ',
+  'ਨ',
+  'ਪ',
+  'ਫ',
+  'ਬ',
+  'ਭ',
+  'ਮ',
+  'ਯ',
+  'ਰ',
+  'ਲ',
+  'ਵ',
+  'ੜ',
+  'ਸ਼',
+  'ਖ਼',
+  'ਗ਼',
+  'ਜ਼',
+  'ਫ਼',
+];
 
 class WordQuestPage extends StatefulWidget {
   const WordQuestPage({
@@ -45,9 +90,9 @@ class _WordQuestPageState extends State<WordQuestPage> {
   LanguageMode _mode = LanguageMode.english;
   int _wordSize = 4;
   List<String> _letterBank = const [];
-  String _message = 'Choose a letter to begin your quest.';
+  String _message = '';
   bool _loading = true;
-  bool _showAllLatin = false;
+  bool _showFullKeyboard = false;
   int _hintsRemaining = 2;
 
   @override
@@ -124,15 +169,15 @@ class _WordQuestPageState extends State<WordQuestPage> {
       return;
     }
     final word = _selector.select(candidates);
-    final game = WordQuestGame(solution: word.spelling, maximumTries: 8);
+    final game = WordQuestGame(solution: word.spelling);
     final bank = _buildLetterBank(game, candidates);
     setState(() {
       _word = word;
       _game = game;
       _letterBank = bank;
-      _showAllLatin = false;
+      _showFullKeyboard = false;
       _hintsRemaining = 2;
-      _message = 'Choose a letter to begin your quest.';
+      _message = '';
       _loading = false;
     });
     widget.sessionRepository.save(mode: _mode, wordSize: _wordSize, game: game);
@@ -160,6 +205,16 @@ class _WordQuestPageState extends State<WordQuestPage> {
     }
     final result = choices.toList()..shuffle(_random);
     return result;
+  }
+
+  List<String> _fullLetterBank(WordQuestGame game) {
+    if (_mode != LanguageMode.gurmukhi) {
+      return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.characters.toList(growable: false);
+    }
+    return <String>{
+      ...game.letterBankGraphemes,
+      ..._gurmukhiAlphabet,
+    }.toList(growable: false);
   }
 
   Future<void> _haptic({required bool correct, bool complete = false}) async {
@@ -190,16 +245,15 @@ class _WordQuestPageState extends State<WordQuestPage> {
     if (game == null || game.isComplete) return;
     final result = game.guess(letter);
     final correct = result.result == WordQuestGuessResult.correct;
-    setState(() {
-      _message = switch (result.result) {
-        WordQuestGuessResult.correct =>
-          'Nice find! That letter is in the word.',
-        WordQuestGuessResult.incorrect =>
-          'Try another letter — your garden progress is safe.',
-        WordQuestGuessResult.repeated => 'You already tried that letter.',
-        _ => _message,
-      };
-    });
+    final feedback = switch (result.result) {
+      WordQuestGuessResult.correct => 'Nice find! That letter is in the word.',
+      WordQuestGuessResult.incorrect =>
+        'Try another letter — your garden progress is safe.',
+      WordQuestGuessResult.repeated => 'You already tried that letter.',
+      _ => '',
+    };
+    setState(() {});
+    if (feedback.isNotEmpty) _showFeedback(feedback);
     if (game.isComplete) {
       widget.sessionRepository.clear();
     } else {
@@ -219,8 +273,8 @@ class _WordQuestPageState extends State<WordQuestPage> {
     if (hint.result != WordQuestHintResult.revealed) return;
     setState(() {
       _hintsRemaining--;
-      _message = 'Hint used — a letter is now showing.';
     });
+    _showFeedback('Hint used — a letter is now showing.');
     if (game.isComplete) {
       widget.sessionRepository.clear();
     } else {
@@ -231,6 +285,19 @@ class _WordQuestPageState extends State<WordQuestPage> {
       );
     }
     _haptic(correct: true);
+  }
+
+  void _showFeedback(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message, textAlign: TextAlign.center),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(milliseconds: 1400),
+        ),
+      );
   }
 
   Future<void> _showSettings() async {
@@ -297,7 +364,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     builder: (context) => AlertDialog(
       title: const Text('How to play'),
       content: const Text(
-        'Choose letters to uncover the hidden word. Correct letters help your word garden grow. You have eight tries and two friendly hints. If the word stays hidden, we reveal it so you can learn it.',
+        'Choose letters to uncover the hidden word. Correct letters help your word garden grow. Shorter words have fewer hearts, and every round includes two friendly hints. If the word stays hidden, we reveal it so you can learn it.',
       ),
       actions: [
         TextButton(
@@ -356,15 +423,24 @@ class _WordQuestPageState extends State<WordQuestPage> {
         ),
         actions: [
           PopupMenuButton<String>(
+            key: const ValueKey('word-quest-menu'),
             onSelected: (value) {
               if (value == 'new') _startNewWord();
               if (value == 'settings') _showSettings();
               if (value == 'help') _showHelp();
+              if (value == 'dictionary') context.push('/dictionary');
             },
             itemBuilder: (context) => const [
               PopupMenuItem(value: 'new', child: Text('New word')),
               PopupMenuItem(value: 'settings', child: Text('Game settings')),
               PopupMenuItem(value: 'help', child: Text('How to play')),
+              PopupMenuItem(
+                value: 'dictionary',
+                child: ListTile(
+                  leading: Icon(Icons.menu_book_outlined),
+                  title: Text('Dictionary'),
+                ),
+              ),
             ],
           ),
         ],
@@ -403,6 +479,17 @@ class _WordQuestPageState extends State<WordQuestPage> {
                               language: _mode.label,
                               letters: word.graphemeLength,
                               tries: game.triesRemaining,
+                              hintsRemaining: _hintsRemaining,
+                              onHint: game.isComplete || _hintsRemaining == 0
+                                  ? null
+                                  : _useHint,
+                              showFullKeyboard: _showFullKeyboard,
+                              onToggleKeyboard: game.isComplete
+                                  ? null
+                                  : () => setState(
+                                      () => _showFullKeyboard =
+                                          !_showFullKeyboard,
+                                    ),
                             ),
                             const SizedBox(height: 14),
                             _RaisedPanel(
@@ -431,18 +518,20 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                           size: 18,
                                         ),
                                         const SizedBox(width: 7),
-                                        Text(
-                                          'YOUR CLUE',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelLarge
-                                              ?.copyWith(
-                                                color: scheme.onSurface,
-                                                fontWeight: FontWeight.w900,
-                                                letterSpacing: 1.4,
-                                              ),
+                                        Expanded(
+                                          child: Text(
+                                            'YOUR CLUE',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelLarge
+                                                ?.copyWith(
+                                                  color: scheme.onSurface,
+                                                  fontWeight: FontWeight.w900,
+                                                  letterSpacing: 1.4,
+                                                ),
+                                          ),
                                         ),
-                                        const Spacer(),
+                                        const SizedBox(width: 6),
                                         _MiniBadge(label: word.categoryHint),
                                       ],
                                     ),
@@ -465,36 +554,14 @@ class _WordQuestPageState extends State<WordQuestPage> {
                               ),
                             ),
                             const SizedBox(height: 18),
-                            _WordTiles(game: game),
+                            _WordTiles(
+                              game: game,
+                              showRomanization: _mode == LanguageMode.gurmukhi,
+                            ),
                             const SizedBox(height: 16),
                             _GardenPath(
                               game: game,
                               reducedMotion: widget.reducedMotion,
-                            ),
-                            const SizedBox(height: 10),
-                            Semantics(
-                              liveRegion: true,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 7,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: _QuestPalette.navy.withValues(
-                                    alpha: .72,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: Colors.white24),
-                                ),
-                                child: Text(
-                                  _message,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
                             ),
                             const SizedBox(height: 10),
                             if (game.isComplete)
@@ -504,40 +571,14 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                 onNewWord: _startNewWord,
                               )
                             else ...[
-                              _QuestActionButton(
-                                onPressed: _hintsRemaining == 0
-                                    ? null
-                                    : _useHint,
-                                icon: const Icon(Icons.lightbulb_outline),
-                                label: 'HINT · $_hintsRemaining LEFT',
-                              ),
-                              const SizedBox(height: 10),
-                              if (_mode != LanguageMode.gurmukhi &&
-                                  !_showAllLatin)
-                                TextButton.icon(
-                                  onPressed: () =>
-                                      setState(() => _showAllLatin = true),
-                                  icon: const Icon(
-                                    Icons.keyboard_alt_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  label: const Text(
-                                    'SHOW ALL LETTERS',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ),
                               _LetterBank(
-                                letters:
-                                    _mode != LanguageMode.gurmukhi &&
-                                        _showAllLatin
-                                    ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.characters
-                                          .toList()
+                                letters: _showFullKeyboard
+                                    ? _fullLetterBank(game)
                                     : _letterBank,
                                 game: game,
                                 onPressed: _guess,
+                                showRomanization:
+                                    _mode == LanguageMode.gurmukhi,
                               ),
                             ],
                           ],
@@ -553,8 +594,9 @@ class _WordQuestPageState extends State<WordQuestPage> {
 }
 
 class _WordTiles extends StatelessWidget {
-  const _WordTiles({required this.game});
+  const _WordTiles({required this.game, required this.showRomanization});
   final WordQuestGame game;
+  final bool showRomanization;
 
   @override
   Widget build(BuildContext context) {
@@ -563,65 +605,98 @@ class _WordTiles extends StatelessWidget {
     final hiddenColors = tokens.sikhiStyle
         ? const [Colors.white, _QuestPalette.parchment]
         : [scheme.surfaceContainerLowest, scheme.surfaceContainerHigh];
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 7,
-      runSpacing: 7,
-      children: [
-        for (var i = 0; i < game.revealedGraphemes.length; i++)
-          Semantics(
-            label: game.revealedGraphemes[i] == null
-                ? 'Letter ${i + 1}, hidden'
-                : 'Letter ${i + 1}, ${game.revealedGraphemes[i]}, revealed',
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              width: 55,
-              height: 61,
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(bottom: 7),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: game.revealedGraphemes[i] == null
-                      ? hiddenColors
-                      : [tokens.correct.withValues(alpha: .75), tokens.correct],
-                ),
-                border: Border.all(color: Colors.white, width: 2),
-                borderRadius: BorderRadius.circular(13),
-                boxShadow: [
-                  BoxShadow(
-                    color: game.revealedGraphemes[i] == null
-                        ? scheme.primary.withValues(alpha: .6)
-                        : tokens.correct.withValues(alpha: .7),
-                    offset: const Offset(0, 7),
-                  ),
-                  const BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, 9),
-                  ),
-                ],
-              ),
-              child: Text(
-                game.revealedGraphemes[i] ?? '?',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: game.revealedGraphemes[i] == null
-                      ? scheme.onSurface
-                      : Colors.white,
-                  fontWeight: FontWeight.w900,
-                  shadows: const [
-                    Shadow(
-                      color: Colors.black26,
-                      offset: Offset(0, 2),
-                      blurRadius: 2,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = 7.0;
+        final count = game.revealedGraphemes.length;
+        final available = constraints.maxWidth - spacing * (count - 1);
+        final tileWidth = (available / count).clamp(40.0, 55.0);
+        final tileHeight = showRomanization ? 66.0 : 61.0;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (var i = 0; i < count; i++) ...[
+              if (i > 0) const SizedBox(width: spacing),
+              Semantics(
+                label: game.revealedGraphemes[i] == null
+                    ? 'Letter ${i + 1}, hidden'
+                    : 'Letter ${i + 1}, ${game.revealedGraphemes[i]}, '
+                          '${showRomanization ? romanizeGurmukhiGrapheme(game.revealedGraphemes[i]!) : ''} revealed',
+                child: Container(
+                  key: ValueKey('word-quest-answer-tile-$i'),
+                  width: tileWidth,
+                  height: tileHeight,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(bottom: 7),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: game.revealedGraphemes[i] == null
+                          ? hiddenColors
+                          : [
+                              tokens.correct.withValues(alpha: .75),
+                              tokens.correct,
+                            ],
                     ),
-                  ],
+                    border: Border.all(color: Colors.white, width: 2),
+                    borderRadius: BorderRadius.circular(13),
+                    boxShadow: [
+                      BoxShadow(
+                        color: game.revealedGraphemes[i] == null
+                            ? scheme.primary.withValues(alpha: .6)
+                            : tokens.correct.withValues(alpha: .7),
+                        offset: const Offset(0, 7),
+                      ),
+                      const BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 8,
+                        offset: Offset(0, 9),
+                      ),
+                    ],
+                  ),
+                  child: game.revealedGraphemes[i] == null
+                      ? Text(
+                          '?',
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(
+                                color: scheme.onSurface,
+                                fontWeight: FontWeight.w900,
+                              ),
+                        )
+                      : FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                game.revealedGraphemes[i]!,
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                              ),
+                              if (showRomanization)
+                                Text(
+                                  romanizeGurmukhiGrapheme(
+                                    game.revealedGraphemes[i]!,
+                                  ),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
                 ),
               ),
-            ),
-          ),
-      ],
+            ],
+          ],
+        );
+      },
     );
   }
 }
@@ -633,18 +708,21 @@ class _GardenPath extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tokens = Theme.of(context).extension<GameThemeTokens>()!;
     final distinct = game.solutionGraphemes.toSet();
     final found = distinct.where(game.isGuessed).length;
     final progress = distinct.isEmpty
         ? 0
         : (found / distinct.length * 8).ceil();
     return Semantics(
-      label: '$progress of 8 garden steps glowing',
+      label: '$progress of 8 garden blooms growing',
       child: Container(
-        height: 76,
+        height: 84,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [_QuestPalette.sky, _QuestPalette.turquoise],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF8BE3F0), _QuestPalette.turquoise],
           ),
           borderRadius: BorderRadius.circular(22),
           border: Border.all(color: Colors.white70, width: 2),
@@ -659,24 +737,27 @@ class _GardenPath extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Positioned.fill(child: CustomPaint(painter: _GardenPainter())),
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _GardenPainter(
+                  progress: progress,
+                  bloomColor: tokens.correct,
+                ),
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.fromLTRB(12, 9, 12, 13),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Icon(
-                    Icons.wb_sunny_rounded,
-                    color: _QuestPalette.sunGold,
-                    size: 30,
-                  ),
+                  const SizedBox(width: 26),
                   for (var i = 0; i < 8; i++)
                     AnimatedContainer(
                       duration: reducedMotion
                           ? Duration.zero
                           : const Duration(milliseconds: 250),
-                      width: 22,
-                      height: 15,
+                      width: 20,
+                      height: 13,
                       decoration: BoxDecoration(
                         gradient: i < progress
                             ? const LinearGradient(
@@ -701,13 +782,7 @@ class _GardenPath extends StatelessWidget {
                         ],
                       ),
                     ),
-                  Icon(
-                    progress == 8 ? Icons.local_florist : Icons.park_rounded,
-                    color: progress == 8
-                        ? _QuestPalette.magenta
-                        : _QuestPalette.emerald,
-                    size: 31,
-                  ),
+                  const SizedBox(width: 26),
                 ],
               ),
             ),
@@ -719,33 +794,89 @@ class _GardenPath extends StatelessWidget {
 }
 
 class _GardenPainter extends CustomPainter {
+  const _GardenPainter({required this.progress, required this.bloomColor});
+
+  final int progress;
+  final Color bloomColor;
+
   @override
   void paint(Canvas canvas, Size size) {
-    final hill = Paint()..color = _QuestPalette.emerald.withValues(alpha: .42);
-    final path = Path()
+    final sun = Paint()..color = _QuestPalette.sunGold;
+    canvas.drawCircle(const Offset(24, 22), 10, sun);
+    for (var i = 0; i < 8; i++) {
+      final angle = i * pi / 4;
+      canvas.drawLine(
+        const Offset(24, 22),
+        Offset(24 + cos(angle) * 16, 22 + sin(angle) * 16),
+        Paint()
+          ..color = _QuestPalette.sunGold.withValues(alpha: .75)
+          ..strokeWidth = 2,
+      );
+    }
+
+    final backHill = Paint()
+      ..color = const Color(0xFF56C88B).withValues(alpha: .8);
+    final backPath = Path()
       ..moveTo(0, size.height)
       ..quadraticBezierTo(
-        size.width * .22,
-        size.height * .42,
-        size.width * .48,
+        size.width * .25,
+        size.height * .30,
+        size.width * .62,
         size.height,
       )
       ..close();
-    canvas.drawPath(path, hill);
-    canvas.drawCircle(
-      Offset(size.width * .88, 13),
-      3,
-      Paint()..color = Colors.white70,
+    canvas.drawPath(backPath, backHill);
+
+    final frontHill = Path()
+      ..moveTo(size.width * .38, size.height)
+      ..quadraticBezierTo(
+        size.width * .72,
+        size.height * .40,
+        size.width,
+        size.height * .68,
+      )
+      ..lineTo(size.width, size.height)
+      ..close();
+    canvas.drawPath(
+      frontHill,
+      Paint()..color = _QuestPalette.emerald.withValues(alpha: .72),
+    );
+
+    final stemPaint = Paint()
+      ..color = const Color(0xFF176D43)
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+    for (var i = 0; i < progress; i++) {
+      final x = 58 + i * ((size.width - 116) / 7);
+      final y = size.height - 13 - (i.isEven ? 2 : 8);
+      canvas.drawLine(Offset(x, y), Offset(x, y - 10), stemPaint);
+      canvas.drawOval(
+        Rect.fromCenter(center: Offset(x - 3, y - 7), width: 7, height: 4),
+        Paint()..color = const Color(0xFF76D76B),
+      );
+      canvas.drawCircle(Offset(x, y - 13), 4, Paint()..color = bloomColor);
+      canvas.drawCircle(
+        Offset(x, y - 13),
+        1.5,
+        Paint()..color = _QuestPalette.sunGold,
+      );
+    }
+
+    final treeX = size.width - 23;
+    canvas.drawRect(
+      Rect.fromLTWH(treeX - 2, size.height - 35, 4, 24),
+      Paint()..color = const Color(0xFF8A5A32),
     );
     canvas.drawCircle(
-      Offset(size.width * .82, 24),
-      2,
-      Paint()..color = Colors.white54,
+      Offset(treeX, size.height - 38),
+      progress == 8 ? 15 : 12,
+      Paint()..color = progress == 8 ? bloomColor : _QuestPalette.emerald,
     );
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _GardenPainter oldDelegate) =>
+      oldDelegate.progress != progress || oldDelegate.bloomColor != bloomColor;
 }
 
 class _LetterBank extends StatelessWidget {
@@ -753,10 +884,12 @@ class _LetterBank extends StatelessWidget {
     required this.letters,
     required this.game,
     required this.onPressed,
+    required this.showRomanization,
   });
   final List<String> letters;
   final WordQuestGame game;
   final ValueChanged<String> onPressed;
+  final bool showRomanization;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -766,9 +899,11 @@ class _LetterBank extends StatelessWidget {
     children: [
       for (final letter in letters)
         _QuestKey(
+          key: ValueKey('word-quest-key-$letter'),
           letter: letter,
           enabled: !game.isGuessed(letter),
           onPressed: () => onPressed(letter),
+          showRomanization: showRomanization,
         ),
     ],
   );
@@ -779,10 +914,13 @@ class _QuestKey extends StatelessWidget {
     required this.letter,
     required this.enabled,
     required this.onPressed,
+    required this.showRomanization,
+    super.key,
   });
   final String letter;
   final bool enabled;
   final VoidCallback onPressed;
+  final bool showRomanization;
 
   @override
   Widget build(BuildContext context) {
@@ -794,7 +932,9 @@ class _QuestKey extends StatelessWidget {
     return Semantics(
       button: true,
       enabled: enabled,
-      label: 'Letter $letter',
+      label: showRomanization
+          ? 'Gurmukhi letter $letter, ${romanizeGurmukhiGrapheme(letter)}'
+          : 'Letter $letter',
       child: GestureDetector(
         onTap: enabled ? onPressed : null,
         child: AnimatedContainer(
@@ -830,12 +970,31 @@ class _QuestKey extends StatelessWidget {
                   ]
                 : const [],
           ),
-          child: Text(
-            letter,
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w900,
-              color: enabled ? scheme.onSurface : Colors.white70,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  letter,
+                  style: TextStyle(
+                    fontSize: showRomanization ? 17 : 19,
+                    fontWeight: FontWeight.w900,
+                    color: enabled ? scheme.onSurface : Colors.white70,
+                  ),
+                ),
+                if (showRomanization)
+                  Text(
+                    romanizeGurmukhiGrapheme(letter),
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                      color: enabled
+                          ? scheme.onSurface.withValues(alpha: .75)
+                          : Colors.white60,
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
@@ -896,10 +1055,18 @@ class _QuestStatusBar extends StatelessWidget {
     required this.language,
     required this.letters,
     required this.tries,
+    required this.hintsRemaining,
+    required this.onHint,
+    required this.showFullKeyboard,
+    required this.onToggleKeyboard,
   });
   final String language;
   final int letters;
   final int tries;
+  final int hintsRemaining;
+  final VoidCallback? onHint;
+  final bool showFullKeyboard;
+  final VoidCallback? onToggleKeyboard;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -910,13 +1077,92 @@ class _QuestStatusBar extends StatelessWidget {
           label: '$language · $letters LETTERS',
         ),
       ),
-      const SizedBox(width: 10),
+      const SizedBox(width: 7),
       _StatusPill(
         icon: Icons.favorite_rounded,
         label: '$tries',
         accent: _QuestPalette.magenta,
       ),
+      const SizedBox(width: 7),
+      Semantics(
+        button: true,
+        enabled: onHint != null,
+        label: 'Hint, $hintsRemaining left',
+        child: Tooltip(
+          message: 'Hint, $hintsRemaining left',
+          child: InkWell(
+            key: const ValueKey('word-quest-hint'),
+            onTap: onHint,
+            borderRadius: BorderRadius.circular(22),
+            child: _StatusPill(
+              icon: Icons.lightbulb_outline,
+              label: '$hintsRemaining',
+              accent: onHint == null
+                  ? Theme.of(context).disabledColor
+                  : _QuestPalette.saffron,
+            ),
+          ),
+        ),
+      ),
+      const SizedBox(width: 7),
+      _StatusIconButton(
+        key: const ValueKey('word-quest-keyboard-toggle'),
+        icon: showFullKeyboard
+            ? Icons.keyboard_hide_outlined
+            : Icons.keyboard_alt_outlined,
+        tooltip: showFullKeyboard ? 'Show simple letters' : 'Show all letters',
+        onPressed: onToggleKeyboard,
+      ),
     ],
+  );
+}
+
+class _StatusIconButton extends StatelessWidget {
+  const _StatusIconButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onPressed,
+    super.key,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    enabled: onPressed != null,
+    label: tooltip,
+    child: Tooltip(
+      message: tooltip,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(22),
+        child: Container(
+          width: 41,
+          height: 41,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                _QuestPalette.navy.withValues(alpha: .96),
+                _QuestPalette.indigo.withValues(alpha: .92),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: Colors.white38),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 8,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Icon(icon, color: Colors.white, size: 19),
+        ),
+      ),
+    ),
   );
 }
 
@@ -973,6 +1219,7 @@ class _MiniBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
+    constraints: const BoxConstraints(maxWidth: 118),
     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.primaryContainer,
@@ -981,6 +1228,8 @@ class _MiniBadge extends StatelessWidget {
     ),
     child: Text(
       label.toUpperCase(),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: Theme.of(context).colorScheme.onPrimaryContainer,
         fontWeight: FontWeight.w800,
@@ -1107,7 +1356,6 @@ abstract final class _QuestPalette {
   static const deepGold = Color(0xFFC66612);
   static const parchment = Color(0xFFFFF2CF);
   static const keyCream = Color(0xFFFFDDB4);
-  static const sky = Color(0xFF48D8EA);
   static const turquoise = Color(0xFF1BB9B2);
   static const deepTeal = Color(0xFF116A7A);
   static const emerald = Color(0xFF169B62);

@@ -13,7 +13,7 @@
 - Exact, present, and absent matches.
 - Repeated letters in the guess, solution, or both.
 - Four-, five-, and six-grapheme games.
-- English, romanized Panjabi, Mixed Latin, and Gurmukhi filters.
+- English, romanized Punjabi, Mixed English/Punjabi, and Gurmukhi filters.
 - Invalid guesses and accepted-but-not-solution vocabulary.
 - Seeded random selection and non-repetition policy.
 - Winning, exhausting guesses, statistics, and serialization round trips.
@@ -28,4 +28,3 @@ Before a milestone is considered complete:
 3. Run all unit and content tests.
 4. Run affected widget and golden tests.
 5. Build the affected target in release mode when platform configuration changes.
-

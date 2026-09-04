@@ -126,12 +126,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   String _sourceLabel(VocabularyEntry entry) => switch (_mode) {
     LanguageMode.english => 'English',
-    LanguageMode.romanizedPanjabi => 'Romanized Panjabi',
-    LanguageMode.gurmukhi => 'Gurmukhi · Panjabi',
+    LanguageMode.romanizedPanjabi => 'Romanized Punjabi',
+    LanguageMode.gurmukhi => 'Gurmukhi · Punjabi',
     LanguageMode.mixedLatin =>
       entry.language == VocabularyLanguage.english
           ? 'English'
-          : 'Romanized Panjabi',
+          : 'Romanized Punjabi',
   };
 
   @override

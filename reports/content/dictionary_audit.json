@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "entryCount": 46995,
-  "issueCount": 5450,
+  "issueCount": 5446,
   "counts": {
-    "reference_definition": 3242,
-    "long_definition": 2182,
+    "reference_definition": 3240,
+    "long_definition": 2180,
     "missing_gurmukhi": 8,
     "missing_definition": 2,
     "duplicate_spelling": 16
@@ -353,15 +353,6 @@
       "detail": "Definition has 298 characters."
     },
     {
-      "id": "english_hawk",
-      "language": "english",
-      "latin": "HAWK",
-      "gurmukhi": null,
-      "definition": "One of numerous species and genera of rapacious birds of the family Falconidae. They differ from the true falcons in lacking the prominent tooth and notch of the bill, and in having shorter and less pointed wings. Many are of large size and grade into the eagles. Some, as the goshawk, were formerly trained like falcons. In a more general sense the word is not infrequently applied, also, to true falcons, as the sparrow hawk, pigeon hawk, duck hawk, and prairie hawk.",
-      "issue": "long_definition",
-      "detail": "Definition has 469 characters."
-    },
-    {
       "id": "english_haye",
       "language": "english",
       "latin": "HAYE",
@@ -558,15 +549,6 @@
       "definition": "A viscid fluid secreted by mucous membranes, which it serves to moisten and protect. It covers the lining membranes of all the cavities which open externally, such as those of the mouth, nose, lungs, intestinal canal, urinary passages, etc.",
       "issue": "long_definition",
       "detail": "Definition has 240 characters."
-    },
-    {
-      "id": "english_mung",
-      "language": "english",
-      "latin": "MUNG",
-      "gurmukhi": null,
-      "definition": "erect bushy annual widely cultivated in warm regions of India and Indonesia and United States for forage and especially its edible seeds; chief source of bean sprouts used in Chinese cookery; sometimes placed in genus Phaseolus",
-      "issue": "long_definition",
-      "detail": "Definition has 227 characters."
     },
     {
       "id": "english_musa",
@@ -21242,15 +21224,6 @@
       "detail": "Definition depends on another entry."
     },
     {
-      "id": "english_data",
-      "language": "english",
-      "latin": "DATA",
-      "gurmukhi": null,
-      "definition": "See Datum.",
-      "issue": "reference_definition",
-      "detail": "Definition depends on another entry."
-    },
-    {
       "id": "english_dauk",
       "language": "english",
       "latin": "DAUK",
@@ -22237,15 +22210,6 @@
       "latin": "GINGLE",
       "gurmukhi": null,
       "definition": "See Jingle.",
-      "issue": "reference_definition",
-      "detail": "Definition depends on another entry."
-    },
-    {
-      "id": "english_ginnee",
-      "language": "english",
-      "latin": "GINNEE",
-      "gurmukhi": null,
-      "definition": "See Jinnee.",
       "issue": "reference_definition",
       "detail": "Definition depends on another entry."
     },

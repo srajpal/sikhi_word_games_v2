@@ -2,9 +2,12 @@
 class WordQuestDefinitionQuality {
   const WordQuestDefinitionQuality._();
 
+  static const int maximumClueCharacters = 96;
+
   /// Returns a trimmed, safe clue, or null when the clue is not usable.
   static String? usableClue({required String answer, required String clue}) {
-    final text = clue.trim().replaceAll(RegExp(r'\s+'), ' ');
+    final sourceText = clue.trim().replaceAll(RegExp(r'\s+'), ' ');
+    final text = _conciseSense(sourceText);
     final normalizedAnswer = _normalize(answer);
     final normalizedClue = _normalize(text);
     // Short dictionary senses such as "orchard" and "wisdom" are complete,
@@ -24,6 +27,29 @@ class WordQuestDefinitionQuality {
       return null;
     }
     return text;
+  }
+
+  static String _conciseSense(String text) {
+    if (text.isEmpty) return text;
+
+    // Older dictionary records often append numbered senses after a useful
+    // opening sentence. Word Quest needs only that first child-sized clue.
+    final numberedSense = RegExp(r'(?<=[.!?;])\s+(?=\d+[.)]?\s)')
+        .firstMatch(text);
+    var concise = numberedSense == null
+        ? text
+        : text.substring(0, numberedSense.start);
+    if (concise.length <= maximumClueCharacters) return concise.trim();
+
+    final firstSentence = RegExp(r'^(.{4,96}?[.!?;])(?:\s|$)')
+        .firstMatch(concise);
+    if (firstSentence != null) return firstSentence.group(1)!.trim();
+
+    final prefix = concise.substring(0, maximumClueCharacters - 1);
+    final lastSpace = prefix.lastIndexOf(' ');
+    concise =
+        '${prefix.substring(0, lastSpace > 40 ? lastSpace : prefix.length)}…';
+    return concise.trim();
   }
 
   static String _normalize(String value) => value

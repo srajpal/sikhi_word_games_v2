@@ -17,6 +17,7 @@ class WordQuestWord {
     required this.definitionHint,
     required this.categoryHint,
     required this.source,
+    this.romanizedSpelling,
   });
 
   final String id;
@@ -25,6 +26,7 @@ class WordQuestWord {
   final String definitionHint;
   final String categoryHint;
   final String source;
+  final String? romanizedSpelling;
 
   int get graphemeLength => spelling.characters.length;
 
@@ -119,6 +121,9 @@ class WordQuestVocabulary {
                 )!,
                 categoryHint: _categoryFor(entry),
                 source: entry.source,
+                romanizedSpelling: mode == LanguageMode.gurmukhi
+                    ? entry.latin.trim()
+                    : null,
               ),
             )
             .toList()
@@ -159,7 +164,7 @@ class WordQuestVocabulary {
     if (source.contains('mahan kosh')) return 'Sikhi vocabulary';
     return entry.language == VocabularyLanguage.english
         ? 'English word'
-        : 'Panjabi word';
+        : 'Punjabi word';
   }
 }
 

@@ -1,6 +1,6 @@
 # Sikhi Word Games V2
 
-An offline collection of English, romanized Panjabi, and Gurmukhi word games built with Flutter.
+An offline collection of English, romanized Punjabi, and Gurmukhi word games built with Flutter.
 
 ## Repository layout
 

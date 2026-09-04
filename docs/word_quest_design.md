@@ -6,8 +6,9 @@
 sees a short clue, chooses letters one at a time, and grows a small garden path
 until the word is complete. It keeps the satisfying deduction loop of a
 hangman-style game without a person, animal, broken object, or punishment being
-shown. The default difficulty is forgiving: eight unique incorrect guesses,
-two free hints, and a learning-focused end state when the word is not solved.
+shown. The default difficulty is forgiving: five, six, or seven unique
+incorrect guesses for 4-, 5-, or 6-grapheme words, two free hints, and a
+learning-focused end state when the word is not solved.
 
 The visual metaphor is a **word garden**: correct letters light stepping stones
 and add leaves/flowers to a path toward a garden gate. Incorrect guesses only
@@ -38,7 +39,7 @@ remain pure Dart; this document describes the presentation contract around it.
   loss language. The experience should teach the answer even after the miss
   budget is used.
 - Keep illustration secondary to the letters. Use high-contrast text and the
-  same theme surfaces/borders as the existing Guess the Word and Word Search
+  same theme surfaces/borders as the existing Bujho: Guess the Word and Khoj: Word Search
   cards so the new game feels native to the app.
 
 ## Round rules
@@ -55,7 +56,8 @@ remain pure Dart; this document describes the presentation contract around it.
    incorrect letter increments the miss count and marks the key as “try
    another.” Tapping an already-used key is inert and never consumes a miss.
 4. The round is won when every solution grapheme is revealed. The round enters
-   the learning finish state after eight unique incorrect guesses. The latter
+   the learning finish state after its adaptive miss budget: five tries for a
+   4-grapheme word, six for 5 graphemes, and seven for 6 graphemes. The latter
    is technically a terminal/lost state for persistence, but the UI must call
    it “Keep learning” or “The word is ready to discover,” never “You lost.”
 5. Hints reveal information without consuming a miss. A round has two hints:
@@ -81,7 +83,7 @@ From top to bottom, the round screen contains these sections:
 1. **App bar (56 px minimum):** back button; title `Chardi Kala: Word Quest`;
    subtitle `<language> · <N> letters`; overflow menu with **New word**, **Game
    settings**, and **How to play**. Keep the app bar structure consistent with
-   Guess the Word.
+   Bujho: Guess the Word.
 2. **Quest status strip:** a compact `Round` label and a text counter such as
    `3 of 8 path steps` / `2 letters found`. This is text, not color alone.
 3. **Clue card:** a labeled `Clue` heading and one or two lines of definition.
@@ -91,15 +93,16 @@ From top to bottom, the round screen contains these sections:
    show an accessible “hidden letter” label and a neutral shape; revealed tiles
    show the grapheme. Preserve spaces only if the content policy later allows
    multiword entries; V1 of this mode is single-word only.
-5. **Garden path panel:** a quiet row/arc of eight secular stones or leaves,
+5. **Garden path panel:** a quiet row/arc of eight secular stones, sprouts, or flowers,
    with completed steps highlighted by `tokens.correct`. Include a text
    alternative (`3 of 8 steps`) and do not use a sacred symbol as the endpoint.
 6. **Feedback line:** one live status line for `Letter found`, `Try another
    letter`, hint confirmation, or the positive terminal message. Use
    `Semantics(liveRegion: true)` where supported; do not rely on a transient
    SnackBar as the only feedback.
-7. **Action row:** **Hint** (with `1/2` or `2/2` remaining) and, when a letter is
-   staged in Gurmukhi, **Check** and **Delete**. Hide or disable actions after
+7. **Top status actions:** keep **Hint** beside the heart counter, with `1` or
+   `2` remaining, followed by a compact open/close keyboard icon. Both stay
+   reachable without consuming separate rows. Hide or disable them after
    completion while keeping the result card visible.
 8. **Letter keyboard:** the language-specific keyboard described below. It is
    the final major section and must not be pushed below an unbounded
@@ -113,9 +116,9 @@ From top to bottom, the round screen contains these sections:
 ## Language and settings flow
 
 - Use the same four modes as the other games: **English**, **Romanized
-  Panjabi**, **Mixed Latin**, and **Gurmukhi**. English and Romanized Panjabi
-  use Latin letters; Mixed Latin allows either eligible pool; Gurmukhi uses
-  Panjabi in Gurmukhi. Never combine Latin and Gurmukhi input in one round.
+  Punjabi**, **Mixed English/Punjabi**, and **Gurmukhi**. English and Romanized Punjabi
+  use Latin letters; Mixed English/Punjabi allows either eligible pool; Gurmukhi uses
+  Punjabi in Gurmukhi. Never combine Latin and Gurmukhi input in one round.
 - The overflow **Game settings** opens the existing dialog/bottom-sheet pattern
   with `Language` and `Word size` (4/5/6 letters). Show a short description for
   each language. Apply starts a new round only after the child taps **Apply**;
@@ -131,7 +134,7 @@ From top to bottom, the round screen contains these sections:
 
 ## Letter keyboard behavior
 
-### Latin (English, Romanized Panjabi, Mixed Latin)
+### Latin (English, Romanized Punjabi, Mixed English/Punjabi)
 
 - Use the familiar three-row QWERTY layout already used by `GameKeyboard`, with
   uppercase labels. A tap immediately evaluates that one grapheme; there is no
@@ -142,7 +145,8 @@ From top to bottom, the round screen contains these sections:
   Include a visible **Show all letters** affordance for children who want the
   normal full A–Z keyboard. If a future difficulty setting is added, Easy uses
   the reduced bank and Standard uses the full alphabet. The reduced bank must
-  never omit a solution letter.
+  never omit a solution letter. The same control changes to **Show simple
+  letters** so the player can return to the reduced bank.
 - A correct key uses the positive color/icon and remains disabled; an incorrect
   key uses a neutral muted state and remains disabled. Never communicate key
   status by color alone: add check/try-again icons and spoken labels.
@@ -156,8 +160,14 @@ From top to bottom, the round screen contains these sections:
   children and safe for Unicode comparison.
 - Add a small set of distinct distractor graphemes from eligible reviewed
   vocabulary only, capped so the bank stays readable. Shuffle deterministically
-  per round, keep tiles at a consistent visual width, and put overflow in a
-  labeled `More letters` drawer rather than shrinking the board indefinitely.
+  per round and keep tiles at a consistent visual width. The expanded bank may
+  continue vertically in the page’s scrollable body rather than shrinking keys.
+- Include **Show all letters** / **Show simple letters** for Gurmukhi too. The
+  expanded bank contains the standard Gurmukhi letters plus any whole solution
+  grapheme clusters, preserving immediate whole-grapheme guessing.
+- Show a short romanized pronunciation below each Gurmukhi key, such as
+  `ਸਾ` / `Saa`. Revealed Gurmukhi answer tiles show the same learning aid;
+  hidden tiles never expose it.
 - A tap immediately evaluates one whole grapheme. Used keys become disabled;
   there is no separate combining-mark state, IME composition, or code-unit
   deletion. A physical/IME input path may submit one grapheme at a time after
@@ -173,6 +183,9 @@ From top to bottom, the round screen contains these sections:
   word. Try another one.`, `Hint used — the first letter is showing.`, `You
   found the word!`, and `The word is ready to discover. Let’s learn it
   together.` Avoid shame, streak pressure, or “wrong child” language.
+- Show momentary gameplay feedback in an accessible floating message instead
+  of reserving a permanent status row. Do not show an instructional message
+  before the child has acted; the clue and keyboard make the first action clear.
 - Every tile/key has a useful semantic label and state. The word board reads in
   order as `Letter 1, hidden` / `Letter 1, <grapheme>, revealed`; the garden
   panel reads its numeric progress. Do not expose decorative symbols twice.
@@ -214,8 +227,8 @@ From top to bottom, the round screen contains these sections:
       description and opens the new route.
 - [ ] A round selects a reviewed 4–6 grapheme solution in all four language
       modes and persists/restores its state safely.
-- [ ] Correct/repeated/incorrect letters follow the rules; eight unique misses
-      produce the positive learning finish with the answer and definition.
+- [ ] Correct/repeated/incorrect letters follow the rules; the adaptive 5/6/7
+      miss budget produces the positive learning finish with the answer and definition.
 - [ ] Two non-punitive hints work, announce their effect, and cannot be reused.
 - [ ] Latin Easy reduced bank plus `Show all letters` and Gurmukhi
       answer-specific whole-grapheme bank are deterministic and Unicode-safe.

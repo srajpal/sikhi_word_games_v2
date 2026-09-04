@@ -24,18 +24,18 @@ void main(List<String> arguments) {
     '${app.parent.path}${Platform.pathSeparator}reports'
     '${Platform.pathSeparator}content',
   )..createSync(recursive: true);
-  final sensesByLemma = _readOewnSenses(source);
+  final definitionsBySynset = _readOewnDefinitions(source);
+  final sensesByLemma = _readOewnSenses(source, definitionsBySynset);
   final entries = _readEnglishEntries(app);
   final review =
       entries.map((entry) {
         final word = entry['latin']! as String;
         final current = _definition(entry);
-        final candidates =
-            (sensesByLemma[word.toLowerCase()] ?? const <String>[])
-                .where(_isNeutralDefinition)
-                .toSet()
-                .toList()
-              ..sort(_definitionOrder);
+        final candidates = _uniqueInOrder(
+          (sensesByLemma[word.toLowerCase()] ?? const <String>[]).where(
+            _isNeutralDefinition,
+          ),
+        );
         return <String, Object?>{
           'id': entry['id'],
           'word': word,
@@ -63,7 +63,8 @@ void main(List<String> arguments) {
         'name': 'Open English WordNet 2025 base edition',
         'license': 'CC BY 4.0',
         'selection':
-            'Neutral, standalone senses only; editorial review required.',
+            'First neutral, standalone OEWN sense in lemma order; editorial '
+            'review required.',
       },
       'entryCount': review.length,
       'candidateAvailableCount': available,
@@ -77,8 +78,8 @@ void main(List<String> arguments) {
   );
 }
 
-Map<String, List<String>> _readOewnSenses(Directory source) {
-  final byLemma = <String, List<String>>{};
+Map<String, List<String>> _readOewnDefinitions(Directory source) {
+  final bySynset = <String, List<String>>{};
   for (final file in source.listSync().whereType<File>()) {
     final name = file.uri.pathSegments.last;
     if (!name.endsWith('.json') ||
@@ -88,25 +89,69 @@ Map<String, List<String>> _readOewnSenses(Directory source) {
     }
     final document =
         jsonDecode(file.readAsStringSync()) as Map<String, Object?>;
-    for (final value in document.values) {
+    for (final entry in document.entries) {
+      final value = entry.value;
       if (value is! Map<String, Object?>) {
         continue;
       }
-      final members = (value['members'] as List<Object?>? ?? const <Object?>[])
-          .whereType<String>();
       final definitions =
           (value['definition'] as List<Object?>? ?? const <Object?>[])
               .whereType<String>();
-      for (final member in members) {
-        final list = byLemma.putIfAbsent(
-          member.toLowerCase(),
-          () => <String>[],
-        );
-        list.addAll(definitions);
+      if (definitions.isNotEmpty) bySynset[entry.key] = definitions.toList();
+    }
+  }
+  return bySynset;
+}
+
+Map<String, List<String>> _readOewnSenses(
+  Directory source,
+  Map<String, List<String>> definitionsBySynset,
+) {
+  final byLemma = <String, List<String>>{};
+  const preferredPartsOfSpeech = ['n', 'v', 'a', 's', 'r'];
+  for (final file in source.listSync().whereType<File>()) {
+    final name = file.uri.pathSegments.last;
+    if (!name.startsWith('entries-') || !name.endsWith('.json')) continue;
+    final document =
+        jsonDecode(file.readAsStringSync()) as Map<String, Object?>;
+    for (final entry in document.entries) {
+      // OEWN also contains title-cased variants such as `Book` (the Bible).
+      // The game stores ordinary English answers case-insensitively, so use
+      // only the lowercase lemma rather than letting a proper-name sense win.
+      if (entry.key != entry.key.toLowerCase()) continue;
+      final sensesByPart = entry.value as Map<String, Object?>?;
+      if (sensesByPart == null) continue;
+      final orderedParts = [
+        ...preferredPartsOfSpeech.where(sensesByPart.containsKey),
+        ...sensesByPart.keys.where(
+          (part) => !preferredPartsOfSpeech.contains(part),
+        ),
+      ];
+      final definitions = byLemma.putIfAbsent(
+        entry.key.toLowerCase(),
+        () => <String>[],
+      );
+      for (final part in orderedParts) {
+        final partDocument = sensesByPart[part] as Map<String, Object?>?;
+        final senses = partDocument?['sense'] as List<Object?>? ?? const [];
+        for (final sense in senses) {
+          final synset = (sense as Map<String, Object?>)['synset'] as String?;
+          if (synset != null) {
+            definitions.addAll(definitionsBySynset[synset] ?? const []);
+          }
+        }
       }
     }
   }
   return byLemma;
+}
+
+List<String> _uniqueInOrder(Iterable<String> values) {
+  final seen = <String>{};
+  return [
+    for (final value in values)
+      if (seen.add(value)) value,
+  ];
 }
 
 List<Map<String, Object?>> _readEnglishEntries(Directory app) {
@@ -153,26 +198,4 @@ bool _isNeutralDefinition(String value) {
     r'\b(?:offensive|vulgar|obscene|slur|pejorative|derogatory|ethnic|racial|sexual|genital|prostitute|rape|feces|excrement|narcotic)\b',
     caseSensitive: false,
   ).hasMatch(definition);
-}
-
-int _definitionOrder(String left, String right) {
-  final leftScore = _score(left);
-  final rightScore = _score(right);
-  return leftScore != rightScore
-      ? leftScore.compareTo(rightScore)
-      : left.compareTo(right);
-}
-
-int _score(String definition) {
-  var score = definition.length;
-  if (RegExp(r'^(a|an|the|to)\b', caseSensitive: false).hasMatch(definition)) {
-    score -= 20;
-  }
-  if (RegExp(
-    r'\b(?:archaic|obsolete|formerly)\b',
-    caseSensitive: false,
-  ).hasMatch(definition)) {
-    score += 100;
-  }
-  return score;
 }

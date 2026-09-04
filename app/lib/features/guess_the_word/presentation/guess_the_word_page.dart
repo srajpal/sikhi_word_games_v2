@@ -481,7 +481,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Guess the Word'),
+            const Text('Bujho: Guess the Word'),
             Text(
               '${_mode.label} · $_wordLength letters',
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -718,9 +718,9 @@ class _GuessHelpContent extends StatelessWidget {
         Text('Language modes', style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         const Text(
-          'English uses English words. Romanized Panjabi uses Panjabi words '
-          'written with Latin letters. Mixed Latin accepts both. Gurmukhi '
-          'uses Panjabi words and the custom Gurmukhi keyboard.',
+          'English uses English words. Romanized Punjabi uses Punjabi words '
+          'written with Latin letters. Mixed English/Punjabi accepts both. Gurmukhi '
+          'uses Punjabi words and the custom Gurmukhi keyboard.',
         ),
         const SizedBox(height: 12),
         const Text(

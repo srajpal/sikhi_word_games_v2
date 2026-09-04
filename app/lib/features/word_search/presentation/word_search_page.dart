@@ -244,9 +244,9 @@ class _WordSearchPageState extends State<WordSearchPage> {
 
   String _languageDescription(LanguageMode mode) => switch (mode) {
     LanguageMode.english => 'English words from the offline dictionary',
-    LanguageMode.romanizedPanjabi => 'Panjabi written with Latin letters',
-    LanguageMode.mixedLatin => 'English and romanized Panjabi together',
-    LanguageMode.gurmukhi => 'Panjabi written in Gurmukhi',
+    LanguageMode.romanizedPanjabi => 'Punjabi written with Latin letters',
+    LanguageMode.mixedLatin => 'English and romanized Punjabi together',
+    LanguageMode.gurmukhi => 'Punjabi written in Gurmukhi',
   };
 
   void _startSelection(GridPoint point) {
@@ -327,10 +327,10 @@ class _WordSearchPageState extends State<WordSearchPage> {
           onPressed: () => context.pop(),
           icon: const Icon(Icons.arrow_back),
         ),
-        title: const Text('Word Search'),
+        title: const Text('Khoj: Word Search'),
         actions: [
           PopupMenuButton<_WordSearchAction>(
-            tooltip: 'Word Search menu',
+            tooltip: 'Khoj: Word Search menu',
             onSelected: (action) => switch (action) {
               _WordSearchAction.newPuzzle => _newPuzzle(),
               _WordSearchAction.language => _chooseLanguage(),

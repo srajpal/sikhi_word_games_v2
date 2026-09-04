@@ -39,23 +39,31 @@ class WordQuestHint {
 /// Every visible letter is stored as a Unicode grapheme cluster, so a Punjabi
 /// character with combining marks is always revealed as one tile.
 class WordQuestGame {
-  WordQuestGame({required String solution, this.maximumTries = 7})
+  WordQuestGame({required String solution, int? maximumTries})
     : solution = _normaliseWord(solution),
+      maximumTries =
+          maximumTries ?? recommendedMaximumTriesForSolution(solution),
       _solutionGraphemes = _normaliseWord(solution).characters
           .toList(growable: false) {
     if (_solutionGraphemes.isEmpty) {
       throw ArgumentError.value(solution, 'solution', 'Cannot be empty.');
     }
-    if (maximumTries <= 0) {
+    if (this.maximumTries <= 0) {
       throw ArgumentError.value(
-        maximumTries,
+        this.maximumTries,
         'maximumTries',
         'Must be greater than zero.',
       );
     }
   }
 
-  static const int schemaVersion = 1;
+  static const int schemaVersion = 2;
+
+  /// Gives shorter words a smaller, still forgiving miss budget.
+  ///
+  /// The supported 4-, 5-, and 6-grapheme rounds receive 5, 6, and 7 tries.
+  static int recommendedMaximumTriesForSolution(String solution) =>
+      (_normaliseWord(solution).characters.length + 1).clamp(5, 7);
 
   final String solution;
   final int maximumTries;
