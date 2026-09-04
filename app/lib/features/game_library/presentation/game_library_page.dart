@@ -3,6 +3,12 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
+import '../data/game_launch_preferences_repository.dart';
+import '../../guess_the_word/data/guess_game_repository.dart';
+import '../../guess_the_word/domain/language_mode.dart';
+import '../domain/game_launch_options.dart';
+import '../../word_search/data/word_search_session_repository.dart';
+import '../../word_quest/data/word_quest_session_repository.dart';
 import '../../settings/data/app_settings_repository.dart';
 
 class GameLibraryPage extends StatelessWidget {
@@ -10,12 +16,147 @@ class GameLibraryPage extends StatelessWidget {
     required this.onThemeChanged,
     required this.settings,
     required this.onFeedbackSettingsChanged,
+    required this.guessGameRepository,
+    required this.wordSearchSessionRepository,
+    required this.wordQuestSessionRepository,
+    required this.launchPreferencesRepository,
     super.key,
   });
 
   final ValueChanged<AppThemeChoice> onThemeChanged;
   final AppSettings settings;
   final ValueChanged<AppSettings> onFeedbackSettingsChanged;
+  final GuessGameRepository guessGameRepository;
+  final WordSearchSessionRepository wordSearchSessionRepository;
+  final WordQuestSessionRepository wordQuestSessionRepository;
+  final GameLaunchPreferencesRepository launchPreferencesRepository;
+
+  bool _hasActiveGame(GameKind kind) => switch (kind) {
+    GameKind.guessTheWord => guessGameRepository.hasActiveGame,
+    GameKind.wordSearch => wordSearchSessionRepository.hasActiveGame,
+    GameKind.wordQuest => wordQuestSessionRepository.hasActiveGame,
+  };
+
+  String _pathFor(GameKind kind) => switch (kind) {
+    GameKind.guessTheWord => '/guess-the-word',
+    GameKind.wordSearch => '/word-search',
+    GameKind.wordQuest => '/word-quest',
+  };
+
+  Future<void> _showNewGameOptions(BuildContext context, GameKind kind) async {
+    final saved = launchPreferencesRepository.load(kind);
+    var selectedLanguage = saved.language?.name ?? 'random';
+    var selectedWordSize = saved.wordSize?.toString() ?? 'random';
+    final options = await showModalBottomSheet<GameLaunchOptions>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'New ${_gameName(kind)} game',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Choose a language and word size, or let the game pick for you.',
+                ),
+                const SizedBox(height: 18),
+                DropdownButtonFormField<String>(
+                  initialValue: selectedLanguage,
+                  isExpanded: true,
+                  decoration: const InputDecoration(labelText: 'Language'),
+                  items: [
+                    const DropdownMenuItem(
+                      value: 'random',
+                      child: Text('Random language'),
+                    ),
+                    for (final mode in LanguageMode.values)
+                      DropdownMenuItem(
+                        value: mode.name,
+                        child: Text(mode.label),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setSheetState(() => selectedLanguage = value);
+                    }
+                  },
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  initialValue: selectedWordSize,
+                  isExpanded: true,
+                  decoration: const InputDecoration(labelText: 'Word size'),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'random',
+                      child: Text('Random size'),
+                    ),
+                    DropdownMenuItem(value: '4', child: Text('4 letters')),
+                    DropdownMenuItem(value: '5', child: Text('5 letters')),
+                    DropdownMenuItem(value: '6', child: Text('6 letters')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setSheetState(() => selectedWordSize = value);
+                    }
+                  },
+                ),
+                const SizedBox(height: 20),
+                GameGradientButton(
+                  label: 'Start new game',
+                  icon: const Icon(Icons.play_arrow),
+                  onPressed: () => Navigator.pop(
+                    context,
+                    GameLaunchOptions(
+                      language: selectedLanguage == 'random'
+                          ? null
+                          : LanguageMode.values.byName(selectedLanguage),
+                      wordSize: selectedWordSize == 'random'
+                          ? null
+                          : int.parse(selectedWordSize),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    if (options != null && context.mounted) {
+      await launchPreferencesRepository.save(kind, options);
+      if (!context.mounted) return;
+      context.push(_pathFor(kind), extra: options);
+    }
+  }
+
+  void _continueGame(BuildContext context, GameKind kind) {
+    context.push(
+      _pathFor(kind),
+      extra: const GameLaunchOptions(continueGame: true),
+    );
+  }
+
+  void _startNewGame(BuildContext context, GameKind kind) {
+    context.push(
+      _pathFor(kind),
+      extra: launchPreferencesRepository.load(kind).options,
+    );
+  }
+
+  String _gameName(GameKind kind) => switch (kind) {
+    GameKind.guessTheWord => 'Guess the Word',
+    GameKind.wordSearch => 'Word Search',
+    GameKind.wordQuest => 'Word Quest',
+  };
 
   Future<void> _showFeedbackSettings(BuildContext context) async {
     var hapticLevel = settings.hapticLevel;
@@ -172,24 +313,41 @@ class GameLibraryPage extends StatelessWidget {
                     icon: Icons.grid_view_rounded,
                     title: 'Guess the Word',
                     description: 'Find the hidden word using colored clues.',
-                    actionLabel: 'Play prototype',
-                    onPressed: () => context.push('/guess-the-word'),
+                    gameKind: GameKind.guessTheWord,
+                    hasActiveGame: _hasActiveGame(GameKind.guessTheWord),
+                    onContinue: () =>
+                        _continueGame(context, GameKind.guessTheWord),
+                    onNewGame: () =>
+                        _startNewGame(context, GameKind.guessTheWord),
+                    onNewGameOptions: () =>
+                        _showNewGameOptions(context, GameKind.guessTheWord),
                   ),
                   const SizedBox(height: 16),
                   _GameCard(
                     icon: Icons.search_rounded,
                     title: 'Word Search',
                     description: 'Find offline words hidden in a letter grid.',
-                    actionLabel: 'Play',
-                    onPressed: () => context.push('/word-search'),
+                    gameKind: GameKind.wordSearch,
+                    hasActiveGame: _hasActiveGame(GameKind.wordSearch),
+                    onContinue: () =>
+                        _continueGame(context, GameKind.wordSearch),
+                    onNewGame: () =>
+                        _startNewGame(context, GameKind.wordSearch),
+                    onNewGameOptions: () =>
+                        _showNewGameOptions(context, GameKind.wordSearch),
                   ),
                   const SizedBox(height: 16),
                   _GameCard(
                     icon: Icons.local_florist_outlined,
                     title: 'Chardi Kala: Word Quest',
                     description: 'A gentle letter game for kids—uncover a word and help a garden grow.',
-                    actionLabel: 'Start quest',
-                    onPressed: () => context.push('/word-quest'),
+                    gameKind: GameKind.wordQuest,
+                    hasActiveGame: _hasActiveGame(GameKind.wordQuest),
+                    onContinue: () =>
+                        _continueGame(context, GameKind.wordQuest),
+                    onNewGame: () => _startNewGame(context, GameKind.wordQuest),
+                    onNewGameOptions: () =>
+                        _showNewGameOptions(context, GameKind.wordQuest),
                   ),
                   const SizedBox(height: 16),
                   const _GameCard(
@@ -212,23 +370,29 @@ class _GameCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.description,
-    this.actionLabel = 'Coming later',
-    this.onPressed,
+    this.gameKind,
+    this.hasActiveGame = false,
+    this.onContinue,
+    this.onNewGame,
+    this.onNewGameOptions,
   });
 
   final IconData icon;
   final String title;
   final String description;
-  final String actionLabel;
-  final VoidCallback? onPressed;
+  final GameKind? gameKind;
+  final bool hasActiveGame;
+  final VoidCallback? onContinue;
+  final VoidCallback? onNewGame;
+  final VoidCallback? onNewGameOptions;
 
   @override
   Widget build(BuildContext context) => GamePanel(
     padding: EdgeInsets.zero,
     child: Padding(
-      padding: const EdgeInsets.all(20),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
+      padding: const EdgeInsets.all(24),
+      child: Builder(
+        builder: (context) {
           final details = Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -246,10 +410,10 @@ class _GameCard extends StatelessWidget {
                       .elevationShadow,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   child: Icon(
                     icon,
-                    size: 28,
+                    size: 34,
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
@@ -267,21 +431,37 @@ class _GameCard extends StatelessWidget {
               ),
             ],
           );
-          final action = GameGradientButton(
-            onPressed: onPressed,
-            label: actionLabel,
-          );
-          if (constraints.maxWidth < 560) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [details, const SizedBox(height: 16), action],
-            );
-          }
-          return Row(
+          final actionButtons = <Widget>[
+            if (hasActiveGame && onContinue != null)
+              GameGradientButton(
+                onPressed: onContinue,
+                label: 'Continue game',
+                icon: const Icon(Icons.play_arrow),
+              ),
+            if (onNewGame != null)
+              GameGradientButton(
+                onPressed: onNewGame,
+                label: 'New game',
+                icon: const Icon(Icons.play_arrow),
+              ),
+            if (onNewGameOptions != null)
+              GameGradientButton(
+                onPressed: onNewGameOptions,
+                label: 'New game options',
+                icon: const Icon(Icons.tune),
+              ),
+            if (gameKind == null)
+              const GameGradientButton(label: 'Coming later'),
+          ];
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(child: details),
-              const SizedBox(width: 16),
-              action,
+              details,
+              const SizedBox(height: 18),
+              for (final action in actionButtons) ...[
+                SizedBox(width: double.infinity, child: action),
+                const SizedBox(height: 8),
+              ],
             ],
           );
         },

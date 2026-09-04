@@ -11,13 +11,25 @@ import '../../../core/themes/game_ui.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../guess_the_word/domain/word_pool.dart';
 import '../domain/word_search_puzzle.dart';
+import '../data/word_search_session_repository.dart';
 
 enum _WordSearchAction { newPuzzle, language, help }
 
 class WordSearchPage extends StatefulWidget {
-  const WordSearchPage({required this.vocabularyRepository, super.key});
+  const WordSearchPage({
+    required this.vocabularyRepository,
+    required this.sessionRepository,
+    this.initialMode,
+    this.initialWordSize,
+    this.startFresh = false,
+    super.key,
+  });
 
   final VocabularyRepository vocabularyRepository;
+  final WordSearchSessionRepository sessionRepository;
+  final LanguageMode? initialMode;
+  final int? initialWordSize;
+  final bool startFresh;
 
   @override
   State<WordSearchPage> createState() => _WordSearchPageState();
@@ -25,9 +37,11 @@ class WordSearchPage extends StatefulWidget {
 
 class _WordSearchPageState extends State<WordSearchPage> {
   final _generator = WordSearchGenerator();
+  final _random = math.Random.secure();
   List<VocabularyEntry>? _entries;
   WordSearchPuzzle? _puzzle;
   LanguageMode _mode = LanguageMode.english;
+  int? _wordSize;
   final Set<String> _foundWords = {};
   GridPoint? _dragStart;
   List<GridPoint> _selection = const [];
@@ -93,6 +107,25 @@ class _WordSearchPageState extends State<WordSearchPage> {
   Future<void> _load() async {
     try {
       _entries = await widget.vocabularyRepository.load();
+      if (!widget.startFresh) {
+        final restored = widget.sessionRepository.restore();
+        if (restored != null) {
+          if (!mounted) return;
+          setState(() {
+            _mode = restored.mode;
+            _wordSize = restored.wordSize;
+            _puzzle = restored.puzzle;
+            _foundWords
+              ..clear()
+              ..addAll(restored.foundWords);
+            _error = null;
+          });
+          return;
+        }
+        await widget.sessionRepository.clear();
+      }
+      _mode = widget.initialMode ?? _randomMode();
+      _wordSize = widget.initialWordSize ?? _randomWordSize(_mode);
       _newPuzzle();
     } on Object catch (error) {
       if (!mounted) return;
@@ -112,8 +145,15 @@ class _WordSearchPageState extends State<WordSearchPage> {
         if (spelling == null || !seen.add(spelling.toUpperCase())) continue;
         candidates.add(spelling);
       }
+      final selectedCandidates = _wordSize == null
+          ? candidates
+          : candidates
+                .where((word) => word.characters.length == _wordSize)
+                .toList(growable: false);
       final puzzle = _generator.generate(
-        candidates: candidates,
+        candidates: selectedCandidates.isEmpty
+            ? candidates
+            : selectedCandidates,
         fillerCharacters: _mode == LanguageMode.gurmukhi
             ? _gurmukhiFiller
             : _latinFiller,
@@ -126,10 +166,37 @@ class _WordSearchPageState extends State<WordSearchPage> {
         _selection = const [];
         _error = null;
       });
+      widget.sessionRepository.save(
+        mode: _mode,
+        wordSize: _wordSize,
+        puzzle: puzzle,
+        foundWords: _foundWords,
+      );
     } on Object catch (error) {
       if (!mounted) return;
       setState(() => _error = 'Unable to make a puzzle: $error');
     }
+  }
+
+  LanguageMode _randomMode() {
+    final values = LanguageMode.values;
+    return values[_random.nextInt(values.length)];
+  }
+
+  int _randomWordSize(LanguageMode mode) {
+    final entries = _entries ?? const <VocabularyEntry>[];
+    final sizes = <int>{};
+    for (final entry in entries) {
+      if (!entry.acceptedGuess || !_supportsMode(entry, mode)) continue;
+      final spelling = WordPool.spelling(entry, mode);
+      if (spelling != null &&
+          const [4, 5, 6].contains(spelling.characters.length)) {
+        sizes.add(spelling.characters.length);
+      }
+    }
+    if (sizes.isEmpty) return 5;
+    final values = sizes.toList()..sort();
+    return values[_random.nextInt(values.length)];
   }
 
   bool _supportsMode(VocabularyEntry entry, LanguageMode mode) =>
@@ -207,8 +274,18 @@ class _WordSearchPageState extends State<WordSearchPage> {
       if (word != null) _foundWords.add(word.word);
     });
     if (word == null) return;
-    HapticFeedback.selectionClick();
     final complete = _foundWords.length == puzzle.words.length;
+    if (complete) {
+      widget.sessionRepository.clear();
+    } else {
+      widget.sessionRepository.save(
+        mode: _mode,
+        wordSize: _wordSize,
+        puzzle: puzzle,
+        foundWords: _foundWords,
+      );
+    }
+    HapticFeedback.selectionClick();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: Duration(milliseconds: complete ? 2600 : 1200),

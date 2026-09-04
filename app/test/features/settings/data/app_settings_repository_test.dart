@@ -6,6 +6,13 @@ import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/features/settings/data/app_settings_repository.dart';
 
 void main() {
+  test('uses the Sikhi theme when no settings are stored', () {
+    expect(
+      AppSettingsRepository(MemoryKeyValueStore()).load().theme,
+      AppThemeChoice.sikhi,
+    );
+  });
+
   test('round-trips versioned offline settings', () async {
     final store = MemoryKeyValueStore();
     final repository = AppSettingsRepository(store);
@@ -50,12 +57,12 @@ void main() {
         'schemaVersion': 999,
         'theme': 'sketch',
       });
-    expect(AppSettingsRepository(store).load().theme, AppThemeChoice.modern);
+    expect(AppSettingsRepository(store).load().theme, AppThemeChoice.sikhi);
   });
 
   test('uses safe defaults for malformed JSON', () {
     final store = MemoryKeyValueStore()
       ..values[AppSettingsRepository.storageKey] = '{invalid';
-    expect(AppSettingsRepository(store).load().theme, AppThemeChoice.modern);
+    expect(AppSettingsRepository(store).load().theme, AppThemeChoice.sikhi);
   });
 }

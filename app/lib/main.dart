@@ -10,6 +10,9 @@ import 'features/settings/data/app_settings_repository.dart';
 import 'features/guess_the_word/data/guess_statistics_repository.dart';
 import 'features/guess_the_word/data/guess_game_repository.dart';
 import 'features/guess_the_word/data/solution_history_repository.dart';
+import 'features/word_search/data/word_search_session_repository.dart';
+import 'features/word_quest/data/word_quest_session_repository.dart';
+import 'features/game_library/data/game_launch_preferences_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +23,9 @@ Future<void> main() async {
   final statistics = GuessStatisticsRepository(store);
   final gameRepository = GuessGameRepository(store);
   final solutionHistoryRepository = SolutionHistoryRepository(store);
+  final wordSearchSessionRepository = WordSearchSessionRepository(store);
+  final wordQuestSessionRepository = WordQuestSessionRepository(store);
+  final launchPreferencesRepository = GameLaunchPreferencesRepository(store);
   runApp(
     ProviderScope(
       child: SikhiWordGamesApp(
@@ -27,6 +33,9 @@ Future<void> main() async {
         statisticsRepository: statistics,
         gameRepository: gameRepository,
         solutionHistoryRepository: solutionHistoryRepository,
+        wordSearchSessionRepository: wordSearchSessionRepository,
+        wordQuestSessionRepository: wordQuestSessionRepository,
+        launchPreferencesRepository: launchPreferencesRepository,
       ),
     ),
   );

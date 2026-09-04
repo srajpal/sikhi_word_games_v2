@@ -17,6 +17,8 @@ class GuessGameRepository {
   static const storageKey = 'guessTheWord.activeGame';
   final KeyValueStore _store;
 
+  bool get hasActiveGame => _store.getString(storageKey) != null;
+
   Future<void> save({required GuessGame game, required LanguageMode mode}) =>
       _store.setString(
         storageKey,

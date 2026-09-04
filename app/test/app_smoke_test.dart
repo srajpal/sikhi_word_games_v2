@@ -5,10 +5,77 @@ import 'package:sikhi_word_games_v2/app/app.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
+import 'package:sikhi_word_games_v2/core/themes/game_ui.dart';
 import 'package:sikhi_word_games_v2/features/settings/data/app_settings_repository.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/data/guess_game_repository.dart';
 
 void main() {
+  testWidgets('shows unified new-game actions and random launch options', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    for (final title in [
+      'Guess the Word',
+      'Word Search',
+      'Chardi Kala: Word Quest',
+    ]) {
+      final titleFinder = find.text(title);
+      await tester.ensureVisible(titleFinder);
+      await tester.pumpAndSettle();
+      final card = find.ancestor(
+        of: titleFinder,
+        matching: find.byType(GamePanel),
+      );
+      expect(
+        find.descendant(of: card, matching: find.text('New game')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: card, matching: find.text('New game options')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: card, matching: find.text('Continue game')),
+        findsNothing,
+      );
+    }
+
+    await tester.drag(find.byType(ListView), const Offset(0, 2000));
+    await tester.pumpAndSettle();
+    await _openNewGameOptions(tester);
+    await tester.pumpAndSettle();
+    expect(find.text('English'), findsOneWidget);
+    expect(find.text('5 letters'), findsOneWidget);
+
+    await tester.tap(find.text('English').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Random language'), findsOneWidget);
+    await tester.tap(find.text('Random language').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('5 letters').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Random size'), findsOneWidget);
+    await tester.tap(find.text('Random size').last);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Start new game'));
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('Continue game'), findsOneWidget);
+
+    await _openNewGameOptions(tester);
+    expect(find.text('Random language'), findsOneWidget);
+    expect(find.text('Random size'), findsOneWidget);
+  });
+
   testWidgets('opens Guess the Word from the game library', (tester) async {
     await tester.pumpWidget(
       SikhiWordGamesApp(
@@ -17,7 +84,7 @@ void main() {
       ),
     );
     expect(find.text('Choose a game'), findsOneWidget);
-    await tester.tap(find.text('Play prototype'));
+    await _startNewGame(tester);
     await tester.pumpAndSettle();
     expect(find.text('Guess the Word'), findsOneWidget);
   });
@@ -30,7 +97,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Play'));
+    await _startNewGame(tester, cardIndex: 1);
     await tester.pumpAndSettle();
     expect(find.text('Word Search'), findsOneWidget);
     expect(find.text('English'), findsOneWidget);
@@ -63,9 +130,7 @@ void main() {
 
     await tester.drag(find.byType(ListView), const Offset(0, -420));
     await tester.pumpAndSettle();
-    final startQuest = find.text('Start quest');
-    await tester.tap(startQuest);
-    await tester.pumpAndSettle();
+    await _startNewGame(tester, cardIndex: 2);
 
     expect(find.text('CHARDI KALA'), findsOneWidget);
     expect(find.text('WORD QUEST'), findsOneWidget);
@@ -120,7 +185,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Play prototype'));
+    await _startNewGame(tester);
     await tester.pumpAndSettle();
     await _chooseGameMenu(tester, 'How to play');
 
@@ -163,7 +228,7 @@ void main() {
           vocabularyRepository: _vocabulary,
         ),
       );
-      await tester.tap(find.text('Play prototype'));
+      await _startNewGame(tester);
       await tester.pumpAndSettle();
       await _applyGameSettings(
         tester,
@@ -195,7 +260,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Play prototype'));
+    await _startNewGame(tester);
     await tester.pumpAndSettle();
     await _applyGameSettings(tester, length: '4 letters');
 
@@ -216,7 +281,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Play prototype'));
+    await _startNewGame(tester);
     await tester.pumpAndSettle();
 
     await _typeHardwareWord(tester, 'APPLE');
@@ -235,7 +300,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Play prototype'));
+    await _startNewGame(tester);
     await tester.pumpAndSettle();
     for (final letter in 'GRAPE'.characters) {
       await tester.tap(find.byKey(ValueKey('key-$letter')));
@@ -277,7 +342,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Play prototype'));
+    await _startNewGame(tester);
     await tester.pumpAndSettle();
     for (final letter in 'GRAPE'.characters) {
       await tester.tap(find.byKey(ValueKey('key-$letter')));
@@ -295,7 +360,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Play prototype'));
+    await tester.tap(find.text('Continue game'));
     await tester.pumpAndSettle();
 
     expect(
@@ -344,7 +409,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Play prototype'));
+    await _startNewGame(tester);
     await tester.pumpAndSettle();
     final boardBeforeNotice = tester.getRect(
       find.byKey(const ValueKey('tile-5-0')),
@@ -434,7 +499,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Play prototype'));
+    await _startNewGame(tester);
     await tester.pumpAndSettle();
     await _applyGameSettings(tester, language: 'Gurmukhi', length: '4 letters');
 
@@ -461,6 +526,29 @@ Future<void> _tapVisible(WidgetTester tester, Finder finder) async {
   await tester.pumpAndSettle();
   await tester.tap(finder);
   await tester.pump();
+}
+
+Future<void> _startNewGame(WidgetTester tester, {int cardIndex = 0}) async {
+  await _openNewGameOptions(tester, cardIndex: cardIndex);
+  await tester.tap(find.text('Start new game'));
+  await tester.pumpAndSettle();
+}
+
+Future<void> _openNewGameOptions(
+  WidgetTester tester, {
+  int cardIndex = 0,
+}) async {
+  const titles = ['Guess the Word', 'Word Search', 'Chardi Kala: Word Quest'];
+  final titleFinder = find.text(titles[cardIndex]);
+  await tester.ensureVisible(titleFinder);
+  await tester.pumpAndSettle();
+  final card = find.ancestor(of: titleFinder, matching: find.byType(GamePanel));
+  final optionsButton = find.descendant(
+    of: card,
+    matching: find.text('New game options'),
+  );
+  await tester.tap(optionsButton);
+  await tester.pumpAndSettle();
 }
 
 Future<void> _chooseGameMenu(WidgetTester tester, String item) async {

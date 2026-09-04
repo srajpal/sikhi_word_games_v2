@@ -17,7 +17,7 @@ extension HapticFeedbackLevelLabel on HapticFeedbackLevel {
 class AppSettings {
   const AppSettings({
     this.schemaVersion = currentSchemaVersion,
-    this.theme = AppThemeChoice.modern,
+    this.theme = AppThemeChoice.sikhi,
     this.hapticLevel = HapticFeedbackLevel.medium,
     this.reducedMotion = false,
   });
@@ -57,7 +57,7 @@ class AppSettings {
       theme: storedTheme == 'sketch'
           ? AppThemeChoice.sikhi
           : matchingThemes.isEmpty
-          ? AppThemeChoice.modern
+          ? AppThemeChoice.sikhi
           : matchingThemes.first,
       hapticLevel: _hapticLevelFromJson(json),
       reducedMotion: json['reducedMotion'] as bool? ?? false,

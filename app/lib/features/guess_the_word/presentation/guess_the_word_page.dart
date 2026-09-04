@@ -38,6 +38,9 @@ class GuessTheWordPage extends StatefulWidget {
     required this.solutionHistoryRepository,
     required this.hapticLevel,
     required this.reducedMotion,
+    this.initialMode,
+    this.initialWordLength,
+    this.startFresh = false,
     super.key,
   });
 
@@ -47,6 +50,9 @@ class GuessTheWordPage extends StatefulWidget {
   final SolutionHistoryRepository solutionHistoryRepository;
   final HapticFeedbackLevel hapticLevel;
   final bool reducedMotion;
+  final LanguageMode? initialMode;
+  final int? initialWordLength;
+  final bool startFresh;
 
   @override
   State<GuessTheWordPage> createState() => _GuessTheWordPageState();
@@ -55,6 +61,7 @@ class GuessTheWordPage extends StatefulWidget {
 class _GuessTheWordPageState extends State<GuessTheWordPage> {
   final _controller = TextEditingController();
   final _gameFocusNode = FocusNode(debugLabel: 'Guess game keyboard');
+  final _random = math.Random.secure();
   late final NonRepeatingWordSelector _selector;
   WordPool? _pool;
   GuessGame? _game;
@@ -123,6 +130,12 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       final entries = await widget.vocabularyRepository.load();
       if (!mounted) return;
       _pool = WordPool(entries);
+      if (widget.startFresh) {
+        _mode = widget.initialMode ?? _randomMode();
+        _wordLength = widget.initialWordLength ?? _randomWordLength(_mode);
+        _startGame();
+        return;
+      }
       final restored = widget.gameRepository.restore(
         (mode, length) =>
             _pool!.acceptedGuesses(mode: mode, wordLength: length),
@@ -159,6 +172,17 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         _message = 'Unable to load the offline vocabulary: $error';
       });
     }
+  }
+
+  LanguageMode _randomMode() {
+    final values = LanguageMode.values;
+    return values[_random.nextInt(values.length)];
+  }
+
+  int _randomWordLength(LanguageMode mode) {
+    final lengths = _availableLengths(mode);
+    if (lengths.isEmpty) return 5;
+    return lengths[_random.nextInt(lengths.length)];
   }
 
   List<int> _availableLengths(LanguageMode mode) {

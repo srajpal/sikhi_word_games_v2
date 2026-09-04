@@ -10,18 +10,27 @@ import '../../guess_the_word/domain/language_mode.dart';
 import '../../settings/data/app_settings_repository.dart';
 import '../domain/word_quest_game.dart';
 import '../domain/word_quest_vocabulary.dart';
+import '../data/word_quest_session_repository.dart';
 
 class WordQuestPage extends StatefulWidget {
   const WordQuestPage({
     required this.vocabularyRepository,
     required this.hapticLevel,
     required this.reducedMotion,
+    required this.sessionRepository,
+    this.initialMode,
+    this.initialWordSize,
+    this.startFresh = false,
     super.key,
   });
 
   final VocabularyRepository vocabularyRepository;
   final HapticFeedbackLevel hapticLevel;
   final bool reducedMotion;
+  final WordQuestSessionRepository sessionRepository;
+  final LanguageMode? initialMode;
+  final int? initialWordSize;
+  final bool startFresh;
 
   @override
   State<WordQuestPage> createState() => _WordQuestPageState();
@@ -53,7 +62,48 @@ class _WordQuestPageState extends State<WordQuestPage> {
     );
     if (!mounted) return;
     _vocabulary = vocabulary;
+    if (!widget.startFresh) {
+      final restored = widget.sessionRepository.restore();
+      if (restored != null) {
+        final word = vocabulary.wordForSpelling(
+          mode: restored.mode,
+          spelling: restored.game.solution,
+        );
+        if (word != null) {
+          _mode = restored.mode;
+          _wordSize = restored.wordSize;
+          _word = word;
+          _game = restored.game;
+          _letterBank = _buildLetterBank(
+            restored.game,
+            vocabulary.words(mode: restored.mode),
+          );
+          _hintsRemaining = (2 - restored.game.hintsUsed).clamp(0, 2).toInt();
+          _loading = false;
+          return;
+        }
+      }
+      await widget.sessionRepository.clear();
+    }
+    _mode = widget.initialMode ?? _randomMode();
+    _wordSize = widget.initialWordSize ?? _randomWordSize(_mode);
     _startNewWord();
+  }
+
+  LanguageMode _randomMode() {
+    final values = LanguageMode.values;
+    return values[_random.nextInt(values.length)];
+  }
+
+  int _randomWordSize(LanguageMode mode) {
+    final values = [
+      for (final size in const [4, 5, 6])
+        if (_vocabulary!
+            .words(mode: mode)
+            .any((word) => word.graphemeLength == size))
+          size,
+    ];
+    return values.isEmpty ? 4 : values[_random.nextInt(values.length)];
   }
 
   void _startNewWord() {
@@ -85,6 +135,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
       _message = 'Choose a letter to begin your quest.';
       _loading = false;
     });
+    widget.sessionRepository.save(mode: _mode, wordSize: _wordSize, game: game);
   }
 
   List<String> _buildLetterBank(WordQuestGame game, List<WordQuestWord> pool) {
@@ -149,6 +200,15 @@ class _WordQuestPageState extends State<WordQuestPage> {
         _ => _message,
       };
     });
+    if (game.isComplete) {
+      widget.sessionRepository.clear();
+    } else {
+      widget.sessionRepository.save(
+        mode: _mode,
+        wordSize: _wordSize,
+        game: game,
+      );
+    }
     _haptic(correct: correct, complete: game.isComplete);
   }
 
@@ -161,6 +221,15 @@ class _WordQuestPageState extends State<WordQuestPage> {
       _hintsRemaining--;
       _message = 'Hint used — a letter is now showing.';
     });
+    if (game.isComplete) {
+      widget.sessionRepository.clear();
+    } else {
+      widget.sessionRepository.save(
+        mode: _mode,
+        wordSize: _wordSize,
+        game: game,
+      );
+    }
     _haptic(correct: true);
   }
 

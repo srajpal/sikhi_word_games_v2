@@ -33,6 +33,8 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Complete initial responsive library and fixed-viewport gameplay layouts for phones and wide screens.
 - [x] Add initial accessibility conventions for semantics, focus, contrast, and text scaling.
 - [x] Align all playable game shells with the shared Word Quest visual language using theme-driven backdrops and panels.
+- [x] Add a unified game-library launch flow with New game, Continue game, and random language/word-size choices for every playable mode.
+- [x] Make Sikhi the default theme and persist each game's launch preferences independently, including explicit Random choices.
 
 ## Vocabulary and definitions
 

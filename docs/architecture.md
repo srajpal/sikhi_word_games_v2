@@ -23,6 +23,21 @@ Small implementations for local storage, sharing, haptics, and other platform-sp
 
 The first persistence adapter wraps `SharedPreferences` behind a small key-value interface. App settings and active-game snapshots carry explicit schema versions and fall back safely when stored data is malformed or from an unsupported schema. Tests use an in-memory implementation of the same interface.
 
+### Game-library launch flow
+
+The game library owns the shared launch experience for every playable mode. A
+launch request can start a fresh game with an explicit language and four-, five-,
+or six-grapheme word size, or use `null` for either field to select randomly.
+Each mode keeps its own versioned active-game snapshot so the library can offer
+Continue game only for an unfinished session. Starting a new game replaces that
+mode's snapshot; completing a game clears it.
+
+The library also stores the last launch preference for each game mode separately
+in a versioned snapshot.
+An explicit random language or word-size choice is persisted as `null`, so the
+mode continues to randomize that setting on later new games until the player
+chooses a concrete value.
+
 ## Initial feature boundaries
 
 ```text

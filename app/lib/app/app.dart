@@ -4,9 +4,13 @@ import 'package:go_router/go_router.dart';
 import '../core/themes/app_theme.dart';
 import '../core/content/vocabulary_repository.dart';
 import '../features/game_library/presentation/game_library_page.dart';
+import '../features/game_library/data/game_launch_preferences_repository.dart';
 import '../features/guess_the_word/presentation/guess_the_word_page.dart';
 import '../features/word_search/presentation/word_search_page.dart';
+import '../features/word_search/data/word_search_session_repository.dart';
 import '../features/word_quest/presentation/word_quest_page.dart';
+import '../features/word_quest/data/word_quest_session_repository.dart';
+import '../features/game_library/domain/game_launch_options.dart';
 import '../features/dictionary/presentation/dictionary_page.dart';
 import '../features/guess_the_word/data/guess_statistics_repository.dart';
 import '../features/guess_the_word/data/guess_game_repository.dart';
@@ -21,6 +25,9 @@ class SikhiWordGamesApp extends StatefulWidget {
     GuessStatisticsRepository? statisticsRepository,
     GuessGameRepository? gameRepository,
     SolutionHistoryRepository? solutionHistoryRepository,
+    WordSearchSessionRepository? wordSearchSessionRepository,
+    WordQuestSessionRepository? wordQuestSessionRepository,
+    GameLaunchPreferencesRepository? launchPreferencesRepository,
     super.key,
   }) : vocabularyRepository =
            vocabularyRepository ?? AssetVocabularyRepository(),
@@ -31,13 +38,25 @@ class SikhiWordGamesApp extends StatefulWidget {
            gameRepository ?? GuessGameRepository(MemoryKeyValueStore()),
        solutionHistoryRepository =
            solutionHistoryRepository ??
-           SolutionHistoryRepository(MemoryKeyValueStore());
+           SolutionHistoryRepository(MemoryKeyValueStore()),
+       wordSearchSessionRepository =
+           wordSearchSessionRepository ??
+           WordSearchSessionRepository(MemoryKeyValueStore()),
+       wordQuestSessionRepository =
+           wordQuestSessionRepository ??
+           WordQuestSessionRepository(MemoryKeyValueStore()),
+       launchPreferencesRepository =
+           launchPreferencesRepository ??
+           GameLaunchPreferencesRepository(MemoryKeyValueStore());
 
   final AppSettingsRepository settingsRepository;
   final VocabularyRepository vocabularyRepository;
   final GuessStatisticsRepository statisticsRepository;
   final GuessGameRepository gameRepository;
   final SolutionHistoryRepository solutionHistoryRepository;
+  final WordSearchSessionRepository wordSearchSessionRepository;
+  final WordQuestSessionRepository wordQuestSessionRepository;
+  final GameLaunchPreferencesRepository launchPreferencesRepository;
 
   @override
   State<SikhiWordGamesApp> createState() => _SikhiWordGamesAppState();
@@ -59,6 +78,10 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             onThemeChanged: _changeTheme,
             settings: _settings,
             onFeedbackSettingsChanged: _changeFeedbackSettings,
+            guessGameRepository: widget.gameRepository,
+            wordSearchSessionRepository: widget.wordSearchSessionRepository,
+            wordQuestSessionRepository: widget.wordQuestSessionRepository,
+            launchPreferencesRepository: widget.launchPreferencesRepository,
           ),
           routes: [
             GoRoute(
@@ -70,6 +93,11 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 solutionHistoryRepository: widget.solutionHistoryRepository,
                 hapticLevel: _settings.hapticLevel,
                 reducedMotion: _settings.reducedMotion,
+                initialMode: _launchOptions(state).language,
+                initialWordLength: _launchOptions(state).wordSize,
+                startFresh:
+                    !_launchOptions(state).continueGame &&
+                    state.extra is GameLaunchOptions,
               ),
             ),
             GoRoute(
@@ -82,14 +110,26 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
               path: 'word-search',
               builder: (context, state) => WordSearchPage(
                 vocabularyRepository: widget.vocabularyRepository,
+                sessionRepository: widget.wordSearchSessionRepository,
+                initialMode: _launchOptions(state).language,
+                initialWordSize: _launchOptions(state).wordSize,
+                startFresh:
+                    !_launchOptions(state).continueGame &&
+                    state.extra is GameLaunchOptions,
               ),
             ),
             GoRoute(
               path: 'word-quest',
               builder: (context, state) => WordQuestPage(
                 vocabularyRepository: widget.vocabularyRepository,
+                sessionRepository: widget.wordQuestSessionRepository,
                 hapticLevel: _settings.hapticLevel,
                 reducedMotion: _settings.reducedMotion,
+                initialMode: _launchOptions(state).language,
+                initialWordSize: _launchOptions(state).wordSize,
+                startFresh:
+                    !_launchOptions(state).continueGame &&
+                    state.extra is GameLaunchOptions,
               ),
             ),
           ],
@@ -97,6 +137,11 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
       ],
     );
   }
+
+  GameLaunchOptions _launchOptions(GoRouterState state) =>
+      state.extra is GameLaunchOptions
+      ? state.extra! as GameLaunchOptions
+      : const GameLaunchOptions();
 
   Future<void> _changeTheme(AppThemeChoice choice) async {
     setState(() => _settings = _settings.copyWith(theme: choice));
