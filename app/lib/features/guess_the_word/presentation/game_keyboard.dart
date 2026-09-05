@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/language/gurmukhi_romanization.dart';
 import '../../../core/themes/app_theme.dart';
+import '../../../core/widgets/gurmukhi_key_label.dart';
 import '../domain/language_mode.dart';
 
 class GameKeyboard extends StatelessWidget {
@@ -66,15 +68,36 @@ class GameKeyboard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                         child: _KeyboardButton(
                           key: ValueKey('key-$character'),
-                          label: character,
+                          label: mode == LanguageMode.gurmukhi
+                              ? null
+                              : character,
                           semanticLabel: disabledCharacters.contains(character)
-                              ? '$character, not in the word'
+                              ? mode == LanguageMode.gurmukhi
+                                    ? '$character, ${romanizeGurmukhiGrapheme(character)}, not in the word'
+                                    : '$character, not in the word'
+                              : mode == LanguageMode.gurmukhi
+                              ? '$character, ${romanizeGurmukhiGrapheme(character)}'
                               : character,
                           onPressed:
                               enabled && !disabledCharacters.contains(character)
                               ? () => onCharacter(character)
                               : null,
                           height: compact ? 31 : 43,
+                          child: mode == LanguageMode.gurmukhi
+                              ? GurmukhiKeyLabel(
+                                  grapheme: character,
+                                  color:
+                                      enabled &&
+                                          !disabledCharacters.contains(
+                                            character,
+                                          )
+                                      ? Theme.of(context).colorScheme.onSurface
+                                      : Theme.of(context).colorScheme.onSurface
+                                            .withValues(alpha: 0.45),
+                                  gurmukhiFontSize: compact ? 13 : 15,
+                                  romanizationFontSize: compact ? 6 : 7,
+                                )
+                              : null,
                         ),
                       ),
                     ),

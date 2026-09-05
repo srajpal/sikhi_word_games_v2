@@ -97,6 +97,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Restore interrupted games with their mode, length, turns, and keyboard feedback.
 - [x] Add the shared Latin keyboard for English, romanized Punjabi, and Mixed English/Punjabi.
 - [x] Add the initial purpose-built Gurmukhi keyboard with vowel signs and extended letters.
+- [x] Show shared romanized pronunciation labels on Gurmukhi keyboards in Bujho, Dictionary, and Word Quest.
 - [x] Disable keyboard symbols proven absent without breaking repeated-letter cases.
 - [x] Add tile feedback symbols and semantic labels that do not rely on color alone.
 - [x] Reveal the answer and its definition at game completion.
@@ -149,6 +150,8 @@ This is the persistent project checklist. Keep it updated as work progresses; do
   - [x] Add reversible simple/full keyboards and romanized pronunciation on Gurmukhi tiles.
   - [x] Move the keyboard toggle beside Hint and use floating gameplay feedback to preserve vertical space.
   - [x] Shorten long source definitions to a concise first sense and expose the offline Dictionary from Word Quest.
+  - [x] Show the Romanized terminal answer and one-line definition previews with full-definition feedback.
+  - [x] Replace the garden with a separator while the full keyboard is open so the expanded bank fits phone screens.
   - [x] Add domain, widget, responsive-layout, and navigation tests.
 - [ ] Design and implement a timed typing/accuracy game.
 - [ ] Reuse the shared content repository, themes, settings, and statistics.

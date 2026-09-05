@@ -18,6 +18,8 @@
 - English and romanized Punjabi share one on-screen Latin keyboard.
 - Mixed English/Punjabi selects English or romanized Punjabi solutions and accepts valid guesses from both pools.
 - Gurmukhi is a separate mode with a purpose-built on-screen keyboard.
+- Every Gurmukhi on-screen keyboard shows a short romanized pronunciation under
+  each key and uses the shared pronunciation/label components.
 - Gurmukhi word length is measured in user-visible Unicode grapheme clusters.
 - Do not combine Latin and Gurmukhi guesses in one game because their keyboards and length rules differ.
 

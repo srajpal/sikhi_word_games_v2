@@ -13,6 +13,12 @@
 
 Shared vocabulary models, content loading, persistence contracts, themes, accessibility conventions, and reusable widgets.
 
+Shared Gurmukhi keyboard presentation includes one pronunciation function and a
+two-line key label used across games. Games may own different keyboard layouts
+when their input rules differ: Bujho and Dictionary compose a word from base
+letters and vowel signs, while Word Quest selects whole grapheme clusters.
+Those layouts must reuse the shared pronunciation and label components.
+
 ### Feature modules
 
 Each game owns its domain rules, application/controller state, presentation widgets, and feature-specific data adapters. A game must not add states such as help dialogs or settings panels to its rule engine.

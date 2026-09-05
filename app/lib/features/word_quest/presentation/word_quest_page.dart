@@ -5,12 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/language/gurmukhi_romanization.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
+import '../../../core/widgets/gurmukhi_key_label.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../settings/data/app_settings_repository.dart';
 import '../domain/word_quest_game.dart';
-import '../domain/gurmukhi_romanization.dart';
 import '../domain/word_quest_vocabulary.dart';
 import '../data/word_quest_session_repository.dart';
 
@@ -536,10 +537,8 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                       ],
                                     ),
                                     const SizedBox(height: 9),
-                                    Text(
-                                      word.definitionHint,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
+                                    _DefinitionPreview(
+                                      definition: word.definitionHint,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium
@@ -559,15 +558,26 @@ class _WordQuestPageState extends State<WordQuestPage> {
                               showRomanization: _mode == LanguageMode.gurmukhi,
                             ),
                             const SizedBox(height: 16),
-                            _GardenPath(
-                              game: game,
-                              reducedMotion: widget.reducedMotion,
-                            ),
-                            const SizedBox(height: 10),
+                            if (_showFullKeyboard) ...[
+                              const SizedBox(height: 4),
+                              Divider(
+                                color: scheme.onSurface.withValues(alpha: .2),
+                                height: 1,
+                              ),
+                              const SizedBox(height: 10),
+                            ] else ...[
+                              _GardenPath(
+                                game: game,
+                                reducedMotion: widget.reducedMotion,
+                              ),
+                              const SizedBox(height: 10),
+                            ],
                             if (game.isComplete)
                               _ResultCard(
                                 word: word,
                                 game: game,
+                                showRomanization:
+                                    _mode == LanguageMode.gurmukhi,
                                 onNewWord: _startNewWord,
                               )
                             else ...[
@@ -664,31 +674,22 @@ class _WordTiles extends StatelessWidget {
                                 fontWeight: FontWeight.w900,
                               ),
                         )
+                      : showRomanization
+                      ? GurmukhiKeyLabel(
+                          grapheme: game.revealedGraphemes[i]!,
+                          color: Colors.white,
+                          gurmukhiFontSize: 24,
+                          romanizationFontSize: 10,
+                        )
                       : FittedBox(
                           fit: BoxFit.scaleDown,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                game.revealedGraphemes[i]!,
-                                style: Theme.of(context).textTheme.headlineSmall
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                              ),
-                              if (showRomanization)
-                                Text(
-                                  romanizeGurmukhiGrapheme(
-                                    game.revealedGraphemes[i]!,
-                                  ),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                          child: Text(
+                            game.revealedGraphemes[i]!,
+                            style: Theme.of(context).textTheme.headlineSmall
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
                                 ),
-                            ],
                           ),
                         ),
                 ),
@@ -970,33 +971,19 @@ class _QuestKey extends StatelessWidget {
                   ]
                 : const [],
           ),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
+          child: showRomanization
+              ? GurmukhiKeyLabel(
+                  grapheme: letter,
+                  color: enabled ? scheme.onSurface : Colors.white70,
+                )
+              : Text(
                   letter,
                   style: TextStyle(
-                    fontSize: showRomanization ? 17 : 19,
+                    fontSize: 19,
                     fontWeight: FontWeight.w900,
                     color: enabled ? scheme.onSurface : Colors.white70,
                   ),
                 ),
-                if (showRomanization)
-                  Text(
-                    romanizeGurmukhiGrapheme(letter),
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w700,
-                      color: enabled
-                          ? scheme.onSurface.withValues(alpha: .75)
-                          : Colors.white60,
-                    ),
-                  ),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -1007,10 +994,12 @@ class _ResultCard extends StatelessWidget {
   const _ResultCard({
     required this.word,
     required this.game,
+    required this.showRomanization,
     required this.onNewWord,
   });
   final WordQuestWord word;
   final WordQuestGame game;
+  final bool showRomanization;
   final VoidCallback onNewWord;
 
   @override
@@ -1036,8 +1025,27 @@ class _ResultCard extends StatelessWidget {
             word.spelling,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
+          if (showRomanization &&
+              word.romanizedSpelling?.trim().isNotEmpty == true) ...[
+            const SizedBox(height: 2),
+            Semantics(
+              label: 'Romanized spelling ${word.romanizedSpelling}',
+              child: Text(
+                word.romanizedSpelling!.trim(),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 6),
-          Text(word.definitionHint, textAlign: TextAlign.center),
+          _DefinitionPreview(
+            definition: word.definitionHint,
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 14),
           _QuestActionButton(
             onPressed: onNewWord,
@@ -1210,6 +1218,75 @@ class _StatusPill extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _DefinitionPreview extends StatelessWidget {
+  const _DefinitionPreview({
+    required this.definition,
+    required this.style,
+    this.textAlign = TextAlign.start,
+  });
+
+  final String definition;
+  final TextStyle? style;
+  final TextAlign textAlign;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final painter = TextPainter(
+        text: TextSpan(text: definition, style: style),
+        maxLines: 1,
+        textDirection: Directionality.of(context),
+      )..layout(maxWidth: constraints.maxWidth);
+      final isLong = painter.didExceedMaxLines;
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Text(
+              definition,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: textAlign,
+              style: style,
+            ),
+          ),
+          if (isLong) ...[
+            const SizedBox(width: 2),
+            Tooltip(
+              message: 'Show full definition',
+              child: IconButton(
+                key: const ValueKey('word-quest-definition-more'),
+                onPressed: () => _showFullDefinition(context),
+                icon: const Icon(Icons.info_outline),
+                iconSize: 18,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints.tightFor(
+                  width: 30,
+                  height: 30,
+                ),
+                visualDensity: VisualDensity.compact,
+              ),
+            ),
+          ],
+        ],
+      );
+    },
+  );
+
+  void _showFullDefinition(BuildContext context) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(definition),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
+        ),
+      );
   }
 }
 

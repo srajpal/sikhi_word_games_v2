@@ -6,8 +6,12 @@ import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/core/themes/game_ui.dart';
+import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/features/settings/data/app_settings_repository.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/data/guess_game_repository.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
+import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_repository.dart';
+import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
 
 void main() {
   testWidgets('shows unified new-game actions and random launch options', (
@@ -237,10 +241,59 @@ void main() {
     await tester.tap(keyboardToggle);
     await tester.pump();
     expect(find.byIcon(Icons.keyboard_hide_outlined), findsOneWidget);
+    expect(find.byType(Divider), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('garden blooms')), findsNothing);
     expect(find.byKey(const ValueKey('word-quest-key-ਅ')), findsOneWidget);
     await tester.tap(keyboardToggle);
     await tester.pump();
     expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('garden blooms')), findsOneWidget);
+
+    for (final grapheme in ['ਕੀ', 'ਰ', 'ਤ', 'ਨ']) {
+      await _tapVisible(
+        tester,
+        find.byKey(ValueKey('word-quest-key-$grapheme')),
+      );
+    }
+    await tester.pumpAndSettle();
+    expect(find.text('KIRTAN'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Word Quest previews long clues and shows the full definition', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+        home: WordQuestPage(
+          vocabularyRepository: _vocabulary,
+          hapticLevel: HapticFeedbackLevel.off,
+          reducedMotion: true,
+          sessionRepository: WordQuestSessionRepository(MemoryKeyValueStore()),
+          initialMode: LanguageMode.english,
+          initialWordSize: 6,
+          startFresh: true,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final more = find.byKey(const ValueKey('word-quest-definition-more'));
+    expect(more, findsOneWidget);
+    await tester.tap(more);
+    await tester.pump();
+    expect(
+      find.descendant(
+        of: find.byType(SnackBar),
+        matching: find.text('A world that travels around a star'),
+      ),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 
@@ -601,6 +654,10 @@ void main() {
   testWidgets('Gurmukhi keyboard composes and deletes visible graphemes', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
       SikhiWordGamesApp(
         settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
@@ -611,6 +668,8 @@ void main() {
     await tester.pumpAndSettle();
     await _applyGameSettings(tester, language: 'Gurmukhi', length: '4 letters');
 
+    expect(find.text('Ka'), findsWidgets);
+    expect(find.text('Ee'), findsWidgets);
     await _tapVisible(tester, find.byKey(const ValueKey('key-ਕ')));
     await _tapVisible(tester, find.byKey(const ValueKey('key-ੀ')));
     var value = tester.widget<Text>(find.byKey(const ValueKey('guess-value')));

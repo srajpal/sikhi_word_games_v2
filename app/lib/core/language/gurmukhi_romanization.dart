@@ -1,7 +1,7 @@
 /// Returns a short, readable pronunciation for one Gurmukhi grapheme.
 ///
-/// This is a learning aid for letter tiles, not a replacement for the curated
-/// whole-word romanization stored in the vocabulary.
+/// This is a shared learning aid for keyboard and answer tiles, not a
+/// replacement for curated whole-word romanization in the vocabulary.
 String romanizeGurmukhiGrapheme(String grapheme) {
   if (grapheme.isEmpty) return '';
   const independentVowels = {
@@ -85,10 +85,6 @@ String romanizeGurmukhiGrapheme(String grapheme) {
       vowel = '';
     } else if (character == 'ੰ' || character == 'ਂ') {
       ending += 'n';
-    } else if (character == 'ੱ') {
-      // Addak doubles the following consonant in full words. On a standalone
-      // tile, a light pause marker is clearer than guessing that consonant.
-      ending += '';
     }
   }
   final value = '$onset${vowel ?? (onset.isEmpty ? '' : 'a')}$ending';

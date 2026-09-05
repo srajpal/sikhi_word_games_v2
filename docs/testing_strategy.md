@@ -18,6 +18,7 @@
 - Seeded random selection and non-repetition policy.
 - Winning, exhausting guesses, statistics, and serialization round trips.
 - Gurmukhi grapheme entry, deletion, comparison, and restoration.
+- Shared Gurmukhi key pronunciation labels across composing and whole-grapheme keyboards.
 
 ## Quality gates
 

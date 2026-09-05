@@ -66,8 +66,10 @@ remain pure Dart; this document describes the presentation contract around it.
    available. Disable a used hint and announce what it did. If no helper text
    is available, the second hint reveals another grapheme instead.
 6. On either terminal state, show the complete word, its concise definition,
-   and a single positive action: **New word**. Also offer **Try this word
-   again** in the Keep learning state so a child can practice it.
+   and a single positive action: **New word**. In Gurmukhi mode, show the
+   curated Romanized spelling directly below the Gurmukhi answer. Also offer
+   **Try this word again** in the Keep learning state so a child can practice
+   it.
 
 ## Mobile-first fixed viewport and exact screen layout
 
@@ -86,9 +88,11 @@ From top to bottom, the round screen contains these sections:
    Bujho: Guess the Word.
 2. **Quest status strip:** a compact `Round` label and a text counter such as
    `3 of 8 path steps` / `2 letters found`. This is text, not color alone.
-3. **Clue card:** a labeled `Clue` heading and one or two lines of definition.
-   The card must not include the answer or an answer-length spelling hint that
-   makes Gurmukhi grapheme behavior unclear.
+3. **Clue card:** a labeled `Clue` heading and a one-line definition preview.
+   If the definition does not fit one line, end it with an ellipsis and expose
+   a small action that displays the complete concise definition in a floating
+   message. The card must not include the answer or an answer-length spelling
+   hint that makes Gurmukhi grapheme behavior unclear.
 4. **Word card:** one large, centered tile per solution grapheme. Unknown tiles
    show an accessible “hidden letter” label and a neutral shape; revealed tiles
    show the grapheme. Preserve spaces only if the content policy later allows
@@ -96,6 +100,8 @@ From top to bottom, the round screen contains these sections:
 5. **Garden path panel:** a quiet row/arc of eight secular stones, sprouts, or flowers,
    with completed steps highlighted by `tokens.correct`. Include a text
    alternative (`3 of 8 steps`) and do not use a sacred symbol as the endpoint.
+   When the full keyboard is open, replace the garden with a simple separator
+   so the expanded keyboard remains usable in one phone viewport.
 6. **Feedback line:** one live status line for `Letter found`, `Try another
    letter`, hint confirmation, or the positive terminal message. Use
    `Semantics(liveRegion: true)` where supported; do not rely on a transient
@@ -168,6 +174,8 @@ From top to bottom, the round screen contains these sections:
 - Show a short romanized pronunciation below each Gurmukhi key, such as
   `ਸਾ` / `Saa`. Revealed Gurmukhi answer tiles show the same learning aid;
   hidden tiles never expose it.
+- The terminal answer card shows the curated Romanized spelling below the
+  revealed Gurmukhi word.
 - A tap immediately evaluates one whole grapheme. Used keys become disabled;
   there is no separate combining-mark state, IME composition, or code-unit
   deletion. A physical/IME input path may submit one grapheme at a time after
