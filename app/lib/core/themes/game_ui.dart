@@ -2,6 +2,28 @@ import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
 
+const gameSnackBarDuration = Duration(seconds: 5);
+
+void showGameSnackBar(BuildContext context, String message) {
+  final messenger = ScaffoldMessenger.of(context);
+  messenger
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(message, textAlign: TextAlign.center),
+        action: SnackBarAction(
+          label: 'Dismiss',
+          onPressed: () => messenger.hideCurrentSnackBar(),
+        ),
+        behavior: SnackBarBehavior.floating,
+        duration: gameSnackBarDuration,
+        // SnackBar actions default to persistent in Flutter. The game-wide
+        // feedback contract keeps the action but still times out.
+        persist: false,
+      ),
+    );
+}
+
 class GameBackdrop extends StatelessWidget {
   const GameBackdrop({required this.child, super.key});
   final Widget child;

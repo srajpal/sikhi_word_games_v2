@@ -111,6 +111,27 @@ void main() {
     expect(find.text('Bujho: Guess the Word'), findsOneWidget);
   });
 
+  testWidgets(
+    'keeps game details in the app bar without a duplicate status pill',
+    (tester) async {
+      await tester.pumpWidget(
+        SikhiWordGamesApp(
+          settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+          vocabularyRepository: _vocabulary,
+        ),
+      );
+
+      await _startNewGame(tester);
+      await tester.pumpAndSettle();
+
+      final subtitle = tester.widget<Text>(
+        find.byKey(const ValueKey('guess-game-subtitle')),
+      );
+      expect(subtitle.data, matches(RegExp(r'^.+ · [456] letters$')));
+      expect(find.textContaining('Round'), findsNothing);
+    },
+  );
+
   testWidgets('opens Khoj: Word Search and changes its language', (
     tester,
   ) async {
@@ -350,9 +371,19 @@ void main() {
       ),
       findsOneWidget,
     );
+    final definitionSnackBar = tester.widget<SnackBar>(find.byType(SnackBar));
+    expect(definitionSnackBar.duration, gameSnackBarDuration);
+    expect(definitionSnackBar.persist, isFalse);
     expect(find.text('Dismiss'), findsOneWidget);
     await tester.pumpAndSettle();
     await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
+    expect(find.byType(SnackBar), findsNothing);
+
+    await tester.tap(more);
+    await tester.pump();
+    await tester.pumpAndSettle();
+    await tester.pump(gameSnackBarDuration);
     await tester.pumpAndSettle();
     expect(find.byType(SnackBar), findsNothing);
     expect(tester.takeException(), isNull);
@@ -646,6 +677,9 @@ void main() {
       tester.getCenter(find.byKey(const ValueKey('key-backspace'))).dx,
       greaterThan(tester.getCenter(find.byKey(const ValueKey('key-M'))).dx),
     );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
     for (final letter in 'GRAPE'.characters) {
       await _tapVisible(tester, find.byKey(ValueKey('key-$letter')));
     }
@@ -691,8 +725,15 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Spoiler-free result copied'), findsOneWidget);
+    final copySnackBar = tester.widget<SnackBar>(find.byType(SnackBar));
+    expect(copySnackBar.duration, gameSnackBarDuration);
+    expect(copySnackBar.persist, isFalse);
+    expect(find.text('Dismiss'), findsOneWidget);
     expect(clipboardText, contains('English · 5 letters · 2/6'));
     expect(clipboardText, isNot(contains('APPLE')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
 
     await _chooseGameMenu(tester, 'Statistics');
     expect(

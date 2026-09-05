@@ -58,27 +58,6 @@ const _gurmukhiAlphabet = <String>[
   'ਫ਼',
 ];
 
-void _showDismissibleSnackBar(
-  BuildContext context, {
-  required String message,
-  required Duration duration,
-}) {
-  final messenger = ScaffoldMessenger.of(context);
-  messenger
-    ..hideCurrentSnackBar()
-    ..showSnackBar(
-      SnackBar(
-        content: Text(message, textAlign: TextAlign.center),
-        action: SnackBarAction(
-          label: 'Dismiss',
-          onPressed: () => messenger.hideCurrentSnackBar(),
-        ),
-        behavior: SnackBarBehavior.floating,
-        duration: duration,
-      ),
-    );
-}
-
 class WordQuestPage extends StatefulWidget {
   const WordQuestPage({
     required this.vocabularyRepository,
@@ -331,11 +310,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   void _showFeedback(String message) {
     if (!mounted) return;
-    _showDismissibleSnackBar(
-      context,
-      message: message,
-      duration: const Duration(milliseconds: 2500),
-    );
+    showGameSnackBar(context, message);
   }
 
   Future<void> _showSettings() async {
@@ -1317,11 +1292,7 @@ class _DefinitionPreview extends StatelessWidget {
   );
 
   void _showFullDefinition(BuildContext context) {
-    _showDismissibleSnackBar(
-      context,
-      message: definition,
-      duration: const Duration(seconds: 5),
-    );
+    showGameSnackBar(context, definition);
   }
 }
 

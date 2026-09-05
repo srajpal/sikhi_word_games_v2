@@ -337,15 +337,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   }
 
   void _showNotice(String message) {
-    final messenger = ScaffoldMessenger.of(context);
-    messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 2),
-        content: Text(message, textAlign: TextAlign.center),
-      ),
-    );
+    showGameSnackBar(context, message);
   }
 
   Future<void> _showGameSettings() async {
@@ -484,6 +476,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
             const Text('Bujho: Guess the Word'),
             Text(
               '${_mode.label} · $_wordLength letters',
+              key: const ValueKey('guess-game-subtitle'),
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color:
                     Theme.of(context).appBarTheme.foregroundColor ??
@@ -574,14 +567,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                             onKeyEvent: _handleHardwareKey,
                             child: Column(
                               children: [
-                                GameStatusPill(
-                                  icon: Icons.translate,
-                                  child: Text(
-                                    '${_mode.label} · Round ${game.wordLength} · '
-                                    '${game.maximumAttempts - game.turns.length} tries',
-                                  ),
-                                ),
-                                SizedBox(height: compact ? 8 : 14),
                                 Expanded(
                                   child: GamePanel(
                                     padding: const EdgeInsets.all(10),

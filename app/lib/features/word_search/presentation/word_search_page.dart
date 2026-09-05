@@ -286,15 +286,9 @@ class _WordSearchPageState extends State<WordSearchPage> {
       );
     }
     HapticFeedback.selectionClick();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(milliseconds: complete ? 2600 : 1200),
-        content: Text(
-          complete
-              ? 'Puzzle complete — great searching!'
-              : 'Found ${word.word}',
-        ),
-      ),
+    showGameSnackBar(
+      context,
+      complete ? 'Puzzle complete — great searching!' : 'Found ${word.word}',
     );
   }
 

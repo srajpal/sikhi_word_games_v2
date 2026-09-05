@@ -197,6 +197,8 @@ From top to bottom, the round screen contains these sections:
 - Show momentary gameplay feedback in an accessible floating message instead
   of reserving a permanent status row. Do not show an instructional message
   before the child has acted; the clue and keyboard make the first action clear.
+- All game feedback messages use a five-second timeout and include a `Dismiss`
+  action. The action must not make the message persistent.
 - Every tile/key has a useful semantic label and state. The word board reads in
   order as `Letter 1, hidden` / `Letter 1, <grapheme>, revealed`; the garden
   panel reads its numeric progress. Do not expose decorative symbols twice.
