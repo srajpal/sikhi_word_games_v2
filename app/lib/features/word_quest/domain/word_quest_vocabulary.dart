@@ -45,6 +45,9 @@ class WordQuestVocabulary {
     : _entries = List.unmodifiable(entries);
 
   final List<VocabularyEntry> _entries;
+  final Map<LanguageMode, List<WordQuestWord>> _allWordsByMode = {};
+  final Map<LanguageMode, List<WordQuestWord>> _manageableWordsByMode = {};
+  final Map<LanguageMode, List<String>> _graphemesByMode = {};
 
   static Future<WordQuestVocabulary> load(
     VocabularyRepository repository,
@@ -59,13 +62,29 @@ class WordQuestVocabulary {
     required LanguageMode mode,
     bool preferKidManageable = true,
   }) {
-    final all = _deduplicatedWords(mode);
+    final all = _allWordsByMode.putIfAbsent(
+      mode,
+      () => _deduplicatedWords(mode),
+    );
     if (!preferKidManageable) return all;
-    final manageable = all
-        .where((word) => word.isKidManageable)
-        .toList(growable: false);
-    return manageable.isEmpty ? all : List.unmodifiable(manageable);
+    return _manageableWordsByMode.putIfAbsent(mode, () {
+      final manageable = all
+          .where((word) => word.isKidManageable)
+          .toList(growable: false);
+      return manageable.isEmpty ? all : List.unmodifiable(manageable);
+    });
   }
+
+  /// Distinct whole grapheme clusters available for Gurmukhi letter-bank
+  /// distractors. The derived set is cached because it is reused on every
+  /// new round in that mode.
+  List<String> graphemes({required LanguageMode mode}) =>
+      _graphemesByMode.putIfAbsent(
+        mode,
+        () => List.unmodifiable(
+          words(mode: mode).expand((word) => word.spelling.characters).toSet(),
+        ),
+      );
 
   /// Looks up a playable word by its active-mode spelling.
   WordQuestWord? wordForSpelling({

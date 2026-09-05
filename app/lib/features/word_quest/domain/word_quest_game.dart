@@ -43,6 +43,7 @@ class WordQuestGame {
     : solution = _normaliseWord(solution),
       maximumTries =
           maximumTries ?? recommendedMaximumTriesForSolution(solution),
+      maximumHints = recommendedMaximumHintsForSolution(solution),
       _solutionGraphemes = _normaliseWord(solution).characters
           .toList(growable: false) {
     if (_solutionGraphemes.isEmpty) {
@@ -65,8 +66,14 @@ class WordQuestGame {
   static int recommendedMaximumTriesForSolution(String solution) =>
       (_normaliseWord(solution).characters.length + 1).clamp(5, 7);
 
+  /// Scales hints with word length: none for four letters, one for five, and
+  /// two for six or more letters.
+  static int recommendedMaximumHintsForSolution(String solution) =>
+      (_normaliseWord(solution).characters.length - 4).clamp(0, 2).toInt();
+
   final String solution;
   final int maximumTries;
+  final int maximumHints;
   final List<String> _solutionGraphemes;
   final Set<String> _guessed = <String>{};
   final Set<String> _hinted = <String>{};
@@ -89,6 +96,8 @@ class WordQuestGame {
   int get incorrectGuesses => _incorrectGuesses;
   int get triesRemaining => maximumTries - _incorrectGuesses;
   int get hintsUsed => _hinted.length;
+  int get hintsRemaining =>
+      (maximumHints - hintsUsed).clamp(0, maximumHints).toInt();
 
   /// A tile for each solution grapheme, with null for a still-hidden tile.
   List<String?> get revealedGraphemes => [
@@ -161,6 +170,12 @@ class WordQuestGame {
         revealedGrapheme: null,
       );
     }
+    if (hintsUsed >= maximumHints) {
+      return const WordQuestHint(
+        result: WordQuestHintResult.unavailable,
+        revealedGrapheme: null,
+      );
+    }
     String? next;
     for (final letter in _solutionGraphemes) {
       if (!_guessed.contains(letter)) {
@@ -210,6 +225,7 @@ class WordQuestGame {
     );
     final hinted = _readGraphemeList(json['hintedGraphemes']! as List<Object?>);
     if (!hinted.every(guessed.contains) ||
+        hinted.length > game.maximumHints ||
         guessed.any(
           (letter) =>
               !game._solutionGraphemes.contains(letter) &&

@@ -16,6 +16,19 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games bui
 - Dart 3.13.2
 - Android SDK 36
 
+## App versioning
+
+The current app version is `1.1.0` (build `2`). The version follows
+`major.minor.patch+build` format: increment the minor version for a compatible
+user-facing feature release, the patch version for a compatible fix-only
+release, and the major version for breaking product or data changes. Increment
+the build number for every distributed build, including rebuilds that do not
+change the user-facing version.
+
+When making an update, change both the `version` field in `app/pubspec.yaml` and
+the constants in `app/lib/core/app_version.dart`. The home page displays the
+same value so it can be verified in the running app.
+
 ## Validate V2
 
 From the `app` directory:

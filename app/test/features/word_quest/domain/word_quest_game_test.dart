@@ -67,22 +67,35 @@ void main() {
     test(
       'hint deterministically reveals an unguessed grapheme and tracks it',
       () {
-        final game = WordQuestGame(solution: 'SEVA');
+        final game = WordQuestGame(solution: 'PLANET');
 
         final hint = game.useHint();
 
         expect(hint.result, WordQuestHintResult.revealed);
-        expect(hint.revealedGrapheme, 'S');
+        expect(hint.revealedGrapheme, 'P');
         expect(game.hintsUsed, 1);
-        expect(game.hintedGraphemes, {'S'});
-        expect(game.triesRemaining, 5);
-        game.guess('E');
-        game.guess('V');
-        expect(game.useHint().revealedGrapheme, 'A');
+        expect(game.hintedGraphemes, {'P'});
+        expect(game.hintsRemaining, 1);
+        game.guess('L');
+        game.guess('A');
+        game.guess('N');
+        expect(game.useHint().revealedGrapheme, 'E');
+        expect(game.hintsRemaining, 0);
+        game.guess('T');
         expect(game.status, WordQuestStatus.won);
         expect(game.useHint().result, WordQuestHintResult.gameOver);
       },
     );
+
+    test('scales hints with the visible word length', () {
+      expect(WordQuestGame(solution: 'SEVA').maximumHints, 0);
+      expect(WordQuestGame(solution: 'APPLE').maximumHints, 1);
+      expect(WordQuestGame(solution: 'PLANET').maximumHints, 2);
+
+      final fourLetters = WordQuestGame(solution: 'SEVA');
+      expect(fourLetters.useHint().result, WordQuestHintResult.unavailable);
+      expect(fourLetters.hintsUsed, 0);
+    });
 
     test('assigns 5, 6, and 7 tries to 4-, 5-, and 6-grapheme words', () {
       expect(WordQuestGame(solution: 'SEVA').maximumTries, 5);
@@ -110,6 +123,16 @@ void main() {
           'maximumTries': 7,
           'guessedGraphemes': ['S'],
           'hintedGraphemes': ['X'],
+        }),
+        throwsFormatException,
+      );
+      expect(
+        () => WordQuestGame.restore(const {
+          'schemaVersion': 2,
+          'solution': 'SEVA',
+          'maximumTries': 5,
+          'guessedGraphemes': ['S'],
+          'hintedGraphemes': ['S'],
         }),
         throwsFormatException,
       );

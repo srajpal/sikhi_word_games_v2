@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sikhi_word_games_v2/app/app.dart';
+import 'package:sikhi_word_games_v2/core/app_version.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
@@ -14,6 +15,21 @@ import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_
 import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
 
 void main() {
+  testWidgets('shows the current app version on the home page', (tester) async {
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.byType(ListView), const Offset(0, -2000));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('app-version')), findsOneWidget);
+    expect(find.text(appVersionLabel), findsOneWidget);
+  });
+
   testWidgets('shows unified new-game actions and random launch options', (
     tester,
   ) async {
@@ -205,6 +221,46 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('Word Quest scales hint availability by word size', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    for (final (size, expectedHints) in const [(4, 0), (5, 1), (6, 2)]) {
+      await tester.pumpWidget(
+        MaterialApp(
+          key: ValueKey(size),
+          theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+          home: WordQuestPage(
+            key: ValueKey('word-quest-$size'),
+            vocabularyRepository: _vocabulary,
+            hapticLevel: HapticFeedbackLevel.off,
+            reducedMotion: true,
+            sessionRepository: WordQuestSessionRepository(
+              MemoryKeyValueStore(),
+            ),
+            initialMode: LanguageMode.english,
+            initialWordSize: size,
+            startFresh: true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final hint = find.byKey(const ValueKey('word-quest-hint'));
+      expect(hint, expectedHints == 0 ? findsNothing : findsOneWidget);
+      if (expectedHints > 0) {
+        expect(
+          find.descendant(of: hint, matching: find.text('$expectedHints')),
+          findsOneWidget,
+        );
+      }
+    }
+  });
+
   testWidgets('Word Quest shows Gurmukhi sounds and keyboard choices', (
     tester,
   ) async {
@@ -294,6 +350,11 @@ void main() {
       ),
       findsOneWidget,
     );
+    expect(find.text('Dismiss'), findsOneWidget);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
+    expect(find.byType(SnackBar), findsNothing);
     expect(tester.takeException(), isNull);
   });
 

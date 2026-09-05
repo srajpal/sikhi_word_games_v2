@@ -10,23 +10,39 @@ abstract interface class VocabularyRepository {
 
 class AssetVocabularyRepository implements VocabularyRepository {
   List<VocabularyEntry>? _cache;
+  Future<List<VocabularyEntry>>? _loading;
 
   @override
   Future<List<VocabularyEntry>> load() async {
     if (_cache case final cached?) return cached;
-    final curation = jsonDecode(
-      await rootBundle.loadString(
-        'assets/content/curation/starter_solutions.json',
+    final inFlight = _loading;
+    if (inFlight != null) return inFlight;
+    final future = _loadAssets();
+    _loading = future;
+    try {
+      return await future;
+    } finally {
+      if (identical(_loading, future)) _loading = null;
+    }
+  }
+
+  Future<List<VocabularyEntry>> _loadAssets() async {
+    final documents = await Future.wait([
+      rootBundle.loadString('assets/content/curation/starter_solutions.json'),
+      rootBundle.loadString('assets/content/curation/editorial_overrides.json'),
+      for (final length in const [4, 5, 6])
+        rootBundle.loadString(
+          'assets/content/generated/vocabulary_$length.json',
+        ),
+      rootBundle.loadString(
+        'assets/content/curation/supplemental_entries.json',
       ),
-    ) as Map<String, Object?>;
+    ]);
+    final curation = jsonDecode(documents[0]) as Map<String, Object?>;
     final solutionIds = (curation['solutionIds']! as List<Object?>)
         .cast<String>()
         .toSet();
-    final overridesDocument = jsonDecode(
-      await rootBundle.loadString(
-        'assets/content/curation/editorial_overrides.json',
-      ),
-    ) as Map<String, Object?>;
+    final overridesDocument = jsonDecode(documents[1]) as Map<String, Object?>;
     if (overridesDocument['schemaVersion'] != 1 ||
         overridesDocument['entries'] is! List<Object?>) {
       throw const FormatException('Unsupported editorial override schema.');
@@ -37,12 +53,8 @@ class AssetVocabularyRepository implements VocabularyRepository {
       overrides[override['id']! as String] = override;
     }
     final entries = <VocabularyEntry>[];
-    for (final length in const [4, 5, 6]) {
-      final decoded = jsonDecode(
-        await rootBundle.loadString(
-          'assets/content/generated/vocabulary_$length.json',
-        ),
-      ) as List<Object?>;
+    for (final document in documents.sublist(2, 5)) {
+      final decoded = jsonDecode(document) as List<Object?>;
       for (final item in decoded) {
         var entry = VocabularyEntry.fromJson(item! as Map<String, Object?>);
         if (solutionIds.contains(entry.id)) {
@@ -67,11 +79,8 @@ class AssetVocabularyRepository implements VocabularyRepository {
         entries.add(entry);
       }
     }
-    final supplementalDocument = jsonDecode(
-      await rootBundle.loadString(
-        'assets/content/curation/supplemental_entries.json',
-      ),
-    ) as Map<String, Object?>;
+    final supplementalDocument =
+        jsonDecode(documents[5]) as Map<String, Object?>;
     if (supplementalDocument['schemaVersion'] != 1 ||
         supplementalDocument['entries'] is! List<Object?>) {
       throw const FormatException('Unsupported supplemental entry schema.');

@@ -58,12 +58,34 @@ const _gurmukhiAlphabet = <String>[
   'ਫ਼',
 ];
 
+void _showDismissibleSnackBar(
+  BuildContext context, {
+  required String message,
+  required Duration duration,
+}) {
+  final messenger = ScaffoldMessenger.of(context);
+  messenger
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(message, textAlign: TextAlign.center),
+        action: SnackBarAction(
+          label: 'Dismiss',
+          onPressed: () => messenger.hideCurrentSnackBar(),
+        ),
+        behavior: SnackBarBehavior.floating,
+        duration: duration,
+      ),
+    );
+}
+
 class WordQuestPage extends StatefulWidget {
   const WordQuestPage({
     required this.vocabularyRepository,
     required this.hapticLevel,
     required this.reducedMotion,
     required this.sessionRepository,
+    this.vocabularyFuture,
     this.initialMode,
     this.initialWordSize,
     this.startFresh = false,
@@ -74,6 +96,7 @@ class WordQuestPage extends StatefulWidget {
   final HapticFeedbackLevel hapticLevel;
   final bool reducedMotion;
   final WordQuestSessionRepository sessionRepository;
+  final Future<WordQuestVocabulary>? vocabularyFuture;
   final LanguageMode? initialMode;
   final int? initialWordSize;
   final bool startFresh;
@@ -94,7 +117,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
   String _message = '';
   bool _loading = true;
   bool _showFullKeyboard = false;
-  int _hintsRemaining = 2;
+  int _startRequest = 0;
 
   @override
   void initState() {
@@ -103,9 +126,21 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   Future<void> _load() async {
-    final vocabulary = await WordQuestVocabulary.load(
-      widget.vocabularyRepository,
-    );
+    try {
+      await _loadContents();
+    } on Object catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _message = 'Unable to load the offline word list: $error';
+      });
+    }
+  }
+
+  Future<void> _loadContents() async {
+    final vocabulary =
+        await (widget.vocabularyFuture ??
+            WordQuestVocabulary.load(widget.vocabularyRepository));
     if (!mounted) return;
     _vocabulary = vocabulary;
     if (!widget.startFresh) {
@@ -120,11 +155,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
           _wordSize = restored.wordSize;
           _word = word;
           _game = restored.game;
-          _letterBank = _buildLetterBank(
-            restored.game,
-            vocabulary.words(mode: restored.mode),
-          );
-          _hintsRemaining = (2 - restored.game.hintsUsed).clamp(0, 2).toInt();
+          _letterBank = _buildLetterBank(restored.game);
           _loading = false;
           return;
         }
@@ -133,7 +164,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     }
     _mode = widget.initialMode ?? _randomMode();
     _wordSize = widget.initialWordSize ?? _randomWordSize(_mode);
-    _startNewWord();
+    await _startNewWord();
   }
 
   LanguageMode _randomMode() {
@@ -152,9 +183,18 @@ class _WordQuestPageState extends State<WordQuestPage> {
     return values.isEmpty ? 4 : values[_random.nextInt(values.length)];
   }
 
-  void _startNewWord() {
+  Future<void> _startNewWord() async {
     final vocabulary = _vocabulary;
-    if (vocabulary == null) return;
+    if (vocabulary == null || !mounted) return;
+    final request = ++_startRequest;
+    final shouldYieldForLoading = !_loading;
+    if (shouldYieldForLoading) {
+      setState(() => _loading = true);
+      // Let a player-initiated new-round loading state paint before a mode's
+      // first vocabulary index and Gurmukhi grapheme bank are derived.
+      await Future<void>.delayed(Duration.zero);
+    }
+    if (!mounted || request != _startRequest) return;
     var candidates = vocabulary
         .words(mode: _mode)
         .where((word) => word.graphemeLength == _wordSize)
@@ -171,26 +211,29 @@ class _WordQuestPageState extends State<WordQuestPage> {
     }
     final word = _selector.select(candidates);
     final game = WordQuestGame(solution: word.spelling);
-    final bank = _buildLetterBank(game, candidates);
+    final bank = _buildLetterBank(game);
     setState(() {
       _word = word;
       _game = game;
       _letterBank = bank;
       _showFullKeyboard = false;
-      _hintsRemaining = 2;
       _message = '';
       _loading = false;
     });
-    widget.sessionRepository.save(mode: _mode, wordSize: _wordSize, game: game);
+    await widget.sessionRepository.save(
+      mode: _mode,
+      wordSize: _wordSize,
+      game: game,
+    );
   }
 
-  List<String> _buildLetterBank(WordQuestGame game, List<WordQuestWord> pool) {
+  List<String> _buildLetterBank(WordQuestGame game) {
     final answer = game.letterBankGraphemes.toSet();
     final choices = <String>{...answer};
     if (_mode == LanguageMode.gurmukhi) {
       final distractors =
-          pool
-              .expand((word) => word.spelling.characters)
+          _vocabulary!
+              .graphemes(mode: _mode)
               .where((letter) => !answer.contains(letter))
               .toSet()
               .toList()
@@ -269,12 +312,10 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   void _useHint() {
     final game = _game;
-    if (game == null || game.isComplete || _hintsRemaining == 0) return;
+    if (game == null || game.isComplete || game.hintsRemaining == 0) return;
     final hint = game.useHint();
     if (hint.result != WordQuestHintResult.revealed) return;
-    setState(() {
-      _hintsRemaining--;
-    });
+    setState(() {});
     _showFeedback('Hint used — a letter is now showing.');
     if (game.isComplete) {
       widget.sessionRepository.clear();
@@ -290,15 +331,11 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   void _showFeedback(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(message, textAlign: TextAlign.center),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(milliseconds: 1400),
-        ),
-      );
+    _showDismissibleSnackBar(
+      context,
+      message: message,
+      duration: const Duration(milliseconds: 2500),
+    );
   }
 
   Future<void> _showSettings() async {
@@ -365,7 +402,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     builder: (context) => AlertDialog(
       title: const Text('How to play'),
       content: const Text(
-        'Choose letters to uncover the hidden word. Correct letters help your word garden grow. Shorter words have fewer hearts, and every round includes two friendly hints. If the word stays hidden, we reveal it so you can learn it.',
+        'Choose letters to uncover the hidden word. Correct letters help your word garden grow. Shorter words have fewer hearts. Four-letter words have no hints, five-letter words have one, and six-letter words have two. If the word stays hidden, we reveal it so you can learn it.',
       ),
       actions: [
         TextButton(
@@ -480,8 +517,9 @@ class _WordQuestPageState extends State<WordQuestPage> {
                               language: _mode.label,
                               letters: word.graphemeLength,
                               tries: game.triesRemaining,
-                              hintsRemaining: _hintsRemaining,
-                              onHint: game.isComplete || _hintsRemaining == 0
+                              hintsRemaining: game.hintsRemaining,
+                              onHint:
+                                  game.isComplete || game.hintsRemaining == 0
                                   ? null
                                   : _useHint,
                               showFullKeyboard: _showFullKeyboard,
@@ -1091,27 +1129,29 @@ class _QuestStatusBar extends StatelessWidget {
         label: '$tries',
         accent: _QuestPalette.magenta,
       ),
-      const SizedBox(width: 7),
-      Semantics(
-        button: true,
-        enabled: onHint != null,
-        label: 'Hint, $hintsRemaining left',
-        child: Tooltip(
-          message: 'Hint, $hintsRemaining left',
-          child: InkWell(
-            key: const ValueKey('word-quest-hint'),
-            onTap: onHint,
-            borderRadius: BorderRadius.circular(22),
-            child: _StatusPill(
-              icon: Icons.lightbulb_outline,
-              label: '$hintsRemaining',
-              accent: onHint == null
-                  ? Theme.of(context).disabledColor
-                  : _QuestPalette.saffron,
+      if (hintsRemaining > 0) ...[
+        const SizedBox(width: 7),
+        Semantics(
+          button: true,
+          enabled: onHint != null,
+          label: 'Hint, $hintsRemaining left',
+          child: Tooltip(
+            message: 'Hint, $hintsRemaining left',
+            child: InkWell(
+              key: const ValueKey('word-quest-hint'),
+              onTap: onHint,
+              borderRadius: BorderRadius.circular(22),
+              child: _StatusPill(
+                icon: Icons.lightbulb_outline,
+                label: '$hintsRemaining',
+                accent: onHint == null
+                    ? Theme.of(context).disabledColor
+                    : _QuestPalette.saffron,
+              ),
             ),
           ),
         ),
-      ),
+      ],
       const SizedBox(width: 7),
       _StatusIconButton(
         key: const ValueKey('word-quest-keyboard-toggle'),
@@ -1277,16 +1317,11 @@ class _DefinitionPreview extends StatelessWidget {
   );
 
   void _showFullDefinition(BuildContext context) {
-    final messenger = ScaffoldMessenger.of(context);
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(definition),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 4),
-        ),
-      );
+    _showDismissibleSnackBar(
+      context,
+      message: definition,
+      duration: const Duration(seconds: 5),
+    );
   }
 }
 

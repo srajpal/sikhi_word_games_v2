@@ -7,8 +7,10 @@ sees a short clue, chooses letters one at a time, and grows a small garden path
 until the word is complete. It keeps the satisfying deduction loop of a
 hangman-style game without a person, animal, broken object, or punishment being
 shown. The default difficulty is forgiving: five, six, or seven unique
-incorrect guesses for 4-, 5-, or 6-grapheme words, two free hints, and a
-learning-focused end state when the word is not solved.
+incorrect guesses for 4-, 5-, or 6-grapheme words, with no hint for a
+4-grapheme word, one hint for a 5-grapheme word, and two hints for a
+6-grapheme word. It ends in a learning-focused state when the word is not
+solved.
 
 The visual metaphor is a **word garden**: correct letters light stepping stones
 and add leaves/flowers to a path toward a garden gate. Incorrect guesses only
@@ -60,11 +62,11 @@ remain pure Dart; this document describes the presentation contract around it.
    4-grapheme word, six for 5 graphemes, and seven for 6 graphemes. The latter
    is technically a terminal/lost state for persistence, but the UI must call
    it “Keep learning” or “The word is ready to discover,” never “You lost.”
-5. Hints reveal information without consuming a miss. A round has two hints:
-   **Reveal a letter** reveals the first unrevealed grapheme (all occurrences)
-   and **Show a clue helper** adds a child-friendly sentence or category when
-   available. Disable a used hint and announce what it did. If no helper text
-   is available, the second hint reveals another grapheme instead.
+5. Hints reveal information without consuming a miss. A 4-grapheme round has
+   no hints, a 5-grapheme round has one hint, and a 6-grapheme round has two.
+   **Reveal a letter** reveals the first unrevealed grapheme (all occurrences).
+   Disable a used hint and announce what it did. The hint count is derived from
+   the solution's visible grapheme length and is restored safely with the round.
 6. On either terminal state, show the complete word, its concise definition,
    and a single positive action: **New word**. In Gurmukhi mode, show the
    curated Romanized spelling directly below the Gurmukhi answer. Also offer
@@ -106,8 +108,9 @@ From top to bottom, the round screen contains these sections:
    letter`, hint confirmation, or the positive terminal message. Use
    `Semantics(liveRegion: true)` where supported; do not rely on a transient
    SnackBar as the only feedback.
-7. **Top status actions:** keep **Hint** beside the heart counter, with `1` or
-   `2` remaining, followed by a compact open/close keyboard icon. Both stay
+7. **Top status actions:** keep **Hint** beside the heart counter, with the
+   adaptive number of hints remaining, followed by a compact open/close
+   keyboard icon. Both stay
    reachable without consuming separate rows. Hide or disable them after
    completion while keeping the result card visible.
 8. **Letter keyboard:** the language-specific keyboard described below. It is
@@ -237,7 +240,8 @@ From top to bottom, the round screen contains these sections:
       modes and persists/restores its state safely.
 - [ ] Correct/repeated/incorrect letters follow the rules; the adaptive 5/6/7
       miss budget produces the positive learning finish with the answer and definition.
-- [ ] Two non-punitive hints work, announce their effect, and cannot be reused.
+- [ ] Adaptive non-punitive hints provide 0/1/2 hints for 4/5/6-grapheme words,
+      announce their effect, and cannot be reused.
 - [ ] Latin Easy reduced bank plus `Show all letters` and Gurmukhi
       answer-specific whole-grapheme bank are deterministic and Unicode-safe.
 - [ ] No mutable board state contains or damages sacred marks; all decorative

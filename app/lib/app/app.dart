@@ -9,6 +9,7 @@ import '../features/guess_the_word/presentation/guess_the_word_page.dart';
 import '../features/word_search/presentation/word_search_page.dart';
 import '../features/word_search/data/word_search_session_repository.dart';
 import '../features/word_quest/presentation/word_quest_page.dart';
+import '../features/word_quest/domain/word_quest_vocabulary.dart';
 import '../features/word_quest/data/word_quest_session_repository.dart';
 import '../features/game_library/domain/game_launch_options.dart';
 import '../features/dictionary/presentation/dictionary_page.dart';
@@ -65,6 +66,7 @@ class SikhiWordGamesApp extends StatefulWidget {
 class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
   late AppSettings _settings;
   late final GoRouter _router;
+  Future<WordQuestVocabulary>? _wordQuestVocabularyFuture;
 
   @override
   void initState() {
@@ -123,6 +125,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
               builder: (context, state) => WordQuestPage(
                 vocabularyRepository: widget.vocabularyRepository,
                 sessionRepository: widget.wordQuestSessionRepository,
+                vocabularyFuture: _wordQuestVocabulary(),
                 hapticLevel: _settings.hapticLevel,
                 reducedMotion: _settings.reducedMotion,
                 initialMode: _launchOptions(state).language,
@@ -137,6 +140,11 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
       ],
     );
   }
+
+  Future<WordQuestVocabulary> _wordQuestVocabulary() =>
+      _wordQuestVocabularyFuture ??= WordQuestVocabulary.load(
+        widget.vocabularyRepository,
+      );
 
   GameLaunchOptions _launchOptions(GoRouterState state) =>
       state.extra is GameLaunchOptions

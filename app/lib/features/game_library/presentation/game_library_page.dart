@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/app_version.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
 import '../data/game_launch_preferences_repository.dart';
@@ -359,6 +360,13 @@ class GameLibraryPage extends StatelessWidget {
                   Text(
                     'English definition data adapted from Open English '
                     'WordNet 2025, licensed CC BY 4.0.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    appVersionLabel,
+                    key: const ValueKey('app-version'),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
