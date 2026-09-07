@@ -135,12 +135,19 @@ void main() {
   testWidgets('opens Khoj: Word Search and changes its language', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(320, 568);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
       SikhiWordGamesApp(
         settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
         vocabularyRepository: _vocabulary,
       ),
     );
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(ListView), const Offset(0, -420));
+    await tester.pumpAndSettle();
 
     await _startNewGame(tester, cardIndex: 1);
     await tester.pumpAndSettle();
@@ -148,17 +155,23 @@ void main() {
     expect(find.text('English'), findsOneWidget);
     final hint = find.bySemanticsLabel(RegExp(r'Highlight every '));
     expect(hint, findsWidgets);
-    await tester.tap(hint.first);
-    await tester.pump();
+    await _tapVisible(tester, hint.first);
     expect(
       find.bySemanticsLabel(RegExp(r'Turn off hint for ')),
       findsOneWidget,
     );
+    expect(find.bySemanticsLabel(RegExp(r'hint highlighted')), findsWidgets);
     final definition = find.bySemanticsLabel(RegExp(r'Show definition'));
     expect(definition, findsWidgets);
-    await tester.tap(definition.first);
-    await tester.pump();
+    await _tapVisible(tester, definition.first);
     expect(find.byType(SnackBar), findsOneWidget);
+    final definitionSnackBar = tester.widget<SnackBar>(find.byType(SnackBar));
+    expect(definitionSnackBar.duration, gameSnackBarDuration);
+    expect(definitionSnackBar.persist, isFalse);
+    expect(find.text('Dismiss'), findsOneWidget);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Khoj: Word Search menu'));
     await tester.pumpAndSettle();
@@ -180,6 +193,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Gurmukhi'), findsOneWidget);
+    expect(find.text('KIRTAN'), findsOneWidget);
+    expect(find.text('Kee'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 

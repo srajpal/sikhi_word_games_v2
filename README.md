@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games bui
 
 ## App versioning
 
-The current app version is `1.1.0` (build `2`). The version follows
+The current app version is `1.2.0` (build `3`). The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
 release, and the major version for breaking product or data changes. Increment

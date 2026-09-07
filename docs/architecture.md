@@ -75,6 +75,19 @@ lib/
 - Mixed English/Punjabi accepts both English and romanized Punjabi guesses.
 - Gurmukhi remains a separate mode.
 
+## Khoj: Word Search rules
+
+- The persisted puzzle stores displayed words and grid graphemes; definitions
+  and romanized Punjabi are resolved from the loaded offline vocabulary so the
+  existing session schema remains compatible.
+- Each unsolved target has one first-grapheme hint control. Activating it
+  highlights every matching grapheme in the grid, and activating another target
+  replaces the current hint.
+- Target words open their English definition in the shared five-second,
+  dismissible game message. The game menu also links to the full dictionary.
+- Gurmukhi grid tiles use the shared two-line pronunciation label, and Gurmukhi
+  target words show their curated Latin form beneath the word.
+
 ## Security and privacy
 
 - Do not embed credentials, secrets, or private keys.

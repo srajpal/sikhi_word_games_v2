@@ -550,7 +550,9 @@ class _WordSearchBoard extends StatelessWidget {
                             return Semantics(
                               label:
                                   'Row ${point.row + 1}, column ${point.column + 1}: '
-                                  '$grapheme${mode == LanguageMode.gurmukhi ? ', ${romanizeGurmukhiGrapheme(grapheme)}' : ''}',
+                                  '$grapheme${mode == LanguageMode.gurmukhi ? ', ${romanizeGurmukhiGrapheme(grapheme)}' : ''}'
+                                  '${hinted ? ', hint highlighted' : ''}'
+                                  '${found ? ', found' : ''}',
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
@@ -862,7 +864,7 @@ class _WordTargetCard extends StatelessWidget {
                 onTap: found ? null : onHint,
                 radius: 26,
                 child: Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(9),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: hintActive
