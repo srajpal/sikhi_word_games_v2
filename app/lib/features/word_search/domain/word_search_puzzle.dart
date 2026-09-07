@@ -43,6 +43,8 @@ class PlacedWord {
   final GridPoint start;
   final WordSearchDirection direction;
 
+  String get firstGrapheme => word.characters.first;
+
   Map<String, Object> toJson() => {
     'word': word,
     'row': start.row,
@@ -131,6 +133,17 @@ class WordSearchPuzzle {
   }
 
   Set<GridPoint> cellsFor(PlacedWord word) => word.cells().toSet();
+
+  Set<GridPoint> cellsWithGrapheme(String grapheme) {
+    if (grapheme.isEmpty) return const {};
+    final normalized = grapheme.toUpperCase();
+    return {
+      for (var row = 0; row < cells.length; row++)
+        for (var column = 0; column < cells[row].length; column++)
+          if (cells[row][column].toUpperCase() == normalized)
+            GridPoint(row, column),
+    };
+  }
 
   PlacedWord? wordForSelection(List<GridPoint> selection) {
     for (final word in words) {

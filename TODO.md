@@ -141,6 +141,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 
 - [ ] Define the reusable game-module contract.
 - [x] Design and implement Khoj: Word Search using the full playable vocabulary, language modes, randomized grids, and drag selection.
+- [x] Add Khoj compass styling, dictionary access, definition feedback, grapheme hints, and Gurmukhi pronunciation labels.
 - [x] Build Chardi Kala: Word Quest as the kid-friendly themed alternative to Hangman.
   - [x] Implement Unicode-safe letter guessing, try tokens, hints, and win/loss states.
   - [x] Select age-appropriate words from every existing language mode.

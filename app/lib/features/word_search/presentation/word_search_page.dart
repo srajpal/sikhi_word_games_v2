@@ -6,14 +6,16 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/language/gurmukhi_romanization.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
+import '../../../core/widgets/gurmukhi_key_label.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../guess_the_word/domain/word_pool.dart';
 import '../domain/word_search_puzzle.dart';
 import '../data/word_search_session_repository.dart';
 
-enum _WordSearchAction { newPuzzle, language, help }
+enum _WordSearchAction { newPuzzle, language, help, dictionary }
 
 class WordSearchPage extends StatefulWidget {
   const WordSearchPage({
@@ -45,6 +47,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
   final Set<String> _foundWords = {};
   GridPoint? _dragStart;
   List<GridPoint> _selection = const [];
+  String? _activeHintWord;
   String? _error;
 
   static const _latinFiller = [
@@ -118,6 +121,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
             _foundWords
               ..clear()
               ..addAll(restored.foundWords);
+            _activeHintWord = null;
             _error = null;
           });
           return;
@@ -164,6 +168,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
         _foundWords.clear();
         _dragStart = null;
         _selection = const [];
+        _activeHintWord = null;
         _error = null;
       });
       widget.sessionRepository.save(
@@ -206,6 +211,20 @@ class _WordSearchPageState extends State<WordSearchPage> {
         LanguageMode.gurmukhi => entry.language == VocabularyLanguage.panjabi,
         LanguageMode.mixedLatin => true,
       };
+
+  VocabularyEntry? _entryForWord(String word) {
+    final entries = _entries;
+    if (entries == null) return null;
+    final normalized = word.toUpperCase();
+    for (final entry in entries) {
+      if (!_supportsMode(entry, _mode)) continue;
+      final spelling = WordPool.spelling(entry, _mode);
+      if (spelling != null && spelling.toUpperCase() == normalized) {
+        return entry;
+      }
+    }
+    return null;
+  }
 
   Future<void> _chooseLanguage() async {
     final mode = await showModalBottomSheet<LanguageMode>(
@@ -272,6 +291,9 @@ class _WordSearchPageState extends State<WordSearchPage> {
       _dragStart = null;
       _selection = const [];
       if (word != null) _foundWords.add(word.word);
+      if (word != null && _activeHintWord == word.word) {
+        _activeHintWord = null;
+      }
     });
     if (word == null) return;
     final complete = _foundWords.length == puzzle.words.length;
@@ -289,6 +311,23 @@ class _WordSearchPageState extends State<WordSearchPage> {
     showGameSnackBar(
       context,
       complete ? 'Puzzle complete — great searching!' : 'Found ${word.word}',
+    );
+  }
+
+  void _showDefinition(PlacedWord word) {
+    final entry = _entryForWord(word.word);
+    showGameSnackBar(
+      context,
+      entry == null
+          ? 'Definition unavailable for ${word.word}'
+          : '${word.word}: ${entry.englishDefinition}',
+    );
+  }
+
+  void _activateHint(PlacedWord word) {
+    if (_foundWords.contains(word.word)) return;
+    setState(
+      () => _activeHintWord = _activeHintWord == word.word ? null : word.word,
     );
   }
 
@@ -329,6 +368,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
               _WordSearchAction.newPuzzle => _newPuzzle(),
               _WordSearchAction.language => _chooseLanguage(),
               _WordSearchAction.help => _showHelp(),
+              _WordSearchAction.dictionary => context.push('/dictionary'),
             },
             itemBuilder: (context) => const [
               PopupMenuItem(
@@ -352,6 +392,13 @@ class _WordSearchPageState extends State<WordSearchPage> {
                   title: Text('How to play'),
                 ),
               ),
+              PopupMenuItem(
+                value: _WordSearchAction.dictionary,
+                child: ListTile(
+                  leading: Icon(Icons.menu_book_outlined),
+                  title: Text('Dictionary'),
+                ),
+              ),
             ],
           ),
         ],
@@ -372,9 +419,13 @@ class _WordSearchPageState extends State<WordSearchPage> {
                   mode: _mode,
                   foundWords: _foundWords,
                   selection: _selection,
+                  activeHintWord: _activeHintWord,
+                  entryForWord: _entryForWord,
                   onStartSelection: _startSelection,
                   onExtendSelection: _extendSelection,
                   onCompleteSelection: _completeSelection,
+                  onActivateHint: _activateHint,
+                  onWordTap: _showDefinition,
                   onNewPuzzle: _newPuzzle,
                 ),
         ),
@@ -389,9 +440,13 @@ class _WordSearchBoard extends StatelessWidget {
     required this.mode,
     required this.foundWords,
     required this.selection,
+    required this.activeHintWord,
+    required this.entryForWord,
     required this.onStartSelection,
     required this.onExtendSelection,
     required this.onCompleteSelection,
+    required this.onActivateHint,
+    required this.onWordTap,
     required this.onNewPuzzle,
   });
 
@@ -399,9 +454,13 @@ class _WordSearchBoard extends StatelessWidget {
   final LanguageMode mode;
   final Set<String> foundWords;
   final List<GridPoint> selection;
+  final String? activeHintWord;
+  final VocabularyEntry? Function(String word) entryForWord;
   final ValueChanged<GridPoint> onStartSelection;
   final ValueChanged<GridPoint> onExtendSelection;
   final VoidCallback onCompleteSelection;
+  final ValueChanged<PlacedWord> onActivateHint;
+  final ValueChanged<PlacedWord> onWordTap;
   final VoidCallback onNewPuzzle;
 
   GridPoint _pointFor(Offset position, Size size) {
@@ -423,241 +482,424 @@ class _WordSearchBoard extends StatelessWidget {
         if (foundWords.contains(word.word)) ...puzzle.cellsFor(word),
     };
     final activeCells = selection.toSet();
+    final hintedCells = activeHintWord == null
+        ? const <GridPoint>{}
+        : puzzle.cellsWithGrapheme(activeHintWord!.characters.first);
     final complete = foundWords.length == puzzle.words.length;
-    return LayoutBuilder(
-      builder: (context, constraints) => Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 11,
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          theme.colorScheme.primary,
-                          theme.colorScheme.secondary,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.colorScheme.primary.withValues(
-                            alpha: .28,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Column(
+            children: [
+              _KhojHeader(
+                mode: mode,
+                foundCount: foundWords.length,
+                totalCount: puzzle.words.length,
+              ),
+              const SizedBox(height: 14),
+              GamePanel(
+                padding: const EdgeInsets.all(12),
+                child: LayoutBuilder(
+                  builder: (context, boardConstraints) {
+                    final dimension = math.min(
+                      boardConstraints.maxWidth,
+                      620.0,
+                    );
+                    return SizedBox.square(
+                      dimension: dimension,
+                      child: GestureDetector(
+                        onPanStart: (details) => onStartSelection(
+                          _pointFor(
+                            details.localPosition,
+                            Size.square(dimension),
                           ),
-                          blurRadius: 12,
-                          offset: const Offset(0, 5),
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      mode.label,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onPrimary,
-                        fontWeight: FontWeight.w800,
+                        onPanUpdate: (details) => onExtendSelection(
+                          _pointFor(
+                            details.localPosition,
+                            Size.square(dimension),
+                          ),
+                        ),
+                        onPanEnd: (_) => onCompleteSelection(),
+                        onPanCancel: onCompleteSelection,
+                        child: GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: puzzle.size,
+                                mainAxisSpacing: 3,
+                                crossAxisSpacing: 3,
+                              ),
+                          itemCount: puzzle.size * puzzle.size,
+                          itemBuilder: (context, index) {
+                            final point = GridPoint(
+                              index ~/ puzzle.size,
+                              index % puzzle.size,
+                            );
+                            final grapheme =
+                                puzzle.cells[point.row][point.column];
+                            final found = foundCells.contains(point);
+                            final selected = activeCells.contains(point);
+                            final hinted = hintedCells.contains(point);
+                            final emphasized = found || selected || hinted;
+                            final textColor = emphasized
+                                ? Colors.white
+                                : theme.colorScheme.onSurface;
+                            return Semantics(
+                              label:
+                                  'Row ${point.row + 1}, column ${point.column + 1}: '
+                                  '$grapheme${mode == LanguageMode.gurmukhi ? ', ${romanizeGurmukhiGrapheme(grapheme)}' : ''}',
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: found
+                                        ? [
+                                            tokens.correct,
+                                            tokens.correct.withValues(
+                                              alpha: .72,
+                                            ),
+                                          ]
+                                        : selected
+                                        ? [
+                                            theme.colorScheme.primary,
+                                            theme.colorScheme.secondary,
+                                          ]
+                                        : hinted
+                                        ? [
+                                            tokens.present,
+                                            theme.colorScheme.tertiary,
+                                          ]
+                                        : [
+                                            theme
+                                                .colorScheme
+                                                .surfaceContainerHighest,
+                                            theme.colorScheme.surface,
+                                          ],
+                                  ),
+                                  border: Border.all(
+                                    color: found || hinted
+                                        ? (found
+                                              ? tokens.correct
+                                              : tokens.present)
+                                        : tokens.tileBorder,
+                                    width: tokens.tileBorderWidth,
+                                  ),
+                                  borderRadius: tokens.tileRadius,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: emphasized ? .30 : .14,
+                                      ),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Center(
+                                  child: mode == LanguageMode.gurmukhi
+                                      ? GurmukhiKeyLabel(
+                                          grapheme: grapheme,
+                                          color: textColor,
+                                          gurmukhiFontSize: 18,
+                                          romanizationFontSize: 8,
+                                        )
+                                      : FittedBox(
+                                          child: Text(
+                                            grapheme,
+                                            style: theme.textTheme.titleMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w800,
+                                                  color: textColor,
+                                                ),
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'TARGET WORDS',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.4,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  for (final word in puzzle.words)
+                    _WordTargetCard(
+                      key: ValueKey('word-search-target-${word.word}'),
+                      word: word,
+                      entry: entryForWord(word.word),
+                      mode: mode,
+                      found: foundWords.contains(word.word),
+                      hintActive: activeHintWord == word.word,
+                      onHint: () => onActivateHint(word),
+                      onTap: () => onWordTap(word),
+                    ),
+                ],
+              ),
+              if (complete) ...[
+                const SizedBox(height: 16),
+                GameGradientButton(
+                  label: 'Play another puzzle',
+                  icon: const Icon(Icons.refresh),
+                  onPressed: onNewPuzzle,
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _KhojHeader extends StatelessWidget {
+  const _KhojHeader({
+    required this.mode,
+    required this.foundCount,
+    required this.totalCount,
+  });
+
+  final LanguageMode mode;
+  final int foundCount;
+  final int totalCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final tokens = theme.extension<GameThemeTokens>()!;
+    return GamePanel(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      child: Row(
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [theme.colorScheme.primary, theme.colorScheme.tertiary],
+              ),
+              shape: BoxShape.circle,
+              boxShadow: tokens.elevationShadow,
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(12),
+              child: Icon(Icons.explore_outlined, color: Colors.white),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'KHOJ',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
                   ),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
+                ),
+                Text(
+                  mode.label,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: theme.colorScheme.onSurface,
                   ),
-                  child: Text(
-                    '${foundWords.length}/${puzzle.words.length} found',
-                    style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+                Text(
+                  'follow the compass',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
             ),
           ),
-          Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 620),
-                child: GamePanel(
-                  padding: const EdgeInsets.all(12),
+          const SizedBox(width: 8),
+          GameStatusPill(
+            icon: Icons.flag_outlined,
+            child: Text('$foundCount/$totalCount'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WordTargetCard extends StatelessWidget {
+  const _WordTargetCard({
+    required this.word,
+    required this.entry,
+    required this.mode,
+    required this.found,
+    required this.hintActive,
+    required this.onHint,
+    required this.onTap,
+    super.key,
+  });
+
+  final PlacedWord word;
+  final VocabularyEntry? entry;
+  final LanguageMode mode;
+  final bool found;
+  final bool hintActive;
+  final VoidCallback onHint;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final tokens = theme.extension<GameThemeTokens>()!;
+    final firstGrapheme = word.firstGrapheme;
+    final wordColor = found ? tokens.correct : theme.colorScheme.onSurface;
+    final romanized = mode == LanguageMode.gurmukhi ? entry?.latin : null;
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 145, maxWidth: 260),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: found
+              ? tokens.correct.withValues(alpha: .14)
+              : theme.colorScheme.surface,
+          borderRadius: tokens.tileRadius,
+          border: Border.all(
+            color: hintActive
+                ? tokens.present
+                : theme.colorScheme.outline.withValues(alpha: .35),
+            width: hintActive ? 2 : 1,
+          ),
+          boxShadow: tokens.elevationShadow,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Semantics(
+                button: true,
+                label: found
+                    ? '${word.word}, found. Show definition.'
+                    : '${word.word}. Show definition.',
+                child: InkWell(
+                  key: ValueKey('word-search-definition-${word.word}'),
+                  borderRadius: tokens.tileRadius,
+                  onTap: onTap,
                   child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: LayoutBuilder(
-                      builder: (context, boardConstraints) {
-                        final dimension = math.min(
-                          boardConstraints.maxWidth,
-                          boardConstraints.maxHeight,
-                        );
-                        return SizedBox.square(
-                          dimension: dimension,
-                          child: GestureDetector(
-                            onPanStart: (details) => onStartSelection(
-                              _pointFor(
-                                details.localPosition,
-                                Size.square(dimension),
+                    padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              found ? Icons.check_circle_outline : Icons.search,
+                              size: 18,
+                              color: wordColor,
+                            ),
+                            const SizedBox(width: 7),
+                            Flexible(
+                              child: Text(
+                                word.word,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: wordColor,
+                                  fontWeight: FontWeight.w900,
+                                  decoration: found
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                ),
                               ),
                             ),
-                            onPanUpdate: (details) => onExtendSelection(
-                              _pointFor(
-                                details.localPosition,
-                                Size.square(dimension),
+                          ],
+                        ),
+                        if (romanized != null)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25, top: 2),
+                            child: Text(
+                              romanized,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w700,
                               ),
-                            ),
-                            onPanEnd: (_) => onCompleteSelection(),
-                            onPanCancel: onCompleteSelection,
-                            child: GridView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: puzzle.size,
-                                    mainAxisSpacing: 3,
-                                    crossAxisSpacing: 3,
-                                  ),
-                              itemCount: puzzle.size * puzzle.size,
-                              itemBuilder: (context, index) {
-                                final point = GridPoint(
-                                  index ~/ puzzle.size,
-                                  index % puzzle.size,
-                                );
-                                final found = foundCells.contains(point);
-                                final selected = activeCells.contains(point);
-                                return Semantics(
-                                  label:
-                                      'Row ${point.row + 1}, column ${point.column + 1}: '
-                                      '${puzzle.cells[point.row][point.column]}',
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: found
-                                            ? [
-                                                tokens.correct,
-                                                tokens.correct.withValues(
-                                                  alpha: .72,
-                                                ),
-                                              ]
-                                            : selected
-                                            ? [
-                                                theme.colorScheme.primary,
-                                                theme.colorScheme.secondary,
-                                              ]
-                                            : [
-                                                theme
-                                                    .colorScheme
-                                                    .surfaceContainerHighest,
-                                                theme.colorScheme.surface,
-                                              ],
-                                      ),
-                                      border: Border.all(
-                                        color: found
-                                            ? tokens.correct
-                                            : tokens.tileBorder,
-                                        width: tokens.tileBorderWidth,
-                                      ),
-                                      borderRadius: tokens.tileRadius,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withValues(
-                                            alpha: found || selected
-                                                ? .30
-                                                : .14,
-                                          ),
-                                          blurRadius: 4,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: FittedBox(
-                                        child: Text(
-                                          puzzle.cells[point.row][point.column],
-                                          style: theme.textTheme.titleMedium
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w800,
-                                                color: found || selected
-                                                    ? Colors.white
-                                                    : theme
-                                                          .colorScheme
-                                                          .onSurface,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
                             ),
                           ),
-                        );
-                      },
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
-            child: Column(
-              children: [
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final word in puzzle.words)
-                      Chip(
-                        elevation: 3,
-                        shadowColor: Colors.black45,
-                        backgroundColor: foundWords.contains(word.word)
-                            ? tokens.correct.withValues(alpha: .18)
-                            : theme.colorScheme.surface,
-                        avatar: Icon(
-                          foundWords.contains(word.word)
-                              ? Icons.check_circle
-                              : Icons.search,
-                          size: 18,
-                        ),
-                        label: Text(
-                          word.word,
-                          style: TextStyle(
-                            decoration: foundWords.contains(word.word)
-                                ? TextDecoration.lineThrough
-                                : null,
-                          ),
-                        ),
+            Semantics(
+              button: true,
+              enabled: !found,
+              label: found
+                  ? 'Hint already solved for ${word.word}'
+                  : hintActive
+                  ? 'Turn off hint for ${word.word}'
+                  : 'Highlight every $firstGrapheme in ${word.word}',
+              child: InkResponse(
+                key: ValueKey('word-search-hint-${word.word}'),
+                onTap: found ? null : onHint,
+                radius: 26,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: hintActive
+                          ? tokens.present
+                          : theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: Center(
+                        child: mode == LanguageMode.gurmukhi
+                            ? GurmukhiKeyLabel(
+                                grapheme: firstGrapheme,
+                                color: hintActive
+                                    ? Colors.white
+                                    : theme.colorScheme.onSurface,
+                                gurmukhiFontSize: 15,
+                                romanizationFontSize: 7,
+                              )
+                            : Text(
+                                firstGrapheme,
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  color: hintActive
+                                      ? Colors.white
+                                      : theme.colorScheme.onSurface,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
                       ),
-                  ],
-                ),
-                if (complete) ...[
-                  const SizedBox(height: 12),
-                  FilledButton.icon(
-                    onPressed: onNewPuzzle,
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Play another puzzle'),
+                    ),
                   ),
-                ],
-              ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -146,6 +146,29 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Khoj: Word Search'), findsOneWidget);
     expect(find.text('English'), findsOneWidget);
+    final hint = find.bySemanticsLabel(RegExp(r'Highlight every '));
+    expect(hint, findsWidgets);
+    await tester.tap(hint.first);
+    await tester.pump();
+    expect(
+      find.bySemanticsLabel(RegExp(r'Turn off hint for ')),
+      findsOneWidget,
+    );
+    final definition = find.bySemanticsLabel(RegExp(r'Show definition'));
+    expect(definition, findsWidgets);
+    await tester.tap(definition.first);
+    await tester.pump();
+    expect(find.byType(SnackBar), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Khoj: Word Search menu'));
+    await tester.pumpAndSettle();
+    expect(find.text('Dictionary'), findsOneWidget);
+    await tester.tap(find.text('Dictionary'));
+    await tester.pumpAndSettle();
+    expect(find.text('Dictionary'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('Khoj: Word Search'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Khoj: Word Search menu'));
     await tester.pumpAndSettle();
