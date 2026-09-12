@@ -105,7 +105,12 @@ A new tab loaded the library, restored Bujho, accepted a guess, generated a
 Gurmukhi Khoj puzzle with local fonts, and completed Word Quest. This establishes
 local Chromium cache behavior, not storage permission in the actual itch.io iframe.
 
-The release Chrome integration target compiled locally but stalled before its
-test handshake. CI includes a matching Chrome/ChromeDriver run; until that run
-succeeds, do not label browser integration passed. Physical mobile, screen-reader,
-Safari/Firefox and actual itch.io draft checks remain open in TODO.md.
+Hosted release browser integration passed in [run 34671765499](https://github.com/srajpal/sikhi_word_games_v2/actions/runs/34671765499)
+on commit 8492ec5, alongside analysis, content audits, unit/widget tests, web build,
+and Windows visual tests. The harness uses `-d web-server` and the exact browser
+and driver paths from setup-chrome. Selecting `-d chrome` stalled this toolchain;
+letting ChromeDriver pick the runner's preinstalled browser caused a version
+mismatch. The integration step has a five-minute timeout.
+
+Physical mobile, screen-reader, Safari/Firefox and actual itch.io draft checks
+remain open in TODO.md.

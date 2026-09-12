@@ -22,7 +22,10 @@ their original version and are superseded by this candidate's final checks.
   ZIP: 16,905,406 bytes, 51 files, 60,578,513 bytes expanded.
   SHA-256: 7bb2edd756988fd289e4ee79d29d3dadd0732f9adc0eef151c6a12f0f3993e87.
   See reports/release/package_audit.json and browser_qa.json.
+- [x] Pass hosted browser integration and Windows visual checks on commit 8492ec5.
 - [ ] Confirm the uploaded itch.io draft, real mobile performance and accessibility.
+- [ ] Expand the seven-entry four-letter Romanized Punjabi answer pool with
+  sourced, reviewed definitions to reduce repetition.
 
 ## Toolchain and repository
 
@@ -245,9 +248,10 @@ source review, and target-browser checks still gate public distribution.
 - [x] Add original cover art and icons, controls/known-issues page copy, and a
   feedback route with clipboard-failure handling.
 - [x] Capture packaged game screenshots in reports/release/.
-- [ ] Pass browser integration in CI. Local Chrome release compilation succeeded
-  but the test handshake stalled; this is not a passing integration run.
-  The in-memory fixture also cannot establish real browser storage.
+- [x] Pass browser integration in CI using the documented web-server target and
+  explicitly matched Chrome/ChromeDriver paths. Run 34671765499 passed the
+  preferences and interrupted-game flow on release web code. The in-memory
+  fixture remains separate from the manual real-browser storage checks.
 - [x] Add 12 deterministic theme goldens and Windows CI comparisons.
 - [ ] Complete representative screen-reader and physical-device haptic checks.
 

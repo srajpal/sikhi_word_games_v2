@@ -27,9 +27,14 @@
     "Firefox and Safari",
     "screen reader and haptics",
     "cold startup on modest phone",
-    "browser integration CI",
     "semantic and family-suitability review"
   ],
   "finalArchiveOfflineShellVerified": true,
-  "finalArchiveSha256": "7bb2edd756988fd289e4ee79d29d3dadd0732f9adc0eef151c6a12f0f3993e87"
+  "finalArchiveSha256": "7bb2edd756988fd289e4ee79d29d3dadd0732f9adc0eef151c6a12f0f3993e87",
+  "hostedIntegration": {
+    "result": "passed",
+    "commit": "8492ec5",
+    "run": "https://github.com/srajpal/sikhi_word_games_v2/actions/runs/34671765499",
+    "coverage": "in-memory preferences and interrupted Bujho restoration on release web build"
+  }
 }
