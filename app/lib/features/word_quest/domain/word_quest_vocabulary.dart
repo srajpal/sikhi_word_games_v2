@@ -108,6 +108,7 @@ class WordQuestVocabulary {
     for (final entry in _entries) {
       if (!entry.acceptedGuess ||
           !entry.solutionEligible ||
+          !entry.hasDistributableDefinition ||
           !_supports(entry, mode)) {
         continue;
       }
@@ -115,7 +116,7 @@ class WordQuestVocabulary {
       if (spelling == null || spelling.isEmpty) continue;
       if (WordQuestDefinitionQuality.usableClue(
             answer: spelling,
-            clue: entry.englishDefinition,
+            clue: entry.displayDefinition,
           ) ==
           null) {
         continue;
@@ -136,7 +137,7 @@ class WordQuestVocabulary {
                 spelling: _visibleSpelling(entry, mode),
                 definitionHint: WordQuestDefinitionQuality.usableClue(
                   answer: _spelling(entry, mode)!,
-                  clue: entry.englishDefinition,
+                  clue: entry.displayDefinition,
                 )!,
                 categoryHint: _categoryFor(entry),
                 source: entry.source,

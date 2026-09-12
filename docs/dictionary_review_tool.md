@@ -13,6 +13,12 @@ dart run tool/dictionary_review_server.dart
 
 Open `http://127.0.0.1:8787/`. An optional first argument changes the port.
 
+The server accepts editorial writes only as JSON from its own loopback origin
+on the active port. Requests from other origins, requests without an Origin
+header, and form-compatible content types are rejected before the decision
+store is read or changed. Keep the tool bound to loopback and do not expose it
+through a proxy or port-forwarding service.
+
 The interface reads all generated vocabulary and writes review decisions to a
 local decision store. It supports:
 

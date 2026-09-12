@@ -207,7 +207,7 @@ class _KeyboardSurface extends StatelessWidget {
         ),
         boxShadow: enabled
             ? [
-                ...tokens.elevationShadow,
+                ...tokens.tileShadow,
                 const BoxShadow(
                   color: Color(0x332D3B55),
                   blurRadius: 0,

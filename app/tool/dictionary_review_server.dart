@@ -55,6 +55,7 @@ Future<void> _handleRequest(
     return;
   }
   if (request.method == 'POST' && path == '/api/decision') {
+    if (!_acceptWriteRequest(request)) return;
     final body = await utf8.decoder.bind(request).join();
     final update = jsonDecode(body) as Map<String, Object?>;
     store.update(update);
@@ -62,6 +63,7 @@ Future<void> _handleRequest(
     return;
   }
   if (request.method == 'POST' && path == '/api/bulk') {
+    if (!_acceptWriteRequest(request)) return;
     final body = await utf8.decoder.bind(request).join();
     final document = jsonDecode(body) as Map<String, Object?>;
     final updates = (document['entries']! as List<Object?>)
@@ -99,6 +101,41 @@ Future<void> _handleRequest(
   };
   request.response.write(file.readAsStringSync());
   await request.response.close();
+}
+
+bool _acceptWriteRequest(HttpRequest request) {
+  final status = dictionaryReviewWriteRejection(
+    contentType: request.headers.contentType?.mimeType,
+    origin: request.headers.value('origin'),
+    serverPort: request.connectionInfo?.localPort ?? -1,
+  );
+  if (status == null) return true;
+  _json(request.response, status, {
+    'error': status == HttpStatus.unsupportedMediaType
+        ? 'Write requests must use application/json.'
+        : 'Write requests must come from this review tool.',
+  });
+  return false;
+}
+
+/// Returns an HTTP error status when a write request is not same-origin JSON.
+int? dictionaryReviewWriteRejection({
+  required String? contentType,
+  required String? origin,
+  required int serverPort,
+}) {
+  if (contentType?.toLowerCase() != ContentType.json.mimeType) {
+    return HttpStatus.unsupportedMediaType;
+  }
+  final parsedOrigin = origin == null ? null : Uri.tryParse(origin);
+  if (parsedOrigin == null ||
+      !parsedOrigin.hasScheme ||
+      parsedOrigin.scheme != 'http' ||
+      !const {'127.0.0.1', 'localhost'}.contains(parsedOrigin.host) ||
+      parsedOrigin.port != serverPort) {
+    return HttpStatus.forbidden;
+  }
+  return null;
 }
 
 void _json(HttpResponse response, int status, Object value) {
@@ -298,9 +335,10 @@ void _appendNativeGurmukhiCandidates(
   );
   if (!reportFile.existsSync()) return;
 
-  final document = jsonDecode(reportFile.readAsStringSync())
-      as Map<String, Object?>;
-  final nativeCandidates = (document['candidates'] as List<Object?>?) ?? const [];
+  final document =
+      jsonDecode(reportFile.readAsStringSync()) as Map<String, Object?>;
+  final nativeCandidates =
+      (document['candidates'] as List<Object?>?) ?? const [];
   final existingIds = candidates
       .map((candidate) => candidate['internalId'])
       .whereType<String>()
@@ -338,8 +376,8 @@ void _appendNativeGurmukhiCandidates(
     final recommendation = score >= 110
         ? 'high_priority_review'
         : score >= 95
-            ? 'standard_review'
-            : 'specialist_review';
+        ? 'standard_review'
+        : 'specialist_review';
     candidates.add({
       'rank': candidates.length + 1,
       // Keep a searchable ASCII value when available; the visible value is

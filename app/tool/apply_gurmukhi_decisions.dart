@@ -29,9 +29,12 @@ Future<void> main() async {
     throw StateError('Missing supplemental entries: ${supplementalFile.path}');
   }
 
-  final report = jsonDecode(reportFile.readAsStringSync()) as Map<String, dynamic>;
-  final decisions = jsonDecode(decisionsFile.readAsStringSync()) as Map<String, dynamic>;
-  final supplemental = jsonDecode(supplementalFile.readAsStringSync()) as Map<String, dynamic>;
+  final report =
+      jsonDecode(reportFile.readAsStringSync()) as Map<String, dynamic>;
+  final decisions =
+      jsonDecode(decisionsFile.readAsStringSync()) as Map<String, dynamic>;
+  final supplemental =
+      jsonDecode(supplementalFile.readAsStringSync()) as Map<String, dynamic>;
   final candidates = (report['candidates'] as List<dynamic>? ?? const []);
   final decisionEntries = (decisions['entries'] as List<dynamic>? ?? const []);
   final entries = (supplemental['entries'] as List<dynamic>? ?? const [])
@@ -50,7 +53,9 @@ Future<void> main() async {
   final decisionById = <String, Map<String, dynamic>>{
     for (final raw in decisionEntries)
       if (raw is Map && (raw['id'] ?? raw['internalId']) is String)
-        (raw['id'] ?? raw['internalId']) as String: Map<String, dynamic>.from(raw),
+        (raw['id'] ?? raw['internalId']) as String: Map<String, dynamic>.from(
+          raw,
+        ),
   };
 
   var approved = 0;
@@ -71,24 +76,35 @@ Future<void> main() async {
     final gurmukhi = candidate['gurmukhi'] as String?;
     final romanized = (candidate['romanized'] as String?)?.trim().toUpperCase();
     final sourceDefinition = (candidate['definition'] as String? ?? '').trim();
-    final reviewedDefinition = (decision?['definition'] as String? ?? '').trim();
-    final definition = reviewedDefinition.isNotEmpty ? reviewedDefinition : sourceDefinition;
-    if (gurmukhi == null || romanized == null || romanized.isEmpty ||
-        !RegExp(r'^[A-Z]+$').hasMatch(romanized) || definition.isEmpty) {
+    final reviewedDefinition = (decision?['definition'] as String? ?? '')
+        .trim();
+    final definition = reviewedDefinition.isNotEmpty
+        ? reviewedDefinition
+        : sourceDefinition;
+    if (gurmukhi == null ||
+        romanized == null ||
+        romanized.isEmpty ||
+        !RegExp(r'^[A-Z]+$').hasMatch(romanized) ||
+        definition.isEmpty) {
       skipped++;
       continue;
     }
 
-    if (byId.containsKey(internalId) || bySpelling.containsKey('panjabi:$romanized')) {
+    if (byId.containsKey(internalId) ||
+        bySpelling.containsKey('panjabi:$romanized')) {
       alreadyPresent++;
       continue;
     }
 
     final source = candidate['source'] as Map<String, dynamic>? ?? const {};
     final sourceLabel = StringBuffer('Mahan Kosh multilingual dataset; ')
-      ..write('commit ${report['source'] is Map ? (report['source'] as Map)['commit'] : 'unknown'}');
+      ..write(
+        'commit ${report['source'] is Map ? (report['source'] as Map)['commit'] : 'unknown'}',
+      );
     if (source['volume'] != null || source['page'] != null) {
-      sourceLabel.write('; vol. ${source['volume'] ?? '?'}, p. ${source['page'] ?? '?'}');
+      sourceLabel.write(
+        '; vol. ${source['volume'] ?? '?'}, p. ${source['page'] ?? '?'}',
+      );
     }
 
     final entry = <String, dynamic>{
@@ -96,11 +112,11 @@ Future<void> main() async {
       'language': 'panjabi',
       'latin': romanized,
       'gurmukhi': gurmukhi,
-      'definitions': {'en': [definition], 'pa': []},
-      'lengths': {
-        'latin': romanized.length,
-        'gurmukhi': candidate['length'],
+      'definitions': {
+        'en': [definition],
+        'pa': [],
       },
+      'lengths': {'latin': romanized.length, 'gurmukhi': candidate['length']},
       'acceptedGuess': true,
       'solutionEligible': status == 'approve',
       'reviewStatus': 'editorApproved',
@@ -124,6 +140,8 @@ Future<void> main() async {
   stdout.writeln('Native Gurmukhi decisions applied: $approved');
   stdout.writeln('Already present: $alreadyPresent');
   stdout.writeln('Skipped (missing clean data): $skipped');
-  stdout.writeln('Pending/rejected candidates left untouched: '
-      '${candidates.length - approved - alreadyPresent - skipped}');
+  stdout.writeln(
+    'Pending/rejected candidates left untouched: '
+    '${candidates.length - approved - alreadyPresent - skipped}',
+  );
 }

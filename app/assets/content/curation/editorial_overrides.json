@@ -17304,6 +17304,12 @@
       "reviewStatus": "editorApproved"
     },
     {
+      "id": "english_bozo",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
       "id": "english_brace",
       "englishDefinition": "a support that steadies or strengthens something else",
       "acceptedGuess": true,
@@ -37361,6 +37367,12 @@
       "reviewStatus": "editorApproved"
     },
     {
+      "id": "english_dork",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
       "id": "english_dormer",
       "englishDefinition": "a gabled extension built out from a sloping roof to accommodate a vertical window",
       "acceptedGuess": true,
@@ -55235,7 +55247,7 @@
     },
     {
       "id": "english_give",
-      "englishDefinition": "the elasticity of something that can be stretched and returns to its original length",
+      "englishDefinition": "transfer possession of something concrete or abstract to somebody",
       "acceptedGuess": true,
       "solutionEligible": true,
       "reviewStatus": "machineChecked",
@@ -56698,11 +56710,23 @@
       "source": "Open English WordNet 2025 (CC BY 4.0)"
     },
     {
+      "id": "english_goof",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
       "id": "english_goolde",
       "englishDefinition": "An old English name of some yellow flower, -- the marigold (Calendula), according to Dr. Prior, but in Chaucer perhaps the turnsole.",
       "acceptedGuess": true,
       "solutionEligible": false,
       "reviewStatus": "editorApproved"
+    },
+    {
+      "id": "english_goon",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
     },
     {
       "id": "english_gooroo",
@@ -74890,6 +74914,12 @@
       "reviewStatus": "editorApproved"
     },
     {
+      "id": "english_lech",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
       "id": "english_leche",
       "englishDefinition": "See water buck, under 3d Buck.",
       "acceptedGuess": true,
@@ -79277,7 +79307,7 @@
       "id": "english_lust",
       "englishDefinition": "have a craving, appetite, or great desire for",
       "acceptedGuess": true,
-      "solutionEligible": true,
+      "solutionEligible": false,
       "reviewStatus": "machineChecked",
       "source": "Open English WordNet 2025 (CC BY 4.0)"
     },
@@ -99937,6 +99967,12 @@
       "reviewStatus": "editorApproved"
     },
     {
+      "id": "english_pimp",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
       "id": "english_pimped",
       "englishDefinition": "of Pimp",
       "acceptedGuess": true,
@@ -105526,6 +105562,12 @@
       "solutionEligible": true,
       "reviewStatus": "machineChecked",
       "source": "Open English WordNet 2025 (CC BY 4.0)"
+    },
+    {
+      "id": "english_putz",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
     },
     {
       "id": "english_puzzel",
@@ -130415,9 +130457,9 @@
     },
     {
       "id": "english_stud",
-      "englishDefinition": "a man who is virile and sexually active",
+      "englishDefinition": "an upright in house framing",
       "acceptedGuess": true,
-      "solutionEligible": true,
+      "solutionEligible": false,
       "reviewStatus": "machineChecked",
       "source": "Open English WordNet 2025 (CC BY 4.0)"
     },
@@ -133153,7 +133195,7 @@
     },
     {
       "id": "english_take",
-      "englishDefinition": "the income or profit arising from such transactions as the sale of land or other property",
+      "englishDefinition": "pick out, select, or choose from a number of alternatives",
       "acceptedGuess": true,
       "solutionEligible": true,
       "reviewStatus": "machineChecked",
@@ -141677,6 +141719,12 @@
       "reviewStatus": "editorApproved"
     },
     {
+      "id": "english_twat",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
       "id": "english_tway",
       "englishDefinition": "Two",
       "acceptedGuess": true,
@@ -149366,7 +149414,7 @@
     },
     {
       "id": "english_want",
-      "englishDefinition": "a state of extreme poverty",
+      "englishDefinition": "a specific feeling of desire",
       "acceptedGuess": true,
       "solutionEligible": true,
       "reviewStatus": "machineChecked",
@@ -155755,6 +155803,78 @@
       "reviewStatus": "editorApproved"
     },
     {
+      "id": "gurmukhi_mahan_kosh_1-108-4",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-194-20",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-235-7",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-272-18",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-304-34",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-341-17",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-373-3",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-397-8",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-405-8",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-543-15",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-543-16",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
+      "id": "gurmukhi_mahan_kosh_1-551-18",
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "note": "Release QA exclusion: current sense is insulting, explicit, violent, historical medical advice, or a proper-name narrative. Keep out of random answers pending editorial review; not human approval."
+    },
+    {
       "id": "panjabi_aadat",
       "englishDefinition": "habit",
       "acceptedGuess": true,
@@ -156631,10 +156751,11 @@
     },
     {
       "id": "panjabi_adkar",
-      "englishDefinition": "Corrupted from the Hindi word adrak. Fresh ginger  Adhrak.",
+      "englishDefinition": "ginger",
       "acceptedGuess": true,
-      "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "source": "Legacy definition source unclear; not distributed"
     },
     {
       "id": "panjabi_adli",
@@ -157317,10 +157438,11 @@
     },
     {
       "id": "panjabi_ahsas",
-      "englishDefinition": "realize",
+      "englishDefinition": "a feeling or awareness",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_ahula",
@@ -159018,10 +159140,11 @@
     },
     {
       "id": "panjabi_amrit",
-      "englishDefinition": "Nectar - Holy Water",
+      "englishDefinition": "sacred nectar",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_amriti",
@@ -160684,10 +160807,11 @@
     },
     {
       "id": "panjabi_arpna",
-      "englishDefinition": "(H.). To present aṅ offering, to surrender.",
+      "englishDefinition": "to offer or dedicate",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_arrel",
@@ -161230,10 +161354,11 @@
     },
     {
       "id": "panjabi_asrit",
-      "englishDefinition": "A depend- ant, one that trusts or depends on an- other.",
+      "englishDefinition": "a person who depends on another",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_assa",
@@ -200801,10 +200926,11 @@
     },
     {
       "id": "panjabi_ispat",
-      "englishDefinition": "Steel  As- pAt.",
+      "englishDefinition": "steel",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_isquak",
@@ -200843,10 +200969,11 @@
     },
     {
       "id": "panjabi_itbar",
-      "englishDefinition": "Faith, confidence, credit, reliance, trust.",
+      "englishDefinition": "trust or confidence",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_itbari",
@@ -200997,10 +201124,11 @@
     },
     {
       "id": "panjabi_ixar",
-      "englishDefinition": "coherent",
+      "englishDefinition": "consistent or uniform",
       "acceptedGuess": true,
-      "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "solutionEligible": false,
+      "reviewStatus": "machineChecked",
+      "source": "Legacy definition source unclear; not distributed"
     },
     {
       "id": "panjabi_izzat",
@@ -251026,10 +251154,11 @@
     },
     {
       "id": "panjabi_rupia",
-      "englishDefinition": "rupee",
+      "englishDefinition": "a rupee",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_rupna",
@@ -273244,10 +273373,11 @@
     },
     {
       "id": "panjabi_ustat",
-      "englishDefinition": "Praise, adoration: c. w. karnI.",
+      "englishDefinition": "praise",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_ustut",
@@ -273475,10 +273605,11 @@
     },
     {
       "id": "panjabi_utpad",
-      "englishDefinition": "product",
+      "englishDefinition": "a product",
       "acceptedGuess": true,
       "solutionEligible": true,
-      "reviewStatus": "editorApproved"
+      "reviewStatus": "machineChecked",
+      "source": "Project editorial definition; original text for Sikhi Word Games"
     },
     {
       "id": "panjabi_utpann",

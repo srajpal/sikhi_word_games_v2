@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:sikhi_word_games_v2/app/app.dart';
 import 'package:sikhi_word_games_v2/core/app_version.dart';
@@ -13,6 +14,8 @@ import 'package:sikhi_word_games_v2/features/guess_the_word/data/guess_game_repo
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_repository.dart';
 import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
+import 'package:sikhi_word_games_v2/features/word_search/data/word_search_session_repository.dart';
+import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
   testWidgets('shows the current app version on the home page', (tester) async {
@@ -149,15 +152,33 @@ void main() {
     await tester.drag(find.byType(ListView), const Offset(0, -420));
     await tester.pumpAndSettle();
 
-    await _startNewGame(tester, cardIndex: 1);
+    await _openNewGameOptions(tester, cardIndex: 1);
+    await tester.tap(find.text('English').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('English').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start new game'));
+    await tester.pumpAndSettle();
     await tester.pumpAndSettle();
     expect(find.text('Khoj: Word Search'), findsOneWidget);
-    expect(find.text('English'), findsOneWidget);
-    final hint = find.bySemanticsLabel(RegExp(r'Highlight every '));
+    expect(find.text('KHOJ'), findsNothing);
+    expect(find.text('TARGET WORDS'), findsNothing);
+    final hint = find.bySemanticsLabel(
+      RegExp(r'(hint.*highlight|highlight.*hint)', caseSensitive: false),
+    );
     expect(hint, findsWidgets);
+    expect(
+      tester
+          .getSemantics(hint.first)
+          .getSemanticsData()
+          .hasAction(SemanticsAction.tap),
+      isTrue,
+    );
     await _tapVisible(tester, hint.first);
     expect(
-      find.bySemanticsLabel(RegExp(r'Turn off hint for ')),
+      find.bySemanticsLabel(
+        RegExp(r'turn off hint for ', caseSensitive: false),
+      ),
       findsOneWidget,
     );
     expect(find.bySemanticsLabel(RegExp(r'hint highlighted')), findsWidgets);
@@ -192,9 +213,53 @@ void main() {
     await tester.tap(gurmukhi);
     await tester.pumpAndSettle();
 
-    expect(find.text('Gurmukhi'), findsOneWidget);
     expect(find.text('KIRTAN'), findsOneWidget);
     expect(find.text('Kee'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Khoj compact layout fits a representative phone viewport', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+        home: WordSearchPage(
+          vocabularyRepository: _vocabulary,
+          sessionRepository: WordSearchSessionRepository(MemoryKeyValueStore()),
+          initialMode: LanguageMode.english,
+          initialWordSize: 5,
+          startFresh: true,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('KHOJ'), findsNothing);
+    expect(find.text('TARGET WORDS'), findsNothing);
+    for (final word in ['APPLE', 'GRAPE']) {
+      final wordText = tester.widget<Text>(find.text(word));
+      expect(wordText.maxLines, 1);
+    }
+
+    final verticalScrollables = tester
+        .widgetList<Scrollable>(find.byType(Scrollable))
+        .where(
+          (scrollable) =>
+              scrollable.axisDirection == AxisDirection.down ||
+              scrollable.axisDirection == AxisDirection.up,
+        );
+    for (final scrollable in verticalScrollables) {
+      final position = tester
+          .state<ScrollableState>(find.byWidget(scrollable))
+          .position;
+      expect(position.maxScrollExtent, 0);
+    }
     expect(tester.takeException(), isNull);
   });
 
@@ -922,7 +987,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'english_planet',
@@ -935,7 +1000,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'english_jump',
@@ -948,7 +1013,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'english_grape',
@@ -961,7 +1026,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: false,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'panjabi_kirtan',
@@ -974,6 +1039,6 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
 ]);

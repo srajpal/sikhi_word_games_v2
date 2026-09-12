@@ -1,0 +1,35 @@
+{
+  "version": "1.3.0+5",
+  "browser": "Codex in-app Chromium",
+  "viewport": [
+    1280,
+    720
+  ],
+  "serverHeaders": "Cache-Control: no-store",
+  "offline": [
+    "online cache-ready DOM signal true",
+    "online tab closed",
+    "preview server stopped and direct HTTP request failed",
+    "new tab loaded cached nested URL",
+    "Bujho saved game restored and APPLE guess accepted",
+    "Gurmukhi Khoj puzzle generated and fonts rendered",
+    "Word Quest LOGIC completed using on-screen and physical input"
+  ],
+  "screenshots": [
+    "library-sikhi.png",
+    "bujho-sikhi.png",
+    "khoj-gurmukhi-sikhi.png",
+    "word-quest-sikhi.png"
+  ],
+  "remaining": [
+    "actual itch.io iframe",
+    "physical Android and iOS browsers",
+    "Firefox and Safari",
+    "screen reader and haptics",
+    "cold startup on modest phone",
+    "browser integration CI",
+    "semantic and family-suitability review"
+  ],
+  "finalArchiveOfflineShellVerified": true,
+  "finalArchiveSha256": "7bb2edd756988fd289e4ee79d29d3dadd0732f9adc0eef151c6a12f0f3993e87"
+}

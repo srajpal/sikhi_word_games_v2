@@ -21,8 +21,10 @@ Future<void> main() async {
     throw StateError('Native report or decision store is missing.');
   }
 
-  final report = jsonDecode(reportFile.readAsStringSync()) as Map<String, dynamic>;
-  final decisions = jsonDecode(decisionsFile.readAsStringSync()) as Map<String, dynamic>;
+  final report =
+      jsonDecode(reportFile.readAsStringSync()) as Map<String, dynamic>;
+  final decisions =
+      jsonDecode(decisionsFile.readAsStringSync()) as Map<String, dynamic>;
   final candidates = report['candidates'] as List<dynamic>? ?? const [];
   final entries = (decisions['entries'] as List<dynamic>? ?? const [])
       .map((entry) => Map<String, dynamic>.from(entry as Map))
@@ -47,7 +49,8 @@ Future<void> main() async {
       'length': candidate['length'],
       'decision': 'approve',
       'definition': candidate['definition'] ?? '',
-      'notes': 'Bulk approval requested by project owner for native Gurmukhi queue.',
+      'notes':
+          'Bulk approval requested by project owner for native Gurmukhi queue.',
       'updatedAt': DateTime.now().toUtc().toIso8601String(),
     };
     if (index.containsKey(id)) {

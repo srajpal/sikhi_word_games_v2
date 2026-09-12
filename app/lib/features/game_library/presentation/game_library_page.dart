@@ -1,7 +1,10 @@
+import '../../../core/themes/game_artwork.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/app_version.dart';
+import '../../../core/release_feedback.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
 import '../data/game_launch_preferences_repository.dart';
@@ -56,77 +59,79 @@ class GameLibraryPage extends StatelessWidget {
         builder: (context, setSheetState) => SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'New ${_gameName(kind)} game',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  'Choose a language and word size, or let the game pick for you.',
-                ),
-                const SizedBox(height: 18),
-                DropdownButtonFormField<String>(
-                  initialValue: selectedLanguage,
-                  isExpanded: true,
-                  decoration: const InputDecoration(labelText: 'Language'),
-                  items: [
-                    const DropdownMenuItem(
-                      value: 'random',
-                      child: Text('Random language'),
-                    ),
-                    for (final mode in LanguageMode.values)
-                      DropdownMenuItem(
-                        value: mode.name,
-                        child: Text(mode.label),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'New ${_gameName(kind)} game',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Choose a language and word size, or let the game pick for you.',
+                  ),
+                  const SizedBox(height: 18),
+                  DropdownButtonFormField<String>(
+                    initialValue: selectedLanguage,
+                    isExpanded: true,
+                    decoration: const InputDecoration(labelText: 'Language'),
+                    items: [
+                      const DropdownMenuItem(
+                        value: 'random',
+                        child: Text('Random language'),
                       ),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      setSheetState(() => selectedLanguage = value);
-                    }
-                  },
-                ),
-                const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  initialValue: selectedWordSize,
-                  isExpanded: true,
-                  decoration: const InputDecoration(labelText: 'Word size'),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'random',
-                      child: Text('Random size'),
-                    ),
-                    DropdownMenuItem(value: '4', child: Text('4 letters')),
-                    DropdownMenuItem(value: '5', child: Text('5 letters')),
-                    DropdownMenuItem(value: '6', child: Text('6 letters')),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      setSheetState(() => selectedWordSize = value);
-                    }
-                  },
-                ),
-                const SizedBox(height: 20),
-                GameGradientButton(
-                  label: 'Start new game',
-                  icon: const Icon(Icons.play_arrow),
-                  onPressed: () => Navigator.pop(
-                    context,
-                    GameLaunchOptions(
-                      language: selectedLanguage == 'random'
-                          ? null
-                          : LanguageMode.values.byName(selectedLanguage),
-                      wordSize: selectedWordSize == 'random'
-                          ? null
-                          : int.parse(selectedWordSize),
+                      for (final mode in LanguageMode.values)
+                        DropdownMenuItem(
+                          value: mode.name,
+                          child: Text(mode.label),
+                        ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        setSheetState(() => selectedLanguage = value);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    initialValue: selectedWordSize,
+                    isExpanded: true,
+                    decoration: const InputDecoration(labelText: 'Word size'),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'random',
+                        child: Text('Random size'),
+                      ),
+                      DropdownMenuItem(value: '4', child: Text('4 letters')),
+                      DropdownMenuItem(value: '5', child: Text('5 letters')),
+                      DropdownMenuItem(value: '6', child: Text('6 letters')),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        setSheetState(() => selectedWordSize = value);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  GameGradientButton(
+                    label: 'Start new game',
+                    icon: const Icon(Icons.play_arrow),
+                    onPressed: () => Navigator.pop(
+                      context,
+                      GameLaunchOptions(
+                        language: selectedLanguage == 'random'
+                            ? null
+                            : LanguageMode.values.byName(selectedLanguage),
+                        wordSize: selectedWordSize == 'random'
+                            ? null
+                            : int.parse(selectedWordSize),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -277,7 +282,7 @@ class GameLibraryPage extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.displayMedium
                               ?.copyWith(
-                                color: const Color(0xFFE28A16),
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontWeight: FontWeight.w700,
                               ),
                         ),
@@ -295,7 +300,7 @@ class GameLibraryPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'Choose your path • learn, play, and grow',
+                          'Three word games to play at your own pace',
                           style: Theme.of(context).textTheme.labelLarge
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
@@ -341,7 +346,8 @@ class GameLibraryPage extends StatelessWidget {
                   _GameCard(
                     icon: Icons.local_florist_outlined,
                     title: 'Chardi Kala: Word Quest',
-                    description: 'A gentle letter game for kids—uncover a word and help a garden grow.',
+                    description:
+                        'Use a clue and choose letters to find the word.',
                     gameKind: GameKind.wordQuest,
                     hasActiveGame: _hasActiveGame(GameKind.wordQuest),
                     onContinue: () =>
@@ -362,6 +368,25 @@ class GameLibraryPage extends StatelessWidget {
                     'WordNet 2025, licensed CC BY 4.0.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Gurmukhi dictionary data adapted from Mahan Kosh, '
+                    'licensed CC BY 4.0.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Public playtest. Words and meanings are still being reviewed.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton.icon(
+                    onPressed: () => showReleaseFeedback(context),
+                    icon: const Icon(Icons.feedback_outlined),
+                    label: const Text('Share feedback'),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -411,28 +436,37 @@ class _GameCard extends StatelessWidget {
           final details = Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.secondary,
-                    ],
+              if (gameKind != null)
+                GameArtwork(
+                  kind: switch (gameKind!) {
+                    GameKind.guessTheWord => GameArtworkKind.deduction,
+                    GameKind.wordSearch => GameArtworkKind.search,
+                    GameKind.wordQuest => GameArtworkKind.garden,
+                  },
+                )
+              else
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: Theme.of(context)
+                        .extension<GameThemeTokens>()!
+                        .elevationShadow,
                   ),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: Theme.of(context)
-                      .extension<GameThemeTokens>()!
-                      .elevationShadow,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Icon(
-                    icon,
-                    size: 34,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Icon(
+                      icon,
+                      size: 34,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   ),
                 ),
-              ),
               const SizedBox(width: 20),
               Expanded(
                 child: Column(
@@ -457,12 +491,14 @@ class _GameCard extends StatelessWidget {
               GameGradientButton(
                 onPressed: onNewGame,
                 label: 'New game',
+                prominent: !hasActiveGame,
                 icon: const Icon(Icons.play_arrow),
               ),
             if (onNewGameOptions != null)
               GameGradientButton(
                 onPressed: onNewGameOptions,
                 label: 'New game options',
+                prominent: false,
                 icon: const Icon(Icons.tune),
               ),
             if (gameKind == null)
@@ -473,10 +509,31 @@ class _GameCard extends StatelessWidget {
             children: [
               details,
               const SizedBox(height: 18),
-              for (final action in actionButtons) ...[
-                SizedBox(width: double.infinity, child: action),
-                const SizedBox(height: 8),
-              ],
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final wide =
+                      constraints.maxWidth >= 540 &&
+                      MediaQuery.textScalerOf(context).scale(14) <= 21;
+                  return wide
+                      ? Row(
+                          children: [
+                            for (var i = 0; i < actionButtons.length; i++) ...[
+                              if (i > 0) const SizedBox(width: 10),
+                              Expanded(child: actionButtons[i]),
+                            ],
+                          ],
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            for (final action in actionButtons) ...[
+                              action,
+                              const SizedBox(height: 8),
+                            ],
+                          ],
+                        );
+                },
+              ),
             ],
           );
         },

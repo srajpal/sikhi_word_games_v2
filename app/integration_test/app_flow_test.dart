@@ -44,7 +44,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(settings.load().hapticLevel, HapticFeedbackLevel.off);
 
-    await tester.tap(find.text('Play prototype'));
+    await tester.tap(find.text('New game').first);
     await tester.pumpAndSettle();
     for (final letter in 'GRAPE'.characters) {
       await tester.tap(find.byKey(ValueKey('key-$letter')));
@@ -57,7 +57,8 @@ void main() {
     await tester.pump();
     await launch();
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Play prototype'));
+    expect(find.text('Continue game'), findsOneWidget);
+    await tester.tap(find.text('Continue game'));
     await tester.pumpAndSettle();
 
     expect(

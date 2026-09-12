@@ -35,7 +35,9 @@ void main() {
       'GURMAT',
       'the Guru’s teaching',
       gurmukhi: 'ਗੁਰਮਤਿ',
-      source: 'Mahan Kosh multilingual dataset',
+      source:
+          'Mahan Kosh multilingual dataset; commit '
+          'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6; vol. 1, p. 1',
     ),
     _entry(
       'panjabi_no_gurmukhi',
@@ -194,7 +196,7 @@ VocabularyEntry _entry(
   bool acceptedGuess = true,
   bool solutionEligible = true,
   ReviewStatus reviewStatus = ReviewStatus.unreviewed,
-  String source = 'test source',
+  String source = 'Open English WordNet 2025 (CC BY 4.0)',
 }) => VocabularyEntry(
   id: id,
   language: language,

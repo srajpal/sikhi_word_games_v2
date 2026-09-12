@@ -169,7 +169,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
-                                        'Explore the living vocabulary of Sikhi',
+                                        'Find a word and its meaning',
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium,
@@ -283,7 +283,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(entry.englishDefinition),
+              Text(entry.displayDefinition),
             ],
           ),
         );

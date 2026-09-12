@@ -46,7 +46,7 @@ remain pure Dart; this document describes the presentation contract around it.
 
 ## Round rules
 
-1. Select one curated, solution-eligible entry from the active `LanguageMode`
+1. Select one solution-eligible entry from the active `LanguageMode`
    and a 4-, 5-, or 6-grapheme length. A solution must have a short usable
    definition; if the source definition is long or a cross-reference, display a
    shortened/fallback clue rather than exposing the answer.
@@ -191,7 +191,7 @@ From top to bottom, the round screen contains these sections:
 ## Messaging, accessibility, and feedback
 
 - Use encouraging, concrete copy: `Nice find!`, `That letter is not in this
-  word. Try another one.`, `Hint used — the first letter is showing.`, `You
+  word. Try another one.`, `Hint used. A letter is now showing.`, `You
   found the word!`, and `The word is ready to discover. Let’s learn it
   together.` Avoid shame, streak pressure, or “wrong child” language.
 - Show momentary gameplay feedback in an accessible floating message instead
@@ -236,20 +236,29 @@ From top to bottom, the round screen contains these sections:
 
 ## Acceptance checklist
 
-- [ ] Game Library presents `Chardi Kala: Word Quest` with a clear kid-friendly
+- [x] Game Library presents `Chardi Kala: Word Quest` with a clear gameplay
       description and opens the new route.
-- [ ] A round selects a reviewed 4–6 grapheme solution in all four language
+- [x] A round selects a solution-eligible 4–6 grapheme word in all four language
       modes and persists/restores its state safely.
-- [ ] Correct/repeated/incorrect letters follow the rules; the adaptive 5/6/7
+- [x] Correct/repeated/incorrect letters follow the rules; the adaptive 5/6/7
       miss budget produces the positive learning finish with the answer and definition.
-- [ ] Adaptive non-punitive hints provide 0/1/2 hints for 4/5/6-grapheme words,
+- [x] Adaptive non-punitive hints provide 0/1/2 hints for 4/5/6-grapheme words,
       announce their effect, and cannot be reused.
-- [ ] Latin Easy reduced bank plus `Show all letters` and Gurmukhi
+- [x] Latin Easy reduced bank plus `Show all letters` and Gurmukhi
       answer-specific whole-grapheme bank are deterministic and Unicode-safe.
-- [ ] No mutable board state contains or damages sacred marks; all decorative
+- [x] No mutable board state contains or damages sacred marks; all decorative
       marks are static and semantically handled.
 - [ ] Screen sections, focus order, semantic labels, text scaling, haptics,
       Reduce motion, compact height, and 320 px width are verified in widget
       tests and a web/mobile preview.
 - [ ] `flutter analyze`, affected unit/widget tests, and a release web build
       pass before the mode is considered complete.
+
+## Current content qualification
+
+The garden design targets a gentle learning experience, but present solution
+eligibility includes bulk machine decisions. Clue structure and short spelling
+do not prove child suitability or common usage. The 2026-09-12 audit found
+unsuitable and obscure candidates; known exclusions are recorded in curation,
+and a complete common-word/age-suitability review remains open in TODO.md.
+Do not describe the whole vocabulary or Dictionary as verified for children.

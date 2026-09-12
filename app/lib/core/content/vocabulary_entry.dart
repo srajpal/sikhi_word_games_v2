@@ -36,12 +36,30 @@ class VocabularyEntry {
   final ReviewStatus reviewStatus;
   final String source;
 
+  bool get hasDistributableDefinition =>
+      source == 'Open English WordNet 2025 (CC BY 4.0)' ||
+      source.startsWith(
+        'Mahan Kosh multilingual dataset; commit '
+        'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6;',
+      ) ||
+      source ==
+          'Project editorial definition; original text for Sikhi Word Games';
+
+  /// Player-facing form of the source definition. The imported text remains
+  /// unchanged for provenance, review, and serialization.
+  String get displayDefinition => hasDistributableDefinition
+      ? englishDefinition
+            .replaceAll(RegExp(r'\s*[\u2013\u2014]\s*'), ' - ')
+            .replaceAll('\u2026', '...')
+      : 'Definition unavailable for this word.';
+
   VocabularyEntry copyWith({
     String? englishDefinition,
     String? gurmukhi,
     bool? acceptedGuess,
     bool? solutionEligible,
     ReviewStatus? reviewStatus,
+    String? source,
   }) => VocabularyEntry(
     id: id,
     language: language,
@@ -53,7 +71,7 @@ class VocabularyEntry {
     acceptedGuess: acceptedGuess ?? this.acceptedGuess,
     solutionEligible: solutionEligible ?? this.solutionEligible,
     reviewStatus: reviewStatus ?? this.reviewStatus,
-    source: source,
+    source: source ?? this.source,
   );
 
   factory VocabularyEntry.fromJson(Map<String, Object?> json) {
@@ -72,7 +90,16 @@ class VocabularyEntry {
       acceptedGuess: json['acceptedGuess']! as bool,
       solutionEligible: json['solutionEligible']! as bool,
       reviewStatus: ReviewStatus.values.byName(json['reviewStatus']! as String),
-      source: sources.first as String,
+      source: sources.cast<String>().firstWhere(
+        (source) =>
+            source == 'Open English WordNet 2025 (CC BY 4.0)' ||
+            source.startsWith(
+              'Mahan Kosh multilingual dataset; commit '
+              'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6;',
+            ) ||
+            source == 'Project editorial definition; original text for Sikhi Word Games',
+        orElse: () => sources.first as String,
+      ),
     );
   }
 

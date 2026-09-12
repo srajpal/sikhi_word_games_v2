@@ -82,6 +82,7 @@ class GuessGame {
     if (json['schemaVersion'] != 1 ||
         json['solution'] is! String ||
         json['maximumAttempts'] is! int ||
+        (json['maximumAttempts']! as int) <= 0 ||
         json['guesses'] is! List) {
       throw const FormatException('Unsupported or malformed game snapshot.');
     }

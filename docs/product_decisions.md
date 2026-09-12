@@ -9,7 +9,7 @@
 - Do not include accounts, online leaderboards, or a backend dependency.
 - Do not migrate V1 user settings, scores, or statistics.
 - Begin with unlimited random Bujho: Guess the Word games.
-- Add Khoj: Word Search, Hangman or a themed equivalent, and a typing challenge later.
+- The playable collection includes Bujho: Guess the Word, Khoj: Word Search, and Chardi Kala: Word Quest, plus the Dictionary. A typing challenge remains future scope.
 
 ## Language modes
 
@@ -34,13 +34,20 @@
 ## Design policy
 
 - Players choose their active theme.
-- Ship Modern and Sketch themes first.
-- Allow future themes, including a Sikhi-inspired theme, without duplicating game screens.
+- Ship exactly three themes: Modern, Sikhi, and Dark. Sikhi is the default.
+- Keep all three themes in the shared theme system without duplicating game screens.
 - Use semantic design tokens and reusable themed components.
 - Keep game rules independent of visual themes.
+- Modern uses teal actions and light neutral surfaces. Sikhi uses navy actions,
+  warm cream surfaces and restrained geometric decoration. Dark uses deep blue
+  surfaces with pale blue actions. Keep readable sans-serif text in all three.
+- Game previews and garden illustration colors belong in the shared theme
+  components. Sacred marks remain static header decoration, never game pieces.
+- Give Continue game the strongest emphasis when a saved game exists; otherwise
+  emphasize New game. Keep options visually secondary.
 
 ## Hosting
 
 - Cloudflare Pages is the leading candidate for static web previews and hosting.
-- The playable web app may eventually live separately from the marketing website, including possible itch.io distribution.
+- Prepare the playable web app for an itch.io public playtest. Publishing remains a separate release action; see README.md and TODO.md for gates.
 - The final marketing-site relationship is intentionally undecided.

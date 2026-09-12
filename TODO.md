@@ -2,6 +2,28 @@
 
 This is the persistent project checklist. Keep it updated as work progresses; do not remove incomplete scope.
 
+## Current release candidate: 1.3.0+5
+
+The candidate targets an itch.io public playtest, not a completed child-suitability
+review or mobile-store release. Bujho, Khoj, and Word Quest are implemented.
+Typing Challenge remains future scope. Historical validation entries below retain
+their original version and are superseded by this candidate's final checks.
+
+- [x] Keep 46,989 accepted guesses while limiting random answers to 14,892 sourced,
+  standalone records. All four language options support lengths 4, 5, and 6.
+- [x] Distribute 18,279 licensed/original definitions; hide 28,716 unclear legacy
+  definitions without deleting authoring history or claiming human approval.
+- [x] Add original branding, all three shared themes, bundled Latin/Gurmukhi fonts,
+  playtest review notice, and player feedback.
+- [x] Scan all 85 hosted Pub dependencies against OSV: no known advisories returned.
+  This does not cover unknown vulnerabilities or the Flutter/native SDK itself.
+- [x] Complete local package/browser validation: 136 tests pass, including 12
+  theme goldens; analyzer, content gates and cache behavior checks pass.
+  ZIP: 16,905,406 bytes, 51 files, 60,578,513 bytes expanded.
+  SHA-256: 7bb2edd756988fd289e4ee79d29d3dadd0732f9adc0eef151c6a12f0f3993e87.
+  See reports/release/package_audit.json and browser_qa.json.
+- [ ] Confirm the uploaded itch.io draft, real mobile performance and accessibility.
+
 ## Toolchain and repository
 
 - [x] Audit the V1 repository and identify reusable behavior and content.
@@ -18,7 +40,7 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Create the initial V2 architecture document; revise it as implementation evolves.
 - [x] Create the initial vocabulary/content schema; revise it after import findings.
 - [x] Create and maintain the automated testing strategy.
-- [ ] Document release and deployment procedures.
+- [x] Document itch.io packaging, draft validation, and release/rollback steps in README.md.
 
 ## Application foundation
 
@@ -71,8 +93,10 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Document the JSON-versus-SQLite runtime storage decision and review triggers.
 - [ ] Reassess every bundled English definition against an authoritative, legally usable offline source and retain only neutral, standalone game definitions.
 - [x] Define source provenance and an editorial policy for imported definitions, including sensitive-sense selection and review rules.
-- [ ] Triage and replace the existing 1,596 long and 2,016 reference-only definitions before expanding the active answer pools further.
-- [ ] Replace pretty-printed review assets with compact/indexed release assets and measure startup/download performance.
+- [ ] Triage and replace the current 2,180 long and 3,240 reference-definition flags before expanding answer pools; counts refer to the complete raw/effective audit, not unique unsafe words.
+- [ ] Complete a broader family-suitability review of every active solution.
+- [x] Generate compact release assets separately from authoring records.
+- [ ] Measure cold startup and dictionary filtering on a modest physical phone.
 
 ## Bujho: Guess the Word engine
 
@@ -122,29 +146,31 @@ This is the persistent project checklist. Keep it updated as work progresses; do
 - [x] Cover offline statistics totals, streaks, distributions, isolation, persistence, and malformed-data fallback.
 - [x] Add initial content-import and validation tests.
 - [x] Add responsive widget tests for narrow library and fixed-viewport gameplay layouts.
-- [ ] Add Modern, Sikhi, and Dark golden tests.
+- [x] Add Modern, Sikhi, and Dark golden tests (12 Windows visual baselines).
 - [x] Add representative integration flows for preferences and interrupted-game restoration.
 - [x] Establish a clean `flutter analyze` and test-suite baseline; keep both clean.
 
 ## Platform and release work
 
-- [ ] Verify offline loading; the initial release web build compiles successfully.
+- [x] Verify local nested-path offline loading with the preview server stopped.
+- [ ] Verify offline reload in the actual itch.io draft iframe.
 - [ ] Reduce the initial uncompressed web artifact baseline (59.6 MB total; 17.9 MB generated vocabulary).
 - [ ] Verify Android debug and release builds on emulator and physical hardware.
 - [ ] Verify iPhone and iPad builds on macOS and physical hardware.
 - [ ] Configure app identifiers, icons, splash screens, signing, and store metadata.
 - [ ] Add a Cloudflare Pages preview workflow for compiled web assets.
 - [ ] Decide whether the playable web app is separate from the future marketing site.
-- [ ] Consider itch.io distribution after the web build is stable.
+- [x] Choose itch.io web playtest as the next distribution target; publication is blocked by the release gates below.
 
 ## Later game modules
 
 - [ ] Define the reusable game-module contract.
 - [x] Design and implement Khoj: Word Search using the full playable vocabulary, language modes, randomized grids, and drag selection.
 - [x] Add Khoj compass styling, dictionary access, definition feedback, grapheme hints, and Gurmukhi pronunciation labels.
+- [x] Compact Khoj into a fixed viewport with a single-row target strip and clearly labeled hint controls.
 - [x] Build Chardi Kala: Word Quest as the kid-friendly themed alternative to Hangman.
   - [x] Implement Unicode-safe letter guessing, try tokens, hints, and win/loss states.
-  - [x] Select age-appropriate words from every existing language mode.
+  - [ ] Verify age-appropriate common words in every language/length pool. Current filters check clue structure, not age suitability; bulk approval is insufficient.
   - [x] Build the respectful Sikh-inspired word-garden scene and child-friendly keyboard.
   - [x] Add new-game, language/word-size difficulty, help, haptics, and reduced-motion behavior.
   - [x] Keep 4–6 answer tiles on one row and move the hint beside the adaptive heart counter.
@@ -156,3 +182,188 @@ This is the persistent project checklist. Keep it updated as work progresses; do
   - [x] Add domain, widget, responsive-layout, and navigation tests.
 - [ ] Design and implement a timed typing/accuracy game.
 - [ ] Reuse the shared content repository, themes, settings, and statistics.
+
+## itch.io readiness audit (2026-09-12)
+
+**Decision: not ready for unrestricted public release.** All three games are
+implemented and can be exercised in a developer playtest. Content suitability,
+source review, and target-browser checks still gate public distribution.
+
+### Confirmed and addressed
+
+- [x] Pulled `main` with fast-forward-only: already current. Preserved pre-existing
+  local edits, the V1 reference, and local editorial backups.
+- [x] Baseline complete unit/widget suite: 97 passing tests. Added targeted
+  regression coverage during this audit; final rerun results follow below.
+- [x] Built the release web app using local CanvasKit resources.
+- [x] Replaced default Flutter metadata, added startup feedback, bundled a
+  licensed Gurmukhi font, and added third-party notices.
+- [x] Restricted bundled content to three sanitized release JSON files; review
+  queues and backups are excluded. Added a checked, versioned ZIP helper.
+- [x] Fixed stale Bujho Continue visibility for invalid saves and rejected
+  zero/negative saved attempt limits. Updated stale integration launch selectors.
+- [x] Removed em dashes from authored player copy. Definition display uses shared
+  punctuation cleanup while source definitions and serialization remain intact.
+- [x] Reviewed 20 confirmed unsuitable random answers and recorded exclusions in
+  editorial curation, with machine-review status rather than human approval.
+- [x] Corrected stale Modern/Sketch documentation to Modern/Sikhi/Dark, replaced
+  the template app README, and refreshed architecture/testing/content docs.
+- [x] Browser QA at a nested HTTP path: Bujho physical-keyboard guess and
+  real-browser saved-game restoration; full Khoj puzzle completion using forward,
+  reverse, and vertical drag; Word Quest on-screen complete win.
+
+### Release blockers and required follow-up
+
+- [ ] Complete a reviewed public-playtest answer pool. Audit began with 46,995
+  records, 46,989 accepted guesses, and 33,331 solution-eligible records.
+  Machine flags: 3,240 reference definitions, 2,180 long definitions, 16 duplicate
+  spelling flags, eight missing Gurmukhi forms, and two empty definitions.
+  Removing 20 known bad answers is not a safety guarantee for the remaining pool.
+- [ ] Review child suitability separately from dictionary correctness. Random
+  Word Quest produced ATRIP, with a nautical clue, in browser testing. Obscure,
+  insulting, adult, violent, historical-medical, and proper-name senses need
+  decisions. Dictionary content remains broader than random answers. Unclear legacy
+  definitions are now hidden, but sourced senses still need editorial review. Do not advertise a fully child-safe dictionary.
+- [x] Exclude unclear V1-derived definitions from distribution. Release generation
+  clears all their definition arrays and removes them from random answers.
+  OEWN, pinned Mahan Kosh, and original project text remain visible with notices.
+- [ ] Source and review replacements for the 28,716 hidden legacy definitions.
+- [ ] Test the final uploaded itch.io draft iframe on Chromium, Firefox, Safari,
+  Android touch, and iOS Safari: focus, fullscreen, drag, clipboard, reload,
+  and storage with restrictive browser settings. Local preview is partial evidence.
+- [x] Verify keyboard-only Khoj selection and completion in the local browser.
+- [ ] Verify real screen-reader usability across games.
+- [ ] Measure startup/download and dictionary filtering on a modest phone. Compact
+  runtime JSON and a reproducible authoring workflow are implemented; physical
+  mobile performance remains unmeasured.
+- [x] Implement a generated, scoped offline application cache with bounded assets,
+  atomic installation and version-safe activation. Behavior and generator tests pass.
+- [x] Verify packaged offline reload locally: closed online tab, stopped the
+  no-store HTTP server, reopened the nested URL, restored Bujho, generated Gurmukhi
+  Khoj, and completed Word Quest.
+- [ ] Verify offline reload in the uploaded itch.io iframe.
+- [x] Add original cover art and icons, controls/known-issues page copy, and a
+  feedback route with clipboard-failure handling.
+- [x] Capture packaged game screenshots in reports/release/.
+- [ ] Pass browser integration in CI. Local Chrome release compilation succeeded
+  but the test handshake stalled; this is not a passing integration run.
+  The in-memory fixture also cannot establish real browser storage.
+- [x] Add 12 deterministic theme goldens and Windows CI comparisons.
+- [ ] Complete representative screen-reader and physical-device haptic checks.
+
+### Scope and documentation notes
+
+Architecture is suitable for the present offline static collection; no backend,
+account system, or database migration is needed to ship a playtest. Large widget
+files and synchronous vocabulary parsing deserve measured follow-up, not a broad
+rewrite before release. The typing game is future scope and is not a release
+blocker for the three-game collection. Android debug signing and macOS/iOS device
+validation block mobile-store releases, not the itch.io web artifact.
+
+The maintained Markdown documents were checked for current scope, themes,
+validation, and release claims. Generated Markdown under reports/content remains
+historical/reproducible audit output rather than being manually rewritten as
+current editorial approval. The iOS LaunchImage README remains platform template
+instructions, not the project's release documentation.
+
+Spark supplied `reports/content/spark_definition_proposals.json`: 150 triage
+records, 103 marked needs_expert_review and 47 keep; zero replacement definitions
+or source citations. Parent review found false positives and generic reasons,
+including an unsupported circular-definition claim for ABJECT. No proposals were
+applied automatically. This is an unverified queue, not completed cleanup.
+
+### Additional confirmed fixes and evidence
+
+- [x] Fixed 200% text-scale overflows in shared launch options and Khoj hint
+  controls; added a widget check across the three games at 390 by 844.
+- [x] Added the documented Word Quest physical-letter input and same-word retry
+  after a learning finish. Tested the loss/retry/keyboard path.
+- [x] Protected local dictionary-editor writes against cross-site requests and
+  untrusted Host-based origins. Seven focused guard tests pass, including opaque
+  and malformed origins. This tool is excluded from the distributed game.
+- [x] Tested all 12 language/length pools using real assets; measured counts live
+  in docs/content_schema.md. None is empty; adding more words is not the priority.
+- [x] Browser package check: Gurmukhi glyph display, whole-grapheme composition
+  and deletion, and Dictionary keyboard search. Mobile-sized browser override
+  did not change the captured viewport, so mobile evidence remains widget-only.
+- [x] ZIP layout inspected: root index.html, relative base, local Gurmukhi font
+  and license notices, no review decisions/backups; archive within current itch
+  file-count, path-length, per-file, and total-size limits.
+
+Security review found no app accounts, backend calls, or embedded credentials in
+the examined runtime code. This is a scoped source/configuration review and
+regression testing, not a claim of a complete penetration test or an independent
+vulnerability database scan. Remaining browser storage/clipboard restrictions
+must be checked in the actual host. Dependency patch updates can be evaluated
+separately; no dependency upgrade was forced during this audit.
+
+### Final automated gate results
+
+- Full Flutter suite: **110 tests passed** after the fixes.
+- Static analysis: **no issues found**.
+- Formatter check: **77 Dart files checked, zero changes required**.
+- Content audit: **46,995 records, 5,446 editorial flags**; the command succeeds
+  but these flags remain open and are not an editorial approval.
+- Release web packaging succeeds with relative paths and local renderer resources.
+  The audit artifact keeps the existing development version 1.2.1+4. README.md
+  records the next-distribution version recommendation and publication gates.
+
+Final ZIP: `app/dist/sikhi-word-games-web-1.2.1+4.zip`, 18,387,867 bytes
+compressed, 76,287,618 bytes extracted, 50 files. Archive integrity, root index,
+relative base, and exclusion of editorial backups verified. SHA-256:
+`e17952db7deefae66cdb3c2cac6b4f4d3a138c8358181ac7a1fd0411af820ccb`.
+This is a local developer-playtest artifact, not approval to publish.
+
+The final ZIP was extracted and loaded under another nested HTTP path. Visible
+home credits and version matched the package. Word Quest physical-keyboard input
+was verified through a complete SUPER win in that final archive. Earlier browser
+runs also covered Bujho restoration, Khoj completion, Gurmukhi composition/delete,
+and Dictionary search. These are local Chromium-based checks, not uploaded
+itch.io or native mobile sign-off.
+
+## Aesthetic and content follow-up (September 2026)
+
+- [x] Shared theme refresh: teal Modern, navy/cream Sikhi, deep-blue Dark;
+  stronger action hierarchy, decorative game previews, clearer type and softer
+  shadows. Word Quest uses shared surfaces and garden colors throughout.
+- [x] Added full Khoj keyboard play; independently reviewed and fixed mixed
+  pointer/keyboard state, selection focus contrast and clipped target labels.
+- [x] Fixed Word Quest Continue staying on the loading screen after restoring a
+  saved round. Added a regression with an already revealed letter.
+- [x] Applied five checked OEWN definition/sense corrections. LUST and STUD are
+  guess-only. The broader content audit still has 5,446 editorial flags.
+- [x] Added bounded content triage. Only explicitly checked corrections may be
+  written; generic suggestions remain manual-review candidates. A zero pending
+  result covers changed OEWN candidates, not the entire dictionary.
+- [x] Reviewed Spark's proposals as signals; no unsourced suggestions were used
+  as replacement definitions or automatic answer approvals.
+
+The useful next feature work is a familiar-word difficulty option backed by
+reviewed vocabulary labels, a saved-words learning list in Dictionary, and clearer
+progress/statistics across games. These need scoped product work after playtest
+feedback. They are not required to make the current three core loops playable.
+Typing Challenge remains clearly marked Coming later and is not a fourth
+playable mode. Do not add accounts or online leaderboards for the playtest.
+
+The next distributed version should be **1.3.0+5** because this pass adds keyboard
+play and a visible theme refresh. Existing audit archives remain development
+version 1.2.1+4; no tag or publication has been made. The earlier archive hash and
+size above describe the pre-refresh build and are superseded by this pass.
+
+Follow-up automated gates: **117 tests passed**, static analysis found no issues,
+and **82 Dart files** passed formatting without changes. The content audit again
+reported **46,995 records and 5,446 open flags**. Pool counts were remeasured from
+the runtime assets and updated in docs/content_schema.md (33,309 eligible
+records). The checked-in runtime source has no em dashes, en dashes, or Unicode
+ellipsis; displayed imported definitions use the shared punctuation cleanup.
+
+Refreshed developer-playtest ZIP: app/dist/sikhi-word-games-web-1.2.1+4.zip,
+18,186,296 bytes, 50 files. SHA-256:
+`db48ea9e648a9b20f9ca9d4b00556f8409d572d6a10ba802f575f4c5bcc7375a`.
+Release build and archive extraction succeeded. Publishing remains blocked by
+the content/licensing and actual-host validation gates described above.
+
+Final extracted-package browser verification confirmed Word Quest Continue loads
+its saved round, Khoj target words are fully visible, and keyboard selection
+found FENNY. The final local preview is served at
+http://127.0.0.1:8765/aesthetic-verified/ while the development server is running.

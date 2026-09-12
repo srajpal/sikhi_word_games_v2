@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-
 /// Builds a reviewable candidate queue from a native Gurmukhi dictionary.
 ///
 /// This deliberately does not approve candidates. It separates source
@@ -87,7 +86,8 @@ Future<void> main(List<String> arguments) async {
     'policy': {
       'lengthDefinition': 'Unicode extended grapheme clusters',
       'targetLengths': [5, 6],
-      'approval': 'Candidates require editorial review; ranking is not approval.',
+      'approval':
+          'Candidates require editorial review; ranking is not approval.',
     },
     'sourceCounts': {
       'coreEntries': coreEntries.length,
@@ -104,8 +104,9 @@ Future<void> main(List<String> arguments) async {
     'candidates': candidates.map((c) => c.toJson()).toList(),
   };
   const encoder = JsonEncoder.withIndent('  ');
-  File('${reportDirectory.path}${Platform.pathSeparator}gurmukhi_candidates.json')
-      .writeAsStringSync(encoder.convert(output));
+  File(
+    '${reportDirectory.path}${Platform.pathSeparator}gurmukhi_candidates.json',
+  ).writeAsStringSync(encoder.convert(output));
 
   final markdown = StringBuffer()
     ..writeln('# Native Gurmukhi 5/6-Grapheme Candidates')
@@ -117,8 +118,12 @@ Future<void> main(List<String> arguments) async {
     ..writeln()
     ..writeln('- Core entries read: ${coreEntries.length}')
     ..writeln('- Unique candidates: ${candidates.length}')
-    ..writeln('- Five graphemes: ${candidates.where((c) => c.length == 5).length}')
-    ..writeln('- Six graphemes: ${candidates.where((c) => c.length == 6).length}')
+    ..writeln(
+      '- Five graphemes: ${candidates.where((c) => c.length == 5).length}',
+    )
+    ..writeln(
+      '- Six graphemes: ${candidates.where((c) => c.length == 6).length}',
+    )
     ..writeln()
     ..writeln('| Rank | Word | Length | Score | Definition | Flags |')
     ..writeln('| ---: | --- | ---: | ---: | --- | --- |');
@@ -200,9 +205,7 @@ String? _latinFromTransliteration(String? value) {
       .replaceAll('ā', 'a')
       .replaceAll('ī', 'i')
       .replaceAll('ū', 'u');
-  final cleaned = mapped
-      .replaceAll(RegExp(r'[^A-Za-z]'), '')
-      .toUpperCase();
+  final cleaned = mapped.replaceAll(RegExp(r'[^A-Za-z]'), '').toUpperCase();
   return RegExp(r'^[A-Z]{2,24}$').hasMatch(cleaned) ? cleaned : null;
 }
 
@@ -228,8 +231,9 @@ class _Candidate {
   List<String> get flags {
     final result = <String>[];
     final lower = definition.toLowerCase();
-    if (RegExp(r'\b(see|refer|same as|variant|plural|fem(?:inine)?|past tense)\b')
-        .hasMatch(lower)) {
+    if (RegExp(
+      r'\b(see|refer|same as|variant|plural|fem(?:inine)?|past tense)\b',
+    ).hasMatch(lower)) {
       result.add('reference_or_inflection');
     }
     if (RegExp(
@@ -248,8 +252,9 @@ class _Candidate {
     if (definition.length <= 180) value += 8;
     if (definition.length >= 25) value += 5;
     if (latin != null) value += 3;
-    if (RegExp(r'\b(see|refer|same as|variant|plural|fem(?:inine)?|past tense)\b')
-        .hasMatch(lower)) {
+    if (RegExp(
+      r'\b(see|refer|same as|variant|plural|fem(?:inine)?|past tense)\b',
+    ).hasMatch(lower)) {
       value -= 28;
     }
     if (RegExp(
@@ -292,7 +297,9 @@ class _Options {
     String? value(String name) {
       final prefix = '--$name=';
       for (final argument in arguments) {
-        if (argument.startsWith(prefix)) return argument.substring(prefix.length);
+        if (argument.startsWith(prefix)) {
+          return argument.substring(prefix.length);
+        }
       }
       return null;
     }

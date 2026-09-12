@@ -587,7 +587,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                         .titleLarge,
                                   ),
                                   Text(
-                                    _solutionEntry!.englishDefinition,
+                                    _solutionEntry!.displayDefinition,
                                     textAlign: TextAlign.center,
                                     maxLines: compact ? 1 : 2,
                                     overflow: TextOverflow.ellipsis,
@@ -741,7 +741,7 @@ class _HelpRow extends StatelessWidget {
       children: [
         Icon(icon, semanticLabel: label),
         const SizedBox(width: 10),
-        Expanded(child: Text('$label — $description')),
+        Expanded(child: Text('$label: $description')),
       ],
     ),
   );
@@ -955,7 +955,7 @@ class _Tile extends StatelessWidget {
             color: color,
             borderRadius: tokens.tileRadius,
             boxShadow: [
-              ...tokens.elevationShadow,
+              ...tokens.tileShadow,
               if (tokens.sikhiStyle)
                 const BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
             ],
