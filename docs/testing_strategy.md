@@ -6,8 +6,8 @@
   Unicode graphemes, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
-- Themes are Modern, Sikhi, and Dark. Golden image tests remain outstanding;
-  theme unit tests are not visual regression tests.
+- Twelve Windows golden image tests cover Modern, Sikhi, and Dark. They run
+  separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.
 - Release browser checks must cover all three games and Dictionary with real
@@ -89,7 +89,8 @@ controls no longer fit; do not shrink the grid to zero.
 Browser inspection covered the library and all three modes in Modern, Sikhi and
 Dark. Phone-size and 200% text evidence is from Flutter widget tests. Actual
 mobile browsers, screen-reader announcements, and hosted iframe interaction still
-need separate checks. Golden-image coverage remains a follow-up.
+need separate checks. Twelve visual baselines now cover the shared components
+and a representative state in each mode across all three themes.
 
 ## Release candidate 1.3.0+5 evidence
 

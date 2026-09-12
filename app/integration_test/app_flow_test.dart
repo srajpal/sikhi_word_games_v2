@@ -83,7 +83,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'integration-test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'english_grape',
@@ -96,6 +96,6 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: false,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'integration-test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
 ]);
