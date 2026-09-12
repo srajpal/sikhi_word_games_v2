@@ -31,17 +31,19 @@ jobs:
       - run: dart run tool/audit_content.dart
       - run: flutter build web --release --no-web-resources-cdn --suppress-analytics
       - uses: browser-actions/setup-chrome@v2
+        id: chrome
         with:
           chrome-version: stable
           install-chromedriver: true
       - name: Start ChromeDriver
-        run: chromedriver --port=4444 &
+        run: '"${{ steps.chrome.outputs.chromedriver-path }}" --port=4444 &'
       - name: Run browser integration flow
         timeout-minutes: 5
         run: >-
           flutter drive
           --driver=test_driver/integration_test.dart
           --target=integration_test/app_flow_test.dart
+          --chrome-binary="${{ steps.chrome.outputs.chrome-path }}"
           -d web-server
           --headless
           --release
