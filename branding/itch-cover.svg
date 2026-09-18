@@ -15,12 +15,14 @@
   <path d="M339 333C374 335 387 311 377 298C354 300 340 312 339 333Z" fill="#173a67"/>
 </g></g>
 <g font-family="Arial,sans-serif">
-<text x="82" y="125" font-size="26" letter-spacing="5" fill="#e8ad35">THREE WORD GAMES</text>
+<text x="82" y="125" font-size="26" letter-spacing="5" fill="#e8ad35">FIVE WORD AND LETTER GAMES</text>
 <text x="75" y="316" font-size="156" font-weight="700" fill="#fff8e8">Sikhi</text>
 <text x="75" y="475" font-size="140" font-weight="700" fill="#fff8e8">Word</text>
 <text x="75" y="634" font-size="140" font-weight="700" fill="#fff8e8">Games</text>
 <text x="82" y="735" font-size="33" fill="#f7e4bc">Guess words. Find words. Learn meanings.</text>
-<path d="M82 790H1178" stroke="#527393" stroke-width="2"/>
-<text x="82" y="856" font-size="28" fill="#fff8e8">English · Romanized Punjabi · Gurmukhi</text>
-<text x="82" y="925" font-size="23" letter-spacing="2" fill="#e8ad35">BUJHO  /  KHOJ  /  WORD QUEST</text>
+<path d="M82 774H1178" stroke="#527393" stroke-width="2"/>
+<text x="82" y="825" font-size="28" fill="#fff8e8">English · Romanized Punjabi · Gurmukhi</text>
+<text x="82" y="875" font-size="23" letter-spacing="2" fill="#e8ad35">BUJHO / KHOJ / WORD QUEST / JODO / LEARN LETTERS</text>
+<text x="82" y="932" font-size="30" font-weight="700" fill="#fff8e8">Khalsa Game Studio</text>
+<text x="82" y="975" font-size="25" fill="#f7e4bc">khalsagamestudio.com</text>
 </g></svg>

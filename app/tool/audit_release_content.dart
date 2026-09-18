@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:characters/characters.dart';
 
+import 'content/punjabi_quality.dart';
+
 void main() {
   final entries = <Map<String, Object?>>[];
   for (final length in const [4, 5, 6]) {
@@ -18,6 +20,7 @@ void main() {
   var invalidSolutions = 0;
   final ids = <String>{};
   final pools = <String, int>{};
+  final uniquePools = <String, Set<String>>{};
   for (final entry in entries) {
     final id = entry['id']! as String;
     if (!ids.add(id)) throw StateError('Duplicate release ID: $id');
@@ -29,17 +32,19 @@ void main() {
     final definition = englishDefinitions.single as String;
     final sources = (entry['sources']! as List<Object?>).cast<String>();
     final trusted = sources.any(_trustedSource);
-    final allDefinitionText = definitions.values
+    final nonEnglishDefinitionText = definitions.entries
+        .where((entry) => entry.key != 'en')
+        .map((entry) => entry.value)
         .whereType<List<Object?>>()
         .expand((values) => values)
         .whereType<String>();
+    if (nonEnglishDefinitionText.any((text) => text.trim().isNotEmpty)) {
+      throw StateError('$id leaks a non-English definition.');
+    }
     final solution = entry['solutionEligible']! as bool;
     final accepted = entry['acceptedGuess']! as bool;
     if (definition.isEmpty) {
       hidden++;
-      if (allDefinitionText.any((text) => text.trim().isNotEmpty)) {
-        throw StateError('$id leaks a non-English legacy definition.');
-      }
     } else {
       sourced++;
       if (!trusted) {
@@ -61,14 +66,42 @@ void main() {
         lengths['gurmukhi'] != gurmukhi?.characters.length) {
       throw StateError('$id has stale grapheme lengths.');
     }
+    if (language == 'panjabi' && definition.isNotEmpty) {
+      final quality = assessPunjabiQuality(
+        PunjabiQualityCandidate(
+          gurmukhi: gurmukhi ?? '',
+          latin: latin,
+          englishDefinition: definition,
+        ),
+      );
+      if (!quality.isPromotionCandidate) {
+        throw StateError('$id has an unchecked Punjabi definition.');
+      }
+    }
     if (!solution) continue;
-    _add(
+    final latinMode = language == 'english' ? 'english' : 'romanized';
+    addPlayableSpelling(
       pools,
-      '${language == 'english' ? 'english' : 'romanized'}:${latin.characters.length}',
+      uniquePools,
+      mode: latinMode,
+      graphemeLength: latin.characters.length,
+      spelling: latin,
     );
-    _add(pools, 'mixed:${latin.characters.length}');
+    addPlayableSpelling(
+      pools,
+      uniquePools,
+      mode: 'mixed',
+      graphemeLength: latin.characters.length,
+      spelling: latin,
+    );
     if (language == 'panjabi' && gurmukhi != null) {
-      _add(pools, 'gurmukhi:${gurmukhi.characters.length}');
+      addPlayableSpelling(
+        pools,
+        uniquePools,
+        mode: 'gurmukhi',
+        graphemeLength: gurmukhi.characters.length,
+        spelling: gurmukhi,
+      );
     }
   }
   if (invalidSolutions != 0) {
@@ -77,13 +110,16 @@ void main() {
   for (final mode in const ['english', 'romanized', 'mixed', 'gurmukhi']) {
     for (final length in const [4, 5, 6]) {
       final count = pools['$mode:$length'] ?? 0;
-      stdout.writeln('$mode/$length: $count');
-      if (count < 6) throw StateError('$mode/$length has only $count answers.');
+      final unique = uniquePools['$mode:$length']?.length ?? 0;
+      stdout.writeln('$mode/$length: $count records, $unique unique spellings');
+      if (unique < 300) {
+        throw StateError('$mode/$length has only $unique unique answers.');
+      }
     }
   }
   stdout.writeln(
     'Release content: ${entries.length} records, $sourced sourced definitions, '
-    '$hidden hidden legacy definitions, no unsourced solutions.',
+    '$hidden hidden definitions, no unsourced solutions.',
   );
 }
 
@@ -103,3 +139,15 @@ final _referenceOnly = RegExp(
 
 void _add(Map<String, int> counts, String key) =>
     counts.update(key, (value) => value + 1, ifAbsent: () => 1);
+
+void addPlayableSpelling(
+  Map<String, int> rawPools,
+  Map<String, Set<String>> uniquePools, {
+  required String mode,
+  required int graphemeLength,
+  required String spelling,
+}) {
+  final key = '$mode:$graphemeLength';
+  _add(rawPools, key);
+  uniquePools.putIfAbsent(key, () => <String>{}).add(spelling);
+}

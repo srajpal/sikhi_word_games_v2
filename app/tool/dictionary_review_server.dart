@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:characters/characters.dart';
+
+import 'review_punjabi_content.dart' show sourceCommit;
+
 const _defaultPort = 8787;
 
 Future<void> main(List<String> arguments) async {
@@ -58,7 +62,10 @@ Future<void> _handleRequest(
     if (!_acceptWriteRequest(request)) return;
     final body = await utf8.decoder.bind(request).join();
     final update = jsonDecode(body) as Map<String, Object?>;
-    store.update(update);
+    final candidates =
+        (_readCandidates(curationDirectory)['candidates'] as List)
+            .cast<Map<String, Object?>>();
+    store.update(update, candidates);
     _json(request.response, HttpStatus.ok, {'saved': true});
     return;
   }
@@ -68,7 +75,10 @@ Future<void> _handleRequest(
     final document = jsonDecode(body) as Map<String, Object?>;
     final updates = (document['entries']! as List<Object?>)
         .cast<Map<String, Object?>>();
-    store.updateAll(updates);
+    final candidates =
+        (_readCandidates(curationDirectory)['candidates'] as List)
+            .cast<Map<String, Object?>>();
+    store.updateAll(updates, candidates);
     _json(request.response, HttpStatus.ok, {
       'saved': true,
       'count': updates.length,
@@ -186,12 +196,18 @@ class _DecisionStore {
     return result;
   }
 
-  void update(Map<String, Object?> update) => updateAll([update]);
+  void update(
+    Map<String, Object?> update,
+    List<Map<String, Object?>> candidates,
+  ) => updateAll([update], candidates);
 
-  void updateAll(List<Map<String, Object?>> updates) {
+  void updateAll(
+    List<Map<String, Object?>> updates,
+    List<Map<String, Object?>> candidates,
+  ) {
     final entries = read();
     for (final update in updates) {
-      final normalized = _validate(update);
+      final normalized = _validate(update, candidates);
       entries[normalized['id']! as String] = normalized;
     }
     final sorted = entries.values.toList()
@@ -208,7 +224,10 @@ class _DecisionStore {
     );
   }
 
-  Map<String, Object?> _validate(Map<String, Object?> value) {
+  Map<String, Object?> _validate(
+    Map<String, Object?> value,
+    List<Map<String, Object?>> candidates,
+  ) {
     final word = (value['word'] as String?)?.trim().toUpperCase();
     final id = (value['id'] as String?)?.trim();
     final decision = value['decision'] as String?;
@@ -228,7 +247,7 @@ class _DecisionStore {
     if (decision == 'approve' && definition.isEmpty) {
       throw const FormatException('Approved answers require a definition.');
     }
-    return {
+    final normalized = <String, Object?>{
       'word': word,
       'id': id,
       if (value['language'] is String) 'language': value['language'],
@@ -238,7 +257,31 @@ class _DecisionStore {
       'notes': notes,
       'updatedAt': DateTime.now().toUtc().toIso8601String(),
     };
+    return enrichDictionaryReviewDecision(normalized, candidates);
   }
+}
+
+/// Adds provenance known by the local server rather than trusting write-body
+/// metadata supplied by the browser.
+Map<String, Object?> enrichDictionaryReviewDecision(
+  Map<String, Object?> decision,
+  List<Map<String, Object?>> candidates,
+) {
+  final id = decision['id'];
+  final candidate = candidates
+      .where((item) => item['internalId'] == id)
+      .firstOrNull;
+  if (candidate?['sourceCandidate'] != true ||
+      candidate?['sourceId'] is! String) {
+    return decision;
+  }
+  final sourceId = candidate!['sourceId']! as String;
+  return {
+    ...decision,
+    'reviewMethod': 'manual-review-v1',
+    'verificationSource':
+        'Mahan Kosh multilingual dataset; commit $sourceCommit; entry $sourceId',
+  };
 }
 
 Map<String, Object?> _readCandidates(Directory curationDirectory) {
@@ -246,13 +289,29 @@ Map<String, Object?> _readCandidates(Directory curationDirectory) {
     '${curationDirectory.parent.path}${Platform.pathSeparator}generated',
   );
   final candidates = <Map<String, Object?>>[];
+  final overridesFile = File(
+    '${curationDirectory.path}${Platform.pathSeparator}editorial_overrides.json',
+  );
+  final overrides = <String, Map<String, Object?>>{};
+  if (overridesFile.existsSync()) {
+    final document =
+        jsonDecode(overridesFile.readAsStringSync()) as Map<String, Object?>;
+    for (final raw in document['entries']! as List<Object?>) {
+      final override = raw! as Map<String, Object?>;
+      overrides[override['id']! as String] = override;
+    }
+  }
   for (final length in const [4, 5, 6]) {
     final file = File(
       '${generated.path}${Platform.pathSeparator}vocabulary_$length.json',
     );
     final entries = jsonDecode(file.readAsStringSync()) as List<Object?>;
     for (final item in entries) {
-      final entry = item! as Map<String, Object?>;
+      final rawEntry = item! as Map<String, Object?>;
+      final entry = _applyReviewOverride(
+        rawEntry,
+        overrides[rawEntry['id'] as String?],
+      );
       final definitions = entry['definitions']! as Map<String, Object?>;
       final definition =
           ((definitions['en'] as List<Object?>?) ?? const []).firstOrNull
@@ -287,7 +346,11 @@ Map<String, Object?> _readCandidates(Directory curationDirectory) {
                 as Map<String, Object?>)['entries']
             as List<Object?>;
     for (final item in entries) {
-      final entry = item! as Map<String, Object?>;
+      final rawEntry = item! as Map<String, Object?>;
+      final entry = _applyReviewOverride(
+        rawEntry,
+        overrides[rawEntry['id'] as String?],
+      );
       final definitions = entry['definitions']! as Map<String, Object?>;
       final definition =
           ((definitions['en'] as List<Object?>?) ?? const []).firstOrNull
@@ -321,6 +384,36 @@ Map<String, Object?> _readCandidates(Directory curationDirectory) {
   };
 }
 
+Map<String, Object?> _applyReviewOverride(
+  Map<String, Object?> source,
+  Map<String, Object?>? override,
+) {
+  if (override == null) return source;
+  final entry = Map<String, Object?>.from(source);
+  final definitions = Map<String, Object?>.from(
+    entry['definitions']! as Map<String, Object?>,
+  );
+  if (override['englishDefinition'] case final String definition) {
+    definitions['en'] = [definition];
+  }
+  if (override['latin'] case final String latin) entry['latin'] = latin;
+  if (override['gurmukhi'] case final String gurmukhi) {
+    entry['gurmukhi'] = gurmukhi;
+  }
+  for (final field in ['acceptedGuess', 'solutionEligible', 'reviewStatus']) {
+    if (override.containsKey(field)) entry[field] = override[field];
+  }
+  if (override['source'] case final String source) entry['sources'] = [source];
+  final latin = entry['latin']! as String;
+  final gurmukhi = entry['gurmukhi'] as String?;
+  entry['definitions'] = definitions;
+  entry['lengths'] = {
+    'latin': latin.characters.length,
+    'gurmukhi': gurmukhi?.characters.length,
+  };
+  return entry;
+}
+
 void _appendNativeGurmukhiCandidates(
   List<Map<String, Object?>> candidates,
   Directory curationDirectory,
@@ -337,21 +430,10 @@ void _appendNativeGurmukhiCandidates(
 
   final document =
       jsonDecode(reportFile.readAsStringSync()) as Map<String, Object?>;
+  final source = document['source'];
+  if (!isPinnedDictionaryReportSource(source)) return;
   final nativeCandidates =
       (document['candidates'] as List<Object?>?) ?? const [];
-  final existingIds = candidates
-      .map((candidate) => candidate['internalId'])
-      .whereType<String>()
-      .toSet();
-  final existingDisplayWords = candidates
-      .map((candidate) => candidate['displayWord'])
-      .whereType<String>()
-      .toSet();
-  final existingSearchWords = candidates
-      .map((candidate) => candidate['word'])
-      .whereType<String>()
-      .map((word) => word.toUpperCase())
-      .toSet();
   for (final raw in nativeCandidates) {
     final candidate = raw! as Map<String, Object?>;
     final sourceId = candidate['id'] as String?;
@@ -362,12 +444,13 @@ void _appendNativeGurmukhiCandidates(
     if (sourceId == null || gurmukhi == null || length is! int) continue;
 
     final internalId = 'gurmukhi_mahan_kosh_$sourceId';
-    // Once a reviewed candidate has been imported into supplemental entries,
-    // do not show a second copy from the source queue. Display-word matching
-    // also catches pre-existing spellings imported under a different ID.
-    if (existingIds.contains(internalId) ||
-        existingDisplayWords.contains(gurmukhi) ||
-        (romanized != null && existingSearchWords.contains(romanized))) {
+    if (annotateImportedNativeCandidate(
+      candidates: candidates,
+      internalId: internalId,
+      gurmukhi: gurmukhi,
+      sourceId: sourceId,
+      source: source! as Map<String, Object?>,
+    )) {
       continue;
     }
     final score = candidate['score'] is num
@@ -396,8 +479,39 @@ void _appendNativeGurmukhiCandidates(
       'definition': definition,
       'source': document['source'],
       'sourceCandidate': true,
+      'sourceId': sourceId,
     });
   }
+}
+
+bool isPinnedDictionaryReportSource(Object? value) =>
+    value is Map<String, Object?> && value['commit'] == sourceCommit;
+
+bool annotateImportedNativeCandidate({
+  required List<Map<String, Object?>> candidates,
+  required String internalId,
+  required String gurmukhi,
+  required String sourceId,
+  required Map<String, Object?> source,
+}) {
+  var matches = candidates.where(
+    (existing) => existing['internalId'] == internalId,
+  );
+  if (matches.isEmpty) {
+    matches = candidates.where(
+      (existing) =>
+          existing['language'] == 'gurmukhi' &&
+          existing['displayWord'] == gurmukhi,
+    );
+  }
+  if (matches.isEmpty) return false;
+  for (final existing in matches) {
+    existing
+      ..['sourceCandidate'] = true
+      ..['sourceId'] = sourceId
+      ..['source'] = source;
+  }
+  return true;
 }
 
 int _lengthValue(String name) => switch (name) {

@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:characters/characters.dart';
 
+import 'content/punjabi_quality.dart';
+
 /// Builds the only vocabulary files intended for distribution.
 /// Authoring imports and curation records remain unchanged.
 void main(List<String> arguments) {
@@ -13,13 +15,17 @@ void main(List<String> arguments) {
               as List<Object?>)
           .cast<String>()
           .toSet();
-  final overrides = <String, Map<String, Object?>>{
-    for (final item
-        in _read('assets/content/curation/editorial_overrides.json')['entries']!
-            as List<Object?>)
-      (item! as Map<String, Object?>)['id']! as String:
-          item as Map<String, Object?>,
-  };
+  final overrides = <String, Map<String, Object?>>{};
+  for (final item
+      in _read('assets/content/curation/editorial_overrides.json')['entries']!
+          as List<Object?>) {
+    final override = item! as Map<String, Object?>;
+    final id = override['id']! as String;
+    if (overrides.containsKey(id)) {
+      throw FormatException('Duplicate editorial override ID: $id');
+    }
+    overrides[id] = override;
+  }
   final shards = <int, List<Map<String, Object?>>>{1: [], 2: [], 3: []};
   final seen = <String>{};
   for (final shard in shards.keys) {
@@ -29,8 +35,14 @@ void main(List<String> arguments) {
     ) as List<Object?>;
     for (final item in entries) {
       final entry = Map<String, Object?>.from(item! as Map<String, Object?>);
-      shards[shard]!.add(_releaseEntry(entry, overrides, solutionIds));
-      seen.add(entry['id']! as String);
+      ensureUniqueVocabularyId(seen, entry);
+      shards[shard]!.add(
+        buildReleaseEntry(
+          entry,
+          override: overrides[entry['id']],
+          solutionIds: solutionIds,
+        ),
+      );
     }
   }
   final supplemental =
@@ -38,16 +50,19 @@ void main(List<String> arguments) {
           as List<Object?>;
   for (final item in supplemental) {
     final entry = Map<String, Object?>.from(item! as Map<String, Object?>);
-    if (!seen.add(entry['id']! as String)) {
-      throw FormatException('Duplicate vocabulary ID: ${entry['id']}');
-    }
-    final lengths = entry['lengths']! as Map<String, Object?>;
+    ensureUniqueVocabularyId(seen, entry);
+    final releaseEntry = buildReleaseEntry(
+      entry,
+      override: overrides[entry['id']],
+      solutionIds: solutionIds,
+    );
+    final lengths = releaseEntry['lengths']! as Map<String, Object?>;
     final latin = lengths['latin']! as int;
     final gurmukhi = lengths['gurmukhi'] as int?;
     final shard = latin >= 4 && latin <= 6
         ? latin - 3
         : (gurmukhi == 5 ? 2 : 3);
-    shards[shard]!.add(_releaseEntry(entry, overrides, solutionIds));
+    shards[shard]!.add(releaseEntry);
   }
   final output = Directory('assets/content/release')
     ..createSync(recursive: true);
@@ -73,7 +88,7 @@ void main(List<String> arguments) {
   }
   stdout.writeln(
     'Built ${trusted + hidden} release records: $trusted sourced definitions, '
-    '$hidden hidden legacy definitions; $stale stale shards.',
+    '$hidden hidden definitions; $stale stale shards.',
   );
   if (check && stale != 0) {
     throw StateError(
@@ -82,14 +97,18 @@ void main(List<String> arguments) {
   }
 }
 
-Map<String, Object?> _releaseEntry(
-  Map<String, Object?> sourceEntry,
-  Map<String, Map<String, Object?>> overrides,
-  Set<String> solutionIds,
-) {
+void ensureUniqueVocabularyId(Set<String> seen, Map<String, Object?> entry) {
+  final id = entry['id']! as String;
+  if (!seen.add(id)) throw FormatException('Duplicate vocabulary ID: $id');
+}
+
+Map<String, Object?> buildReleaseEntry(
+  Map<String, Object?> sourceEntry, {
+  Map<String, Object?>? override,
+  Set<String> solutionIds = const {},
+}) {
   final entry = Map<String, Object?>.from(sourceEntry);
   final id = entry['id']! as String;
-  final override = overrides[id];
   final definitions = Map<String, Object?>.from(
     entry['definitions']! as Map<String, Object?>,
   );
@@ -105,36 +124,48 @@ Map<String, Object?> _releaseEntry(
         sources = ['Legacy definition source unclear; not distributed'];
       }
     }
+    if (override['latin'] case final String latin) entry['latin'] = latin;
     if (override['gurmukhi'] case final String gurmukhi) {
       entry['gurmukhi'] = gurmukhi;
-      final lengths = Map<String, Object?>.from(
-        entry['lengths']! as Map<String, Object?>,
-      );
-      lengths['gurmukhi'] = gurmukhi.characters.length;
-      entry['lengths'] = lengths;
     }
     accepted = override['acceptedGuess'] as bool? ?? accepted;
     solution = override['solutionEligible'] as bool? ?? solution;
     reviewStatus = override['reviewStatus'] as String? ?? reviewStatus;
     if (override['source'] case final String source) sources = [source];
+    if (override['reviewMethod'] case final String method) {
+      entry['reviewMethod'] = method;
+    }
   }
+  final latin = entry['latin']! as String;
+  final gurmukhi = entry['gurmukhi'] as String?;
+  entry['lengths'] = {
+    'latin': latin.characters.length,
+    'gurmukhi': gurmukhi?.characters.length,
+  };
   final trusted = sources.any(_trustedSource);
   final standalone =
       definition.trim().isNotEmpty &&
       !_referenceOnly.hasMatch(definition.trim());
-  if (trusted) {
-    definitions['en'] = [definition];
-  } else {
-    definitions
-      ..clear()
-      ..addAll({
-        'en': [''],
-        'pa': <String>[],
-      });
-  }
+  definitions
+    ..clear()
+    ..addAll({
+      'en': [trusted ? definition : ''],
+      'pa': <String>[],
+    });
   entry['definitions'] = definitions;
   entry['acceptedGuess'] = accepted;
-  entry['solutionEligible'] = trusted && standalone && solution;
+  final passesPunjabiPolicy =
+      entry['language'] != 'panjabi' ||
+      assessPunjabiQuality(
+        PunjabiQualityCandidate(
+          gurmukhi: gurmukhi ?? '',
+          latin: latin,
+          englishDefinition: definition,
+        ),
+      ).isPromotionCandidate;
+  if (!passesPunjabiPolicy) definitions['en'] = [''];
+  entry['solutionEligible'] =
+      accepted && trusted && standalone && solution && passesPunjabiPolicy;
   entry['reviewStatus'] = reviewStatus;
   entry['sources'] = sources;
   return entry;

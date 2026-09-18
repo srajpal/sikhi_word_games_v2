@@ -6,6 +6,34 @@ abstract interface class KeyValueStore {
   Future<void> remove(String key);
 }
 
+/// Serializes writes to an exact app key, including across repository instances.
+/// Reset callers must first stop producers (such as a game page being disposed).
+class KeyValueStoreWrites {
+  static final _queues = Expando<Map<String, Future<void>>>();
+
+  static Future<void> run(
+    KeyValueStore store,
+    String key,
+    Future<void> Function() action,
+  ) {
+    final queues = _queues[store] ??= {};
+    final previous = queues[key] ?? Future<void>.value();
+    final result = previous.then((_) => action());
+    // A failed write is reported to its caller but must not block a later reset.
+    queues[key] = result.catchError((Object _) {});
+    return result;
+  }
+
+  static Future<void> setString(
+    KeyValueStore store,
+    String key,
+    String value,
+  ) => run(store, key, () => store.setString(key, value));
+
+  static Future<void> remove(KeyValueStore store, String key) =>
+      run(store, key, () => store.remove(key));
+}
+
 class SharedPreferencesKeyValueStore implements KeyValueStore {
   const SharedPreferencesKeyValueStore(this._preferences);
 
@@ -21,7 +49,9 @@ class SharedPreferencesKeyValueStore implements KeyValueStore {
 
   @override
   Future<void> remove(String key) async {
-    await _preferences.remove(key);
+    if (!await _preferences.remove(key)) {
+      throw StateError('Unable to remove saved app data');
+    }
   }
 }
 

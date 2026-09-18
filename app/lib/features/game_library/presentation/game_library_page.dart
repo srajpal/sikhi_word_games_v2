@@ -1,9 +1,19 @@
+import '../../learn_letters/data/learn_letters_repository.dart';
+import '../../../core/widgets/game_guide.dart';
 import '../../../core/themes/game_artwork.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/app_version.dart';
+import '../../../core/studio_brand.dart';
+import '../../../core/widgets/reset_app_data_dialog.dart';
+import '../../word_bridges/data/word_bridges_repository.dart';
+import '../../word_bridges/domain/word_bridges_content.dart';
+import '../../guess_the_word/data/guess_statistics_repository.dart';
+import '../../guess_the_word/domain/guess_statistics.dart';
+import 'library_statistics.dart';
 import '../../../core/release_feedback.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
@@ -24,6 +34,11 @@ class GameLibraryPage extends StatelessWidget {
     required this.wordSearchSessionRepository,
     required this.wordQuestSessionRepository,
     required this.launchPreferencesRepository,
+    this.guessStatisticsRepository,
+    this.wordBridgesRepository,
+    this.learnLettersRepository,
+    this.loadWordBridgesContent,
+    this.onResetAllData,
     super.key,
   });
 
@@ -34,20 +49,33 @@ class GameLibraryPage extends StatelessWidget {
   final WordSearchSessionRepository wordSearchSessionRepository;
   final WordQuestSessionRepository wordQuestSessionRepository;
   final GameLaunchPreferencesRepository launchPreferencesRepository;
+  final GuessStatisticsRepository? guessStatisticsRepository;
+  final WordBridgesRepository? wordBridgesRepository;
+  final LearnLettersRepository? learnLettersRepository;
+  final Future<WordBridgesContent> Function()? loadWordBridgesContent;
+  final Future<void> Function()? onResetAllData;
 
   bool _hasActiveGame(GameKind kind) => switch (kind) {
     GameKind.guessTheWord => guessGameRepository.hasActiveGame,
     GameKind.wordSearch => wordSearchSessionRepository.hasActiveGame,
     GameKind.wordQuest => wordQuestSessionRepository.hasActiveGame,
+    GameKind.wordBridges => wordBridgesRepository?.hasActiveGame ?? false,
+    GameKind.learnLetters => learnLettersRepository?.hasActiveGame ?? false,
   };
 
   String _pathFor(GameKind kind) => switch (kind) {
     GameKind.guessTheWord => '/guess-the-word',
     GameKind.wordSearch => '/word-search',
     GameKind.wordQuest => '/word-quest',
+    GameKind.wordBridges => '/word-bridges',
+    GameKind.learnLetters => '/learn-letters',
   };
 
   Future<void> _showNewGameOptions(BuildContext context, GameKind kind) async {
+    if (kind == GameKind.wordBridges) {
+      await _showBridgesOptions(context);
+      return;
+    }
     final saved = launchPreferencesRepository.load(kind);
     var selectedLanguage = saved.language?.name ?? 'random';
     var selectedWordSize = saved.wordSize?.toString() ?? 'random';
@@ -162,16 +190,103 @@ class GameLibraryPage extends StatelessWidget {
     GameKind.guessTheWord => 'Bujho: Guess the Word',
     GameKind.wordSearch => 'Khoj: Word Search',
     GameKind.wordQuest => 'Word Quest',
+    GameKind.wordBridges => 'Jodo: Word Bridges',
+    GameKind.learnLetters => 'Akhar Pachhaan: Learn Letters',
   };
 
+  Future<void> _showBridgesOptions(BuildContext context) async {
+    final loader = loadWordBridgesContent;
+    if (loader == null) return;
+    late WordBridgesContent content;
+    try {
+      content = await loader();
+    } on Object catch (_) {
+      if (context.mounted) {
+        showGameSnackBar(
+          context,
+          'Unable to load matching sets. Please try again.',
+        );
+      }
+      return;
+    }
+    if (!context.mounted) return;
+    final modes = content.availableModes;
+    if (modes.isEmpty) {
+      showGameSnackBar(context, 'No matching sets are available.');
+      return;
+    }
+    final saved = launchPreferencesRepository
+        .load(GameKind.wordBridges)
+        .language;
+    var selected = saved == null
+        ? 'random'
+        : modes.contains(saved)
+        ? saved.name
+        : modes.first.name;
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, update) => AlertDialog(
+          title: const Text('New Jodo set'),
+          scrollable: true,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Match four words to their English meanings. Sets include different word lengths.',
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                initialValue: selected,
+                isExpanded: true,
+                decoration: const InputDecoration(labelText: 'Language'),
+                items: [
+                  const DropdownMenuItem(
+                    value: 'random',
+                    child: Text('Random language'),
+                  ),
+                  for (final mode in modes)
+                    DropdownMenuItem(value: mode.name, child: Text(mode.label)),
+                ],
+                onChanged: (value) {
+                  if (value != null) update(() => selected = value);
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, selected),
+              child: const Text('Start new set'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (result == null || !context.mounted) return;
+    final options = GameLaunchOptions(
+      language: result == 'random' ? null : LanguageMode.values.byName(result),
+    );
+    await launchPreferencesRepository.save(GameKind.wordBridges, options);
+    if (context.mounted) context.push('/word-bridges', extra: options);
+  }
+
   Future<void> _showFeedbackSettings(BuildContext context) async {
+    var resetRequested = false;
+    var statisticsRequested = false;
     var hapticLevel = settings.hapticLevel;
     var reducedMotion = settings.reducedMotion;
+    var celebrationSettings = settings;
     final updated = await showDialog<AppSettings>(
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Feedback settings'),
+          title: const Text('App settings'),
+          scrollable: true,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -192,6 +307,12 @@ class GameLibraryPage extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 12),
+              const Text(
+                'Use your device display settings for larger or bold text. '
+                'Screen-reader controls and letter feedback work without color. '
+                'Your device reduce-motion setting is also respected.',
+              ),
+              const SizedBox(height: 12),
               SwitchListTile(
                 title: const Text('Reduce motion'),
                 subtitle: const Text('Minimize tile and interface animation'),
@@ -199,6 +320,100 @@ class GameLibraryPage extends StatelessWidget {
                 onChanged: (value) =>
                     setDialogState(() => reducedMotion = value),
               ),
+              const Divider(),
+              SwitchListTile(
+                title: const Text('Victory sound'),
+                subtitle: const Text('Play a short fanfare when you win'),
+                value: celebrationSettings.victorySound,
+                onChanged: (value) => setDialogState(() {
+                  celebrationSettings = celebrationSettings.copyWith(
+                    victorySound: value,
+                  );
+                }),
+              ),
+              SwitchListTile(
+                title: const Text('Victory particles'),
+                subtitle: const Text(
+                  'Celebrate wins with colorful bursts. Reduce motion turns these off.',
+                ),
+                value: celebrationSettings.victoryParticles,
+                onChanged: (value) => setDialogState(() {
+                  celebrationSettings = celebrationSettings.copyWith(
+                    victoryParticles: value,
+                  );
+                }),
+              ),
+              ExpansionTile(
+                title: const Text('Per-game celebrations'),
+                subtitle: const Text(
+                  'Turn off sound or particles for individual games',
+                ),
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'The main switches above apply to every game. Your choices below are kept when you turn them back on.',
+                    ),
+                  ),
+                  for (final game in GameKind.values) ...[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Text(
+                        _gameName(game),
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ),
+                    SwitchListTile(
+                      title: Text(
+                        'Sound',
+                        semanticsLabel: '${_gameName(game)} victory sound',
+                      ),
+                      key: ValueKey('victory-sound-${game.name}'),
+                      value: !celebrationSettings.mutedVictoryGames.contains(
+                        game.name,
+                      ),
+                      onChanged: (value) => setDialogState(() {
+                        celebrationSettings = celebrationSettings
+                            .withGameVictory(game, sound: value);
+                      }),
+                    ),
+                    SwitchListTile(
+                      title: Text(
+                        'Particles',
+                        semanticsLabel: '${_gameName(game)} victory particles',
+                      ),
+                      key: ValueKey('victory-particles-${game.name}'),
+                      value: !celebrationSettings.quietVictoryGames.contains(
+                        game.name,
+                      ),
+                      onChanged: (value) => setDialogState(() {
+                        celebrationSettings = celebrationSettings
+                            .withGameVictory(game, particles: value);
+                      }),
+                    ),
+                  ],
+                ],
+              ),
+              const Divider(),
+              TextButton.icon(
+                onPressed: () {
+                  statisticsRequested = true;
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.bar_chart),
+                label: const Text('Your statistics'),
+              ),
+              if (onResetAllData != null) ...[
+                const Divider(),
+                TextButton.icon(
+                  onPressed: () {
+                    resetRequested = true;
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(Icons.restart_alt),
+                  label: const Text('Reset all app data'),
+                ),
+              ],
             ],
           ),
           actions: [
@@ -208,7 +423,7 @@ class GameLibraryPage extends StatelessWidget {
             ),
             FilledButton(
               onPressed: () => Navigator.of(context).pop(
-                settings.copyWith(
+                celebrationSettings.copyWith(
                   hapticLevel: hapticLevel,
                   reducedMotion: reducedMotion,
                 ),
@@ -220,6 +435,19 @@ class GameLibraryPage extends StatelessWidget {
       ),
     );
     if (updated != null) onFeedbackSettingsChanged(updated);
+    if (statisticsRequested && context.mounted) {
+      showLibraryStatistics(
+        context,
+        bujho: guessStatisticsRepository?.load() ?? const GuessStatisticsBook(),
+        khoj: wordSearchSessionRepository.statistics.total,
+        quest: wordQuestSessionRepository.statistics.total,
+        bridges: wordBridgesRepository?.total,
+        letters: learnLettersRepository?.statistics,
+      );
+    }
+    if (resetRequested && context.mounted) {
+      await showResetAppDataDialog(context, onReset: onResetAllData!);
+    }
   }
 
   @override
@@ -235,9 +463,9 @@ class GameLibraryPage extends StatelessWidget {
         title: const Text('Sikhi Word Games'),
         actions: [
           IconButton(
-            tooltip: 'Feedback settings',
+            tooltip: 'App settings',
             onPressed: () => _showFeedbackSettings(context),
-            icon: const Icon(Icons.accessibility_new),
+            icon: const Icon(Icons.settings_outlined),
           ),
           PopupMenuButton<AppThemeChoice>(
             key: const ValueKey('app-theme-menu'),
@@ -271,7 +499,7 @@ class GameLibraryPage extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 900),
               child: ListView(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                 children: [
                   if (activeTheme == AppThemeChoice.sikhi) ...[
                     Semantics(
@@ -290,78 +518,103 @@ class GameLibraryPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                   ],
-                  GamePanel(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Choose a game',
-                          style: Theme.of(context).textTheme.headlineLarge,
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Three word games to play at your own pace',
-                          style: Theme.of(context).textTheme.labelLarge
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Play offline in English, romanized Punjabi, and Gurmukhi.',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
+                  Text(
+                    'Offline word games in English, Punjabi and Gurmukhi',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 24),
-                  _GameCard(
-                    icon: Icons.grid_view_rounded,
-                    title: 'Bujho: Guess the Word',
-                    description: 'Find the hidden word using colored clues.',
-                    gameKind: GameKind.guessTheWord,
-                    hasActiveGame: _hasActiveGame(GameKind.guessTheWord),
-                    onContinue: () =>
-                        _continueGame(context, GameKind.guessTheWord),
-                    onNewGame: () =>
-                        _startNewGame(context, GameKind.guessTheWord),
-                    onNewGameOptions: () =>
-                        _showNewGameOptions(context, GameKind.guessTheWord),
+                  const SizedBox(height: 4),
+                  Text(
+                    'by $studioName',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelMedium,
                   ),
                   const SizedBox(height: 16),
-                  _GameCard(
-                    icon: Icons.search_rounded,
-                    title: 'Khoj: Word Search',
-                    description: 'Find offline words hidden in a letter grid.',
-                    gameKind: GameKind.wordSearch,
-                    hasActiveGame: _hasActiveGame(GameKind.wordSearch),
-                    onContinue: () =>
-                        _continueGame(context, GameKind.wordSearch),
-                    onNewGame: () =>
-                        _startNewGame(context, GameKind.wordSearch),
-                    onNewGameOptions: () =>
-                        _showNewGameOptions(context, GameKind.wordSearch),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final twoColumns =
+                          constraints.maxWidth >= 720 &&
+                          MediaQuery.textScalerOf(context).scale(14) <= 21;
+                      final cardWidth = twoColumns
+                          ? (constraints.maxWidth - 16) / 2
+                          : constraints.maxWidth;
+                      final cards = <Widget>[
+                        _GameCard(
+                          title: 'Bujho: Guess the Word',
+                          description:
+                              'Find the hidden word using letter clues.',
+                          gameKind: GameKind.guessTheWord,
+                          hasActiveGame: _hasActiveGame(GameKind.guessTheWord),
+                          onContinue: () =>
+                              _continueGame(context, GameKind.guessTheWord),
+                          onNewGame: () =>
+                              _startNewGame(context, GameKind.guessTheWord),
+                          onNewGameOptions: () => _showNewGameOptions(
+                            context,
+                            GameKind.guessTheWord,
+                          ),
+                        ),
+                        _GameCard(
+                          title: 'Khoj: Word Search',
+                          description: 'Trace hidden words in a letter grid.',
+                          gameKind: GameKind.wordSearch,
+                          hasActiveGame: _hasActiveGame(GameKind.wordSearch),
+                          onContinue: () =>
+                              _continueGame(context, GameKind.wordSearch),
+                          onNewGame: () =>
+                              _startNewGame(context, GameKind.wordSearch),
+                          onNewGameOptions: () =>
+                              _showNewGameOptions(context, GameKind.wordSearch),
+                        ),
+                        _GameCard(
+                          title: 'Chardi Kala: Word Quest',
+                          description:
+                              'Use a clue and choose letters to find the word.',
+                          gameKind: GameKind.wordQuest,
+                          hasActiveGame: _hasActiveGame(GameKind.wordQuest),
+                          onContinue: () =>
+                              _continueGame(context, GameKind.wordQuest),
+                          onNewGame: () =>
+                              _startNewGame(context, GameKind.wordQuest),
+                          onNewGameOptions: () =>
+                              _showNewGameOptions(context, GameKind.wordQuest),
+                        ),
+                        _GameCard(
+                          title: 'Jodo: Word Bridges',
+                          description: 'Connect four words to their meanings.',
+                          gameKind: GameKind.wordBridges,
+                          hasActiveGame: _hasActiveGame(GameKind.wordBridges),
+                          onContinue: () =>
+                              _continueGame(context, GameKind.wordBridges),
+                          onNewGame: () =>
+                              _startNewGame(context, GameKind.wordBridges),
+                          onNewGameOptions: () => _showBridgesOptions(context),
+                        ),
+                        _GameCard(
+                          title: 'Akhar Pachhaan: Learn Letters',
+                          description: 'Recognize Gurmukhi letters and learn their names.',
+                          gameKind: GameKind.learnLetters,
+                          hasActiveGame: _hasActiveGame(GameKind.learnLetters),
+                          onContinue: () =>
+                              _continueGame(context, GameKind.learnLetters),
+                          onNewGame: () =>
+                              _startNewGame(context, GameKind.learnLetters),
+                          onNewGameOptions: () =>
+                              showGameHelp(context, GameKind.learnLetters),
+                        ),
+                      ];
+                      return Wrap(
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: [
+                          for (final card in cards)
+                            SizedBox(width: cardWidth, child: card),
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
-                  _GameCard(
-                    icon: Icons.local_florist_outlined,
-                    title: 'Chardi Kala: Word Quest',
-                    description:
-                        'Use a clue and choose letters to find the word.',
-                    gameKind: GameKind.wordQuest,
-                    hasActiveGame: _hasActiveGame(GameKind.wordQuest),
-                    onContinue: () =>
-                        _continueGame(context, GameKind.wordQuest),
-                    onNewGame: () => _startNewGame(context, GameKind.wordQuest),
-                    onNewGameOptions: () =>
-                        _showNewGameOptions(context, GameKind.wordQuest),
-                  ),
-                  const SizedBox(height: 16),
-                  const _GameCard(
-                    icon: Icons.keyboard_rounded,
-                    title: 'Typing Challenge',
-                    description: 'Practice accurate English, Punjabi, and Gurmukhi typing.',
-                  ),
+                  const StudioWebsiteLink(),
                   const SizedBox(height: 20),
                   Text(
                     'English definition data adapted from Open English '
@@ -407,137 +660,167 @@ class GameLibraryPage extends StatelessWidget {
 
 class _GameCard extends StatelessWidget {
   const _GameCard({
-    required this.icon,
     required this.title,
     required this.description,
-    this.gameKind,
+    required this.gameKind,
     this.hasActiveGame = false,
     this.onContinue,
     this.onNewGame,
     this.onNewGameOptions,
   });
 
-  final IconData icon;
   final String title;
   final String description;
-  final GameKind? gameKind;
+  final GameKind gameKind;
   final bool hasActiveGame;
   final VoidCallback? onContinue;
   final VoidCallback? onNewGame;
   final VoidCallback? onNewGameOptions;
 
   @override
-  Widget build(BuildContext context) => GamePanel(
-    padding: EdgeInsets.zero,
-    child: Padding(
-      padding: const EdgeInsets.all(24),
-      child: Builder(
-        builder: (context) {
-          final details = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (gameKind != null)
-                GameArtwork(
-                  kind: switch (gameKind!) {
-                    GameKind.guessTheWord => GameArtworkKind.deduction,
-                    GameKind.wordSearch => GameArtworkKind.search,
-                    GameKind.wordQuest => GameArtworkKind.garden,
-                  },
-                )
-              else
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.primary,
-                        Theme.of(context).colorScheme.secondary,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: Theme.of(context)
-                        .extension<GameThemeTokens>()!
-                        .elevationShadow,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Icon(
-                      icon,
-                      size: 34,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 4),
-                    Text(description),
-                  ],
-                ),
-              ),
-            ],
-          );
-          final actionButtons = <Widget>[
-            if (hasActiveGame && onContinue != null)
-              GameGradientButton(
-                onPressed: onContinue,
-                label: 'Continue game',
-                icon: const Icon(Icons.play_arrow),
-              ),
-            if (onNewGame != null)
-              GameGradientButton(
-                onPressed: onNewGame,
-                label: 'New game',
-                prominent: !hasActiveGame,
-                icon: const Icon(Icons.play_arrow),
-              ),
-            if (onNewGameOptions != null)
-              GameGradientButton(
-                onPressed: onNewGameOptions,
-                label: 'New game options',
-                prominent: false,
-                icon: const Icon(Icons.tune),
-              ),
-            if (gameKind == null)
-              const GameGradientButton(label: 'Coming later'),
-          ];
-          return Column(
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final hasContinue = hasActiveGame && onContinue != null;
+    return Semantics(
+      key: ValueKey('game-card-semantics-${gameKind.name}'),
+      container: true,
+      explicitChildNodes: true,
+      sortKey: OrdinalSortKey(gameKind.index.toDouble()),
+      child: FocusTraversalGroup(
+        child: GamePanel(
+          padding: const EdgeInsets.all(16),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              details,
-              const SizedBox(height: 18),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GameArtwork(
+                    kind: switch (gameKind) {
+                      GameKind.guessTheWord => GameArtworkKind.deduction,
+                      GameKind.wordSearch => GameArtworkKind.search,
+                      GameKind.wordQuest => GameArtworkKind.garden,
+                      GameKind.wordBridges => GameArtworkKind.bridges,
+                      GameKind.learnLetters => GameArtworkKind.letters,
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Semantics(
+                          header: true,
+                          child: Text(title, style: theme.textTheme.titleLarge),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(description, style: theme.textTheme.bodyMedium),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final wide =
-                      constraints.maxWidth >= 540 &&
-                      MediaQuery.textScalerOf(context).scale(14) <= 21;
-                  return wide
-                      ? Row(
-                          children: [
-                            for (var i = 0; i < actionButtons.length; i++) ...[
-                              if (i > 0) const SizedBox(width: 10),
-                              Expanded(child: actionButtons[i]),
-                            ],
-                          ],
+                  final labelStyle = theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  );
+                  final actionStyle = ButtonStyle(
+                    minimumSize: const WidgetStatePropertyAll(Size(48, 48)),
+                    padding: const WidgetStatePropertyAll(
+                      EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                    ),
+                    textStyle: WidgetStatePropertyAll(labelStyle),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: theme
+                            .extension<GameThemeTokens>()!
+                            .controlRadius,
+                      ),
+                    ),
+                  );
+                  final primary = FilledButton(
+                    key: hasContinue
+                        ? ValueKey('continue-game-${gameKind.name}')
+                        : ValueKey('new-game-${gameKind.name}'),
+                    onPressed: hasContinue ? onContinue : onNewGame,
+                    style: actionStyle,
+                    child: Text(
+                      hasContinue ? 'Continue' : 'New game',
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                  final secondary = hasContinue
+                      ? OutlinedButton(
+                          key: ValueKey('new-game-${gameKind.name}'),
+                          onPressed: onNewGame,
+                          style: actionStyle,
+                          child: const Text(
+                            'New game',
+                            textAlign: TextAlign.center,
+                          ),
                         )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            for (final action in actionButtons) ...[
-                              action,
-                              const SizedBox(height: 8),
-                            ],
+                      : null;
+                  final options = IconButton.outlined(
+                    tooltip: gameKind == GameKind.learnLetters
+                        ? 'How to play'
+                        : 'New game options',
+                    onPressed: onNewGameOptions,
+                    style: IconButton.styleFrom(
+                      minimumSize: const Size(48, 48),
+                    ),
+                    icon: Icon(
+                      gameKind == GameKind.learnLetters
+                          ? Icons.help_outline
+                          : Icons.tune_rounded,
+                    ),
+                  );
+                  double labelWidth(String text) {
+                    final painter = TextPainter(
+                      text: TextSpan(text: text, style: labelStyle),
+                      textScaler: MediaQuery.textScalerOf(context),
+                      textDirection: Directionality.of(context),
+                    )..layout();
+                    final width = painter.width;
+                    painter.dispose();
+                    return width;
+                  }
+
+                  // Preserve one row on small phones, but let enlarged labels
+                  // move the secondary action below instead of shrinking text.
+                  final widestLabel =
+                      labelWidth('Continue') > labelWidth('New game')
+                      ? labelWidth('Continue')
+                      : labelWidth('New game');
+                  final allFit =
+                      constraints.maxWidth >= (widestLabel + 16) * 2 + 64;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(child: primary),
+                          if (secondary != null && allFit) ...[
+                            const SizedBox(width: 8),
+                            Expanded(child: secondary),
                           ],
-                        );
+                          const SizedBox(width: 8),
+                          options,
+                        ],
+                      ),
+                      if (secondary != null && !allFit) ...[
+                        const SizedBox(height: 8),
+                        secondary,
+                      ],
+                    ],
+                  );
                 },
               ),
             ],
-          );
-        },
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

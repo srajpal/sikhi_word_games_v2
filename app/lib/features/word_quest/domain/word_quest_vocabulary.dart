@@ -4,6 +4,7 @@ import 'package:characters/characters.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/language/gurmukhi_normalization.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import 'word_quest_definition_quality.dart';
 
@@ -82,7 +83,10 @@ class WordQuestVocabulary {
       _graphemesByMode.putIfAbsent(
         mode,
         () => List.unmodifiable(
-          words(mode: mode).expand((word) => word.spelling.characters).toSet(),
+          words(mode: mode)
+              .expand((word) => word.spelling.characters)
+              .map(normalizeGurmukhi)
+              .toSet(),
         ),
       );
 
@@ -167,7 +171,8 @@ class WordQuestVocabulary {
         LanguageMode.mixedLatin => true,
       };
 
-  static String _normalize(String spelling) => spelling.trim().toUpperCase();
+  static String _normalize(String spelling) =>
+      normalizeGurmukhi(spelling.trim().toUpperCase());
 
   static bool _isBetter(VocabularyEntry contender, VocabularyEntry current) {
     final contenderScore = _qualityScore(contender);

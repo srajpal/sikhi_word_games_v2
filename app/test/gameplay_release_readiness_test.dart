@@ -63,10 +63,8 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.drag(find.byType(ListView), const Offset(0, -1400));
-    await tester.pumpAndSettle();
     final title = find.text('Chardi Kala: Word Quest');
-    await tester.ensureVisible(title);
+    await tester.scrollUntilVisible(title, 200);
     final card = find.ancestor(of: title, matching: find.byType(GamePanel));
     await _startEnglishGame(tester, card);
 
@@ -82,12 +80,12 @@ void main() {
 
     expect(find.text('The word is ready to discover'), findsOneWidget);
     expect(find.text('APPLE'), findsOneWidget);
-    await tester.ensureVisible(find.text('TRY THIS WORD AGAIN'));
-    await tester.tap(find.text('TRY THIS WORD AGAIN'));
+    await tester.ensureVisible(find.text('Try this word again'));
+    await tester.tap(find.text('Try this word again'));
     await tester.pump();
 
     expect(find.text('The word is ready to discover'), findsNothing);
-    expect(find.text('6'), findsOneWidget);
+    expect(find.text('6 tries'), findsOneWidget);
     await tester.sendKeyDownEvent(LogicalKeyboardKey.keyA, character: 'a');
     await tester.sendKeyUpEvent(LogicalKeyboardKey.keyA);
     await tester.pump();
@@ -105,7 +103,7 @@ void main() {
 Future<void> _startEnglishGame(WidgetTester tester, Finder card) async {
   final options = find.descendant(
     of: card,
-    matching: find.text('New game options'),
+    matching: find.byTooltip('New game options'),
   );
   await tester.ensureVisible(options);
   await tester.pumpAndSettle();
@@ -127,7 +125,7 @@ const _gameTitles = [
 const _pageTitles = [
   'Bujho: Guess the Word',
   'Khoj: Word Search',
-  'CHARDI KALA',
+  'Chardi Kala',
 ];
 
 const _vocabulary = MemoryVocabularyRepository([

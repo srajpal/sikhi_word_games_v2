@@ -1,3 +1,7 @@
+import '../../../core/statistics/game_statistics_dialog.dart';
+import '../../../core/widgets/game_guide.dart';
+import '../../../core/widgets/victory_celebration.dart';
+import '../../game_library/domain/game_launch_options.dart';
 import '../../../core/themes/game_artwork.dart';
 
 import 'dart:math';
@@ -194,6 +198,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   Future<void> _startNewWord() async {
+    VictoryCelebration.stop(context);
     final vocabulary = _vocabulary;
     if (vocabulary == null || !mounted) return;
     final request = ++_startRequest;
@@ -322,6 +327,15 @@ class _WordQuestPageState extends State<WordQuestPage> {
     setState(() {});
     if (feedback.isNotEmpty) _showFeedback(feedback);
     if (game.isComplete) {
+      if (game.status == WordQuestStatus.won) {
+        VictoryCelebration.celebrate(context);
+      }
+      widget.sessionRepository.statistics.record(
+        mode: _mode.name,
+        size: game.solutionGraphemes.length,
+        won: game.status == WordQuestStatus.won,
+        hintsUsed: game.hintsUsed,
+      );
       widget.sessionRepository.clear();
     } else {
       widget.sessionRepository.save(
@@ -341,6 +355,15 @@ class _WordQuestPageState extends State<WordQuestPage> {
     setState(() {});
     _showFeedback('Hint used. A letter is now showing.');
     if (game.isComplete) {
+      if (game.status == WordQuestStatus.won) {
+        VictoryCelebration.celebrate(context);
+      }
+      widget.sessionRepository.statistics.record(
+        mode: _mode.name,
+        size: game.solutionGraphemes.length,
+        won: game.status == WordQuestStatus.won,
+        hintsUsed: game.hintsUsed,
+      );
       widget.sessionRepository.clear();
     } else {
       widget.sessionRepository.save(
@@ -354,7 +377,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   void _showFeedback(String message) {
     if (!mounted) return;
-    showGameSnackBar(context, message);
+    setState(() => _message = message);
   }
 
   Future<void> _showSettings() async {
@@ -416,21 +439,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     }
   }
 
-  void _showHelp() => showDialog<void>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('How to play'),
-      content: const Text(
-        'Choose letters to uncover the hidden word. Correct letters help your word garden grow. Shorter words have fewer hearts. Four-letter words have no hints, five-letter words have one, and six-letter words have two. If the word stays hidden, we reveal it so you can learn it.',
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Got it'),
-        ),
-      ],
-    ),
-  );
+  void _showHelp() => showGameHelp(context, GameKind.wordQuest);
 
   @override
   Widget build(BuildContext context) {
@@ -447,19 +456,19 @@ class _WordQuestPageState extends State<WordQuestPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'CHARDI KALA',
+                'Chardi Kala',
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
-                  letterSpacing: 1.8,
+                  letterSpacing: .2,
                   fontSize: 18,
                 ),
               ),
               Text(
-                'WORD QUEST',
+                'Word Quest',
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
-                  letterSpacing: 3,
-                  fontSize: 10,
+                  letterSpacing: .2,
+                  fontSize: 12,
                 ),
               ),
             ],
@@ -472,11 +481,30 @@ class _WordQuestPageState extends State<WordQuestPage> {
               if (value == 'new') _startNewWord();
               if (value == 'settings') _showSettings();
               if (value == 'help') _showHelp();
+              if (value == 'celebrations') {
+                VictoryCelebration.showSettings(context);
+              }
+              if (value == 'statistics') {
+                showGameStatistics(
+                  context,
+                  title: 'Word Quest',
+                  repository: widget.sessionRepository.statistics,
+                  mode: _mode.name,
+                  size: _game?.solutionGraphemes.length ?? _wordSize,
+                  modeLabel: _mode.label,
+                  isQuest: true,
+                );
+              }
               if (value == 'dictionary') context.push('/dictionary');
             },
             itemBuilder: (context) => const [
               PopupMenuItem(value: 'new', child: Text('New word')),
               PopupMenuItem(value: 'settings', child: Text('Game settings')),
+              PopupMenuItem(value: 'statistics', child: Text('Statistics')),
+              PopupMenuItem(
+                value: 'celebrations',
+                child: Text('Celebration settings'),
+              ),
               PopupMenuItem(value: 'help', child: Text('How to play')),
               PopupMenuItem(
                 value: 'dictionary',
@@ -515,45 +543,50 @@ class _WordQuestPageState extends State<WordQuestPage> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 620),
                       child: LayoutBuilder(
-                        builder: (context, constraints) =>
-                            SingleChildScrollView(
-                              padding: EdgeInsets.all(
-                                constraints.maxWidth < 360 ? 12 : 16,
-                              ),
-                              child: Column(
-                                children: [
-                                  _QuestStatusBar(
-                                    language: _mode.label,
-                                    letters: word.graphemeLength,
-                                    tries: game.triesRemaining,
-                                    hintsRemaining: game.hintsRemaining,
-                                    onHint:
-                                        game.isComplete ||
-                                            game.hintsRemaining == 0
-                                        ? null
-                                        : _useHint,
-                                    showFullKeyboard: _showFullKeyboard,
-                                    onToggleKeyboard: game.isComplete
-                                        ? null
-                                        : () => setState(
-                                            () => _showFullKeyboard =
-                                                !_showFullKeyboard,
-                                          ),
-                                  ),
-                                  const SizedBox(height: 14),
-                                  _RaisedPanel(
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        16,
-                                        12,
-                                        16,
-                                        14,
+                        builder: (context, constraints) => SingleChildScrollView(
+                          padding: EdgeInsets.all(
+                            constraints.maxWidth < 360 ? 12 : 16,
+                          ),
+                          child: Column(
+                            children: [
+                              _QuestStatusBar(
+                                language: _mode.label,
+                                letters: word.graphemeLength,
+                                tries: game.triesRemaining,
+                                hintsRemaining: game.hintsRemaining,
+                                onHint:
+                                    game.isComplete || game.hintsRemaining == 0
+                                    ? null
+                                    : _useHint,
+                                showFullKeyboard: _showFullKeyboard,
+                                onToggleKeyboard: game.isComplete
+                                    ? null
+                                    : () => setState(
+                                        () => _showFullKeyboard =
+                                            !_showFullKeyboard,
                                       ),
-                                      child: Column(
+                              ),
+                              const SizedBox(height: 14),
+                              _RaisedPanel(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    16,
+                                    12,
+                                    16,
+                                    14,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Wrap(
+                                        spacing: 12,
+                                        runSpacing: 8,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
+                                            WrapCrossAlignment.center,
                                         children: [
                                           Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Icon(
                                                 Icons.lightbulb_outline,
@@ -561,91 +594,99 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                                 size: 18,
                                               ),
                                               const SizedBox(width: 7),
-                                              Expanded(
-                                                child: Text(
-                                                  'YOUR CLUE',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .labelLarge
-                                                      ?.copyWith(
-                                                        color: scheme.onSurface,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        letterSpacing: 1.4,
-                                                      ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 6),
-                                              _MiniBadge(
-                                                label: word.categoryHint,
+                                              Text(
+                                                'Your clue',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelLarge
+                                                    ?.copyWith(
+                                                      color: scheme.onSurface,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                    ),
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 9),
-                                          _DefinitionPreview(
-                                            definition: word.definitionHint,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium
-                                                ?.copyWith(
-                                                  color: scheme.onSurface,
-                                                  fontWeight: FontWeight.w700,
-                                                  height: 1.25,
-                                                ),
-                                          ),
+                                          _MiniBadge(label: word.categoryHint),
                                         ],
                                       ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 18),
-                                  _WordTiles(
-                                    game: game,
-                                    showRomanization:
-                                        _mode == LanguageMode.gurmukhi,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  if (_showFullKeyboard) ...[
-                                    const SizedBox(height: 4),
-                                    Divider(
-                                      color: scheme.onSurface.withValues(
-                                        alpha: .2,
+                                      const SizedBox(height: 9),
+                                      _DefinitionPreview(
+                                        definition: word.definitionHint,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              color: scheme.onSurface,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1.25,
+                                            ),
                                       ),
-                                      height: 1,
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ] else ...[
-                                    _GardenPath(
-                                      game: game,
-                                      reducedMotion: widget.reducedMotion,
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
-                                  if (game.isComplete)
-                                    _ResultCard(
-                                      word: word,
-                                      game: game,
-                                      showRomanization:
-                                          _mode == LanguageMode.gurmukhi,
-                                      onNewWord: _startNewWord,
-                                      onTryAgain:
-                                          game.status == WordQuestStatus.lost
-                                          ? _retryWord
-                                          : null,
-                                    )
-                                  else ...[
-                                    _LetterBank(
-                                      letters: _showFullKeyboard
-                                          ? _fullLetterBank(game)
-                                          : _letterBank,
-                                      game: game,
-                                      onPressed: _guess,
-                                      showRomanization:
-                                          _mode == LanguageMode.gurmukhi,
-                                    ),
-                                  ],
-                                ],
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(height: 18),
+                              _WordTiles(
+                                game: game,
+                                showRomanization:
+                                    _mode == LanguageMode.gurmukhi,
+                              ),
+                              const SizedBox(height: 16),
+                              if (_showFullKeyboard) ...[
+                                const SizedBox(height: 4),
+                                Divider(
+                                  color: scheme.onSurface.withValues(alpha: .2),
+                                  height: 1,
+                                ),
+                                const SizedBox(height: 10),
+                              ] else ...[
+                                _GardenPath(
+                                  game: game,
+                                  reducedMotion: widget.reducedMotion,
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                              if (game.isComplete)
+                                _ResultCard(
+                                  word: word,
+                                  game: game,
+                                  showRomanization:
+                                      _mode == LanguageMode.gurmukhi,
+                                  onNewWord: _startNewWord,
+                                  onTryAgain:
+                                      game.status == WordQuestStatus.lost
+                                      ? _retryWord
+                                      : null,
+                                )
+                              else ...[
+                                _LetterBank(
+                                  letters: _showFullKeyboard
+                                      ? _fullLetterBank(game)
+                                      : _letterBank,
+                                  game: game,
+                                  onPressed: _guess,
+                                  showRomanization:
+                                      _mode == LanguageMode.gurmukhi,
+                                ),
+                                const SizedBox(height: 12),
+                                Semantics(
+                                  liveRegion: true,
+                                  child: Text(
+                                    _message.isEmpty
+                                        ? 'Choose a letter to grow your garden.'
+                                        : _message,
+                                    key: const ValueKey('word-quest-feedback'),
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -765,7 +806,7 @@ class _GardenPath extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [scene.sky, scene.horizon],
           ),
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: tokens.panelRadius,
           border: Border.all(color: tokens.tileBorder.withValues(alpha: .4)),
           boxShadow: tokens.tileShadow,
         ),
@@ -966,47 +1007,60 @@ class _QuestKey extends StatelessWidget {
       label: showRomanization
           ? 'Gurmukhi letter $letter, ${romanizeGurmukhiGrapheme(letter)}'
           : 'Letter $letter',
-      child: GestureDetector(
-        onTap: enabled ? onPressed : null,
-        child: AnimatedContainer(
-          duration: MediaQuery.disableAnimationsOf(context)
-              ? Duration.zero
-              : const Duration(milliseconds: 120),
-          width: 49,
-          height: 48,
-          margin: EdgeInsets.only(bottom: enabled ? 6 : 1),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: enabled
-                  ? keyColors
-                  : [
-                      scheme.surfaceContainerHighest,
-                      scheme.surfaceContainerHighest,
-                    ],
-            ),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: enabled ? tokens.tileBorder : scheme.outlineVariant,
-              width: 2,
-            ),
-            boxShadow: enabled ? tokens.tileShadow : const [],
+      excludeSemantics: true,
+      onTap: enabled ? onPressed : null,
+      child: AnimatedContainer(
+        duration: MediaQuery.disableAnimationsOf(context)
+            ? Duration.zero
+            : const Duration(milliseconds: 120),
+        width: 49,
+        height: 48,
+        margin: EdgeInsets.only(bottom: enabled ? 6 : 1),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: enabled
+                ? keyColors
+                : [
+                    scheme.surfaceContainerHighest,
+                    scheme.surfaceContainerHighest,
+                  ],
           ),
-          child: showRomanization
-              ? GurmukhiKeyLabel(
-                  grapheme: letter,
-                  color: enabled ? scheme.onSurface : scheme.onSurfaceVariant,
-                )
-              : Text(
-                  letter,
-                  style: TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.w900,
-                    color: enabled ? scheme.onSurface : scheme.onSurfaceVariant,
-                  ),
-                ),
+          borderRadius: tokens.controlRadius,
+          border: Border.all(
+            color: enabled ? tokens.tileBorder : scheme.outlineVariant,
+            width: 2,
+          ),
+          boxShadow: enabled ? tokens.tileShadow : const [],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: enabled ? onPressed : null,
+            borderRadius: tokens.controlRadius,
+            focusColor: scheme.primary.withValues(alpha: .3),
+            child: Center(
+              child: showRomanization
+                  ? GurmukhiKeyLabel(
+                      grapheme: letter,
+                      color: enabled
+                          ? scheme.onSurface
+                          : scheme.onSurfaceVariant,
+                    )
+                  : Text(
+                      letter,
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.w900,
+                        color: enabled
+                            ? scheme.onSurface
+                            : scheme.onSurfaceVariant,
+                      ),
+                    ),
+            ),
+          ),
         ),
       ),
     );
@@ -1074,14 +1128,14 @@ class _ResultCard extends StatelessWidget {
             _QuestActionButton(
               onPressed: onTryAgain!,
               icon: const Icon(Icons.replay),
-              label: 'TRY THIS WORD AGAIN',
+              label: 'Try this word again',
             ),
             const SizedBox(height: 10),
           ],
           _QuestActionButton(
             onPressed: onNewWord,
             icon: const Icon(Icons.refresh),
-            label: 'NEW WORD',
+            label: 'New word',
           ),
         ],
       ),
@@ -1108,44 +1162,46 @@ class _QuestStatusBar extends StatelessWidget {
   final VoidCallback? onToggleKeyboard;
 
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) => Wrap(
+    spacing: 8,
+    runSpacing: 8,
+    crossAxisAlignment: WrapCrossAlignment.center,
     children: [
-      Expanded(
-        child: _StatusPill(
-          icon: Icons.translate_rounded,
-          label: '$language · $letters LETTERS',
-        ),
+      _StatusPill(
+        icon: Icons.translate_rounded,
+        label: '$language · $letters letters',
       ),
-      const SizedBox(width: 7),
       _StatusPill(
         icon: Icons.favorite_rounded,
-        label: '$tries',
+        label: '$tries ${tries == 1 ? 'try' : 'tries'}',
         accent: Theme.of(context).colorScheme.tertiaryContainer,
         foreground: Theme.of(context).colorScheme.onTertiaryContainer,
       ),
-      if (hintsRemaining > 0) ...[
-        const SizedBox(width: 7),
+      if (hintsRemaining > 0)
         Semantics(
           button: true,
           enabled: onHint != null,
           label: 'Hint, $hintsRemaining left',
+          excludeSemantics: true,
+          onTap: onHint,
           child: Tooltip(
             message: 'Hint, $hintsRemaining left',
             child: InkWell(
               key: const ValueKey('word-quest-hint'),
               onTap: onHint,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: Theme.of(context)
+                  .extension<GameThemeTokens>()!
+                  .controlRadius,
               child: _StatusPill(
                 icon: Icons.lightbulb_outline,
-                label: '$hintsRemaining',
+                label:
+                    '$hintsRemaining ${hintsRemaining == 1 ? 'hint' : 'hints'}',
                 accent: Theme.of(context).colorScheme.secondaryContainer,
                 foreground: Theme.of(context).colorScheme.onSecondaryContainer,
               ),
             ),
           ),
         ),
-      ],
-      const SizedBox(width: 7),
       _StatusIconButton(
         key: const ValueKey('word-quest-keyboard-toggle'),
         icon: showFullKeyboard
@@ -1194,11 +1250,13 @@ class _StatusPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Container(
-      constraints: const BoxConstraints(minHeight: 44),
+      constraints: const BoxConstraints(minHeight: 48),
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 9),
       decoration: BoxDecoration(
         color: accent ?? scheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: Theme.of(context)
+            .extension<GameThemeTokens>()!
+            .controlRadius,
         border: Border.all(color: scheme.outlineVariant),
       ),
       child: Row(
@@ -1209,7 +1267,6 @@ class _StatusPill extends StatelessWidget {
           Flexible(
             child: Text(
               label,
-              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: foreground ?? scheme.onSurface,
                 fontWeight: FontWeight.w800,
@@ -1235,52 +1292,13 @@ class _DefinitionPreview extends StatelessWidget {
   final TextAlign textAlign;
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
-      final painter = TextPainter(
-        text: TextSpan(text: definition, style: style),
-        maxLines: 1,
-        textDirection: Directionality.of(context),
-      )..layout(maxWidth: constraints.maxWidth);
-      final isLong = painter.didExceedMaxLines;
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Text(
-              definition,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: textAlign,
-              style: style,
-            ),
-          ),
-          if (isLong) ...[
-            const SizedBox(width: 2),
-            Tooltip(
-              message: 'Show full definition',
-              child: IconButton(
-                key: const ValueKey('word-quest-definition-more'),
-                onPressed: () => _showFullDefinition(context),
-                icon: const Icon(Icons.info_outline),
-                iconSize: 18,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints.tightFor(
-                  width: 30,
-                  height: 30,
-                ),
-                visualDensity: VisualDensity.compact,
-              ),
-            ),
-          ],
-        ],
-      );
-    },
+  Widget build(BuildContext context) => Text(
+    definition,
+    key: const ValueKey('word-quest-full-definition'),
+    textAlign: textAlign,
+    style: style,
+    softWrap: true,
   );
-
-  void _showFullDefinition(BuildContext context) {
-    showGameSnackBar(context, definition);
-  }
 }
 
 class _MiniBadge extends StatelessWidget {
@@ -1289,21 +1307,20 @@ class _MiniBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    constraints: const BoxConstraints(maxWidth: 118),
     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.primaryContainer,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: Theme.of(context)
+          .extension<GameThemeTokens>()!
+          .controlRadius,
       border: Border.all(color: Theme.of(context).colorScheme.primary),
     ),
     child: Text(
-      label.toUpperCase(),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+      label,
       style: TextStyle(
         color: Theme.of(context).colorScheme.onPrimaryContainer,
         fontWeight: FontWeight.w800,
-        fontSize: 9,
+        fontSize: 12,
       ),
     ),
   );

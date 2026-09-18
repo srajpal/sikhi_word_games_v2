@@ -39,10 +39,10 @@ Human-editable source content may be transformed into compact, indexed applicati
 Editorial corrections and exclusions live in
 `app/assets/content/curation/editorial_overrides.json`. Each override references a
 stable imported ID and may replace its definition or Gurmukhi spelling, change
-guess/solution eligibility, and advance its review status. This keeps human
-decisions separate from reproducible V1 imports.
+guess/solution eligibility, and advance its review status. This keeps explicit
+editorial decisions separate from reproducible V1 imports.
 
-Editor-approved words that do not exist in V1 live in
+Curated words that do not exist in V1 live in
 `app/assets/content/curation/supplemental_entries.json`. They use the same
 runtime record shape, retain their external source attribution, and are loaded
 after generated imports. Stable IDs must remain unique across both sources.
@@ -57,7 +57,7 @@ spreadsheet/review tool, with a short Markdown summary for humans.
 
 ## Runtime storage decision
 
-Use JSON for canonical content and editorial review. For the current 46,995-record
+Use JSON for canonical content and editorial review. For the current 47,093-record
 offline dataset, prefer compact, sharded, indexed JSON runtime assets shared by
 Android, iOS, and web. Do not introduce SQLite yet:
 
@@ -74,24 +74,31 @@ need complex relational queries.
 
 ## Initial V1 import findings
 
-The reproducible V1 import produced 38,510 accepted-guess records: 20,859 English and 17,651 Punjabi. Curated supplements currently bring the authoring total to 46,995 records. The sanitized release assets retain 46,989 accepted guesses and 14,892 sourced standalone answer records. All V1 word and definition keys align and no duplicate stable IDs were found in the original import. Imported entries default to `solutionEligible: false` until curated.
+The reproducible V1 import produced 38,510 accepted-guess records: 20,859 English and 17,651 Punjabi. Curated supplements currently bring the canonical total to 47,093 records. The sanitized release assets retain 45,416 accepted guesses, 14,701 answer records, 16,756 visible sourced definitions, and 30,337 records whose unclear or held definitions are hidden. All V1 word and definition keys align and no duplicate stable IDs were found in the original import. Imported entries default to `solutionEligible: false` until a source-matched or explicit editorial decision makes them playable.
 
-The current combined runtime audit contains two empty definitions, eight Punjabi records without a valid Gurmukhi form, and 16 duplicate-spelling flags. It also contains 2,180 definitions longer than 220 characters and 3,240 definitions that start as cross-references or inflected-form references. See `reports/content/dictionary_audit.md` for current counts and `reports/content/v1_import_report.md` for the original import findings.
+The authoring-archive audit is intentionally broader than the release audit and
+can contain empty, malformed, long, reference-only, or duplicate records that
+are held from play. See `reports/content/dictionary_audit.md` for the latest raw
+archive flags and `reports/content/v1_import_report.md` for the original import
+findings. Those flags must not be reported as defects in the sanitized release
+assets unless the release audit also finds them.
 
 ## Measured release coverage (2026-09-12)
 
 After source filtering and the release-QA exclusions, the release-content audit
-produced these Bujho answer counts using the actual bundled assets.
+produced these unique Bujho answer counts using the actual bundled assets.
 
 | Mode | 4 | 5 | 6 |
 | --- | ---: | ---: | ---: |
 | English | 1,713 | 2,567 | 4,030 |
-| Romanized Punjabi | 7 | 57 | 250 |
-| Mixed Latin | 1,720 | 2,624 | 4,280 |
-| Gurmukhi | 9 | 5,070 | 1,503 |
+| Romanized Punjabi | 990 | 1,383 | 1,106 |
+| Mixed Latin | 2,632 | 3,941 | 5,128 |
+| Gurmukhi | 342 | 2,346 | 533 |
 
-A regression check requires every mode and length to support at least six Bujho
-answers and a nonempty Word Quest clue pool. Khoj draws only records with a
+Regression checks require every mode and length to retain at least 300 unique
+Bujho answers and 250 Word Quest clues. Counts above are unique spellings; the
+audit reports raw records separately because aliases can share a spelling.
+Runtime selection deduplicates the actual spelling shown to the player. Khoj draws only accepted, answer-eligible records with a
 distributable definition. These counts establish coverage, not everyday
 usefulness, age suitability, or source accuracy. Authoring files preserve raw
 definitions, while the bundled release shards omit unclear legacy definition

@@ -1,5 +1,7 @@
 import 'package:characters/characters.dart';
 
+import '../../../core/language/gurmukhi_normalization.dart';
+
 enum LetterResult { absent, present, correct }
 
 class EvaluatedLetter {
@@ -18,8 +20,10 @@ abstract final class GuessEvaluator {
     required String solution,
     required String guess,
   }) {
-    final solutionLetters = graphemes(solution.toUpperCase());
-    final guessLetters = graphemes(guess.toUpperCase());
+    final solutionLetters = graphemes(
+      normalizeGurmukhi(solution.toUpperCase()),
+    );
+    final guessLetters = graphemes(normalizeGurmukhi(guess.toUpperCase()));
     if (solutionLetters.length != guessLetters.length) {
       throw ArgumentError.value(guess, 'guess', 'Grapheme lengths must match.');
     }

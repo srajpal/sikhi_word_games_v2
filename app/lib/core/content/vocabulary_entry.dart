@@ -37,17 +37,19 @@ class VocabularyEntry {
   final String source;
 
   bool get hasDistributableDefinition =>
-      source == 'Open English WordNet 2025 (CC BY 4.0)' ||
-      source.startsWith(
-        'Mahan Kosh multilingual dataset; commit '
-        'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6;',
-      ) ||
-      source ==
-          'Project editorial definition; original text for Sikhi Word Games';
+      englishDefinition.trim().isNotEmpty &&
+      (source == 'Open English WordNet 2025 (CC BY 4.0)' ||
+          source.startsWith(
+            'Mahan Kosh multilingual dataset; commit '
+            'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6;',
+          ) ||
+          source ==
+              'Project editorial definition; original text for Sikhi Word Games');
 
   /// Player-facing form of the source definition. The imported text remains
   /// unchanged for provenance, review, and serialization.
-  String get displayDefinition => hasDistributableDefinition
+  String get displayDefinition =>
+      hasDistributableDefinition && englishDefinition.trim().isNotEmpty
       ? englishDefinition
             .replaceAll(RegExp(r'\s*[\u2013\u2014]\s*'), ' - ')
             .replaceAll('\u2026', '...')

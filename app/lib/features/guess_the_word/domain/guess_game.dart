@@ -1,5 +1,7 @@
 import 'package:characters/characters.dart';
 
+import '../../../core/language/gurmukhi_normalization.dart';
+
 import 'guess_evaluator.dart';
 
 enum GuessGameStatus { playing, won, lost }
@@ -28,9 +30,9 @@ class GuessGame {
     required Set<String> acceptedGuesses,
     this.maximumAttempts = 6,
   }) : assert(maximumAttempts > 0),
-       solution = solution.toUpperCase(),
+       solution = normalizeGurmukhi(solution.toUpperCase()),
        acceptedGuesses = acceptedGuesses
-           .map((word) => word.toUpperCase())
+           .map((word) => normalizeGurmukhi(word.toUpperCase()))
            .toSet();
 
   final String solution;
@@ -47,7 +49,7 @@ class GuessGame {
     if (_status != GuessGameStatus.playing) {
       return const GuessSubmission.rejected(GuessRejection.gameOver);
     }
-    final guess = value.trim().toUpperCase();
+    final guess = normalizeGurmukhi(value.trim().toUpperCase());
     if (guess.characters.length != wordLength) {
       return const GuessSubmission.rejected(GuessRejection.wrongLength);
     }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,6 +8,12 @@ import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/core/themes/game_ui.dart';
+import 'package:sikhi_word_games_v2/features/game_library/data/game_launch_preferences_repository.dart';
+import 'package:sikhi_word_games_v2/features/game_library/presentation/game_library_page.dart';
+import 'package:sikhi_word_games_v2/features/word_bridges/data/word_bridges_repository.dart';
+import 'package:sikhi_word_games_v2/features/word_bridges/domain/word_bridges_content.dart';
+import 'package:sikhi_word_games_v2/features/word_bridges/domain/word_bridges_game.dart';
+import 'package:sikhi_word_games_v2/features/word_bridges/presentation/word_bridges_page.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/data/guess_game_repository.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/data/guess_statistics_repository.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/data/solution_history_repository.dart';
@@ -20,8 +28,10 @@ import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzz
 import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
+  late WordBridgesContent bridgesContent;
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    bridgesContent = await WordBridgesContent.load(AssetVocabularyRepository());
     await (FontLoader(
       'NotoSans',
     )..addFont(rootBundle.load('assets/fonts/noto_sans/NotoSans.ttf'))).load();
@@ -36,8 +46,136 @@ void main() {
     )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
   });
 
+  for (final mode in [LanguageMode.english, LanguageMode.gurmukhi]) {
+    testWidgets('Jodo ${mode.name} phone board renders in Sikhi', (
+      tester,
+    ) async {
+      _setGoldenSurface(tester);
+      tester.view.physicalSize = const Size(360, 1100);
+      final decks = bridgesContent.decksFor(mode);
+      final pairs = mode == LanguageMode.english
+          ? decks
+                .firstWhere(
+                  (deck) =>
+                      deck.pairs.any((pair) => pair.id == 'english_bread'),
+                )
+                .pairs
+          : decks.first.pairs;
+      final repository = WordBridgesRepository(MemoryKeyValueStore());
+      final game = WordBridgesGame(
+        pairs: pairs,
+        random: Random(9),
+        roundId: 'golden-jodo-phone-${mode.name}',
+      );
+      game.selectWord(pairs.first.id);
+      await repository.save(mode: mode, game: game);
+      await tester.pumpWidget(
+        MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+          home: WordBridgesPage(
+            vocabularyRepository: AssetVocabularyRepository(),
+            repository: repository,
+            contentFuture: Future.value(bridgesContent),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      if (mode == LanguageMode.english) {
+        expect(find.text('BREAD'), findsOneWidget);
+      } else {
+        for (final pair in pairs) {
+          expect(
+            find.text(bridgesContent.romanizedFor(pair.id)!),
+            findsOneWidget,
+          );
+        }
+      }
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('images/jodo_phone_${mode.name}_sikhi.png'),
+      );
+    }, tags: 'golden');
+  }
+
   for (final themeChoice in AppThemeChoice.values) {
     final themeName = themeChoice.name;
+
+    testWidgets('library game identities render in $themeName', (tester) async {
+      _setGoldenSurface(tester);
+      final store = MemoryKeyValueStore();
+      final games = GuessGameRepository(store);
+      await games.save(
+        mode: LanguageMode.english,
+        game: GuessGame(solution: 'APPLE', acceptedGuesses: {'APPLE', 'GRAPE'}),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppThemes.forChoice(themeChoice),
+          home: GameLibraryPage(
+            onThemeChanged: (_) {},
+            settings: AppSettings(theme: themeChoice, reducedMotion: true),
+            onFeedbackSettingsChanged: (_) {},
+            guessGameRepository: games,
+            wordSearchSessionRepository: WordSearchSessionRepository(store),
+            wordQuestSessionRepository: WordQuestSessionRepository(store),
+            launchPreferencesRepository: GameLaunchPreferencesRepository(store),
+            wordBridgesRepository: WordBridgesRepository(store),
+            loadWordBridgesContent: () async => bridgesContent,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('images/library_$themeName.png'),
+      );
+    }, tags: 'golden');
+
+    testWidgets(
+      'Jodo Gurmukhi matched and selected cards render in $themeName',
+      (tester) async {
+        _setGoldenSurface(tester);
+        tester.view.physicalSize = const Size(800, 1100);
+        final repository = WordBridgesRepository(MemoryKeyValueStore());
+        final pairs = bridgesContent
+            .decksFor(LanguageMode.gurmukhi)
+            .first
+            .pairs;
+        final game = WordBridgesGame(
+          pairs: pairs,
+          random: Random(9),
+          roundId: 'golden-jodo',
+        );
+        game.selectWord(pairs[0].id);
+        game.selectMeaning(pairs[0].id);
+        game.selectWord(pairs[1].id);
+        await repository.save(mode: LanguageMode.gurmukhi, game: game);
+        await tester.pumpWidget(
+          MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: AppThemes.forChoice(themeChoice),
+            home: WordBridgesPage(
+              vocabularyRepository: AssetVocabularyRepository(),
+              repository: repository,
+              contentFuture: Future.value(bridgesContent),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        expect(find.text('Matched'), findsNWidgets(2));
+        expect(find.text('Selected'), findsOneWidget);
+        await expectLater(
+          find.byType(Scaffold),
+          matchesGoldenFile('images/jodo_gurmukhi_$themeName.png'),
+        );
+      },
+      tags: 'golden',
+    );
 
     testWidgets('shared components render in $themeName', (tester) async {
       _setGoldenSurface(tester);
@@ -133,7 +271,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('YOUR CLUE'), findsOneWidget);
+      expect(find.text('Your clue'), findsOneWidget);
       for (final (key, character) in [
         (LogicalKeyboardKey.keyA, 'a'),
         (LogicalKeyboardKey.keyP, 'p'),

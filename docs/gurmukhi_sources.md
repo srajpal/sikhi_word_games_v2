@@ -11,9 +11,9 @@ The Punjabi University RCPLT [online Punjabi dictionary](https://dic.learnpunjab
 ## Import policy
 
 - Import native Gurmukhi headwords, not Romanized words padded to a target size.
-- Count the displayed word using Unicode grapheme/akhar units. Five and six are gameplay lengths, not Latin transliteration lengths.
+- Count the displayed word using Unicode grapheme/akhar units. Four, five, and six are gameplay lengths, not Latin transliteration lengths.
 - Keep the source ID, volume, page, repository, commit, and license in the candidate report.
-- Require a clean Romanized form when adding an entry to the shared vocabulary schema. A missing Romanized form is a review flag, not a reason to invent one.
+- Require a clean Romanized form when adding an entry to the shared vocabulary schema. The shared phoneme-preserving converter rejects unknown notation instead of silently deleting it. A missing or broken Romanized form is held out of play, not invented.
 - Preserve the source definition for review, then write a short, neutral, standalone game definition before approval.
 - Reject or hold definite names, places, abbreviations, scripture quotations, inflection-only entries, cross-reference-only entries, and rude/curse terms.
 - Ranking is only triage. It never changes `acceptedGuess` or `solutionEligible`.
@@ -33,3 +33,28 @@ dart run tool/import_gurmukhi_source.dart `
 The importer writes `reports/content/gurmukhi_candidates.json` and
 `reports/content/gurmukhi_candidates.md`. Those files are review queues; they
 are not runtime content until editorial decisions are recorded and applied.
+
+## Current Punjabi review
+
+Use the locally pinned root files for the combined source and editorial pass:
+
+```powershell
+cd app
+dart run tool/review_punjabi_content.dart
+dart run tool/review_punjabi_content.dart --write
+```
+
+The first command previews changes; `--write` applies them. The report records
+the exact Mahan Kosh source ID and sense index. Source-matched automatic
+decisions and source-checked, owner-authorized editorial decisions are marked
+`machineChecked`; this does not claim community or independent human review.
+The compatibility wrapper uses the same review policy. Blanket approval of the
+old queue is obsolete.
+
+The importer and review pipeline accept actual four-, five-, and six-grapheme
+Gurmukhi headwords. Latin spellings come from the phoneme-preserving helper or
+an explicit reviewed override, and lengths are recalculated after an override.
+Explicit exclusions remain protected unless a later per-entry decision reopens
+them. Missing, unsafe, uncertain, reference-only, or malformed meanings remain
+held. Familiarity and child suitability remain useful future curation passes;
+they do not prevent applying decisions already authorized and recorded.

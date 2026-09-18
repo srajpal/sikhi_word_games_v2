@@ -1,6 +1,6 @@
 # Sikhi Word Games V2
 
-An offline collection of English, romanized Punjabi, and Gurmukhi word games built with Flutter.
+An offline collection of English, romanized Punjabi, and Gurmukhi word games from **Khalsa Game Studio** ([khalsagamestudio.com](https://khalsagamestudio.com/)), built with Flutter.
 
 ## Repository layout
 
@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games bui
 
 ## App versioning
 
-The current public-playtest candidate is `1.3.0` (build `5`). The version follows
+The current public-playtest candidate is `1.9.0` (build `17`). The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
 release, and the major version for breaking product or data changes. Increment
@@ -52,8 +52,8 @@ changes belong in the curation layer described in the content documentation.
 
 ## itch.io release workflow
 
-The first itch.io distribution is **Public playtest 1.3.0+5**. This version adds
-keyboard play and a shared visual refresh. It is prepared locally; a commit or
+The first itch.io distribution is **Public playtest 1.9.0+17**. This candidate includes keyboard play, shared themes, corrected Punjabi
+spellings, clearer definitions, and a broader curated answer rotation. It is prepared locally; a commit or
 successful CI run does not publish the itch.io game. Do not reset the version
 history because itch.io is a new host. Change both version sources together and
 increment the build number for the next distributed rebuild.
@@ -66,7 +66,7 @@ increment the build number for the next distributed rebuild.
    The helper builds with local renderer resources, changes the compiled base
    path to `./`, and packages the web files with `index.html` at the archive root.
    Flutter 3.47.2 rejects `--base-href ./`, so the helper patches build output.
-3. Serve the package through HTTP under a nested directory and verify all three
+3. Serve the package through HTTP under a nested directory and verify all five
    games, Dictionary, Gurmukhi rendering, refresh, and real browser persistence.
    Do not test by opening `index.html` through a file URL.
 4. Create an unpublished itch.io HTML project and upload the ZIP as playable in
@@ -104,7 +104,7 @@ Test the actual host before advertising offline reload there.
 - `.github/workflows/flutter_web.yml` runs the automated release checks. Visual
   baselines and a browser integration target supplement unit/widget tests.
 
-Use `app/dist/sikhi-word-games-web-1.3.0+5.zip` for the draft upload. The directory
+Use `app/dist/sikhi-word-games-web-1.9.0+17.zip` for the draft upload. The directory
 is ignored by Git; the ZIP is built from the committed sources. Artwork sources
 live in `branding/`; cover and real gameplay screenshots live in `reports/release/`.
 Keep `THIRD_PARTY_NOTICES.txt` and both bundled-font license files in the package.

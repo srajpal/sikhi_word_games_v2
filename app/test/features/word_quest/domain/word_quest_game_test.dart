@@ -30,6 +30,17 @@ void main() {
       expect(repeated.revealedGraphemes, const ['ਕਾ', 'ਕਾ']);
     });
 
+    test('matches precomposed and decomposed Gurmukhi letter guesses', () {
+      final game = WordQuestGame(solution: 'ਖ਼ਬਰ');
+
+      expect(game.solutionGraphemes, const ['ਖ਼', 'ਬ', 'ਰ']);
+      expect(game.guess('ਖ਼').result, WordQuestGuessResult.correct);
+      expect(game.revealedGraphemes.first, 'ਖ਼');
+      game.guess('ਬ');
+      game.guess('ਰ');
+      expect(game.status, WordQuestStatus.won);
+    });
+
     test('repeated guesses are harmless', () {
       final game = WordQuestGame(solution: 'SEVA');
 

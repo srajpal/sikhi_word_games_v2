@@ -46,7 +46,8 @@ class GuessGameRepository {
   }
 
   Future<void> save({required GuessGame game, required LanguageMode mode}) =>
-      _store.setString(
+      KeyValueStoreWrites.setString(
+        _store,
         storageKey,
         jsonEncode({
           'schemaVersion': 1,
@@ -92,5 +93,7 @@ class GuessGameRepository {
     }
   }
 
-  Future<void> clear() => _store.remove(storageKey);
+  Future<void> resetAll() => clear();
+
+  Future<void> clear() => KeyValueStoreWrites.remove(_store, storageKey);
 }

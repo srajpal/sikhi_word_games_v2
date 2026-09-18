@@ -163,6 +163,7 @@ class _KeyboardButton extends StatelessWidget {
     enabled: onPressed != null,
     label: semanticLabel ?? label,
     excludeSemantics: true,
+    onTap: onPressed,
     child: Tooltip(
       message: semanticLabel ?? label ?? '',
       child: SizedBox(

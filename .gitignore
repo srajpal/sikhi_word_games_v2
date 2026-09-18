@@ -38,3 +38,10 @@ sikhi_word_games-main.zip
 mahan-kosh-*.json
 mahan-kosh-*.tar.gz
 mahan-kosh-source/
+
+# Local pronunciation generation tools, excluded from source and app assets.
+.audio-venv/
+.audio-tools/
+
+# Generated visual-test failure diagnostics, not approved baselines.
+app/test/goldens/failures/

@@ -37,6 +37,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(sessions.restore()!.puzzle.words, hasLength(6));
+    expect(
+      sessions.restore()!.puzzle.words,
+      isNot(contains(anyOf('ਫੂਲ', 'ਖਾਲੀ'))),
+    );
     final scrollView = find.byKey(const ValueKey('word-search-board-scroll'));
     final scrollable = find.descendant(
       of: scrollView,
@@ -137,6 +141,32 @@ const _gurmukhiVocabulary = MemoryVocabularyRepository([
     englishDefinition: 'Sixth test word',
     latinLength: 4,
     gurmukhiLength: 4,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'Project editorial definition; original text for Sikhi Word Games',
+  ),
+  VocabularyEntry(
+    id: 'panjabi_guess_only',
+    language: VocabularyLanguage.panjabi,
+    latin: 'PHUL',
+    gurmukhi: 'ਫੂਲ',
+    englishDefinition: 'A legacy guess-only spelling',
+    latinLength: 4,
+    gurmukhiLength: 3,
+    acceptedGuess: true,
+    solutionEligible: false,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'Project editorial definition; original text for Sikhi Word Games',
+  ),
+  VocabularyEntry(
+    id: 'panjabi_blank',
+    language: VocabularyLanguage.panjabi,
+    latin: 'KHALI',
+    gurmukhi: 'ਖਾਲੀ',
+    englishDefinition: '   ',
+    latinLength: 5,
+    gurmukhiLength: 3,
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,

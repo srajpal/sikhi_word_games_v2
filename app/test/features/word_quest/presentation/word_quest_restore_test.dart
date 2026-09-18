@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
@@ -14,34 +15,57 @@ void main() {
   testWidgets('restores an unfinished quest into the playable screen', (
     tester,
   ) async {
-    final repository = WordQuestSessionRepository(MemoryKeyValueStore());
-    final game = WordQuestGame(solution: 'APPLE')..guess('A');
-    await repository.save(mode: LanguageMode.english, wordSize: 5, game: game);
+    final semantics = tester.ensureSemantics();
+    try {
+      final repository = WordQuestSessionRepository(MemoryKeyValueStore());
+      final game = WordQuestGame(solution: 'APPLE')..guess('A');
+      await repository.save(
+        mode: LanguageMode.english,
+        wordSize: 5,
+        game: game,
+      );
 
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppThemes.forChoice(AppThemeChoice.sikhi),
-        home: WordQuestPage(
-          vocabularyRepository: _vocabulary,
-          hapticLevel: HapticFeedbackLevel.off,
-          reducedMotion: true,
-          sessionRepository: repository,
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+          home: WordQuestPage(
+            vocabularyRepository: _vocabulary,
+            hapticLevel: HapticFeedbackLevel.off,
+            reducedMotion: true,
+            sessionRepository: repository,
+          ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(find.text('A round fruit'), findsOneWidget);
-    expect(find.byKey(const ValueKey('word-quest-key-A')), findsOneWidget);
-    expect(
-      find.descendant(
-        of: find.byKey(const ValueKey('word-quest-answer-tile-0')),
-        matching: find.text('A'),
-      ),
-      findsOneWidget,
-    );
-    expect(tester.takeException(), isNull);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.text('A round fruit'), findsOneWidget);
+      expect(find.byKey(const ValueKey('word-quest-key-A')), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('word-quest-answer-tile-0')),
+          matching: find.text('A'),
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      final letterP = tester.getSemantics(find.bySemanticsLabel('Letter P'));
+      expect(letterP.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
+      tester.binding.renderViews.first.owner!.semanticsOwner!.performAction(
+        letterP.id,
+        SemanticsAction.tap,
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('word-quest-answer-tile-1')),
+          matching: find.text('P'),
+        ),
+        findsOneWidget,
+      );
+    } finally {
+      semantics.dispose();
+    }
   });
 }
 

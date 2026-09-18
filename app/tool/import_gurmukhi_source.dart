@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:characters/characters.dart';
+
+import 'content/mahan_kosh_text.dart';
+
 /// Builds a reviewable candidate queue from a native Gurmukhi dictionary.
 ///
 /// This deliberately does not approve candidates. It separates source
@@ -29,8 +33,8 @@ Future<void> main(List<String> arguments) async {
       skippedShape++;
       continue;
     }
-    final length = _gurmukhiVisibleLength(headword);
-    if (length != 5 && length != 6) {
+    final length = headword.characters.length;
+    if (length < 4 || length > 6) {
       skippedLength++;
       continue;
     }
@@ -51,7 +55,7 @@ Future<void> main(List<String> arguments) async {
       word: headword,
       length: length,
       definition: _cleanDefinition(definition),
-      latin: _latinFromTransliteration(item['tr'] as String?),
+      latin: romanizeMahanKosh(item['tr'] as String?),
       volume: (item['vol'] as num?)?.toInt(),
       page: (item['page'] as num?)?.toInt(),
     );
@@ -85,7 +89,7 @@ Future<void> main(List<String> arguments) async {
     },
     'policy': {
       'lengthDefinition': 'Unicode extended grapheme clusters',
-      'targetLengths': [5, 6],
+      'targetLengths': [4, 5, 6],
       'approval':
           'Candidates require editorial review; ranking is not approval.',
     },
@@ -98,6 +102,7 @@ Future<void> main(List<String> arguments) async {
     },
     'candidateCount': candidates.length,
     'countsByLength': {
+      '4': candidates.where((c) => c.length == 4).length,
       '5': candidates.where((c) => c.length == 5).length,
       '6': candidates.where((c) => c.length == 6).length,
     },
@@ -109,7 +114,7 @@ Future<void> main(List<String> arguments) async {
   ).writeAsStringSync(encoder.convert(output));
 
   final markdown = StringBuffer()
-    ..writeln('# Native Gurmukhi 5/6-Grapheme Candidates')
+    ..writeln('# Native Gurmukhi 4/5/6-Grapheme Candidates')
     ..writeln()
     ..writeln('Source: Mahan Kosh multilingual dataset (`${options.commit}`).')
     ..writeln('License: CC BY 4.0; see `docs/gurmukhi_sources.md`.')
@@ -118,6 +123,9 @@ Future<void> main(List<String> arguments) async {
     ..writeln()
     ..writeln('- Core entries read: ${coreEntries.length}')
     ..writeln('- Unique candidates: ${candidates.length}')
+    ..writeln(
+      '- Four graphemes: ${candidates.where((c) => c.length == 4).length}',
+    )
     ..writeln(
       '- Five graphemes: ${candidates.where((c) => c.length == 5).length}',
     )
@@ -142,7 +150,8 @@ Future<void> main(List<String> arguments) async {
 
   stdout.writeln('Generated ${candidates.length} native Gurmukhi candidates.');
   stdout.writeln(
-    'Five graphemes: ${candidates.where((c) => c.length == 5).length}; '
+    'Four graphemes: ${candidates.where((c) => c.length == 4).length}; '
+    'five graphemes: ${candidates.where((c) => c.length == 5).length}; '
     'six graphemes: ${candidates.where((c) => c.length == 6).length}.',
   );
   stdout.writeln('Reports: ${reportDirectory.path}');
@@ -163,51 +172,10 @@ bool _isGurmukhiWord(String value) {
 
 String _key(String value) => value;
 
-// Gurmukhi combining marks belong to the preceding visible akhar. This keeps
-// the importer independent of Flutter's package cache while matching the
-// grapheme policy used by the app for normal Punjabi spellings.
-int _gurmukhiVisibleLength(String value) {
-  var count = 0;
-  for (final rune in value.runes) {
-    final isCombiningMark =
-        (rune >= 0x0A01 && rune <= 0x0A03) ||
-        (rune >= 0x0A3C && rune <= 0x0A4D) ||
-        (rune >= 0x0A51 && rune <= 0x0A51) ||
-        (rune >= 0x0A70 && rune <= 0x0A71) ||
-        rune == 0x0A75;
-    if (!isCombiningMark) count++;
-  }
-  return count;
-}
-
 String _cleanDefinition(String value) => value
     .replaceAll(RegExp(r'\s+'), ' ')
     .replaceAll(RegExp(r'\.{2,}'), '.')
     .trim();
-
-String? _latinFromTransliteration(String? value) {
-  if (value == null) return null;
-  final mapped = value
-      .replaceAll('ə', 'a')
-      .replaceAll('Ə', 'A')
-      .replaceAll('ı', 'i')
-      .replaceAll('ṛ', 'r')
-      .replaceAll('ṙ', 'r')
-      .replaceAll('ṇ', 'n')
-      .replaceAll('ṅ', 'n')
-      .replaceAll('ñ', 'n')
-      .replaceAll('ṭ', 't')
-      .replaceAll('ḍ', 'd')
-      .replaceAll('ś', 's')
-      .replaceAll('ṣ', 's')
-      .replaceAll('ṃ', 'm')
-      .replaceAll('ṁ', 'm')
-      .replaceAll('ā', 'a')
-      .replaceAll('ī', 'i')
-      .replaceAll('ū', 'u');
-  final cleaned = mapped.replaceAll(RegExp(r'[^A-Za-z]'), '').toUpperCase();
-  return RegExp(r'^[A-Z]{2,24}$').hasMatch(cleaned) ? cleaned : null;
-}
 
 class _Candidate {
   const _Candidate({

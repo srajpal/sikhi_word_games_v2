@@ -84,8 +84,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('How to play'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Press Enter or Space'), findsOneWidget);
-    expect(find.textContaining('Press Escape to cancel'), findsOneWidget);
+    expect(find.textContaining('Enter or Space to choose'), findsOneWidget);
+    expect(find.textContaining('Escape cancels a selection'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

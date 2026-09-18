@@ -64,31 +64,28 @@ disabled through editorial overrides.
 Commit the decision file and resulting curated assets together so each runtime
 change has an auditable editorial decision.
 
-### Apply native Gurmukhi decisions
+### Apply Punjabi source decisions
 
-Native candidates are never imported automatically. After reviewing them in
-the tool, preview and then apply only the entries marked `approve` or
-`guess_only`:
-
-```powershell
-dart tool/apply_gurmukhi_decisions.dart
-```
-
-The command is idempotent and only writes `supplemental_entries.json` when it
-finds new approved decisions. It requires a clean ASCII Romanized value and a
-non-empty definition, records the Mahan Kosh commit and page provenance, and
-keeps rejected or pending candidates out of the runtime pool.
-
-If the project owner explicitly approves the entire generated native queue,
-record that decision first with:
+The current combined workflow uses the pinned Mahan Kosh core and English files,
+precise source IDs and sense indexes, and explicit editorial proposals. Preview
+the decisions first, then apply them:
 
 ```powershell
-dart tool/approve_all_gurmukhi.dart
-dart tool/apply_gurmukhi_decisions.dart
+dart run tool/review_punjabi_content.dart
+dart run tool/review_punjabi_content.dart --write
 ```
 
-The bulk command still leaves candidates without a clean Romanized value out
-of the runtime dictionary; those entries remain visible in the review queue.
+The command is idempotent. It applies source-matched automatic decisions and
+source-checked, owner-authorized editorial decisions as `machineChecked`, not
+as community or independent human review. The compatibility wrapper follows
+the same policy. The old blanket-approval path is obsolete. Explicit exclusions
+remain protected unless a later per-entry decision reopens them.
+
+Native four-, five-, and six-grapheme entries use actual Unicode grapheme
+counts. The shared Romanization helper preserves known phonemes and rejects
+unknown notation. A reviewed Latin override is stored explicitly and its length
+is recalculated. Missing, unsafe, uncertain, cross-reference-only, or malformed
+meanings stay held, and broken pronunciations are excluded from play.
 
 ## Automatic first pass
 
@@ -98,7 +95,7 @@ Run the conservative automatic classifier in preview mode:
 dart run tool/auto_triage_four_letter_candidates.dart
 ```
 
-Add `--write` to save its proposals. It preserves existing human decisions,
+Add `--write` to save its proposals. It preserves existing explicit decisions,
 rejects only an explicit family-safety list, approves only independently
 verified common words whose definitions pass clarity and sensitive-content
 checks, and leaves uncertain entries pending. Its detailed audit is written to

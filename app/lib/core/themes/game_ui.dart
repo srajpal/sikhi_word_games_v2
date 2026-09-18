@@ -17,9 +17,8 @@ void showGameSnackBar(BuildContext context, String message) {
         ),
         behavior: SnackBarBehavior.floating,
         duration: gameSnackBarDuration,
-        // SnackBar actions default to persistent in Flutter. The game-wide
-        // feedback contract keeps the action but still times out.
-        persist: false,
+        // Give screen-reader users time to hear and dismiss feedback.
+        persist: MediaQuery.accessibleNavigationOf(context),
       ),
     );
 }
@@ -33,13 +32,14 @@ class GameBackdrop extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(gradient: tokens.backgroundGradient),
       child: Stack(
+        fit: StackFit.expand,
         children: [
           if (tokens.sikhiStyle)
             Positioned.fill(
               child: CustomPaint(
                 painter: _PhulkariPainter(
                   color: Theme.of(context).colorScheme.primary
-                      .withValues(alpha: .07),
+                      .withValues(alpha: .025),
                 ),
               ),
             ),
@@ -169,7 +169,7 @@ class GameGradientButton extends StatelessWidget {
             onTap: onPressed,
             borderRadius: radius,
             child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 44),
+              constraints: const BoxConstraints(minHeight: 48, minWidth: 48),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18,
@@ -177,22 +177,22 @@ class GameGradientButton extends StatelessWidget {
                 ),
                 child: IconTheme(
                   data: IconThemeData(color: foreground, size: 19),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (icon != null) ...[icon!, const SizedBox(width: 8)],
-                        Text(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (icon != null) ...[icon!, const SizedBox(width: 8)],
+                      Flexible(
+                        child: Text(
                           label,
+                          textAlign: TextAlign.center,
                           style: theme.textTheme.labelLarge?.copyWith(
                             fontWeight: FontWeight.w800,
                             color: foreground,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

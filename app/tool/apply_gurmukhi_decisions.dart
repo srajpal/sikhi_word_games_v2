@@ -1,147 +1,232 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// Applies curator decisions for the native Gurmukhi queue to the app's
-/// supplemental vocabulary. Pending entries are never imported.
+import 'package:characters/characters.dart';
+
+import 'content/mahan_kosh_text.dart';
+import 'content/punjabi_quality.dart';
+import 'review_punjabi_content.dart' show editorialSource, sourceCommit;
+
 Future<void> main() async {
   final app = Directory.current;
   final workspace = app.parent;
-  final reportFile = File(
-    '${workspace.path}${Platform.pathSeparator}reports${Platform.pathSeparator}'
-    'content${Platform.pathSeparator}gurmukhi_candidates.json',
+  await applyGurmukhiDecisions(
+    reportFile: File(
+      '${workspace.path}/reports/content/gurmukhi_candidates.json',
+    ),
+    decisionsFile: File(
+      '${app.path}/assets/content/curation/dictionary_review_decisions.json',
+    ),
+    supplementalFile: File(
+      '${app.path}/assets/content/curation/supplemental_entries.json',
+    ),
+    overridesFile: File(
+      '${app.path}/assets/content/curation/editorial_overrides.json',
+    ),
   );
-  final decisionsFile = File(
-    '${app.path}${Platform.pathSeparator}assets${Platform.pathSeparator}content${Platform.pathSeparator}'
-    'curation${Platform.pathSeparator}dictionary_review_decisions.json',
-  );
-  final supplementalFile = File(
-    '${app.path}${Platform.pathSeparator}assets${Platform.pathSeparator}content${Platform.pathSeparator}'
-    'curation${Platform.pathSeparator}supplemental_entries.json',
-  );
+}
 
-  if (!reportFile.existsSync()) {
-    throw StateError('Missing native candidate report: ${reportFile.path}');
+Future<void> applyGurmukhiDecisions({
+  required File reportFile,
+  required File decisionsFile,
+  required File supplementalFile,
+  required File overridesFile,
+}) async {
+  for (final file in [
+    reportFile,
+    decisionsFile,
+    supplementalFile,
+    overridesFile,
+  ]) {
+    if (!file.existsSync()) {
+      throw StateError('Missing required file: ${file.path}');
+    }
   }
-  if (!decisionsFile.existsSync()) {
-    throw StateError('Missing review decisions: ${decisionsFile.path}');
+  final report = _read(reportFile);
+  final source = report['source'];
+  if (source is! Map || source['commit'] != sourceCommit) {
+    throw FormatException('Candidate report is not pinned to $sourceCommit.');
   }
-  if (!supplementalFile.existsSync()) {
-    throw StateError('Missing supplemental entries: ${supplementalFile.path}');
-  }
-
-  final report =
-      jsonDecode(reportFile.readAsStringSync()) as Map<String, dynamic>;
-  final decisions =
-      jsonDecode(decisionsFile.readAsStringSync()) as Map<String, dynamic>;
-  final supplemental =
-      jsonDecode(supplementalFile.readAsStringSync()) as Map<String, dynamic>;
-  final candidates = (report['candidates'] as List<dynamic>? ?? const []);
-  final decisionEntries = (decisions['entries'] as List<dynamic>? ?? const []);
-  final entries = (supplemental['entries'] as List<dynamic>? ?? const [])
-      .map((entry) => Map<String, dynamic>.from(entry as Map))
+  final supplemental = _read(supplementalFile);
+  final overridesDocument = _read(overridesFile);
+  final supplementalEntries = (supplemental['entries'] as List)
+      .map((item) => Map<String, dynamic>.from(item as Map))
       .toList();
-
-  final byId = <String, Map<String, dynamic>>{
-    for (final entry in entries)
-      if (entry['id'] is String) entry['id'] as String: entry,
+  final supplementsById = {
+    for (final entry in supplementalEntries) entry['id'] as String: entry,
   };
-  final bySpelling = <String, Map<String, dynamic>>{
-    for (final entry in entries)
-      if (entry['latin'] is String && entry['language'] is String)
-        '${entry['language']}:${entry['latin']}': entry,
+  final overrides = {
+    for (final item in overridesDocument['entries'] as List)
+      (item as Map)['id'] as String: Map<String, dynamic>.from(item),
   };
-  final decisionById = <String, Map<String, dynamic>>{
-    for (final raw in decisionEntries)
-      if (raw is Map && (raw['id'] ?? raw['internalId']) is String)
-        (raw['id'] ?? raw['internalId']) as String: Map<String, dynamic>.from(
-          raw,
-        ),
+  final candidates = {
+    for (final item in report['candidates'] as List)
+      'gurmukhi_mahan_kosh_${(item as Map)['id']}': Map<String, dynamic>.from(
+        item,
+      ),
   };
 
-  var approved = 0;
-  var skipped = 0;
-  var alreadyPresent = 0;
-  for (final raw in candidates) {
-    final candidate = raw as Map<String, dynamic>;
-    final sourceId = candidate['id'] as String?;
-    if (sourceId == null) {
-      skipped++;
+  var applied = 0;
+  var stale = 0;
+  final seenDecisionIds = <String>{};
+  for (final raw in (_read(decisionsFile)['entries'] as List)) {
+    final decision = Map<String, dynamic>.from(raw as Map);
+    final id = (decision['id'] ?? decision['internalId']) as String?;
+    if (id != null && !seenDecisionIds.add(id)) {
+      throw FormatException('Duplicate manual decision: $id');
+    }
+    final candidate = id == null ? null : candidates[id];
+    if (candidate == null) continue;
+    if ('${decision['notes']}'.contains('Bulk approval requested') ||
+        !_modernReviewMethod(decision['reviewMethod'])) {
+      stale++;
       continue;
     }
-    final internalId = 'gurmukhi_mahan_kosh_$sourceId';
-    final decision = decisionById[internalId];
-    final status = decision?['decision'];
-    if (status != 'approve' && status != 'guess_only') continue;
-
-    final gurmukhi = candidate['gurmukhi'] as String?;
-    final romanized = (candidate['romanized'] as String?)?.trim().toUpperCase();
-    final sourceDefinition = (candidate['definition'] as String? ?? '').trim();
-    final reviewedDefinition = (decision?['definition'] as String? ?? '')
-        .trim();
-    final definition = reviewedDefinition.isNotEmpty
-        ? reviewedDefinition
-        : sourceDefinition;
-    if (gurmukhi == null ||
-        romanized == null ||
-        romanized.isEmpty ||
-        !RegExp(r'^[A-Z]+$').hasMatch(romanized) ||
-        definition.isEmpty) {
-      skipped++;
+    final status = decision['decision'];
+    if (status != 'approve' && status != 'guess_only' && status != 'reject') {
+      throw FormatException('Unsupported decision for $id: $status');
+    }
+    final existing = supplementsById[id];
+    if (status == 'reject') {
+      // A rejection may be the operation that removes a malformed legacy
+      // record, so it must not depend on that record passing spelling checks.
+      // There is nothing to reject when no supplemental record exists.
+      if (existing == null) continue;
+      existing['acceptedGuess'] = false;
+      existing['solutionEligible'] = false;
+      overrides[id!] = {
+        ...?overrides[id],
+        'id': id,
+        'englishDefinition': '',
+        'acceptedGuess': false,
+        'solutionEligible': false,
+        'reviewStatus': 'machineChecked',
+        'reviewMethod': decision['reviewMethod'],
+        'note':
+            decision['notes'] ??
+            'Rejected from the manual Punjabi review queue.',
+      };
+      applied++;
       continue;
     }
-
-    if (byId.containsKey(internalId) ||
-        bySpelling.containsKey('panjabi:$romanized')) {
-      alreadyPresent++;
-      continue;
-    }
-
-    final source = candidate['source'] as Map<String, dynamic>? ?? const {};
-    final sourceLabel = StringBuffer('Mahan Kosh multilingual dataset; ')
-      ..write(
-        'commit ${report['source'] is Map ? (report['source'] as Map)['commit'] : 'unknown'}',
+    final gurmukhi = (decision['gurmukhi'] ?? candidate['gurmukhi']) as String?;
+    final latin = '${decision['latin'] ?? candidate['romanized'] ?? ''}'
+        .trim()
+        .toUpperCase();
+    final sourceDefinition = '${candidate['definition'] ?? ''}'.trim();
+    final definition = '${decision['definition'] ?? sourceDefinition}'.trim();
+    if (gurmukhi == null || !hasMatchingPunjabiConsonants(gurmukhi, latin)) {
+      throw FormatException(
+        'Invalid Punjabi spelling for $id: $latin / $gurmukhi',
       );
-    if (source['volume'] != null || source['page'] != null) {
-      sourceLabel.write(
-        '; vol. ${source['volume'] ?? '?'}, p. ${source['page'] ?? '?'}',
-      );
     }
-
-    final entry = <String, dynamic>{
-      'id': internalId,
-      'language': 'panjabi',
-      'latin': romanized,
-      'gurmukhi': gurmukhi,
-      'definitions': {
-        'en': [definition],
-        'pa': [],
-      },
-      'lengths': {'latin': romanized.length, 'gurmukhi': candidate['length']},
-      'acceptedGuess': true,
-      'solutionEligible': status == 'approve',
-      'reviewStatus': 'editorApproved',
-      'sources': [sourceLabel.toString()],
-    };
-    entries.add(entry);
-    byId[internalId] = entry;
-    bySpelling['panjabi:$romanized'] = entry;
-    approved++;
-  }
-
-  if (approved > 0) {
-    supplemental['entries'] = entries;
-    final temporary = File('${supplementalFile.path}.tmp');
-    await temporary.writeAsString(
-      const JsonEncoder.withIndent('  ').convert(supplemental),
+    final quality = assessPunjabiQuality(
+      PunjabiQualityCandidate(
+        gurmukhi: gurmukhi,
+        latin: latin,
+        englishDefinition: definition,
+      ),
     );
-    await temporary.rename(supplementalFile.path);
+    if (!quality.isPromotionCandidate) {
+      throw FormatException(
+        'Unsafe decision for $id: '
+        '${quality.blockingIssues.map((issue) => issue.code).join(', ')}',
+      );
+    }
+
+    final sourceDetails = candidate['source'] as Map? ?? const {};
+    final mahanSource =
+        'Mahan Kosh multilingual dataset; commit $sourceCommit; '
+        'vol. ${sourceDetails['volume'] ?? '?'}, p. ${sourceDetails['page'] ?? '?'}; '
+        'entry ${candidate['id']}';
+    final rewritten = definition != sourceDefinition;
+    if (rewritten && '${decision['verificationSource'] ?? ''}'.trim().isEmpty) {
+      throw FormatException(
+        'Rewritten definition lacks verificationSource: $id',
+      );
+    }
+    const accepted = true;
+    final eligible = status == 'approve';
+    final definitionSource = rewritten ? editorialSource : mahanSource;
+    if (existing == null && accepted) {
+      final entry = <String, dynamic>{
+        'id': id,
+        'language': 'panjabi',
+        'latin': latin,
+        'gurmukhi': gurmukhi,
+        'definitions': {
+          'en': [definition],
+          'pa': <String>[],
+        },
+        'lengths': {
+          'latin': latin.characters.length,
+          'gurmukhi': gurmukhi.characters.length,
+        },
+        'acceptedGuess': accepted,
+        'solutionEligible': eligible,
+        'reviewStatus': 'machineChecked',
+        'sources': [definitionSource],
+      };
+      supplementalEntries.add(entry);
+      supplementsById[id!] = entry;
+    } else {
+      existing['acceptedGuess'] = accepted;
+      existing['solutionEligible'] = eligible;
+    }
+
+    // A current manual decision is authoritative even when an older override
+    // exists, so write the correction and eligibility together.
+    overrides[id!] = {
+      ...?overrides[id],
+      'id': id,
+      'latin': latin,
+      'gurmukhi': gurmukhi,
+      'englishDefinition': definition,
+      'acceptedGuess': accepted,
+      'solutionEligible': eligible,
+      'reviewStatus': 'machineChecked',
+      'source': definitionSource,
+      'verificationSource': mahanSource,
+      'reviewMethod': decision['reviewMethod'],
+      'note':
+          decision['notes'] ?? 'Applied from the manual Punjabi review queue.',
+    };
+    applied++;
   }
 
-  stdout.writeln('Native Gurmukhi decisions applied: $approved');
-  stdout.writeln('Already present: $alreadyPresent');
-  stdout.writeln('Skipped (missing clean data): $skipped');
-  stdout.writeln(
-    'Pending/rejected candidates left untouched: '
-    '${candidates.length - approved - alreadyPresent - skipped}',
+  if (applied == 0) {
+    stdout.writeln('Manual Gurmukhi decisions applied: 0');
+    stdout.writeln('Stale blanket decisions skipped: $stale');
+    return;
+  }
+
+  // Everything validates before either canonical document is replaced.
+  supplemental['entries'] = supplementalEntries
+    ..sort((a, b) => (a['id'] as String).compareTo(b['id'] as String));
+  overridesDocument['entries'] = overrides.values.toList()
+    ..sort((a, b) => (a['id'] as String).compareTo(b['id'] as String));
+  await _atomicWrite(supplementalFile, supplemental);
+  await _atomicWrite(overridesFile, overridesDocument);
+  stdout.writeln('Manual Gurmukhi decisions applied: $applied');
+  stdout.writeln('Stale blanket decisions skipped: $stale');
+}
+
+bool _modernReviewMethod(Object? value) =>
+    value == 'manual-review-v1' ||
+    value == 'human-reviewed-v1' ||
+    value == 'agent-editorial-source-checked-v1';
+
+Map<String, dynamic> _read(File file) =>
+    jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+
+Future<void> _atomicWrite(
+  File destination,
+  Map<String, dynamic> document,
+) async {
+  final temporary = File('${destination.path}.tmp');
+  await temporary.writeAsString(
+    '${const JsonEncoder.withIndent('  ').convert(document)}\n',
+    flush: true,
   );
+  await temporary.rename(destination.path);
 }

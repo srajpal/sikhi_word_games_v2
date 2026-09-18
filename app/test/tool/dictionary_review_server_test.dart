@@ -93,4 +93,85 @@ void main() {
       isNull,
     );
   });
+
+  test('adds pinned provenance to native review decisions server-side', () {
+    final enriched = enrichDictionaryReviewDecision(
+      {'id': 'gurmukhi_mahan_kosh_2-10-3', 'decision': 'approve'},
+      [
+        {
+          'internalId': 'gurmukhi_mahan_kosh_2-10-3',
+          'sourceCandidate': true,
+          'sourceId': '2-10-3',
+        },
+      ],
+    );
+
+    expect(enriched['reviewMethod'], 'manual-review-v1');
+    expect(
+      enriched['verificationSource'],
+      contains('fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6'),
+    );
+    expect(enriched['verificationSource'], contains('entry 2-10-3'));
+  });
+
+  test('native matching never annotates an English Latin homograph', () {
+    final candidates = <Map<String, Object?>>[
+      {
+        'internalId': 'english_sing',
+        'language': 'english',
+        'word': 'SING',
+        'displayWord': 'SING',
+      },
+    ];
+
+    expect(
+      annotateImportedNativeCandidate(
+        candidates: candidates,
+        internalId: 'gurmukhi_mahan_kosh_2-10-3',
+        gurmukhi: 'ਸਿੰਘ',
+        sourceId: '2-10-3',
+        source: const {'commit': 'pinned'},
+      ),
+      isFalse,
+    );
+    expect(candidates.single['sourceCandidate'], isNull);
+  });
+
+  test('native matching annotates the exact imported native ID', () {
+    final candidates = <Map<String, Object?>>[
+      {
+        'internalId': 'legacy_duplicate',
+        'language': 'gurmukhi',
+        'displayWord': 'ਸਿੰਘ',
+      },
+      {
+        'internalId': 'gurmukhi_mahan_kosh_2-10-3',
+        'language': 'gurmukhi',
+        'displayWord': 'ਸਿੰਘ',
+      },
+    ];
+
+    expect(
+      annotateImportedNativeCandidate(
+        candidates: candidates,
+        internalId: 'gurmukhi_mahan_kosh_2-10-3',
+        gurmukhi: 'ਸਿੰਘ',
+        sourceId: '2-10-3',
+        source: const {'commit': 'pinned'},
+      ),
+      isTrue,
+    );
+    expect(candidates.first['sourceCandidate'], isNull);
+    expect(candidates.last['sourceId'], '2-10-3');
+  });
+
+  test('only the pinned report commit establishes provenance', () {
+    expect(isPinnedDictionaryReportSource(const {'commit': 'wrong'}), isFalse);
+    expect(
+      isPinnedDictionaryReportSource(const {
+        'commit': 'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6',
+      }),
+      isTrue,
+    );
+  });
 }

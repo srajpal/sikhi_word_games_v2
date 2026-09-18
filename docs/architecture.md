@@ -85,6 +85,11 @@ lib/
 
 ## Khoj: Word Search rules
 
+- Each target has a distinct selectable cell path, including reverse-word
+  pairs. Saved puzzles must contain one grapheme per cell, unique nonempty
+  targets, matching grid letters and distinct target paths. Invalid snapshots
+  fall back to a new game through the existing session recovery behavior.
+
 - The persisted puzzle stores displayed words and grid graphemes; definitions
   and romanized Punjabi are resolved from the loaded offline vocabulary so the
   existing session schema remains compatible.
@@ -118,10 +123,34 @@ lib/
 The current separation is suitable for a small static playtest: game engines are
 pure Dart, persistence is behind a key-value interface, and the three games share
 vocabulary, launch preferences, themes, and language utilities. No backend is
-needed for the present scope. Bujho owns statistics and durable answer rotation;
-these are not yet a shared cross-game statistics service. Riverpod currently
+needed for the present scope. Bujho preserves its existing statistics and durable
+answer rotation. Khoj and Word Quest use a shared statistics repository with
+separate per-game storage keys and language/length buckets. The library reads
+all three repositories for its summary; it does not store a second aggregate or
+combine their win rates. Riverpod currently
 wraps the app at startup while most state is owned by widgets and repositories.
 Do not add another state layer just to prepare the web release.
+
+Statistics count finished attempts only. Leaving a round does not create a
+loss. A Word Quest retry is another attempt; hinted wins are shown separately.
+Khoj records a puzzle and its target count only on completion. Existing Bujho
+history is retained, while the other games begin counting with this feature.
+The shared summary includes repeated words, rather than claiming unique words
+learned. Statistics writes and active-session cleanup are separate operations;
+they are not a crash-atomic transaction.
+
+Each game route has a skippable three-step first-launch guide. Independent
+versioned markers live in the shared local store. Skip, Done and Back dismissal
+prevent future automatic display; Help can replay the guide without resetting
+the game. Help and walkthroughs use shared rule text. Tests may omit the guide
+repository to exercise gameplay directly; production injects the persisted one.
+
+Shared controls expose semantic activation and wrap larger action text. Khoj
+supports screen-reader activation of start/end cells, including cancellation
+by activating the start again. Word Quest letter keys support focus and
+activation as well as direct typing. Accessible-navigation feedback remains
+until dismissed. Device reduce-motion settings supplement the app preference.
+These mechanisms still require physical TalkBack/VoiceOver playtesting.
 
 The main scale risks are the large JSON vocabulary, synchronous parsing/filtering
 on the UI isolate, and large presentation files. Measure cold loading and input
@@ -133,6 +162,17 @@ source or be original project editorial text. Definitions with unclear legacy
 provenance are removed from the release shards, and affected entries cannot be
 solutions. Generated source data, editorial queues, curation records, and backups
 remain authoring data and must not enter the web archive.
+
+Bujho, Khoj, and Word Quest all select answers through the curated
+`solutionEligible` boundary. Source provenance, mechanical definition quality,
+and editorial approval remain separate decisions. The Punjabi review pipeline
+records the pinned source entry and sense for traceability, preserves explicit
+answer exclusions, and marks automated results as machine checked. Release
+generation revalidates those decisions and requires every answer to remain an
+accepted guess. Each game de-duplicates the active mode by its displayed spelling,
+so stable alias IDs can support saved games without weighting the same answer
+twice. Release audits report both source-record totals and unique playable
+spellings; only the unique count establishes pool coverage.
 
 The itch.io package generates a content-identified service worker after the final
 web build. It caches only a bounded allowlist of same-origin files within the
@@ -154,3 +194,29 @@ The local dictionary authoring server is excluded from the web package. Its
 write endpoints require JSON and a loopback Origin matching the actual bound
 port, so unrelated web pages cannot submit simple cross-site writes. This guard
 is independent of the Host header. It is a local authoring tool, not a hosted API.
+
+## Word Bridges
+
+Word Bridges separates its pure Dart matching engine, fixed-deck content resolver,
+single-key persistence repository, and Flutter presentation. Four unique pairs are
+shuffled independently on each side. Either side can be selected first; a mismatch
+counts an attempt without removing solved pairs. Completion, per-language statistics,
+and round-ID deduplication are saved atomically. Restore checks the saved pairs
+against current eligible content. Starter decks reference shipped stable vocabulary
+IDs and fail closed when an entry or usable sourced definition is unavailable.
+
+Studio attribution lives in `lib/core/studio_brand.dart`. Its website action uses
+`url_launcher` to open the supplied Khalsa Game Studio HTTPS address in an external
+browser. It is invoked only by a player tap; no studio network requests are needed
+for app startup, puzzle play or persistence. A launch failure shows a selectable
+address instead of interrupting the game library.
+
+App-wide reset is available only from the library. Repositories remove their exact owned keys; unrelated origin data is preserved. Writes and removals are queued by store identity and key to drain pending saves before removal, including writes from multiple repository instances. Failure may leave a partial reset and is reported with retry. UI reloads persisted settings and library state after either outcome.
+
+
+VictoryCelebration is a shared route-owned wrapper around GameGuide. Games notify only from accepted player-action win transitions; the wrapper owns the finite animation and audio player, stops on a new round/background/disposal, and does not persist events. Preferences remain within app.settings, so app-wide reset includes them. Audio uses audioplayers with a bundled original PCM WAV generated by app/tool/generate_victory_sound.py; no runtime network is needed. Audio errors are nonfatal. Particle colors derive from the active shared theme.
+
+
+Learn Letters uses a separate validated35-entry letter table, a five-question round model, and learnLetters.state.v1 for atomic session/statistics/first-try practice counts/completion IDs. Frozen snapshots enter the shared key write queue; completed round IDs prevent duplicate scoring. Counts update only on completed rounds. App-wide reset includes this key and the guide/settings entries. Global rounds include completed letter rounds, while word totals exclude letters.
+
+LetterPronunciationButton plays bundled WAV previews on explicit activation, stops earlier letter playback, and disposes players with their widgets. Backgrounding stops playback; failures are visible and retryable. Pronunciation playback is independent of optional victory sound settings. Local .audio-tools and .audio-venv are ignored and never packaged.

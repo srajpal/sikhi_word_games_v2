@@ -1,3 +1,5 @@
+import '../../../core/statistics/game_statistics_repository.dart';
+
 import 'dart:convert';
 
 import '../../../core/persistence/key_value_store.dart';
@@ -22,13 +24,17 @@ class WordQuestSessionRepository {
   static const storageKey = 'wordQuest.activeGame';
   final KeyValueStore _store;
 
+  GameStatisticsRepository get statistics =>
+      GameStatisticsRepository(_store, 'wordQuest');
+
   bool get hasActiveGame => restore() != null;
 
   Future<void> save({
     required LanguageMode mode,
     required int wordSize,
     required WordQuestGame game,
-  }) => _store.setString(
+  }) => KeyValueStoreWrites.setString(
+    _store,
     storageKey,
     jsonEncode({
       'schemaVersion': 1,
@@ -64,5 +70,10 @@ class WordQuestSessionRepository {
     }
   }
 
-  Future<void> clear() => _store.remove(storageKey);
+  Future<void> resetAll() async {
+    await clear();
+    await statistics.resetAll();
+  }
+
+  Future<void> clear() => KeyValueStoreWrites.remove(_store, storageKey);
 }

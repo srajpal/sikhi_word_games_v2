@@ -69,6 +69,16 @@ membership, and the absence of a flagged term are ranking signals only. They do
 not approve an answer. New random-answer approvals still require a licensed
 standalone meaning plus an explicit reviewed decision.
 
+For Punjabi content, `dart run tool/review_punjabi_content.dart` previews the
+current source-matched and explicit editorial decisions. Add `--write` to apply
+them. The command reads the locally pinned `mahan-kosh-core.json` and
+`mahan-kosh-en.json`, records the precise source ID and sense index, and marks
+applied decisions `machineChecked`. This status records reproducible machine
+checks and owner-authorized editorial work; it does not claim community or
+independent human review. The compatibility wrapper follows the same policy.
+Blanket queue approval is obsolete. Explicit exclusions remain protected and
+can be reopened only by a later per-entry decision.
+
 ## Other sources
 
 Merriam-Webster is appropriate for manual editorial verification but is not a
@@ -101,10 +111,12 @@ specifically for Sikhi Word Games. A source license establishes reuse rights,
 not semantic, cultural, or age suitability. Existing editorial exclusions and
 the unresolved review queue still apply.
 
-The current release assets contain 46,995 spellings, 46,989 accepted guesses,
-and 14,892 sourced standalone answer records. They include 10,279 OEWN
-definitions, 7,991 pinned Mahan Kosh definitions, and 9 original project
-definitions. The other 28,716 legacy definitions are absent from every language
-field in the distributed assets; their spellings remain guess-only. ADKAR and
-IXAR were deliberately left guess-only because their Latin and Gurmukhi forms
-need further editorial verification.
+The current release assets contain 47,093 records, 45,416 accepted guesses,
+14,701 answer records, and 16,756 visible sourced definitions. The other 30,337
+records have no distributed definition. The latest Punjabi review report covers
+13,678 source-matched records and 288 explicit edited definitions: 187 familiar
+Romanized words and 101 native four-grapheme proposals. It records 6,386
+approved and 5,186 held decisions. Missing, unsafe, uncertain, or malformed
+meanings remain held; broken pronunciations are excluded from play. These are
+release decisions, not a claim that every archived dictionary sense has been
+reviewed for familiarity or children.

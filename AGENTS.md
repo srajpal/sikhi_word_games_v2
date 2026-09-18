@@ -35,6 +35,9 @@ repository or vocabulary corpus without a concrete need.
   `dart run tool/build_release_content.dart --write` from `app/`; check it with
   `--check` and `dart run tool/audit_release_content.dart`. Only these compact
   vocabulary files belong in the distributed app.
+- For Punjabi content, use `dart run tool/review_punjabi_content.dart` to preview
+  source-backed changes, then `--write` to apply checked decisions. Never restore
+  the retired blanket-approval behavior or mark machine decisions as human review.
 - Preserve unrelated user changes and avoid unrelated refactoring.
 
 ## Validation

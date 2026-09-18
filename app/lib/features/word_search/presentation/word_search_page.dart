@@ -1,3 +1,8 @@
+import '../../../core/statistics/game_statistics_dialog.dart';
+import '../../../core/widgets/game_guide.dart';
+import '../../../core/widgets/victory_celebration.dart';
+import '../../game_library/domain/game_launch_options.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -15,7 +20,14 @@ import '../../guess_the_word/domain/word_pool.dart';
 import '../domain/word_search_puzzle.dart';
 import '../data/word_search_session_repository.dart';
 
-enum _WordSearchAction { newPuzzle, language, help, dictionary }
+enum _WordSearchAction {
+  newPuzzle,
+  language,
+  help,
+  statistics,
+  dictionary,
+  celebrations,
+}
 
 class WordSearchPage extends StatefulWidget {
   const WordSearchPage({
@@ -122,6 +134,13 @@ class _WordSearchPageState extends State<WordSearchPage> {
       if (!widget.startFresh) {
         final restored = widget.sessionRepository.restore();
         if (restored != null) {
+          if (!_canRestore(restored)) {
+            _mode = restored.mode;
+            _wordSize = restored.wordSize;
+            await widget.sessionRepository.clear();
+            _newPuzzle();
+            return;
+          }
           if (!mounted) return;
           setState(() {
             _mode = restored.mode;
@@ -136,7 +155,9 @@ class _WordSearchPageState extends State<WordSearchPage> {
             _keyboardSelecting = false;
           });
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) _gridFocusNode.requestFocus();
+            if (mounted && ModalRoute.of(context)?.isCurrent != false) {
+              _gridFocusNode.requestFocus();
+            }
           });
           return;
         }
@@ -151,7 +172,20 @@ class _WordSearchPageState extends State<WordSearchPage> {
     }
   }
 
+  bool _canRestore(WordSearchSession restored) => restored.puzzle.words.every(
+    (placed) => (_entries ?? const <VocabularyEntry>[]).any(
+      (entry) =>
+          entry.acceptedGuess &&
+          entry.solutionEligible &&
+          entry.hasDistributableDefinition &&
+          _supportsMode(entry, restored.mode) &&
+          WordPool.spelling(entry, restored.mode)?.trim().toUpperCase() ==
+              placed.word.trim().toUpperCase(),
+    ),
+  );
+
   void _newPuzzle() {
+    VictoryCelebration.stop(context);
     final entries = _entries;
     if (entries == null) return;
     try {
@@ -159,6 +193,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
       final seen = <String>{};
       for (final entry in entries) {
         if (!entry.acceptedGuess ||
+            !entry.solutionEligible ||
             !entry.hasDistributableDefinition ||
             !_supportsMode(entry, _mode)) {
           continue;
@@ -198,7 +233,9 @@ class _WordSearchPageState extends State<WordSearchPage> {
         foundWords: _foundWords,
       );
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _gridFocusNode.requestFocus();
+        if (mounted && ModalRoute.of(context)?.isCurrent != false) {
+          _gridFocusNode.requestFocus();
+        }
       });
     } on Object catch (error) {
       if (!mounted) return;
@@ -216,6 +253,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
     final sizes = <int>{};
     for (final entry in entries) {
       if (!entry.acceptedGuess ||
+          !entry.solutionEligible ||
           !entry.hasDistributableDefinition ||
           !_supportsMode(entry, mode)) {
         continue;
@@ -315,9 +353,44 @@ class _WordSearchPageState extends State<WordSearchPage> {
     });
   }
 
+  void _activateAccessibleCell(GridPoint point) {
+    final puzzle = _puzzle;
+    if (puzzle == null || _foundWords.length == puzzle.words.length) return;
+    if (!_keyboardSelecting || _dragStart == null) {
+      setState(() {
+        _keyboardSelecting = true;
+        _keyboardPoint = point;
+        _dragStart = point;
+        _selection = [point];
+      });
+      showGameSnackBar(
+        context,
+        'Start selected. Choose the last cell, or select this cell again to cancel.',
+      );
+      return;
+    }
+    if (_dragStart == point) {
+      setState(() {
+        _keyboardSelecting = false;
+        _dragStart = null;
+        _selection = const [];
+      });
+      showGameSnackBar(context, 'Selection cancelled.');
+      return;
+    }
+    final line = WordSearchPuzzle.lineBetween(_dragStart!, point);
+    if (line == null) {
+      showGameSnackBar(context, 'Choose an end cell in a straight line.');
+      return;
+    }
+    _keyboardPoint = point;
+    _selection = line;
+    _completeSelection();
+  }
+
   void _completeSelection() {
     final puzzle = _puzzle;
-    if (puzzle == null) return;
+    if (puzzle == null || _foundWords.length == puzzle.words.length) return;
     final word = puzzle.wordForSelection(_selection);
     setState(() {
       _keyboardSelecting = false;
@@ -328,9 +401,19 @@ class _WordSearchPageState extends State<WordSearchPage> {
         _activeHintWord = null;
       }
     });
-    if (word == null) return;
+    if (word == null) {
+      showGameSnackBar(context, 'No target found. Try another selection.');
+      return;
+    }
     final complete = _foundWords.length == puzzle.words.length;
     if (complete) {
+      VictoryCelebration.celebrate(context);
+      widget.sessionRepository.statistics.record(
+        mode: _mode.name,
+        size: _wordSize,
+        won: true,
+        wordsFound: puzzle.words.length,
+      );
       widget.sessionRepository.clear();
     } else {
       widget.sessionRepository.save(
@@ -424,26 +507,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
     );
   }
 
-  void _showHelp() {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('How to play'),
-        content: const Text(
-          'Find every word below the grid. Drag across letters horizontally, '
-          'vertically, or diagonally. Words may run forward or backward. With '
-          'a keyboard, use the arrow keys to move. Press Enter or Space to '
-          'choose the start and end cells. Press Escape to cancel.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Got it'),
-          ),
-        ],
-      ),
-    );
-  }
+  void _showHelp() => showGameHelp(context, GameKind.wordSearch);
 
   @override
   Widget build(BuildContext context) {
@@ -467,6 +531,17 @@ class _WordSearchPageState extends State<WordSearchPage> {
               _WordSearchAction.newPuzzle => _newPuzzle(),
               _WordSearchAction.language => _chooseLanguage(),
               _WordSearchAction.help => _showHelp(),
+              _WordSearchAction.celebrations => VictoryCelebration.showSettings(
+                context,
+              ),
+              _WordSearchAction.statistics => showGameStatistics(
+                context,
+                title: 'Khoj',
+                repository: widget.sessionRepository.statistics,
+                mode: _mode.name,
+                size: _wordSize,
+                modeLabel: _mode.label,
+              ),
               _WordSearchAction.dictionary => context.push('/dictionary'),
             },
             itemBuilder: (context) => const [
@@ -482,6 +557,20 @@ class _WordSearchPageState extends State<WordSearchPage> {
                 child: ListTile(
                   leading: Icon(Icons.language),
                   title: Text('Language'),
+                ),
+              ),
+              PopupMenuItem(
+                value: _WordSearchAction.statistics,
+                child: ListTile(
+                  leading: Icon(Icons.bar_chart),
+                  title: Text('Statistics'),
+                ),
+              ),
+              PopupMenuItem(
+                value: _WordSearchAction.celebrations,
+                child: ListTile(
+                  leading: Icon(Icons.celebration_outlined),
+                  title: Text('Celebration settings'),
                 ),
               ),
               PopupMenuItem(
@@ -529,6 +618,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
                     showKeyboardFocus: _gridFocusNode.hasFocus,
                     keyboardSelecting: _keyboardSelecting,
                     entryForWord: _entryForWord,
+                    onActivateCell: _activateAccessibleCell,
                     onStartSelection: _startSelection,
                     onExtendSelection: _extendSelection,
                     onCompleteSelection: _completeSelection,
@@ -554,6 +644,7 @@ class _WordSearchBoard extends StatelessWidget {
     required this.showKeyboardFocus,
     required this.keyboardSelecting,
     required this.entryForWord,
+    required this.onActivateCell,
     required this.onStartSelection,
     required this.onExtendSelection,
     required this.onCompleteSelection,
@@ -571,6 +662,7 @@ class _WordSearchBoard extends StatelessWidget {
   final bool showKeyboardFocus;
   final bool keyboardSelecting;
   final VocabularyEntry? Function(String word) entryForWord;
+  final ValueChanged<GridPoint> onActivateCell;
   final ValueChanged<GridPoint> onStartSelection;
   final ValueChanged<GridPoint> onExtendSelection;
   final VoidCallback onCompleteSelection;
@@ -708,6 +800,19 @@ class _WordSearchBoard extends StatelessWidget {
                                     ? theme.colorScheme.onPrimary
                                     : theme.colorScheme.onSurface;
                                 return Semantics(
+                                  key: ValueKey(
+                                    'word-search-cell-action-${point.row}-${point.column}',
+                                  ),
+                                  button: true,
+                                  enabled: !complete,
+                                  selected: selected,
+                                  excludeSemantics: true,
+                                  onTap: complete
+                                      ? null
+                                      : () => onActivateCell(point),
+                                  hint: keyboardSelecting
+                                      ? 'Choose the end cell. Choose the start again to cancel.'
+                                      : 'Choose the start cell.',
                                   label:
                                       'Row ${point.row + 1}, column ${point.column + 1}: '
                                       '$grapheme${mode == LanguageMode.gurmukhi ? ', ${romanizeGurmukhiGrapheme(grapheme)}' : ''}'

@@ -31,18 +31,18 @@ void main() {
               .where((word) => word.graphemeLength == length);
           expect(
             answers.length,
-            greaterThanOrEqualTo(6),
-            reason: '${mode.name}/$length must support a full Khoj puzzle',
+            greaterThanOrEqualTo(300),
+            reason: '${mode.name}/$length must retain a varied answer rotation',
           );
           expect(
-            questAnswers,
-            isNotEmpty,
+            questAnswers.length,
+            greaterThanOrEqualTo(250),
             reason: '${mode.name}/$length must support Word Quest',
           );
         }
       }
 
-      expect(entries, hasLength(46995));
+      expect(entries, hasLength(greaterThanOrEqualTo(47093)));
       expect(
         pool.solutions(mode: LanguageMode.english, wordLength: 4),
         hasLength(greaterThanOrEqualTo(1200)),
@@ -125,6 +125,38 @@ void main() {
       expect(
         legacyGuess.displayDefinition,
         'Definition unavailable for this word.',
+      );
+      final romanized = pool.acceptedGuesses(
+        mode: LanguageMode.romanizedPanjabi,
+        wordLength: 5,
+      );
+      expect(romanized, contains('ADRAK'));
+      expect(romanized, isNot(contains('ADKAR')));
+      expect(
+        pool
+            .entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'ADRAK')
+            ?.englishDefinition,
+        'Ginger, used as a spice',
+      );
+      expect(
+        pool.entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'CASE'),
+        isNull,
+      );
+      expect(
+        pool.entryForGuess(mode: LanguageMode.english, guess: 'CASE'),
+        isNotNull,
+      );
+      expect(
+        pool
+            .entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'MARJI')
+            ?.englishDefinition,
+        "A person's will or choice",
+      );
+      expect(
+        pool
+            .entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'DUTARA')
+            ?.englishDefinition,
+        'A musical instrument with two strings',
       );
     },
   );
