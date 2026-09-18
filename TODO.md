@@ -18,6 +18,13 @@
 - [x] Upload build 17 ZIP, select browser playback, save 960 by 720 embed,
   click-to-play/fullscreen and five-game page copy. Owner preview confirms
   Draft visibility and processed Run game control.
+- [x] Actual itch.io iframe launches build 17 with all five library cards.
+  Fullscreen Learn Letters guide, correct Chhachha answer, Hear activation
+  (Stop audio state), page reload and Continue restored the same answered letter
+  at 20 percent. This establishes one hosted save/restore flow, not all-game QA
+  or speaker audibility. Embedded automated clicks hit a fractional-coordinate
+  tooling limitation; fullscreen controls worked. Page copy verified after reload.
+- [x] Commit and push accumulated work to origin/codex/release-playtest-1.3.0.
 - [ ] Complete actual-host all-game, audio, persistence and offline-restart checks.
 - [ ] Review pronunciation/audio publication status with owner/fluent speaker,
   active vocabulary suitability, mobile browsers and real screen readers.
