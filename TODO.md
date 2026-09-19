@@ -2,6 +2,10 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W15: Quest uses five-second, dismissible inline feedback;
+  remove the permanent instruction row as designed. Screen-reader persistence
+  follows the shared accessibility policy. Widget test covers timeout and dismiss.
+
 - [x] #5 W1: preserve ੜ as a distinct core letter, verified against Unicode
   decomposition data. Document the old snapshot policy; no content files edited.
 

@@ -4,6 +4,7 @@ import '../../../core/widgets/victory_celebration.dart';
 import '../../game_library/domain/game_launch_options.dart';
 import '../../../core/themes/game_artwork.dart';
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -101,6 +102,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
   int _wordSize = 4;
   List<String> _letterBank = const [];
   String _message = '';
+  Timer? _feedbackTimer;
   bool _loading = true;
   bool _showFullKeyboard = false;
   int _startRequest = 0;
@@ -113,6 +115,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   @override
   void dispose() {
+    _feedbackTimer?.cancel();
     _keyboardFocusNode.dispose();
     super.dispose();
   }
@@ -200,6 +203,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   Future<void> _startNewWord() async {
     if (!mounted) return;
+    _feedbackTimer?.cancel();
     VictoryCelebration.stop(context);
     final vocabulary = _vocabulary;
     if (vocabulary == null || !mounted) return;
@@ -247,6 +251,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   void _retryWord() {
+    _feedbackTimer?.cancel();
     final word = _word;
     if (word == null) return;
     final game = WordQuestGame(solution: word.spelling);
@@ -395,9 +400,18 @@ class _WordQuestPageState extends State<WordQuestPage> {
     _haptic(correct: true);
   }
 
+  void _dismissFeedback() {
+    _feedbackTimer?.cancel();
+    if (mounted) setState(() => _message = '');
+  }
+
   void _showFeedback(String message) {
     if (!mounted) return;
-    setState(() => _message = message);
+    _feedbackTimer?.cancel();
+    setState(() => _message = _game?.isComplete == true ? '' : message);
+    if (_message.isNotEmpty && !MediaQuery.accessibleNavigationOf(context)) {
+      _feedbackTimer = Timer(gameSnackBarDuration, _dismissFeedback);
+    }
   }
 
   Future<void> _showSettings() async {
@@ -575,150 +589,163 @@ class _WordQuestPageState extends State<WordQuestPage> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 620),
                       child: LayoutBuilder(
-                        builder: (context, constraints) => SingleChildScrollView(
-                          padding: EdgeInsets.all(
-                            constraints.maxWidth < 360 ? 12 : 16,
-                          ),
-                          child: Column(
-                            children: [
-                              _QuestStatusBar(
-                                language: _mode.label,
-                                letters: word.graphemeLength,
-                                tries: game.triesRemaining,
-                                hintsRemaining: game.hintsRemaining,
-                                onHint:
-                                    game.isComplete || game.hintsRemaining == 0
-                                    ? null
-                                    : _useHint,
-                                showFullKeyboard: _showFullKeyboard,
-                                onToggleKeyboard: game.isComplete
-                                    ? null
-                                    : () => setState(
-                                        () => _showFullKeyboard =
-                                            !_showFullKeyboard,
-                                      ),
+                        builder: (context, constraints) =>
+                            SingleChildScrollView(
+                              padding: EdgeInsets.all(
+                                constraints.maxWidth < 360 ? 12 : 16,
                               ),
-                              const SizedBox(height: 14),
-                              _RaisedPanel(
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    16,
-                                    12,
-                                    16,
-                                    14,
+                              child: Column(
+                                children: [
+                                  _QuestStatusBar(
+                                    language: _mode.label,
+                                    letters: word.graphemeLength,
+                                    tries: game.triesRemaining,
+                                    hintsRemaining: game.hintsRemaining,
+                                    onHint:
+                                        game.isComplete ||
+                                            game.hintsRemaining == 0
+                                        ? null
+                                        : _useHint,
+                                    showFullKeyboard: _showFullKeyboard,
+                                    onToggleKeyboard: game.isComplete
+                                        ? null
+                                        : () => setState(
+                                            () => _showFullKeyboard =
+                                                !_showFullKeyboard,
+                                          ),
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Wrap(
-                                        spacing: 12,
-                                        runSpacing: 8,
+                                  const SizedBox(height: 14),
+                                  _RaisedPanel(
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                        16,
+                                        12,
+                                        16,
+                                        14,
+                                      ),
+                                      child: Column(
                                         crossAxisAlignment:
-                                            WrapCrossAlignment.center,
+                                            CrossAxisAlignment.stretch,
                                         children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
+                                          Wrap(
+                                            spacing: 12,
+                                            runSpacing: 8,
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
                                             children: [
-                                              Icon(
-                                                Icons.lightbulb_outline,
-                                                color: scheme.secondary,
-                                                size: 18,
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    Icons.lightbulb_outline,
+                                                    color: scheme.secondary,
+                                                    size: 18,
+                                                  ),
+                                                  const SizedBox(width: 7),
+                                                  Text(
+                                                    'Your clue',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .labelLarge
+                                                        ?.copyWith(
+                                                          color:
+                                                              scheme.onSurface,
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                        ),
+                                                  ),
+                                                ],
                                               ),
-                                              const SizedBox(width: 7),
-                                              Text(
-                                                'Your clue',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .labelLarge
-                                                    ?.copyWith(
-                                                      color: scheme.onSurface,
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                    ),
+                                              _MiniBadge(
+                                                label: word.categoryHint,
                                               ),
                                             ],
                                           ),
-                                          _MiniBadge(label: word.categoryHint),
+                                          const SizedBox(height: 9),
+                                          _DefinitionPreview(
+                                            definition: word.definitionHint,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(
+                                                  color: scheme.onSurface,
+                                                  fontWeight: FontWeight.w700,
+                                                  height: 1.25,
+                                                ),
+                                          ),
                                         ],
                                       ),
-                                      const SizedBox(height: 9),
-                                      _DefinitionPreview(
-                                        definition: word.definitionHint,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                            ?.copyWith(
-                                              color: scheme.onSurface,
-                                              fontWeight: FontWeight.w700,
-                                              height: 1.25,
-                                            ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 18),
+                                  _WordTiles(
+                                    game: game,
+                                    showRomanization:
+                                        _mode == LanguageMode.gurmukhi,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  if (_showFullKeyboard) ...[
+                                    const SizedBox(height: 4),
+                                    Divider(
+                                      color: scheme.onSurface.withValues(
+                                        alpha: .2,
                                       ),
-                                    ],
-                                  ),
-                                ),
+                                      height: 1,
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ] else ...[
+                                    _GardenPath(
+                                      game: game,
+                                      reducedMotion: widget.reducedMotion,
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
+                                  if (game.isComplete)
+                                    _ResultCard(
+                                      word: word,
+                                      game: game,
+                                      showRomanization:
+                                          _mode == LanguageMode.gurmukhi,
+                                      onNewWord: _startNewWord,
+                                      onTryAgain:
+                                          game.status == WordQuestStatus.lost
+                                          ? _retryWord
+                                          : null,
+                                    )
+                                  else ...[
+                                    _LetterBank(
+                                      letters: _showFullKeyboard
+                                          ? _fullLetterBank(game)
+                                          : _letterBank,
+                                      game: game,
+                                      onPressed: _guess,
+                                      showRomanization:
+                                          _mode == LanguageMode.gurmukhi,
+                                    ),
+                                    if (_message.isNotEmpty)
+                                      Semantics(
+                                        liveRegion: true,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                _message,
+                                                key: const ValueKey(
+                                                  'word-quest-feedback',
+                                                ),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: _dismissFeedback,
+                                              child: const Text('Dismiss'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                ],
                               ),
-                              const SizedBox(height: 18),
-                              _WordTiles(
-                                game: game,
-                                showRomanization:
-                                    _mode == LanguageMode.gurmukhi,
-                              ),
-                              const SizedBox(height: 16),
-                              if (_showFullKeyboard) ...[
-                                const SizedBox(height: 4),
-                                Divider(
-                                  color: scheme.onSurface.withValues(alpha: .2),
-                                  height: 1,
-                                ),
-                                const SizedBox(height: 10),
-                              ] else ...[
-                                _GardenPath(
-                                  game: game,
-                                  reducedMotion: widget.reducedMotion,
-                                ),
-                                const SizedBox(height: 10),
-                              ],
-                              if (game.isComplete)
-                                _ResultCard(
-                                  word: word,
-                                  game: game,
-                                  showRomanization:
-                                      _mode == LanguageMode.gurmukhi,
-                                  onNewWord: _startNewWord,
-                                  onTryAgain:
-                                      game.status == WordQuestStatus.lost
-                                      ? _retryWord
-                                      : null,
-                                )
-                              else ...[
-                                _LetterBank(
-                                  letters: _showFullKeyboard
-                                      ? _fullLetterBank(game)
-                                      : _letterBank,
-                                  game: game,
-                                  onPressed: _guess,
-                                  showRomanization:
-                                      _mode == LanguageMode.gurmukhi,
-                                ),
-                                const SizedBox(height: 12),
-                                Semantics(
-                                  liveRegion: true,
-                                  child: Text(
-                                    _message.isEmpty
-                                        ? 'Choose a letter to grow your garden.'
-                                        : _message,
-                                    key: const ValueKey('word-quest-feedback'),
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium,
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
+                            ),
                       ),
                     ),
                   ),

@@ -194,11 +194,12 @@ From top to bottom, the round screen contains these sections:
   word. Try another one.`, `Hint used. A letter is now showing.`, `You
   found the word!`, and `The word is ready to discover. Let’s learn it
   together.` Avoid shame, streak pressure, or “wrong child” language.
-- Show momentary gameplay feedback in an accessible floating message instead
-  of reserving a permanent status row. Do not show an instructional message
+- Following the approved 1.6 illustrated redesign, show momentary gameplay
+  feedback inline so it cannot cover keyboard targets. Do not show an instructional message
   before the child has acted; the clue and keyboard make the first action clear.
 - All game feedback messages use a five-second timeout and include a `Dismiss`
-  action. The action must not make the message persistent.
+  action. Keep feedback until dismissed when accessible navigation is enabled;
+  otherwise the action must not make the message persistent.
 - Every tile/key has a useful semantic label and state. The word board reads in
   order as `Letter 1, hidden` / `Letter 1, <grapheme>, revealed`; the garden
   panel reads its numeric progress. Do not expose decorative symbols twice.

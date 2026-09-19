@@ -12,6 +12,38 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.d
 import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
 
 void main() {
+  testWidgets('feedback dismisses manually and after five seconds', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.modern),
+        home: WordQuestPage(
+          vocabularyRepository: _vocabulary,
+          hapticLevel: HapticFeedbackLevel.off,
+          reducedMotion: true,
+          sessionRepository: WordQuestSessionRepository(MemoryKeyValueStore()),
+          initialMode: LanguageMode.english,
+          initialWordSize: 5,
+          startFresh: true,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Choose a letter to grow your garden.'), findsNothing);
+    await tester.tap(find.byKey(const ValueKey('word-quest-key-A')));
+    await tester.pumpAndSettle();
+    expect(find.text('Nice find! That letter is in the word.'), findsOneWidget);
+    await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('word-quest-feedback')), findsNothing);
+    await tester.tap(find.byKey(const ValueKey('word-quest-key-P')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('word-quest-feedback')), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('word-quest-feedback')), findsNothing);
+  });
   testWidgets('restores an unfinished quest into the playable screen', (
     tester,
   ) async {
