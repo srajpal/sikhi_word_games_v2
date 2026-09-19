@@ -1,3 +1,6 @@
+import '../../../core/persistence/reset_sections.dart';
+import '../../../core/statistics/game_statistics_repository.dart';
+
 import 'dart:convert';
 
 import '../../../core/persistence/key_value_store.dart';
@@ -24,6 +27,9 @@ class WordSearchSessionRepository {
   static const storageKey = 'wordSearch.activeGame';
   final KeyValueStore _store;
 
+  GameStatisticsRepository get statistics =>
+      GameStatisticsRepository(_store, 'wordSearch');
+
   bool get hasActiveGame => restore() != null;
 
   Future<void> save({
@@ -31,7 +37,8 @@ class WordSearchSessionRepository {
     required int? wordSize,
     required WordSearchPuzzle puzzle,
     required Set<String> foundWords,
-  }) => _store.setString(
+  }) => KeyValueStoreWrites.setString(
+    _store,
     storageKey,
     jsonEncode({
       'schemaVersion': 1,
@@ -81,5 +88,11 @@ class WordSearchSessionRepository {
     }
   }
 
-  Future<void> clear() => _store.remove(storageKey);
+  Future<void> resetAll() => resetSections({
+    'Saved game': () => clear(),
+    'Statistics': statistics.resetAll,
+  });
+
+  Future<void> clear({Future<void>? after}) =>
+      KeyValueStoreWrites.remove(_store, storageKey, after: after);
 }

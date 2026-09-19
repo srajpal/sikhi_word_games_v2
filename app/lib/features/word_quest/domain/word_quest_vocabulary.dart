@@ -4,6 +4,7 @@ import 'package:characters/characters.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/language/gurmukhi_normalization.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import 'word_quest_definition_quality.dart';
 
@@ -82,7 +83,10 @@ class WordQuestVocabulary {
       _graphemesByMode.putIfAbsent(
         mode,
         () => List.unmodifiable(
-          words(mode: mode).expand((word) => word.spelling.characters).toSet(),
+          words(mode: mode)
+              .expand((word) => word.spelling.characters)
+              .map(normalizeGurmukhi)
+              .toSet(),
         ),
       );
 
@@ -108,6 +112,7 @@ class WordQuestVocabulary {
     for (final entry in _entries) {
       if (!entry.acceptedGuess ||
           !entry.solutionEligible ||
+          !entry.hasDistributableDefinition ||
           !_supports(entry, mode)) {
         continue;
       }
@@ -115,7 +120,7 @@ class WordQuestVocabulary {
       if (spelling == null || spelling.isEmpty) continue;
       if (WordQuestDefinitionQuality.usableClue(
             answer: spelling,
-            clue: entry.englishDefinition,
+            clue: entry.displayDefinition,
           ) ==
           null) {
         continue;
@@ -136,7 +141,7 @@ class WordQuestVocabulary {
                 spelling: _visibleSpelling(entry, mode),
                 definitionHint: WordQuestDefinitionQuality.usableClue(
                   answer: _spelling(entry, mode)!,
-                  clue: entry.englishDefinition,
+                  clue: entry.displayDefinition,
                 )!,
                 categoryHint: _categoryFor(entry),
                 source: entry.source,
@@ -166,7 +171,8 @@ class WordQuestVocabulary {
         LanguageMode.mixedLatin => true,
       };
 
-  static String _normalize(String spelling) => spelling.trim().toUpperCase();
+  static String _normalize(String spelling) =>
+      normalizeGurmukhi(spelling.trim().toUpperCase());
 
   static bool _isBetter(VocabularyEntry contender, VocabularyEntry current) {
     final contenderScore = _qualityScore(contender);

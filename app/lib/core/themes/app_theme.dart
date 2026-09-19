@@ -36,6 +36,15 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
   final LinearGradient panelGradient;
   final List<BoxShadow> elevationShadow;
 
+  BorderRadius get panelRadius => BorderRadius.circular(sikhiStyle ? 22 : 20);
+  BorderRadius get controlRadius => BorderRadius.circular(sikhiStyle ? 12 : 14);
+  List<BoxShadow> get tileShadow => [
+    BoxShadow(
+      color: tileBorder.withValues(alpha: .16),
+      offset: const Offset(0, 2),
+    ),
+  ];
+
   @override
   GameThemeTokens copyWith({
     Color? correct,
@@ -91,33 +100,32 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
 abstract final class AppThemes {
   static ThemeData forChoice(AppThemeChoice choice) => switch (choice) {
     AppThemeChoice.modern => _theme(
-      seed: const Color(0xFF315C9E),
-      background: const Color(0xFFF6F7FB),
+      seed: const Color(0xFF0B6F66),
+      background: const Color(0xFFF5F8F7),
       radius: 12,
-      borderWidth: 1.5,
+      borderWidth: 1.25,
       sikhiStyle: false,
-      backgroundGradient: const [Color(0xFFF8FBFF), Color(0xFFE6EEFF)],
-      panelGradient: const [Color(0xFFFFFFFF), Color(0xFFEFF4FF)],
+      backgroundGradient: const [Color(0xFFF6FAF8), Color(0xFFE7F0EF)],
+      panelGradient: const [Color(0xFFFFFFFF), Color(0xFFF6FAF9)],
     ),
     AppThemeChoice.sikhi => _theme(
       seed: const Color(0xFFE28A16),
       background: const Color(0xFFFFF8E8),
-      radius: 6,
-      borderWidth: 2.5,
+      radius: 8,
+      borderWidth: 1.75,
       sikhiStyle: true,
-      fontFamily: 'serif',
-      backgroundGradient: const [Color(0xFFFFF8E8), Color(0xFFFFD9A0)],
-      panelGradient: const [Color(0xFFFFFCF4), Color(0xFFFFEBC7)],
+      backgroundGradient: const [Color(0xFFFFFAEF), Color(0xFFF7E4BC)],
+      panelGradient: const [Color(0xFFFFFDF7), Color(0xFFFFF5DF)],
     ),
     AppThemeChoice.dark => _theme(
       seed: const Color(0xFF8FB4FF),
       background: const Color(0xFF111318),
       radius: 12,
-      borderWidth: 1.5,
+      borderWidth: 1.25,
       sikhiStyle: false,
       brightness: Brightness.dark,
-      backgroundGradient: const [Color(0xFF171329), Color(0xFF30184A)],
-      panelGradient: const [Color(0xFF30234B), Color(0xFF211A38)],
+      backgroundGradient: const [Color(0xFF0D1727), Color(0xFF172D3D)],
+      panelGradient: const [Color(0xFF1C2B40), Color(0xFF172436)],
     ),
   };
 
@@ -128,80 +136,152 @@ abstract final class AppThemes {
     required double borderWidth,
     required bool sikhiStyle,
     Brightness brightness = Brightness.light,
-    String? fontFamily,
+    String fontFamily = 'NotoSans',
     required List<Color> backgroundGradient,
     required List<Color> panelGradient,
-  }) => ThemeData(
-    useMaterial3: true,
-    brightness: brightness,
-    colorScheme: ColorScheme.fromSeed(seedColor: seed, brightness: brightness),
-    scaffoldBackgroundColor: background,
-    fontFamily: fontFamily,
-    appBarTheme: sikhiStyle
-        ? const AppBarTheme(
-            centerTitle: true,
-            backgroundColor: Color(0xFF173A67),
-            foregroundColor: Color(0xFFFFF8E8),
-          )
-        : null,
-    cardTheme: sikhiStyle
-        ? const CardThemeData(
-            color: Color(0xFFFFFCF4),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(22),
-                topRight: Radius.circular(22),
-                bottomLeft: Radius.circular(5),
-                bottomRight: Radius.circular(5),
-              ),
-              side: BorderSide(color: Color(0xFF173A67), width: 1.5),
-            ),
-          )
-        : null,
-    filledButtonTheme: sikhiStyle
-        ? FilledButtonThemeData(
-            style: FilledButton.styleFrom(
-              shape: const RoundedRectangleBorder(
+  }) {
+    final dark = brightness == Brightness.dark;
+    final scheme = ColorScheme.fromSeed(seedColor: seed, brightness: brightness)
+        .copyWith(
+          primary: dark
+              ? const Color(0xFFA9C9FF)
+              : sikhiStyle
+              ? const Color(0xFF173A67)
+              : const Color(0xFF0B6F66),
+          onPrimary: dark ? const Color(0xFF112B4C) : Colors.white,
+          secondary: dark
+              ? const Color(0xFFA6DBC9)
+              : sikhiStyle
+              ? const Color(0xFF88550C)
+              : const Color(0xFF52658B),
+          onSecondary: dark ? const Color(0xFF103B30) : Colors.white,
+          surface: dark
+              ? const Color(0xFF172436)
+              : sikhiStyle
+              ? const Color(0xFFFFFDF7)
+              : Colors.white,
+          onSurface: dark ? const Color(0xFFE9EFF8) : const Color(0xFF202D3D),
+        );
+    final base = ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: background,
+      fontFamily: fontFamily,
+      fontFamilyFallback: const ['NotoSansGurmukhi'],
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        backgroundColor: sikhiStyle ? const Color(0xFF173A67) : scheme.surface,
+        foregroundColor: sikhiStyle
+            ? const Color(0xFFFFF8E8)
+            : scheme.onSurface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        titleTextStyle: TextStyle(
+          fontSize: 19,
+          fontWeight: FontWeight.w800,
+          color: sikhiStyle ? const Color(0xFFFFF8E8) : scheme.onSurface,
+          fontFamily: fontFamily,
+          fontFamilyFallback: const ['NotoSansGurmukhi'],
+        ),
+      ),
+      cardTheme: sikhiStyle
+          ? const CardThemeData(
+              color: Color(0xFFFFFCF4),
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(14),
-                  topRight: Radius.circular(14),
-                  bottomLeft: Radius.circular(4),
-                  bottomRight: Radius.circular(4),
+                  topLeft: Radius.circular(22),
+                  topRight: Radius.circular(22),
+                  bottomLeft: Radius.circular(5),
+                  bottomRight: Radius.circular(5),
                 ),
                 side: BorderSide(color: Color(0xFF173A67), width: 1.5),
               ),
-            ),
-          )
-        : null,
-    extensions: [
-      GameThemeTokens(
-        correct: const Color(0xFF2E7D55),
-        present: const Color(0xFFC28A12),
-        absent: const Color(0xFF68707A),
-        tileBorder: const Color(0xFF34383E),
-        tileRadius: BorderRadius.all(Radius.circular(radius)),
-        tileBorderWidth: borderWidth,
-        sikhiStyle: sikhiStyle,
-        backgroundGradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: backgroundGradient,
-        ),
-        panelGradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: panelGradient,
-        ),
-        elevationShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(
-              alpha: brightness == Brightness.dark ? .35 : .16,
-            ),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            )
+          : null,
+      filledButtonTheme: sikhiStyle
+          ? FilledButtonThemeData(
+              style: FilledButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(14),
+                    topRight: Radius.circular(14),
+                    bottomLeft: Radius.circular(4),
+                    bottomRight: Radius.circular(4),
+                  ),
+                  side: BorderSide(color: Color(0xFF173A67), width: 1.5),
+                ),
+              ),
+            )
+          : null,
+      extensions: [
+        GameThemeTokens(
+          correct: const Color(0xFF28734F),
+          present: const Color(0xFF866009),
+          absent: dark ? const Color(0xFF465268) : const Color(0xFF566579),
+          tileBorder: dark
+              ? const Color(0xFF8296B4)
+              : sikhiStyle
+              ? const Color(0xFF8F7959)
+              : const Color(0xFF869D99),
+          tileRadius: BorderRadius.all(Radius.circular(radius)),
+          tileBorderWidth: borderWidth,
+          sikhiStyle: sikhiStyle,
+          backgroundGradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: backgroundGradient,
           ),
-        ],
+          panelGradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: panelGradient,
+          ),
+          elevationShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: dark ? .24 : .08),
+              blurRadius: 20,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+      ],
+    );
+    return base.copyWith(
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
       ),
-    ],
-  );
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+      ),
+      textTheme: base.textTheme.copyWith(
+        headlineLarge: base.textTheme.headlineLarge?.copyWith(
+          fontWeight: FontWeight.w800,
+          letterSpacing: -1,
+        ),
+        headlineSmall: base.textTheme.headlineSmall?.copyWith(
+          fontWeight: FontWeight.w800,
+          letterSpacing: -.4,
+        ),
+        titleLarge: base.textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.w800,
+          letterSpacing: -.35,
+        ),
+      ),
+    );
+  }
 }

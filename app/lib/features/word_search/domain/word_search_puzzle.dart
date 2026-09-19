@@ -43,6 +43,8 @@ class PlacedWord {
   final GridPoint start;
   final WordSearchDirection direction;
 
+  String get firstGrapheme => word.characters.first;
+
   Map<String, Object> toJson() => {
     'word': word,
     'row': start.row,
@@ -100,7 +102,7 @@ class WordSearchPuzzle {
     for (final row in json['cells']! as List<Object?>) {
       if (row is! List<Object?> ||
           row.isEmpty ||
-          row.any((cell) => cell is! String)) {
+          row.any((cell) => cell is! String || cell.characters.length != 1)) {
         throw const FormatException('Malformed word-search cells.');
       }
       cells.add([for (final cell in row) cell! as String]);
@@ -127,10 +129,38 @@ class WordSearchPuzzle {
         )) {
       throw const FormatException('Placed word is outside the grid.');
     }
+    final seenWords = <String>{};
+    final occupiedPaths = <String>{};
+    for (final word in words) {
+      final letters = word.word.characters.toList();
+      final points = word.cells();
+      if (letters.isEmpty ||
+          !seenWords.add(word.word) ||
+          !occupiedPaths.add(_pathKey(points))) {
+        throw const FormatException('Empty, duplicate, or ambiguous target.');
+      }
+      for (var index = 0; index < letters.length; index++) {
+        final point = points[index];
+        if (cells[point.row][point.column] != letters[index]) {
+          throw const FormatException('Target does not match the grid.');
+        }
+      }
+    }
     return WordSearchPuzzle(cells: cells, words: words);
   }
 
   Set<GridPoint> cellsFor(PlacedWord word) => word.cells().toSet();
+
+  Set<GridPoint> cellsWithGrapheme(String grapheme) {
+    if (grapheme.isEmpty) return const {};
+    final normalized = grapheme.toUpperCase();
+    return {
+      for (var row = 0; row < cells.length; row++)
+        for (var column = 0; column < cells[row].length; column++)
+          if (cells[row][column].toUpperCase() == normalized)
+            GridPoint(row, column),
+    };
+  }
 
   PlacedWord? wordForSelection(List<GridPoint> selection) {
     for (final word in words) {
@@ -207,37 +237,54 @@ class WordSearchGenerator {
       words.add(word);
     }
     if (words.isEmpty) throw StateError('No words fit this word-search grid.');
-    words.shuffle(_random);
+    if (targetWordCount < 1 || words.length < targetWordCount) {
+      throw ArgumentError(
+        'The requested target count exceeds the available words.',
+      );
+    }
+    for (var attempt = 0; attempt < 8; attempt++) {
+      words.shuffle(_random);
 
-    final cells = List.generate(size, (_) => List<String?>.filled(size, null));
-    final placed = <PlacedWord>[];
-    for (final word in words) {
-      if (placed.length >= targetWordCount) break;
-      final placement = _findPlacement(cells, word);
-      if (placement == null) continue;
-      final letters = word.characters.toList(growable: false);
-      for (var index = 0; index < letters.length; index++) {
-        cells[placement.start.row +
-                placement.direction.rowStep * index][placement.start.column +
-                placement.direction.columnStep * index] =
-            letters[index];
+      final cells = List.generate(
+        size,
+        (_) => List<String?>.filled(size, null),
+      );
+      final placed = <PlacedWord>[];
+      for (final word in words) {
+        if (placed.length >= targetWordCount) break;
+        final placement = _findPlacement(cells, word, placed);
+        if (placement == null) continue;
+        final letters = word.characters.toList(growable: false);
+        for (var index = 0; index < letters.length; index++) {
+          cells[placement.start.row +
+                  placement.direction.rowStep * index][placement.start.column +
+                  placement.direction.columnStep * index] =
+              letters[index];
+        }
+        placed.add(placement);
       }
-      placed.add(placement);
-    }
-    if (placed.isEmpty) throw StateError('Unable to place a word-search word.');
-    for (var row = 0; row < size; row++) {
-      for (var column = 0; column < size; column++) {
-        cells[row][column] ??=
-            fillerCharacters[_random.nextInt(fillerCharacters.length)];
+      if (placed.length != targetWordCount) continue;
+      for (var row = 0; row < size; row++) {
+        for (var column = 0; column < size; column++) {
+          cells[row][column] ??=
+              fillerCharacters[_random.nextInt(fillerCharacters.length)];
+        }
       }
+      return WordSearchPuzzle(
+        cells: [for (final row in cells) row.cast<String>()],
+        words: List.unmodifiable(placed),
+      );
     }
-    return WordSearchPuzzle(
-      cells: [for (final row in cells) row.cast<String>()],
-      words: List.unmodifiable(placed),
+    throw StateError(
+      'Unable to place every target after eight attempts. Try a new puzzle.',
     );
   }
 
-  PlacedWord? _findPlacement(List<List<String?>> cells, String word) {
+  PlacedWord? _findPlacement(
+    List<List<String?>> cells,
+    String word,
+    List<PlacedWord> placed,
+  ) {
     final starts = [
       for (var row = 0; row < cells.length; row++)
         for (var column = 0; column < cells.length; column++)
@@ -267,10 +314,27 @@ class WordSearchGenerator {
           }
         }
         if (canPlace) {
-          return PlacedWord(word: word, start: start, direction: direction);
+          final candidate = PlacedWord(
+            word: word,
+            start: start,
+            direction: direction,
+          );
+          // Reverse-word pairs must have separate selectable paths.
+          if (placed.any(
+            (other) => _pathKey(other.cells()) == _pathKey(candidate.cells()),
+          )) {
+            continue;
+          }
+          return candidate;
         }
       }
     }
     return null;
   }
+}
+
+String _pathKey(List<GridPoint> points) {
+  final keys = points.map((point) => '${point.row},${point.column}').toList()
+    ..sort();
+  return keys.join(';');
 }

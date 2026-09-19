@@ -1,5 +1,9 @@
+import 'package:sikhi_word_games_v2/features/game_library/presentation/game_library_page.dart';
+import 'package:sikhi_word_games_v2/features/game_library/data/game_launch_preferences_repository.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/presentation/guess_the_word_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:sikhi_word_games_v2/app/app.dart';
 import 'package:sikhi_word_games_v2/core/app_version.dart';
@@ -13,8 +17,58 @@ import 'package:sikhi_word_games_v2/features/guess_the_word/data/guess_game_repo
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_repository.dart';
 import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
+import 'package:sikhi_word_games_v2/features/word_search/data/word_search_session_repository.dart';
+import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
+  testWidgets('rejected preference writes preserve settings and game launch', (
+    tester,
+  ) async {
+    final store = _RejectingWrites();
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(store),
+        launchPreferencesRepository: GameLaunchPreferencesRepository(store),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.pumpAndSettle();
+    var library = tester.widget<GameLibraryPage>(find.byType(GameLibraryPage));
+    library.onThemeChanged(AppThemeChoice.dark);
+    await tester.pumpAndSettle();
+    library = tester.widget<GameLibraryPage>(find.byType(GameLibraryPage));
+    expect(
+      Theme.of(tester.element(find.byType(GameLibraryPage))).brightness,
+      Brightness.dark,
+    );
+    expect(
+      find.text(
+        'Settings could not be saved on this device. They still apply for this session.',
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    library.onFeedbackSettingsChanged(
+      const AppSettings(theme: AppThemeChoice.dark, reducedMotion: true),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
+    await _openNewGameOptions(tester);
+    await tester.tap(find.text('Start new game'));
+    await tester.pumpAndSettle();
+    expect(find.byType(GuessTheWordPage), findsOneWidget);
+    expect(
+      tester
+          .widget<GuessTheWordPage>(find.byType(GuessTheWordPage))
+          .reducedMotion,
+      isTrue,
+    );
+    expect(tester.takeException(), isNull);
+    expect(store.attempts, 3);
+  });
+
   testWidgets('shows the current app version on the home page', (tester) async {
     await tester.pumpWidget(
       SikhiWordGamesApp(
@@ -58,11 +112,11 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.descendant(of: card, matching: find.text('New game options')),
+        find.descendant(of: card, matching: find.byTooltip('New game options')),
         findsOneWidget,
       );
       expect(
-        find.descendant(of: card, matching: find.text('Continue game')),
+        find.descendant(of: card, matching: find.text('Continue')),
         findsNothing,
       );
     }
@@ -89,7 +143,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pageBack();
     await tester.pumpAndSettle();
-    expect(find.text('Continue game'), findsOneWidget);
+    expect(find.text('Continue'), findsOneWidget);
 
     await _openNewGameOptions(tester);
     expect(find.text('Random language'), findsOneWidget);
@@ -105,7 +159,10 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    expect(find.text('Choose a game'), findsOneWidget);
+    expect(
+      find.text('Offline word games in English, Punjabi and Gurmukhi'),
+      findsOneWidget,
+    );
     await _startNewGame(tester);
     await tester.pumpAndSettle();
     expect(find.text('Bujho: Guess the Word'), findsOneWidget);
@@ -135,17 +192,71 @@ void main() {
   testWidgets('opens Khoj: Word Search and changes its language', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(320, 568);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
       SikhiWordGamesApp(
         settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
         vocabularyRepository: _vocabulary,
       ),
     );
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(ListView), const Offset(0, -420));
+    await tester.pumpAndSettle();
 
-    await _startNewGame(tester, cardIndex: 1);
+    await _openNewGameOptions(tester, cardIndex: 1);
+    await tester.tap(find.text('English').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('English').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start new game'));
+    await tester.pumpAndSettle();
     await tester.pumpAndSettle();
     expect(find.text('Khoj: Word Search'), findsOneWidget);
-    expect(find.text('English'), findsOneWidget);
+    expect(find.text('KHOJ'), findsNothing);
+    expect(find.text('TARGET WORDS'), findsNothing);
+    final hint = find.bySemanticsLabel(
+      RegExp(r'(hint.*highlight|highlight.*hint)', caseSensitive: false),
+    );
+    expect(hint, findsWidgets);
+    expect(
+      tester
+          .getSemantics(hint.first)
+          .getSemanticsData()
+          .hasAction(SemanticsAction.tap),
+      isTrue,
+    );
+    await _tapVisible(tester, hint.first);
+    expect(
+      find.bySemanticsLabel(
+        RegExp(r'turn off hint for ', caseSensitive: false),
+      ),
+      findsOneWidget,
+    );
+    expect(find.bySemanticsLabel(RegExp(r'hint highlighted')), findsWidgets);
+    final definition = find.bySemanticsLabel(RegExp(r'Show definition'));
+    expect(definition, findsWidgets);
+    await _tapVisible(tester, definition.first);
+    expect(find.byType(SnackBar), findsOneWidget);
+    final definitionSnackBar = tester.widget<SnackBar>(find.byType(SnackBar));
+    expect(definitionSnackBar.duration, gameSnackBarDuration);
+    expect(definitionSnackBar.persist, isFalse);
+    expect(find.text('Dismiss'), findsOneWidget);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Khoj: Word Search menu'));
+    await tester.pumpAndSettle();
+    expect(find.text('Dictionary'), findsOneWidget);
+    await tester.tap(find.text('Dictionary'));
+    await tester.pumpAndSettle();
+    expect(find.text('Dictionary'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('Khoj: Word Search'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Khoj: Word Search menu'));
     await tester.pumpAndSettle();
@@ -156,7 +267,53 @@ void main() {
     await tester.tap(gurmukhi);
     await tester.pumpAndSettle();
 
-    expect(find.text('Gurmukhi'), findsOneWidget);
+    expect(find.text('KIRTAN'), findsOneWidget);
+    expect(find.text('Kee'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Khoj compact layout fits a representative phone viewport', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+        home: WordSearchPage(
+          vocabularyRepository: _khojCompactVocabulary,
+          sessionRepository: WordSearchSessionRepository(MemoryKeyValueStore()),
+          initialMode: LanguageMode.english,
+          initialWordSize: 5,
+          startFresh: true,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('KHOJ'), findsNothing);
+    expect(find.text('TARGET WORDS'), findsNothing);
+    for (final word in ['APPLE', 'GRAPE']) {
+      final wordText = tester.widget<Text>(find.text(word));
+      expect(wordText.maxLines, 1);
+    }
+
+    final verticalScrollables = tester
+        .widgetList<Scrollable>(find.byType(Scrollable))
+        .where(
+          (scrollable) =>
+              scrollable.axisDirection == AxisDirection.down ||
+              scrollable.axisDirection == AxisDirection.up,
+        );
+    for (final scrollable in verticalScrollables) {
+      final position = tester
+          .state<ScrollableState>(find.byWidget(scrollable))
+          .position;
+      expect(position.maxScrollExtent, 0);
+    }
     expect(tester.takeException(), isNull);
   });
 
@@ -177,9 +334,9 @@ void main() {
     await tester.pumpAndSettle();
     await _startNewGame(tester, cardIndex: 2);
 
-    expect(find.text('CHARDI KALA'), findsOneWidget);
-    expect(find.text('WORD QUEST'), findsOneWidget);
-    expect(find.text('6'), findsOneWidget);
+    expect(find.text('Chardi Kala'), findsOneWidget);
+    expect(find.text('Word Quest'), findsOneWidget);
+    expect(find.text('6 tries'), findsOneWidget);
     expect(find.byKey(const ValueKey('word-quest-hint')), findsOneWidget);
     final keyboardToggle = find.byKey(
       const ValueKey('word-quest-keyboard-toggle'),
@@ -238,7 +395,7 @@ void main() {
     expect(centers.map((center) => center.dy).toSet(), hasLength(1));
     expect(centers.first.dx, greaterThan(0));
     expect(centers.last.dx, lessThan(320));
-    expect(find.text('7'), findsOneWidget);
+    expect(find.text('7 tries'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -275,7 +432,12 @@ void main() {
       expect(hint, expectedHints == 0 ? findsNothing : findsOneWidget);
       if (expectedHints > 0) {
         expect(
-          find.descendant(of: hint, matching: find.text('$expectedHints')),
+          find.descendant(
+            of: hint,
+            matching: find.text(
+              expectedHints == 1 ? '1 hint' : '$expectedHints hints',
+            ),
+          ),
           findsOneWidget,
         );
       }
@@ -337,57 +499,42 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Word Quest previews long clues and shows the full definition', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppThemes.forChoice(AppThemeChoice.sikhi),
-        home: WordQuestPage(
-          vocabularyRepository: _vocabulary,
-          hapticLevel: HapticFeedbackLevel.off,
-          reducedMotion: true,
-          sessionRepository: WordQuestSessionRepository(MemoryKeyValueStore()),
-          initialMode: LanguageMode.english,
-          initialWordSize: 6,
-          startFresh: true,
+  testWidgets(
+    'Word Quest displays full wrapping clues without an extra action',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+          home: WordQuestPage(
+            vocabularyRepository: _vocabulary,
+            hapticLevel: HapticFeedbackLevel.off,
+            reducedMotion: true,
+            sessionRepository: WordQuestSessionRepository(
+              MemoryKeyValueStore(),
+            ),
+            initialMode: LanguageMode.english,
+            initialWordSize: 6,
+            startFresh: true,
+          ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    final more = find.byKey(const ValueKey('word-quest-definition-more'));
-    expect(more, findsOneWidget);
-    await tester.tap(more);
-    await tester.pump();
-    expect(
-      find.descendant(
-        of: find.byType(SnackBar),
-        matching: find.text('A world that travels around a star'),
-      ),
-      findsOneWidget,
-    );
-    final definitionSnackBar = tester.widget<SnackBar>(find.byType(SnackBar));
-    expect(definitionSnackBar.duration, gameSnackBarDuration);
-    expect(definitionSnackBar.persist, isFalse);
-    expect(find.text('Dismiss'), findsOneWidget);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Dismiss'));
-    await tester.pumpAndSettle();
-    expect(find.byType(SnackBar), findsNothing);
-
-    await tester.tap(more);
-    await tester.pump();
-    await tester.pumpAndSettle();
-    await tester.pump(gameSnackBarDuration);
-    await tester.pumpAndSettle();
-    expect(find.byType(SnackBar), findsNothing);
-    expect(tester.takeException(), isNull);
-  });
+      final clue = find.byKey(const ValueKey('word-quest-full-definition'));
+      expect(clue, findsOneWidget);
+      expect(tester.widget<Text>(clue).maxLines, isNull);
+      expect(find.text('A world that travels around a star'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('word-quest-definition-more')),
+        findsNothing,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('game library fits a narrow phone viewport', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -402,7 +549,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('Choose a game'), findsOneWidget);
+    expect(
+      find.text('Offline word games in English, Punjabi and Gurmukhi'),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 
@@ -423,7 +573,11 @@ void main() {
 
     expect(find.text('ੴ'), findsOneWidget);
     expect(
-      Theme.of(tester.element(find.text('Choose a game'))).brightness,
+      Theme.of(
+        tester.element(
+          find.text('Offline word games in English, Punjabi and Gurmukhi'),
+        ),
+      ).brightness,
       Brightness.light,
     );
   });
@@ -439,18 +593,18 @@ void main() {
     await tester.pumpAndSettle();
     await _chooseGameMenu(tester, 'How to play');
 
-    expect(find.text('How to play'), findsOneWidget);
-    expect(find.text('Tile clues'), findsOneWidget);
-    expect(find.text('Language modes'), findsOneWidget);
+    expect(find.text('How to play Bujho'), findsOneWidget);
+    expect(find.text('Read the tile clues'), findsOneWidget);
     expect(
-      find.textContaining('Mixed English/Punjabi accepts both'),
+      find.textContaining('Romanized Punjabi uses Punjabi words'),
       findsOneWidget,
     );
-    expect(find.textContaining('work completely offline'), findsOneWidget);
+    expect(find.textContaining('Mixed accepts both'), findsOneWidget);
+    expect(find.textContaining('installed app works offline'), findsOneWidget);
 
     await tester.tap(find.text('Got it'));
     await tester.pumpAndSettle();
-    expect(find.text('How to play'), findsNothing);
+    expect(find.text('How to play Bujho'), findsNothing);
 
     await _chooseGameMenu(tester, 'Dictionary');
     expect(find.text('Dictionary'), findsOneWidget);
@@ -458,6 +612,11 @@ void main() {
       await tester.tap(find.byKey(ValueKey('key-$letter')));
       await tester.pump();
     }
+    expect(
+      find.descendant(of: find.byType(ListTile), matching: find.text('APPLE')),
+      findsNothing,
+    );
+    await tester.pump(const Duration(milliseconds: 150));
     expect(
       find.descendant(of: find.byType(ListTile), matching: find.text('APPLE')),
       findsOneWidget,
@@ -613,7 +772,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    await tester.tap(find.text('Continue game'));
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
     expect(
@@ -818,7 +977,7 @@ Future<void> _openNewGameOptions(
   final card = find.ancestor(of: titleFinder, matching: find.byType(GamePanel));
   final optionsButton = find.descendant(
     of: card,
-    matching: find.text('New game options'),
+    matching: find.byTooltip('New game options'),
   );
   await tester.tap(optionsButton);
   await tester.pumpAndSettle();
@@ -884,7 +1043,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'english_planet',
@@ -897,7 +1056,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'english_jump',
@@ -910,7 +1069,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'english_grape',
@@ -923,7 +1082,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: false,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'panjabi_kirtan',
@@ -936,6 +1095,44 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
 ]);
+
+const _khojCompactVocabulary = MemoryVocabularyRepository([
+  VocabularyEntry(
+    id: 'english_apple',
+    language: VocabularyLanguage.english,
+    latin: 'APPLE',
+    gurmukhi: null,
+    englishDefinition: 'A round fruit',
+    latinLength: 5,
+    gurmukhiLength: null,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'Project editorial definition; original text for Sikhi Word Games',
+  ),
+  VocabularyEntry(
+    id: 'english_grape',
+    language: VocabularyLanguage.english,
+    latin: 'GRAPE',
+    gurmukhi: null,
+    englishDefinition: 'A small fruit that grows in bunches',
+    latinLength: 5,
+    gurmukhiLength: null,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'Project editorial definition; original text for Sikhi Word Games',
+  ),
+]);
+
+class _RejectingWrites extends MemoryKeyValueStore {
+  int attempts = 0;
+  @override
+  Future<void> setString(String key, String value) async {
+    attempts++;
+    throw StateError('Storage blocked');
+  }
+}

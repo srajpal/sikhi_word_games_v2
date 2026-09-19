@@ -163,6 +163,7 @@ class _KeyboardButton extends StatelessWidget {
     enabled: onPressed != null,
     label: semanticLabel ?? label,
     excludeSemantics: true,
+    onTap: onPressed,
     child: Tooltip(
       message: semanticLabel ?? label ?? '',
       child: SizedBox(
@@ -207,7 +208,7 @@ class _KeyboardSurface extends StatelessWidget {
         ),
         boxShadow: enabled
             ? [
-                ...tokens.elevationShadow,
+                ...tokens.tileShadow,
                 const BoxShadow(
                   color: Color(0x332D3B55),
                   blurRadius: 0,

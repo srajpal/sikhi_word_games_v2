@@ -6,6 +6,71 @@ import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/word_pool.dart';
 
 void main() {
+  test(
+    'search minimum counts visible Gurmukhi letters after normalization',
+    () {
+      final pool = WordPool([
+        _entry('word', VocabularyLanguage.panjabi, 'SHABAD', gurmukhi: 'ਸ਼ਬਦ'),
+      ]);
+      expect(pool.search(mode: LanguageMode.gurmukhi, query: 'ਸ਼'), isEmpty);
+      expect(pool.search(mode: LanguageMode.gurmukhi, query: 'ਸ਼'), isEmpty);
+      expect(
+        pool.search(mode: LanguageMode.gurmukhi, query: 'ਸ਼ਬ').single.id,
+        'word',
+      );
+    },
+  );
+  test('incremental search retains matches beyond the displayed limit', () {
+    final pool = WordPool([
+      for (var i = 0; i < 60; i++)
+        _entry('$i', VocabularyLanguage.english, 'APPLE$i'),
+      _entry('target', VocabularyLanguage.english, 'APRICOT'),
+    ]);
+    expect(pool.search(mode: LanguageMode.english, query: 'AP'), hasLength(50));
+    expect(
+      pool.search(mode: LanguageMode.english, query: 'APR').single.id,
+      'target',
+    );
+    expect(
+      pool.search(mode: LanguageMode.english, query: 'AP', limit: 100),
+      hasLength(61),
+    );
+    expect(
+      pool.search(mode: LanguageMode.english, query: 'PLE', limit: 100),
+      hasLength(60),
+    );
+  });
+  test('deduplicates canonically equivalent Gurmukhi spellings', () {
+    final pool = WordPool([
+      _entry(
+        'precomposed',
+        VocabularyLanguage.panjabi,
+        'KHABAR',
+        gurmukhi: 'ਖ਼ਬਰ',
+        solution: true,
+      ),
+      _entry(
+        'decomposed',
+        VocabularyLanguage.panjabi,
+        'KHABAR',
+        gurmukhi: 'ਖ਼ਬਰ',
+        solution: true,
+      ),
+    ]);
+
+    expect(
+      pool.solutions(mode: LanguageMode.gurmukhi, wordLength: 3),
+      hasLength(1),
+    );
+    expect(
+      pool.entryForGuess(mode: LanguageMode.gurmukhi, guess: 'ਖ਼ਬਰ'),
+      isNotNull,
+    );
+    expect(pool.acceptedGuesses(mode: LanguageMode.gurmukhi, wordLength: 3), {
+      'ਖ਼ਬਰ',
+    });
+  });
+
   final entries = [
     _entry('english_hero', VocabularyLanguage.english, 'HERO', solution: true),
     _entry(
@@ -88,6 +153,89 @@ void main() {
     expect(pool.search(mode: LanguageMode.english, query: 'b'), isEmpty);
   });
 
+  test('search omits explicitly rejected entries', () {
+    final pool = WordPool([
+      _entry('rejected', VocabularyLanguage.english, 'HOME', accepted: false),
+    ]);
+
+    expect(pool.search(mode: LanguageMode.english, query: 'home'), isEmpty);
+  });
+
+  test('deduplicates solutions and prefers the sourced definition', () {
+    final pool = WordPool([
+      _entry('stale', VocabularyLanguage.panjabi, 'SAAJ', solution: true),
+      _entry(
+        'reviewed',
+        VocabularyLanguage.panjabi,
+        'SAAJ',
+        solution: true,
+        definition: 'A musical instrument',
+        source:
+            'Project editorial definition; original text for Sikhi Word Games',
+      ),
+    ]);
+
+    expect(
+      pool.solutions(mode: LanguageMode.romanizedPanjabi, wordLength: 4),
+      hasLength(1),
+    );
+    expect(
+      pool
+          .solutions(mode: LanguageMode.romanizedPanjabi, wordLength: 4)
+          .single
+          .id,
+      'reviewed',
+    );
+    expect(
+      pool
+          .entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'saaj')
+          ?.id,
+      'reviewed',
+    );
+  });
+
+  test('search deduplicates active Gurmukhi spelling before its limit', () {
+    final pool = WordPool([
+      _entry('stale', VocabularyLanguage.panjabi, 'PHUL', gurmukhi: 'ਫੁੱਲ'),
+      _entry(
+        'reviewed',
+        VocabularyLanguage.panjabi,
+        'PHULL',
+        gurmukhi: 'ਫੁੱਲ',
+        solution: true,
+        definition: 'The blooming part of a plant',
+        source:
+            'Project editorial definition; original text for Sikhi Word Games',
+      ),
+      _entry(
+        'other',
+        VocabularyLanguage.panjabi,
+        'PHULLAN',
+        gurmukhi: 'ਫੁੱਲਾਂ',
+      ),
+    ]);
+
+    expect(
+      pool
+          .search(mode: LanguageMode.gurmukhi, query: 'ਫੁੱਲ', limit: 2)
+          .map((entry) => entry.id),
+      ['reviewed', 'other'],
+    );
+  });
+
+  test('trusted empty definitions use the unavailable fallback', () {
+    final entry = _entry(
+      'empty',
+      VocabularyLanguage.english,
+      'VOID',
+      definition: '   ',
+      source:
+          'Project editorial definition; original text for Sikhi Word Games',
+    );
+
+    expect(entry.displayDefinition, 'Definition unavailable for this word.');
+  });
+
   test('seeded selector does not repeat until the pool is exhausted', () {
     final selector = NonRepeatingWordSelector(random: Random(7));
     final first = selector.select(entries);
@@ -136,16 +284,19 @@ VocabularyEntry _entry(
   String latin, {
   String? gurmukhi,
   bool solution = false,
+  bool accepted = true,
+  String definition = 'Definition',
+  String source = 'test',
 }) => VocabularyEntry(
   id: id,
   language: language,
   latin: latin,
   gurmukhi: gurmukhi,
-  englishDefinition: 'Definition',
+  englishDefinition: definition,
   latinLength: latin.length,
   gurmukhiLength: gurmukhi == null ? null : 2,
-  acceptedGuess: true,
+  acceptedGuess: accepted,
   solutionEligible: solution,
   reviewStatus: ReviewStatus.unreviewed,
-  source: 'test',
+  source: source,
 );

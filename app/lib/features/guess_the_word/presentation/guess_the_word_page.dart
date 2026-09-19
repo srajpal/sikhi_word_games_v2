@@ -6,8 +6,12 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/language/gurmukhi_normalization.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
+import '../../../core/widgets/game_guide.dart';
+import '../../../core/widgets/victory_celebration.dart';
+import '../../game_library/domain/game_launch_options.dart';
 import '../domain/guess_evaluator.dart';
 import '../domain/guess_game.dart';
 import '../domain/language_mode.dart';
@@ -28,6 +32,7 @@ enum _GameMenuAction {
   statistics,
   dictionary,
   copyResult,
+  celebrations,
 }
 
 class GuessTheWordPage extends StatefulWidget {
@@ -92,7 +97,11 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   }
 
   void _focusInput() {
-    if (!mounted || _game?.status != GuessGameStatus.playing) return;
+    if (!mounted ||
+        _game?.status != GuessGameStatus.playing ||
+        ModalRoute.of(context)?.isCurrent == false) {
+      return;
+    }
     _gameFocusNode.requestFocus();
   }
 
@@ -144,12 +153,16 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         _startGame();
         return;
       }
-      final solutionEntry = _pool!.entryForGuess(
-        mode: restored.mode,
-        guess: restored.game.solution,
+      final solutionEntry = _entryForPlayableSolution(
+        restored.mode,
+        restored.game.wordLength,
+        restored.game.solution,
       );
       if (solutionEntry == null) {
-        widget.gameRepository.clear();
+        await widget.gameRepository.clear();
+        if (!mounted) return;
+        _mode = restored.mode;
+        _wordLength = restored.game.wordLength;
         _startGame();
         return;
       }
@@ -190,15 +203,38 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     if (pool == null) return const [4, 5, 6];
     return [
       for (final length in const [4, 5, 6])
-        if (pool.solutions(mode: mode, wordLength: length).isNotEmpty) length,
+        if (_playableSolutions(mode, length).isNotEmpty) length,
     ];
   }
 
+  List<VocabularyEntry> _playableSolutions(LanguageMode mode, int length) =>
+      _pool!
+          .solutions(mode: mode, wordLength: length)
+          .where((entry) => entry.hasDistributableDefinition)
+          .toList(growable: false);
+
+  VocabularyEntry? _entryForPlayableSolution(
+    LanguageMode mode,
+    int length,
+    String solution,
+  ) {
+    final wanted = normalizeGurmukhi(solution.trim().toUpperCase());
+    for (final entry in _playableSolutions(mode, length)) {
+      final spelling = WordPool.spelling(entry, mode);
+      if (spelling != null &&
+          normalizeGurmukhi(spelling.trim().toUpperCase()) == wanted) {
+        return entry;
+      }
+    }
+    return null;
+  }
+
   void _startGame({int? length}) {
+    VictoryCelebration.stop(context);
     final pool = _pool;
     if (pool == null) return;
     _wordLength = length ?? _wordLength;
-    final solutions = pool.solutions(mode: _mode, wordLength: _wordLength);
+    final solutions = _playableSolutions(_mode, _wordLength);
     if (solutions.isEmpty) {
       setState(() {
         _loading = false;
@@ -218,15 +254,17 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       _message = null;
       _loading = false;
     });
-    widget.gameRepository.save(game: _game!, mode: _mode);
+    _persist(widget.gameRepository.save(game: _game!, mode: _mode));
     WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
   }
 
   void _saveSolutionHistory() {
-    widget.solutionHistoryRepository.save(
-      SolutionHistory(
-        usedIds: _selector.usedIds,
-        lastSelectedId: _selector.lastSelectedId,
+    _persist(
+      widget.solutionHistoryRepository.save(
+        SolutionHistory(
+          usedIds: _selector.usedIds,
+          lastSelectedId: _selector.lastSelectedId,
+        ),
       ),
     );
   }
@@ -256,10 +294,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           won: game.status == GuessGameStatus.won,
           attempts: game.turns.length,
         );
-        widget.statisticsRepository.save(_statistics);
-        widget.gameRepository.clear();
+        _persist(
+          widget.gameRepository.clear(
+            after: widget.statisticsRepository.save(_statistics),
+          ),
+        );
       } else {
-        widget.gameRepository.save(game: game, mode: _mode);
+        _persist(widget.gameRepository.save(game: game, mode: _mode));
       }
       _controller.clear();
       _message = null;
@@ -267,6 +308,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     _performHaptic();
     if (game.status == GuessGameStatus.won) {
       _showNotice('You found it!');
+      VictoryCelebration.celebrate(context);
     } else if (game.status == GuessGameStatus.lost) {
       _showNotice('No guesses remain.');
     }
@@ -298,19 +340,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     _focusInput();
   }
 
-  Future<void> _showHelp() => showDialog<void>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('How to play'),
-      content: const SingleChildScrollView(child: _GuessHelpContent()),
-      actions: [
-        FilledButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Got it'),
-        ),
-      ],
-    ),
-  );
+  Future<void> _showHelp() => showGameHelp(context, GameKind.guessTheWord);
 
   void _performHaptic({bool isKey = false, bool isError = false}) {
     switch (widget.hapticLevel) {
@@ -452,6 +482,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         _startGame();
       case _GameMenuAction.settings:
         _showGameSettings();
+      case _GameMenuAction.celebrations:
+        VictoryCelebration.showSettings(context);
       case _GameMenuAction.help:
         _showHelp();
       case _GameMenuAction.statistics:
@@ -460,6 +492,18 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         context.push('/dictionary');
       case _GameMenuAction.copyResult:
         _copyResult();
+    }
+  }
+
+  Future<void> _persist(Future<void> write) async {
+    try {
+      await write;
+    } on Object {
+      if (!mounted) return;
+      showGameSnackBar(
+        context,
+        'Progress could not be saved on this device. You can keep playing.',
+      );
     }
   }
 
@@ -505,6 +549,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                 child: ListTile(
                   leading: Icon(Icons.tune),
                   title: Text('Game settings'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: _GameMenuAction.celebrations,
+                child: ListTile(
+                  leading: Icon(Icons.celebration_outlined),
+                  title: Text('Celebration settings'),
                 ),
               ),
               const PopupMenuItem(
@@ -587,7 +638,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                         .titleLarge,
                                   ),
                                   Text(
-                                    _solutionEntry!.englishDefinition,
+                                    _solutionEntry!.displayDefinition,
                                     textAlign: TextAlign.center,
                                     maxLines: compact ? 1 : 2,
                                     overflow: TextOverflow.ellipsis,
@@ -665,86 +716,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       ),
     );
   }
-}
-
-class _GuessHelpContent extends StatelessWidget {
-  const _GuessHelpContent();
-
-  @override
-  Widget build(BuildContext context) => ConstrainedBox(
-    constraints: const BoxConstraints(maxWidth: 460),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text(
-          'Find the hidden word in six accepted guesses. Choose a four-, '
-          'five-, or six-letter game when that length is available.',
-        ),
-        const SizedBox(height: 16),
-        Text('Tile clues', style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
-        const _HelpRow(
-          icon: Icons.check,
-          label: 'Correct',
-          description: 'The letter is in the correct position.',
-        ),
-        const _HelpRow(
-          icon: Icons.swap_horiz,
-          label: 'Present',
-          description: 'The letter belongs somewhere else in the word.',
-        ),
-        const _HelpRow(
-          icon: Icons.close,
-          label: 'Absent',
-          description: 'The letter is not used in the answer.',
-        ),
-        const SizedBox(height: 16),
-        Text('Language modes', style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
-        const Text(
-          'English uses English words. Romanized Punjabi uses Punjabi words '
-          'written with Latin letters. Mixed English/Punjabi accepts both. Gurmukhi '
-          'uses Punjabi words and the custom Gurmukhi keyboard.',
-        ),
-        const SizedBox(height: 12),
-        const Text(
-          'Gurmukhi length counts visible letter groups, so a consonant and '
-          'its vowel sign count together. Backspace removes one visible group.',
-        ),
-        const SizedBox(height: 12),
-        const Text(
-          'The answer and its definition appear when the game ends. Games '
-          'and vocabulary work completely offline.',
-        ),
-      ],
-    ),
-  );
-}
-
-class _HelpRow extends StatelessWidget {
-  const _HelpRow({
-    required this.icon,
-    required this.label,
-    required this.description,
-  });
-
-  final IconData icon;
-  final String label;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 4),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, semanticLabel: label),
-        const SizedBox(width: 10),
-        Expanded(child: Text('$label — $description')),
-      ],
-    ),
-  );
 }
 
 class _StatisticsContent extends StatelessWidget {
@@ -927,7 +898,7 @@ class _Tile extends StatelessWidget {
     final status = switch (letter?.result) {
       LetterResult.correct => 'correct position',
       LetterResult.present => 'present in another position',
-      LetterResult.absent => 'not in the word',
+      LetterResult.absent => 'no unmatched copy in the word',
       null => 'blank',
     };
     final statusIcon = switch (letter?.result) {
@@ -955,7 +926,7 @@ class _Tile extends StatelessWidget {
             color: color,
             borderRadius: tokens.tileRadius,
             boxShadow: [
-              ...tokens.elevationShadow,
+              ...tokens.tileShadow,
               if (tokens.sikhiStyle)
                 const BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
             ],

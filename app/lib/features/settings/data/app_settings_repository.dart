@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../../../core/persistence/key_value_store.dart';
 import '../../../core/themes/app_theme.dart';
+import '../../game_library/domain/game_launch_options.dart';
 
 enum HapticFeedbackLevel { off, light, medium, strong }
 
@@ -20,6 +21,10 @@ class AppSettings {
     this.theme = AppThemeChoice.sikhi,
     this.hapticLevel = HapticFeedbackLevel.medium,
     this.reducedMotion = false,
+    this.victorySound = true,
+    this.victoryParticles = true,
+    this.mutedVictoryGames = const {},
+    this.quietVictoryGames = const {},
   });
 
   static const currentSchemaVersion = 1;
@@ -27,15 +32,50 @@ class AppSettings {
   final AppThemeChoice theme;
   final HapticFeedbackLevel hapticLevel;
   final bool reducedMotion;
+  final bool victorySound;
+  final bool victoryParticles;
+  final Set<String> mutedVictoryGames;
+  final Set<String> quietVictoryGames;
+
+  bool victorySoundFor(GameKind game) =>
+      victorySound && !mutedVictoryGames.contains(game.name);
+
+  bool victoryParticlesFor(GameKind game) =>
+      victoryParticles &&
+      !reducedMotion &&
+      !quietVictoryGames.contains(game.name);
+
+  AppSettings withGameVictory(GameKind game, {bool? sound, bool? particles}) {
+    final muted = {...mutedVictoryGames};
+    final quiet = {...quietVictoryGames};
+    if (sound != null) {
+      sound ? muted.remove(game.name) : muted.add(game.name);
+    }
+    if (particles != null) {
+      particles ? quiet.remove(game.name) : quiet.add(game.name);
+    }
+    return copyWith(
+      mutedVictoryGames: Set.unmodifiable(muted),
+      quietVictoryGames: Set.unmodifiable(quiet),
+    );
+  }
 
   AppSettings copyWith({
     AppThemeChoice? theme,
     HapticFeedbackLevel? hapticLevel,
     bool? reducedMotion,
+    bool? victorySound,
+    bool? victoryParticles,
+    Set<String>? mutedVictoryGames,
+    Set<String>? quietVictoryGames,
   }) => AppSettings(
     theme: theme ?? this.theme,
     hapticLevel: hapticLevel ?? this.hapticLevel,
     reducedMotion: reducedMotion ?? this.reducedMotion,
+    victorySound: victorySound ?? this.victorySound,
+    victoryParticles: victoryParticles ?? this.victoryParticles,
+    mutedVictoryGames: mutedVictoryGames ?? this.mutedVictoryGames,
+    quietVictoryGames: quietVictoryGames ?? this.quietVictoryGames,
   );
 
   Map<String, Object> toJson() => {
@@ -43,6 +83,10 @@ class AppSettings {
     'theme': theme.name,
     'hapticLevel': hapticLevel.name,
     'reducedMotion': reducedMotion,
+    'victorySound': victorySound,
+    'victoryParticles': victoryParticles,
+    'mutedVictoryGames': mutedVictoryGames.toList(),
+    'quietVictoryGames': quietVictoryGames.toList(),
   };
 
   static AppSettings fromJson(Map<String, Object?> json) {
@@ -60,8 +104,18 @@ class AppSettings {
           ? AppThemeChoice.sikhi
           : matchingThemes.first,
       hapticLevel: _hapticLevelFromJson(json),
-      reducedMotion: json['reducedMotion'] as bool? ?? false,
+      reducedMotion: json['reducedMotion'] == true,
+      victorySound: json['victorySound'] != false,
+      victoryParticles: json['victoryParticles'] != false,
+      mutedVictoryGames: _gameSet(json['mutedVictoryGames']),
+      quietVictoryGames: _gameSet(json['quietVictoryGames']),
     );
+  }
+
+  static Set<String> _gameSet(Object? value) {
+    if (value is! List) return const {};
+    final known = GameKind.values.map((game) => game.name).toSet();
+    return Set.unmodifiable(value.whereType<String>().where(known.contains));
   }
 
   static HapticFeedbackLevel _hapticLevelFromJson(Map<String, Object?> json) {
@@ -92,8 +146,11 @@ class AppSettingsRepository {
     }
   }
 
-  Future<void> save(AppSettings settings) =>
-      _store.setString(storageKey, jsonEncode(settings.toJson()));
+  Future<void> save(AppSettings settings) => KeyValueStoreWrites.setString(
+    _store,
+    storageKey,
+    jsonEncode(settings.toJson()),
+  );
 
-  Future<void> reset() => _store.remove(storageKey);
+  Future<void> reset() => KeyValueStoreWrites.remove(_store, storageKey);
 }

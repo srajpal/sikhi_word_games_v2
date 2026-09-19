@@ -1,0 +1,26 @@
+Sikhi Word Games third-party notices
+
+Noto Sans
+Copyright 2022 The Noto Project Authors.
+Source: https://github.com/google/fonts/tree/main/ofl/notosans
+Licensed under the SIL Open Font License, Version 1.1. The full license is
+included as Noto-Sans-OFL.txt with the itch.io web build.
+
+Noto Sans Gurmukhi
+Copyright 2022 The Noto Project Authors.
+Source: https://github.com/google/fonts/tree/main/ofl/notosansgurmukhi
+Licensed under the SIL Open Font License, Version 1.1. The full license is
+included as Noto-Sans-Gurmukhi-OFL.txt with the itch.io web build.
+
+Open English WordNet 2025
+English definition data is adapted from Open English WordNet 2025.
+Source: https://en-word.net/
+Licensed under Creative Commons Attribution 4.0:
+https://creativecommons.org/licenses/by/4.0/
+
+Mahan Kosh multilingual dataset
+Selected Gurmukhi source records are adapted from the Mahan Kosh multilingual
+dataset at commit fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6.
+Source: https://github.com/redroyals/mahan-kosh-multilingual
+Licensed under Creative Commons Attribution 4.0:
+https://creativecommons.org/licenses/by/4.0/

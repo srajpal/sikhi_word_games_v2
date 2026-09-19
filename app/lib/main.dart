@@ -1,3 +1,5 @@
+import 'features/learn_letters/data/learn_letters_repository.dart';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -5,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
+import 'features/word_bridges/data/word_bridges_repository.dart';
 import 'core/persistence/key_value_store.dart';
+import 'core/persistence/game_guide_repository.dart';
 import 'features/settings/data/app_settings_repository.dart';
 import 'features/guess_the_word/data/guess_statistics_repository.dart';
 import 'features/guess_the_word/data/guess_game_repository.dart';
@@ -30,6 +34,9 @@ Future<void> main() async {
     ProviderScope(
       child: SikhiWordGamesApp(
         settingsRepository: settings,
+        wordBridgesRepository: WordBridgesRepository(store),
+        learnLettersRepository: LearnLettersRepository(store),
+        guideRepository: GameGuideRepository(store),
         statisticsRepository: statistics,
         gameRepository: gameRepository,
         solutionHistoryRepository: solutionHistoryRepository,

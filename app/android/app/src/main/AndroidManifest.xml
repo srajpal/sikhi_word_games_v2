@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="sikhi_word_games_v2"
+        android:label="Sikhi Word Games"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

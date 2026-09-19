@@ -1,0 +1,1329 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "Mahan Kosh multilingual dataset",
+    "commit": "fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6",
+    "license": "CC BY 4.0"
+  },
+  "policy": {
+    "decisionType": "machine-reviewed proposals",
+    "targetGraphemeLength": 4,
+    "note": "Each proposal still requires the normal editorial import decision. Automated lexical checks are not a claim of human review."
+  },
+  "entryCount": 101,
+  "entries": [
+    {
+      "sourceId": "1-65-10",
+      "sourceHeadword": "ਉਪਬਨ",
+      "sourceDefinition": "Skt ਉਪਵਨ n a garden.",
+      "sourceTransliteration": "[upbən]",
+      "latin": "UPBAN",
+      "gurmukhi": "ਉਪਬਨ",
+      "definition": "A garden or planted green space.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-448-20",
+      "sourceHeadword": "ਗੁਲਜਾਰ",
+      "sourceDefinition": "P ਗੁਲਜਾਰ n place for flowers, a garden.",
+      "sourceTransliteration": "[guljar]",
+      "latin": "GULJAR",
+      "gurmukhi": "ਗੁਲਜਾਰ",
+      "definition": "A garden or planted green space.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-76-14",
+      "sourceHeadword": "ਉਲਫ਼ਤ",
+      "sourceDefinition": "A الفت n love.",
+      "sourceTransliteration": "[ulfət]",
+      "latin": "ULFAT",
+      "gurmukhi": "ਉਲਫ਼ਤ",
+      "definition": "Love or friendship.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-417-33",
+      "sourceHeadword": "ਸਪ੍ਰੀਤਿ",
+      "sourceDefinition": "adj with love or affection.",
+      "sourceTransliteration": "[səpritı]",
+      "latin": "SAPRITI",
+      "gurmukhi": "ਸਪ੍ਰੀਤਿ",
+      "definition": "With love or affection.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-417-34",
+      "sourceHeadword": "ਸਪ੍ਰੇਮ",
+      "sourceDefinition": "adj with love or affection.",
+      "sourceTransliteration": "[səprem]",
+      "latin": "SAPREM",
+      "gurmukhi": "ਸਪ੍ਰੇਮ",
+      "definition": "With love or affection.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "4-424-22",
+      "sourceHeadword": "ਮੁਹਬਤੀ",
+      "sourceDefinition": "adj lover, who loves.",
+      "sourceTransliteration": "[muhəbbəti]",
+      "latin": "MUHABBATI",
+      "gurmukhi": "ਮੁਹਬਤੀ",
+      "definition": "A loving person.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-68-2",
+      "sourceHeadword": "ਉਪਵਾਸ",
+      "sourceDefinition": "Skt n a fast; missing a meal; observing a fast.",
+      "sourceTransliteration": "[upvas]",
+      "latin": "UPVAS",
+      "gurmukhi": "ਉਪਵਾਸ",
+      "definition": "Going without food for a time.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-178-0",
+      "sourceHeadword": "ਅਨਾਹਾਰ",
+      "sourceDefinition": "Skt अनाहारिन् adj without food, fasting.",
+      "sourceTransliteration": "[ənahar]",
+      "latin": "ANAHAR",
+      "gurmukhi": "ਅਨਾਹਾਰ",
+      "definition": "Going without food for a time.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-178-1",
+      "sourceHeadword": "ਅਨਾਹਾਰੀ",
+      "sourceDefinition": "Skt अनाहारिन् adj without food, fasting.",
+      "sourceTransliteration": "[ənahari]",
+      "latin": "ANAHARI",
+      "gurmukhi": "ਅਨਾਹਾਰੀ",
+      "definition": "A person who does not eat or is fasting.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-50-1",
+      "sourceHeadword": "ਉਤਸੁਕ",
+      "sourceDefinition": "Skt उत्सुक adj eager to know, excited with desire.",
+      "sourceTransliteration": "[utsuk]",
+      "latin": "UTSUK",
+      "gurmukhi": "ਉਤਸੁਕ",
+      "definition": "Eager to learn or know.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed",
+      "existingId": "panjabi_utsuk"
+    },
+    {
+      "sourceId": "1-62-6",
+      "sourceHeadword": "ਉਨ੍ਹਲ",
+      "sourceDefinition": "n summer time; the summer season.",
+      "sourceTransliteration": "[unhal]",
+      "latin": "UNHAL",
+      "gurmukhi": "ਉਨ੍ਹਲ",
+      "definition": "The summer season.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-183-5",
+      "sourceHeadword": "ਅਨੁਦਿਨ",
+      "sourceDefinition": "Skt adv each day, daily, always.",
+      "sourceTransliteration": "ǝnudin",
+      "latin": "ANUDIN",
+      "gurmukhi": "ਅਨੁਦਿਨ",
+      "definition": "Daily or every day.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-497-2",
+      "sourceHeadword": "ਨੌਬਹਾਰ",
+      "sourceDefinition": "P نوبهار n new season, spring season.",
+      "sourceTransliteration": "[nəbəhar]",
+      "latin": "NAUBAHAR",
+      "gurmukhi": "ਨੌਬਹਾਰ",
+      "definition": "The spring season.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-154-0",
+      "sourceHeadword": "ਅਠਵਾਰਾ",
+      "sourceDefinition": "n a period of eight days; the term is used for the week.",
+      "sourceTransliteration": "[əthvara]",
+      "latin": "ATHVARA",
+      "gurmukhi": "ਅਠਵਾਰਾ",
+      "definition": "A week.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-519-21",
+      "sourceHeadword": "ਪਹੁਣਾਈ",
+      "sourceDefinition": "n state of being a guest.",
+      "sourceTransliteration": "[pəhunai]",
+      "latin": "PAHUNAI",
+      "gurmukhi": "ਪਹੁਣਾਈ",
+      "definition": "The state of being a guest.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-465-27",
+      "sourceHeadword": "ਨਿਪਜਨਾ",
+      "sourceDefinition": "v grow, be produced.",
+      "sourceTransliteration": "[nipajna]",
+      "latin": "NIPAJNA",
+      "gurmukhi": "ਨਿਪਜਨਾ",
+      "definition": "To grow or be produced.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-171-9",
+      "sourceHeadword": "ਅਧ੍ਯਾਯ",
+      "sourceDefinition": "Skt n a part of a book, chapter.",
+      "sourceTransliteration": "ədhyay",
+      "latin": "ADHYAY",
+      "gurmukhi": "ਅਧ੍ਯਾਯ",
+      "definition": "A chapter of a book.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-215-12",
+      "sourceHeadword": "ਅਮਰਾਈ",
+      "sourceDefinition": "n a mango grove; a line of mango trees.",
+      "sourceTransliteration": "[əmrai]",
+      "latin": "AMRAI",
+      "gurmukhi": "ਅਮਰਾਈ",
+      "definition": "A grove of mango trees.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-230-6",
+      "sourceHeadword": "ਅਰਹਰ",
+      "sourceDefinition": "n a type of grain/lentil.",
+      "sourceTransliteration": "ərhər",
+      "latin": "ARHAR",
+      "gurmukhi": "ਅਰਹਰ",
+      "definition": "Pigeon pea, a type of pulse.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-260-27",
+      "sourceHeadword": "ਆਸਾਬੰਧ",
+      "sourceDefinition": "adj tied down because of hope; hopeful, expectant.",
+      "sourceTransliteration": "[asabədh]",
+      "latin": "ASABANDH",
+      "gurmukhi": "ਆਸਾਬੰਧ",
+      "definition": "Hopeful or expectant.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-260-28",
+      "sourceHeadword": "ਆਸਾਬੰਧੂ",
+      "sourceDefinition": "adj tied down because of hope; hopeful, expectant.",
+      "sourceTransliteration": "[asabədhu]",
+      "latin": "ASABANDHU",
+      "gurmukhi": "ਆਸਾਬੰਧੂ",
+      "definition": "Hopeful or expectant.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-243-24",
+      "sourceHeadword": "ਅਲਮਾਸ",
+      "sourceDefinition": "P الماس n a diamond, a hard substance.",
+      "sourceTransliteration": "əlmas",
+      "latin": "ALMAS",
+      "gurmukhi": "ਅਲਮਾਸ",
+      "definition": "A diamond.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-274-13",
+      "sourceHeadword": "ਆਤਿਥਯ",
+      "sourceDefinition": "n hospitality, respect for and service of guests.",
+      "sourceTransliteration": "[atithy]",
+      "latin": "ATITHY",
+      "gurmukhi": "ਆਤਿਥਯ",
+      "definition": "Warm service and respect for guests.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-342-16",
+      "sourceHeadword": "ਇਮਦਾਦ",
+      "sourceDefinition": "A ਇਮਦਾਦ help, aid, assistance, support.",
+      "sourceTransliteration": "[imdad]",
+      "latin": "IMDAD",
+      "gurmukhi": "ਇਮਦਾਦ",
+      "definition": "Help or support.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-377-16",
+      "sourceHeadword": "ਸਹਾਇਤਾ",
+      "sourceDefinition": "n help, support.",
+      "sourceTransliteration": "[səhaita]",
+      "latin": "SAHAITA",
+      "gurmukhi": "ਸਹਾਇਤਾ",
+      "definition": "Help or support.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "4-416-3",
+      "sourceHeadword": "ਮੁਆਵਿਨ",
+      "sourceDefinition": "A معاون who helps; helper, assistant.",
+      "sourceTransliteration": "[muavin]",
+      "latin": "MUAVIN",
+      "gurmukhi": "ਮੁਆਵਿਨ",
+      "definition": "A helper or assistant.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-342-17",
+      "sourceHeadword": "ਇਮਰੋਜ਼",
+      "sourceDefinition": "P ਇਮਰੋਜ਼ this day, today.",
+      "sourceTransliteration": "[imroz]",
+      "latin": "IMROZ",
+      "gurmukhi": "ਇਮਰੋਜ਼",
+      "definition": "Today or this day.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-356-28",
+      "sourceHeadword": "ਏਤਬਾਰ",
+      "sourceDefinition": "P اعتبار n trust, faith, reliability, belief.",
+      "sourceTransliteration": "[etbar]",
+      "latin": "ETBAR",
+      "gurmukhi": "ਏਤਬਾਰ",
+      "definition": "Trust or confidence.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-543-2",
+      "sourceHeadword": "ਪਤਿਆਨਾ",
+      "sourceDefinition": "v have faith; trust; belief.",
+      "sourceTransliteration": "[pətiana]",
+      "latin": "PATIANA",
+      "gurmukhi": "ਪਤਿਆਨਾ",
+      "definition": "To trust or have faith.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-543-3",
+      "sourceHeadword": "ਪਤਿਆਰ",
+      "sourceDefinition": "n faith, trust, belief.",
+      "sourceTransliteration": "[pətiar]",
+      "latin": "PATIAR",
+      "gurmukhi": "ਪਤਿਆਰ",
+      "definition": "Trust or confidence.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-389-25",
+      "sourceHeadword": "ਸੱਗਰੱਤਾ",
+      "sourceDefinition": "very close and loving.",
+      "sourceTransliteration": "[səggarətta]",
+      "latin": "SAGGARATTA",
+      "gurmukhi": "ਸੱਗਰੱਤਾ",
+      "definition": "Close and loving.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-411-21",
+      "sourceHeadword": "ਸਨਮਾਨ",
+      "sourceDefinition": "Skt सन्मान n respect, reverence, veneration.",
+      "sourceTransliteration": "[sənman]",
+      "latin": "SANMAN",
+      "gurmukhi": "ਸਨਮਾਨ",
+      "definition": "Respect or honour.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-478-19",
+      "sourceHeadword": "ਸਾਕਸ਼ਰ",
+      "sourceDefinition": "Skt adj learned, who can read and write.",
+      "sourceTransliteration": "[sakşər]",
+      "latin": "SAKSHAR",
+      "gurmukhi": "ਸਾਕਸ਼ਰ",
+      "definition": "A person who can read and write.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-516-23",
+      "sourceHeadword": "ਸਿਖਲਾਨਾ",
+      "sourceDefinition": "v to teach.",
+      "sourceTransliteration": "[sikhlana]",
+      "latin": "SIKHLANA",
+      "gurmukhi": "ਸਿਖਲਾਨਾ",
+      "definition": "To teach.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-545-30",
+      "sourceHeadword": "ਸੀਤਲਤਾ",
+      "sourceDefinition": "cold; weather; winter; frost.",
+      "sourceTransliteration": "[sītalta]",
+      "latin": "SITALTA",
+      "gurmukhi": "ਸੀਤਲਤਾ",
+      "definition": "Coolness.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-591-11",
+      "sourceHeadword": "ਸੁਲਾਉਣਾ",
+      "sourceDefinition": "v to put one to sleep.",
+      "sourceTransliteration": "[sulauna]",
+      "latin": "SULAUNA",
+      "gurmukhi": "ਸੁਲਾਉਣਾ",
+      "definition": "To put someone to sleep.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-555-16",
+      "sourceHeadword": "ਸੁਕਰਮ",
+      "sourceDefinition": "good work, noble work.",
+      "sourceTransliteration": "[sukərəm]",
+      "latin": "SUKARAM",
+      "gurmukhi": "ਸੁਕਰਮ",
+      "definition": "Good or noble work.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-608-4",
+      "sourceHeadword": "ਸ਼ੇਰਦਿਲ",
+      "sourceDefinition": "P شيردل adjhaving a lion-hearted, brave.",
+      "sourceTransliteration": "[ṣerdil]",
+      "latin": "SHERDIL",
+      "gurmukhi": "ਸ਼ੇਰਦਿਲ",
+      "definition": "Brave or lion-hearted.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-560-11",
+      "sourceHeadword": "ਸੁਖਾਸਨ",
+      "sourceDefinition": "a soft seat, which is comfortable to sit at.",
+      "sourceTransliteration": "[sukhasən]",
+      "latin": "SUKHASAN",
+      "gurmukhi": "ਸੁਖਾਸਨ",
+      "definition": "A soft and comfortable seat.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-601-4",
+      "sourceHeadword": "ਸੂਰਮਤਾ",
+      "sourceDefinition": "n bravery, courage.",
+      "sourceTransliteration": "[surəmta]",
+      "latin": "SURAMTA",
+      "gurmukhi": "ਸੂਰਮਤਾ",
+      "definition": "Bravery or courage.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "4-126-7",
+      "sourceHeadword": "ਬਾਵਰਚੀ",
+      "sourceDefinition": "P ਬਾਵਰਚੀ n cook.",
+      "sourceTransliteration": "[bavərci]",
+      "latin": "BAVARCHI",
+      "gurmukhi": "ਬਾਵਰਚੀ",
+      "definition": "A cook.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "4-515-3",
+      "sourceHeadword": "ਰਸੋਇਆ",
+      "sourceDefinition": "person who prepares dishes; cook.",
+      "sourceTransliteration": "[rəsoia]",
+      "latin": "RASOIA",
+      "gurmukhi": "ਰਸੋਇਆ",
+      "definition": "A cook.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-619-2",
+      "sourceHeadword": "ਸੋਨਜੂਹੀ",
+      "sourceDefinition": "Dg a light-yellow jasmine; a jasmine with golden coloured flowers.",
+      "sourceTransliteration": "[sonjuhi]",
+      "latin": "SONJUHI",
+      "gurmukhi": "ਸੋਨਜੂਹੀ",
+      "definition": "A light yellow jasmine flower.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-212-16",
+      "sourceHeadword": "ਕਿਰਸਾਣ",
+      "sourceDefinition": "n farmer; one who cultivates land; cultivator, ploughman.",
+      "sourceTransliteration": "[kırsan]",
+      "latin": "KIRSAN",
+      "gurmukhi": "ਕਿਰਸਾਣ",
+      "definition": "A farmer.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-669-23",
+      "sourceHeadword": "ਸ੍ਵਾਸਥ",
+      "sourceDefinition": "Skt ਸ੍ਵਸ੍ਥ. n being in one’s natural state; health; sound state.",
+      "sourceTransliteration": "[svasəth]",
+      "latin": "SVASATH",
+      "gurmukhi": "ਸ੍ਵਾਸਥ",
+      "definition": "Health or a sound physical state.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-669-24",
+      "sourceHeadword": "ਸ੍ਵਸਥ",
+      "sourceDefinition": "Skt ਸ੍ਵਸ੍ਥ. n being in one’s natural state; health; sound state.",
+      "sourceTransliteration": "[svasth]",
+      "latin": "SVASTH",
+      "gurmukhi": "ਸ੍ਵਸਥ",
+      "definition": "Healthy or in a sound state.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-651-24",
+      "sourceHeadword": "ਸੰਪੂਰਨ",
+      "sourceDefinition": "Skt ਸੰਪੂਰ੍ਣ adj whole, entire, all",
+      "sourceTransliteration": "[sãpurən]",
+      "latin": "SANPURAN",
+      "gurmukhi": "ਸੰਪੂਰਨ",
+      "definition": "Whole, complete, or full.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-659-21",
+      "sourceHeadword": "ਸ੍ਰਮਿਤ",
+      "sourceDefinition": "adj exhausted due to hard work; weary.",
+      "sourceTransliteration": "[sramit]",
+      "latin": "SRAMIT",
+      "gurmukhi": "ਸ੍ਰਮਿਤ",
+      "definition": "Tired from hard work.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "1-657-0",
+      "sourceHeadword": "ਸਥਾਪਕ",
+      "sourceDefinition": "Skt adj who gives shelter, or establishes, or founder.",
+      "sourceTransliteration": "[sthapāk]",
+      "latin": "STHAPAK",
+      "gurmukhi": "ਸਥਾਪਕ",
+      "definition": "A founder or one who establishes something.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-33-17",
+      "sourceHeadword": "ਹਕੀਕਤ",
+      "sourceDefinition": "A ਹਕੀਕਤ n reality, truth.",
+      "sourceTransliteration": "[həkıkət]",
+      "latin": "HAKIKAT",
+      "gurmukhi": "ਹਕੀਕਤ",
+      "definition": "Truth or reality.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-60-3",
+      "sourceHeadword": "ਹਲਚਲ",
+      "sourceDefinition": "stir, commotion.",
+      "sourceTransliteration": "[hələcəl]",
+      "latin": "HALACHAL",
+      "gurmukhi": "ਹਲਚਲ",
+      "definition": "Movement or activity.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-45-13",
+      "sourceHeadword": "ਹਰਕਤ",
+      "sourceDefinition": "A ਹਰਕਤ motion, movement, effort.",
+      "sourceTransliteration": "[hərkət]",
+      "latin": "HARKAT",
+      "gurmukhi": "ਹਰਕਤ",
+      "definition": "Movement or activity.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed",
+      "existingId": "panjabi_harkat"
+    },
+    {
+      "sourceId": "2-61-8",
+      "sourceHeadword": "ਹਲੁਨਣਾ",
+      "sourceDefinition": "v shake.",
+      "sourceTransliteration": "[həlunna]",
+      "latin": "HALUNNA",
+      "gurmukhi": "ਹਲੁਨਣਾ",
+      "definition": "To shake or move back and forth.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-56-13",
+      "sourceHeadword": "ਹਰੀਅਲ",
+      "sourceDefinition": "Skt ਹਰਿਤ n a green pigeon, a pigeon-like green-coloured bird.",
+      "sourceTransliteration": "[həriəl]",
+      "latin": "HARIAL",
+      "gurmukhi": "ਹਰੀਅਲ",
+      "definition": "A green pigeon.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-43-12",
+      "sourceHeadword": "ਹਮਦਮ",
+      "sourceDefinition": "P ਹਮਦਮ n alter ego, bosom friend, true friend.",
+      "sourceTransliteration": "[həmdəm]",
+      "latin": "HAMDAM",
+      "gurmukhi": "ਹਮਦਮ",
+      "definition": "A close friend.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-70-28",
+      "sourceHeadword": "ਹਿਕਮਤੀ",
+      "sourceDefinition": "adj wise, skilled, ingenious.",
+      "sourceTransliteration": "[hikməti]",
+      "latin": "HIKMATI",
+      "gurmukhi": "ਹਿਕਮਤੀ",
+      "definition": "Wise and skilled.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-135-12",
+      "sourceHeadword": "ਕਮਜੋਰ",
+      "sourceDefinition": "P کمزور adj weak, feeble.",
+      "sourceTransliteration": "[kəmzor]",
+      "latin": "KAMJOR",
+      "gurmukhi": "ਕਮਜੋਰ",
+      "definition": "Weak or feeble.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-116-1",
+      "sourceHeadword": "ਕਤਰਣਾ",
+      "sourceDefinition": "Skt ਕ੍ਰੰਤਨ cut into pieces with an implement or scissors; cut.",
+      "sourceTransliteration": "[kətərṇa]",
+      "latin": "KATARNA",
+      "gurmukhi": "ਕਤਰਣਾ",
+      "definition": "To cut into pieces.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-155-0",
+      "sourceHeadword": "ਕਰਾਬਤ",
+      "sourceDefinition": "A ا قرابت n feeling of being near; state of being a close relative.",
+      "sourceTransliteration": "[kərabət]",
+      "latin": "KARABAT",
+      "gurmukhi": "ਕਰਾਬਤ",
+      "definition": "A close family relationship.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-195-2",
+      "sourceHeadword": "ਕਾਰਕੁਨ",
+      "sourceDefinition": "P کارکن n servant, worker, manager.",
+      "sourceTransliteration": "[karkun]",
+      "latin": "KARKUN",
+      "gurmukhi": "ਕਾਰਕੁਨ",
+      "definition": "A worker or manager.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-196-20",
+      "sourceHeadword": "ਕਾਰਬਾਰੀ",
+      "sourceDefinition": "adj worker, servant.",
+      "sourceTransliteration": "[karbari]",
+      "latin": "KARBARI",
+      "gurmukhi": "ਕਾਰਬਾਰੀ",
+      "definition": "A worker.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-195-6",
+      "sourceHeadword": "ਕਾਰਖਾਨਾ",
+      "sourceDefinition": "P کارخانه n workshop; a place where work is done.",
+      "sourceTransliteration": "[karxana]",
+      "latin": "KARXANA",
+      "gurmukhi": "ਕਾਰਖਾਨਾ",
+      "definition": "A workshop.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-196-21",
+      "sourceHeadword": "ਕਾਰਮਣਾ",
+      "sourceDefinition": "v agree to get some work done.",
+      "sourceTransliteration": "[karməṇa]",
+      "latin": "KARMANA",
+      "gurmukhi": "ਕਾਰਮਣਾ",
+      "definition": "To arrange for work to be done.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-668-2",
+      "sourceHeadword": "ਜਲਰੁਹ",
+      "sourceDefinition": "Skt n lotus born from water.",
+      "sourceTransliteration": "[jəlruh]",
+      "latin": "JALRUH",
+      "gurmukhi": "ਜਲਰੁਹ",
+      "definition": "A lotus flower.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-246-4",
+      "sourceHeadword": "ਕੁਰੇਲਣਾ",
+      "sourceDefinition": "v scratch the earth; scrape\nthe ground.",
+      "sourceTransliteration": "[kurelna]",
+      "latin": "KURELNA",
+      "gurmukhi": "ਕੁਰੇਲਣਾ",
+      "definition": "To scrape the ground.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-286-0",
+      "sourceHeadword": "ਕ੍ਰਿਪਾਲੁ",
+      "sourceDefinition": "adj kind, merciful.",
+      "sourceTransliteration": "[kripalu]",
+      "latin": "KRIPALU",
+      "gurmukhi": "ਕ੍ਰਿਪਾਲੁ",
+      "definition": "Kind and merciful.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-325-6",
+      "sourceHeadword": "ਅਰਦਾਸਾ",
+      "sourceDefinition": "prayer.",
+      "sourceTransliteration": "[ǝrdasa]",
+      "latin": "ARDASA",
+      "gurmukhi": "ਅਰਦਾਸਾ",
+      "definition": "A prayer.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-505-18",
+      "sourceHeadword": "ਨ੍ਰਿਤ੍ਯ",
+      "sourceDefinition": "n rhythmic movement of limbs; dance.",
+      "sourceTransliteration": "[nrity]",
+      "latin": "NRITY",
+      "gurmukhi": "ਨ੍ਰਿਤ੍ਯ",
+      "definition": "A dance.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-389-7",
+      "sourceHeadword": "ਗਲਾਉਣਾ",
+      "sourceDefinition": "v pronounce, say, produce sound from the throat.",
+      "sourceTransliteration": "[gəlauna]",
+      "latin": "GALAUNA",
+      "gurmukhi": "ਗਲਾਉਣਾ",
+      "definition": "To speak or make a sound.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-449-5",
+      "sourceHeadword": "ਗੁਲਦਾਨ",
+      "sourceDefinition": "flowervase; vase made of metal or alloy, glass or chinaware.",
+      "sourceTransliteration": "[guldan]",
+      "latin": "GULDAN",
+      "gurmukhi": "ਗੁਲਦਾਨ",
+      "definition": "A flower vase.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-421-12",
+      "sourceHeadword": "ਗੁੰਨ੍ਹਣਾ",
+      "sourceDefinition": "v knead; work and press together into a mass; crush by rubbing.",
+      "sourceTransliteration": "[gūnhna]",
+      "latin": "GUNHNA",
+      "gurmukhi": "ਗੁੰਨ੍ਹਣਾ",
+      "definition": "To knead into a mass.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-426-2",
+      "sourceHeadword": "ਗੁਰਗਾਬੀ",
+      "sourceDefinition": "P گُرگابی a kind of pair of wooden sandals; pump shoes.",
+      "sourceTransliteration": "[gurgabi]",
+      "latin": "GURGABI",
+      "gurmukhi": "ਗੁਰਗਾਬੀ",
+      "definition": "A type of wooden shoe.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-455-7",
+      "sourceHeadword": "ਚਉਰਾਹਾ",
+      "sourceDefinition": "n a place where four paths converge; a crossing.",
+      "sourceTransliteration": "[cǝuraha]",
+      "latin": "CHAURAHA",
+      "gurmukhi": "ਚਉਰਾਹਾ",
+      "definition": "A crossing where four paths meet.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-593-3",
+      "sourceHeadword": "ਚੰਗਿਆੜਾ",
+      "sourceDefinition": "n ember, spark of burning wood or coal.",
+      "sourceTransliteration": "[cǝgiara]",
+      "latin": "CHANGIARA",
+      "gurmukhi": "ਚੰਗਿਆੜਾ",
+      "definition": "An ember or spark.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-611-20",
+      "sourceHeadword": "ਛਲਲੰਗ",
+      "sourceDefinition": "n jump, leap, gambol, frisk.",
+      "sourceTransliteration": "[chǝlag]",
+      "latin": "CHHALLANG",
+      "gurmukhi": "ਛਲਲੰਗ",
+      "definition": "A jump or leap.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-733-13",
+      "sourceHeadword": "ਫੁਡ਼ਕਨਾ",
+      "sourceDefinition": "v jump, hop, skip.",
+      "sourceTransliteration": "[phudəkņa]",
+      "latin": "PHUDAKNA",
+      "gurmukhi": "ਫੁਡ਼ਕਨਾ",
+      "definition": "To jump or hop.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-665-1",
+      "sourceHeadword": "ਜਲਖਗ",
+      "sourceDefinition": "n water fowl.",
+      "sourceTransliteration": "[jəlkhǝg]",
+      "latin": "JALKHAG",
+      "gurmukhi": "ਜਲਖਗ",
+      "definition": "A water bird.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-665-5",
+      "sourceHeadword": "ਜਲਚਰ",
+      "sourceDefinition": "n aquatic animals such as tortoise,\nfish etc.",
+      "sourceTransliteration": "[jəlcər]",
+      "latin": "JALCHAR",
+      "gurmukhi": "ਜਲਚਰ",
+      "definition": "An animal that lives in water.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-665-7",
+      "sourceHeadword": "ਜਲਚਰੀ",
+      "sourceDefinition": "n fish.",
+      "sourceTransliteration": "[jəlcəri]",
+      "latin": "JALCHARI",
+      "gurmukhi": "ਜਲਚਰੀ",
+      "definition": "A fish.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-667-17",
+      "sourceHeadword": "ਜਲਫਲ",
+      "sourceDefinition": "Skt n water chestnut.",
+      "sourceTransliteration": "[jəlphǝl]",
+      "latin": "JALPHAL",
+      "gurmukhi": "ਜਲਫਲ",
+      "definition": "A water chestnut.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-671-1",
+      "sourceHeadword": "ਜਲਬਲ",
+      "sourceDefinition": "Skt n stream, river.",
+      "sourceTransliteration": "[jələbəl]",
+      "latin": "JALABAL",
+      "gurmukhi": "ਜਲਬਲ",
+      "definition": "A stream or river.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-727-6",
+      "sourceHeadword": "ਜੋਤਿਜੁਤ",
+      "sourceDefinition": "adj lit; with light.",
+      "sourceTransliteration": "[jotījut]",
+      "latin": "JOTIJUT",
+      "gurmukhi": "ਜੋਤਿਜੁਤ",
+      "definition": "Lit or filled with light.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-708-26",
+      "sourceHeadword": "ਜੁਜਦਾਨ",
+      "sourceDefinition": "P n a bag to keep unbound volumes of a book; satchel.",
+      "sourceTransliteration": "[juzdan]",
+      "latin": "JUJDAN",
+      "gurmukhi": "ਜੁਜਦਾਨ",
+      "definition": "A satchel for book pages.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed",
+      "existingId": "panjabi_jujdan"
+    },
+    {
+      "sourceId": "2-737-7",
+      "sourceHeadword": "ਜ੍ਯਾਮਿਤੀ",
+      "sourceDefinition": "Skt n measurement of earth, science dealing with dimensions of the earth; geometry.",
+      "sourceTransliteration": "[jyamīti]",
+      "latin": "JYAMITI",
+      "gurmukhi": "ਜ੍ਯਾਮਿਤੀ",
+      "definition": "The study of shapes and measurements.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-691-27",
+      "sourceHeadword": "ਜਿਗਿਆਸੂ",
+      "sourceDefinition": "Skt जिज्ञासु adj desirous to know,",
+      "sourceTransliteration": "[jigyasu]",
+      "latin": "JIGYASU",
+      "gurmukhi": "ਜਿਗਿਆਸੂ",
+      "definition": "A person eager to learn.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "2-730-15",
+      "sourceHeadword": "ਜੋਰਮੇਲ",
+      "sourceDefinition": "n gathering, congregation, carnival. 2 fast friendship.",
+      "sourceTransliteration": "[jormel]",
+      "latin": "JORMEL",
+      "gurmukhi": "ਜੋਰਮੇਲ",
+      "definition": "A gathering or fair.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-50-9",
+      "sourceHeadword": "ਟਪਕਣਾ",
+      "sourceDefinition": "v drip, leak, trickle (of droplets). 2 (of a fruit) fall from the branch of a tree.",
+      "sourceTransliteration": "[ṭapəkṇa]",
+      "latin": "TAPAKNA",
+      "gurmukhi": "ਟਪਕਣਾ",
+      "definition": "To drip or trickle.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-48-10",
+      "sourceHeadword": "ਟਹਲਣਾ",
+      "sourceDefinition": "v walk leisurely; stroll.",
+      "sourceTransliteration": "[təhəlna]",
+      "latin": "TAHALNA",
+      "gurmukhi": "ਟਹਲਣਾ",
+      "definition": "To walk at an easy pace.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-32-13",
+      "sourceHeadword": "ਪਹੁੰਚਾਣਾ",
+      "sourceDefinition": "v carry from one place to another, deliver at a fixed place.",
+      "sourceTransliteration": "[pəhūcānā]",
+      "latin": "PAHUNCHANA",
+      "gurmukhi": "ਪਹੁੰਚਾਣਾ",
+      "definition": "To carry and deliver.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning. Romanization was corrected explicitly to preserve the source-script consonants. Four graphemes verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-33-14",
+      "sourceHeadword": "ਪਕਾਉਣਾ",
+      "sourceDefinition": "v cook, boil well.",
+      "sourceTransliteration": "[pəkauna]",
+      "latin": "PAKAUNA",
+      "gurmukhi": "ਪਕਾਉਣਾ",
+      "definition": "To cook or boil well.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-546-14",
+      "sourceHeadword": "ਪਤ੍ਰਿਕਾ",
+      "sourceDefinition": "n letter.",
+      "sourceTransliteration": "[pətrika]",
+      "latin": "PATRIKA",
+      "gurmukhi": "ਪਤ੍ਰਿਕਾ",
+      "definition": "A letter.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-121-17",
+      "sourceHeadword": "ਤਰਕਾਰੀ",
+      "sourceDefinition": "n cooked vegetable.",
+      "sourceTransliteration": "[tərkari]",
+      "latin": "TARKARI",
+      "gurmukhi": "ਤਰਕਾਰੀ",
+      "definition": "A cooked vegetable dish.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-101-8",
+      "sourceHeadword": "ਤਹਮਤ",
+      "sourceDefinition": "P ਤਹਮਤ n sheet used as garment for lower part of the body; cloth covering the body down the waist.",
+      "sourceTransliteration": "[təhmət]",
+      "latin": "TAHMAT",
+      "gurmukhi": "ਤਹਮਤ",
+      "definition": "A cloth worn below the waist.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-107-26",
+      "sourceHeadword": "ਤਤਕਰਾ",
+      "sourceDefinition": "n list of contents in a book; contents, index.",
+      "sourceTransliteration": "[tətkəra]",
+      "latin": "TATKARA",
+      "gurmukhi": "ਤਤਕਰਾ",
+      "definition": "A book index or contents list.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-116-28",
+      "sourceHeadword": "ਤਫ਼ਰੀਹ",
+      "sourceDefinition": "A ਤਫ਼ਰੀਹ n amusement, merriment, happiness, joy.",
+      "sourceTransliteration": "[təfrih]",
+      "latin": "TAFRIH",
+      "gurmukhi": "ਤਫ਼ਰੀਹ",
+      "definition": "Joy or happiness.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-127-0",
+      "sourceHeadword": "ਤਰਾਇਣੁ",
+      "sourceDefinition": "adj helping one to swim, helping one to cross (a river).",
+      "sourceTransliteration": "[təraiņu]",
+      "latin": "TARAINU",
+      "gurmukhi": "ਤਰਾਇਣੁ",
+      "definition": "To help someone swim or cross a river.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-209-29",
+      "sourceHeadword": "ਥਿਆਉਣਾ",
+      "sourceDefinition": "v achieve, find, get.",
+      "sourceTransliteration": "[thiāuṇā]",
+      "latin": "THIAUNA",
+      "gurmukhi": "ਥਿਆਉਣਾ",
+      "definition": "To achieve or find.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-263-22",
+      "sourceHeadword": "ਦਿਖਾਲਣਾ",
+      "sourceDefinition": "v show.",
+      "sourceTransliteration": "[dıkhɑlṇa]",
+      "latin": "DIKHALNA",
+      "gurmukhi": "ਦਿਖਾਲਣਾ",
+      "definition": "To show.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-303-15",
+      "sourceHeadword": "ਦੂਰਸਥ",
+      "sourceDefinition": "adj situated far away.",
+      "sourceTransliteration": "[durəsth]",
+      "latin": "DURASTH",
+      "gurmukhi": "ਦੂਰਸਥ",
+      "definition": "Far away.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-402-7",
+      "sourceHeadword": "ਨਵਨੀਤ",
+      "sourceDefinition": "Skt n fresh butter, just made by churning milk or cream.",
+      "sourceTransliteration": "[nəvnit]",
+      "latin": "NAVNIT",
+      "gurmukhi": "ਨਵਨੀਤ",
+      "definition": "Fresh butter.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    },
+    {
+      "sourceId": "3-384-18",
+      "sourceHeadword": "ਨਜਿਕਾਨਾ",
+      "sourceDefinition": "v come close.",
+      "sourceTransliteration": "[nəjıkana]",
+      "latin": "NAJIKANA",
+      "gurmukhi": "ਨਜਿਕਾਨਾ",
+      "definition": "To come close.",
+      "reason": "Selected after checking the pinned Mahan Kosh sense; the concise definition preserves that specific meaning and the four-grapheme count is verified with package:characters.",
+      "reviewStatus": "machineReviewed"
+    }
+  ],
+  "rejectedCount": 49,
+  "rejections": [
+    {
+      "sourceId": "1-129-8",
+      "reason": "Opaque historical loan; not useful enough for play."
+    },
+    {
+      "sourceId": "1-49-10",
+      "reason": "Literary star synonym is too opaque for this pool."
+    },
+    {
+      "sourceId": "1-160-6",
+      "reason": "Opaque historical loan; not useful enough for play."
+    },
+    {
+      "sourceId": "1-200-1",
+      "reason": "Archaic loan with limited play value."
+    },
+    {
+      "sourceId": "1-202-8",
+      "reason": "Specialized colour term with limited play value."
+    },
+    {
+      "sourceId": "1-181-16",
+      "reason": "Archaic Sanskrit form with limited play value."
+    },
+    {
+      "sourceId": "1-180-10",
+      "reason": "Archaic Sanskrit form with limited play value."
+    },
+    {
+      "sourceId": "1-212-28",
+      "reason": "Archaic Sanskrit form with limited play value."
+    },
+    {
+      "sourceId": "1-217-13",
+      "reason": "Archaic Sanskrit form with limited play value."
+    },
+    {
+      "sourceId": "1-287-4",
+      "reason": "Historical vessel term is too opaque for this pool."
+    },
+    {
+      "sourceId": "1-301-15",
+      "reason": "Historical garment term is too opaque for this pool."
+    },
+    {
+      "sourceId": "1-408-17",
+      "reason": "Literary wind synonym is too opaque for this pool."
+    },
+    {
+      "sourceId": "1-422-5",
+      "reason": "Archaic loan for night-time."
+    },
+    {
+      "sourceId": "1-445-1",
+      "reason": "Specialized architectural term."
+    },
+    {
+      "sourceId": "1-525-23",
+      "reason": "Archaic Persian form."
+    },
+    {
+      "sourceId": "1-525-24",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "1-525-25",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "1-538-5",
+      "reason": "Literary Sanskrit synonym for hair."
+    },
+    {
+      "sourceId": "1-556-28",
+      "reason": "Specialized Sanskrit shell term."
+    },
+    {
+      "sourceId": "1-556-29",
+      "reason": "Specialized Sanskrit pearl term."
+    },
+    {
+      "sourceId": "1-553-10",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "1-576-12",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "1-598-1",
+      "reason": "Literary cook synonym is too opaque."
+    },
+    {
+      "sourceId": "1-613-7",
+      "reason": "Literary farmer synonym is too opaque."
+    },
+    {
+      "sourceId": "2-53-19",
+      "reason": "Literary cloud synonym is too opaque."
+    },
+    {
+      "sourceId": "2-140-14",
+      "reason": "Specialized gourd name."
+    },
+    {
+      "sourceId": "2-173-13",
+      "reason": "Specialized occupational form."
+    },
+    {
+      "sourceId": "2-176-18",
+      "reason": "Specialized historical occupation."
+    },
+    {
+      "sourceId": "2-223-4",
+      "reason": "Opaque literary lotus synonym."
+    },
+    {
+      "sourceId": "2-214-22",
+      "reason": "Specialized dye term."
+    },
+    {
+      "sourceId": "2-215-19",
+      "reason": "Opaque literary term for a cry."
+    },
+    {
+      "sourceId": "2-225-12",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "2-325-26",
+      "reason": "Dictionary sense is clear but the headword is an opaque synonym."
+    },
+    {
+      "sourceId": "2-358-13",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "2-360-23",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "2-356-25",
+      "reason": "Source spelling is unusual and needs separate review."
+    },
+    {
+      "sourceId": "2-421-10",
+      "reason": "Archaic Persian noun."
+    },
+    {
+      "sourceId": "2-458-7",
+      "reason": "Unfamiliar bird name needs separate review."
+    },
+    {
+      "sourceId": "2-508-2",
+      "reason": "Literary occupational synonym is too opaque."
+    },
+    {
+      "sourceId": "2-513-1",
+      "reason": "Literary hailstone synonym is too opaque."
+    },
+    {
+      "sourceId": "2-722-5",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "2-706-20",
+      "reason": "Archaic Persian verb."
+    },
+    {
+      "sourceId": "3-191-33",
+      "reason": "Archaic verb form."
+    },
+    {
+      "sourceId": "3-178-23",
+      "reason": "Source transliteration conflicts with the Gurmukhi consonants."
+    },
+    {
+      "sourceId": "3-240-11",
+      "reason": "Archaic Persian adjective."
+    },
+    {
+      "sourceId": "3-383-16",
+      "reason": "Literary dance term is too opaque."
+    },
+    {
+      "sourceId": "4-415-18",
+      "reason": "Opaque historical loan; not useful enough for play."
+    },
+    {
+      "sourceId": "4-445-5",
+      "reason": "Opaque historical loan; not useful enough for play."
+    },
+    {
+      "sourceId": "2-647-13",
+      "reason": "Archaic Persian verb."
+    }
+  ]
+}

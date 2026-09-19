@@ -17,9 +17,8 @@ void showGameSnackBar(BuildContext context, String message) {
         ),
         behavior: SnackBarBehavior.floating,
         duration: gameSnackBarDuration,
-        // SnackBar actions default to persistent in Flutter. The game-wide
-        // feedback contract keeps the action but still times out.
-        persist: false,
+        // Give screen-reader users time to hear and dismiss feedback.
+        persist: MediaQuery.accessibleNavigationOf(context),
       ),
     );
 }
@@ -33,13 +32,14 @@ class GameBackdrop extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(gradient: tokens.backgroundGradient),
       child: Stack(
+        fit: StackFit.expand,
         children: [
           if (tokens.sikhiStyle)
             Positioned.fill(
               child: CustomPaint(
                 painter: _PhulkariPainter(
                   color: Theme.of(context).colorScheme.primary
-                      .withValues(alpha: .07),
+                      .withValues(alpha: .025),
                 ),
               ),
             ),
@@ -65,7 +65,7 @@ class GamePanel extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         gradient: tokens.panelGradient,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: tokens.panelRadius,
         border: Border.all(
           color: Theme.of(context).colorScheme.primary.withValues(alpha: .18),
         ),
@@ -88,9 +88,7 @@ class GameStatusPill extends StatelessWidget {
     final tokens = theme.extension<GameThemeTokens>()!;
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
-        ),
+        color: theme.colorScheme.primary,
         borderRadius: BorderRadius.circular(22),
         boxShadow: tokens.elevationShadow,
       ),
@@ -127,9 +125,11 @@ class GameGradientButton extends StatelessWidget {
     required this.label,
     this.icon,
     this.onPressed,
+    this.prominent = true,
     super.key,
   });
 
+  final bool prominent;
   final String label;
   final Widget? icon;
   final VoidCallback? onPressed;
@@ -139,52 +139,62 @@ class GameGradientButton extends StatelessWidget {
     final theme = Theme.of(context);
     final tokens = theme.extension<GameThemeTokens>()!;
     final enabled = onPressed != null;
-    final radius = BorderRadius.circular(16);
+    final radius = tokens.controlRadius;
+    final foreground = enabled
+        ? prominent
+              ? theme.colorScheme.onPrimary
+              : theme.colorScheme.primary
+        : theme.colorScheme.onSurface.withValues(alpha: .45);
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: enabled ? tokens.panelGradient : null,
-        color: enabled ? null : theme.colorScheme.surfaceContainerHighest,
+        color: enabled
+            ? prominent
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.surface
+            : theme.colorScheme.surfaceContainerHighest,
         borderRadius: radius,
         border: Border.all(
           color: enabled
               ? theme.colorScheme.primary.withValues(alpha: .35)
               : theme.colorScheme.outline.withValues(alpha: .35),
         ),
-        boxShadow: enabled
-            ? [
-                ...tokens.elevationShadow,
-                BoxShadow(
-                  color: theme.colorScheme.primary.withValues(alpha: .18),
-                  blurRadius: 0,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : null,
+        boxShadow: enabled && prominent ? tokens.tileShadow : null,
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: radius,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (icon != null) ...[icon!, const SizedBox(width: 8)],
-                  Text(
-                    label,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: enabled
-                          ? theme.colorScheme.onSurface
-                          : theme.colorScheme.onSurface.withValues(alpha: .45),
-                    ),
+      child: Semantics(
+        button: true,
+        enabled: enabled,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onPressed,
+            borderRadius: radius,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 48, minWidth: 48),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 11,
+                ),
+                child: IconTheme(
+                  data: IconThemeData(color: foreground, size: 19),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (icon != null) ...[icon!, const SizedBox(width: 8)],
+                      Flexible(
+                        child: Text(
+                          label,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: foreground,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),

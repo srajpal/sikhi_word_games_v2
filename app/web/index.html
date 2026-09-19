@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -18,29 +18,42 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Four offline word games in English, Punjabi, and Gurmukhi by Khalsa Game Studio.">
+  <meta name="author" content="Khalsa Game Studio">
+  <link rel="author" href="https://khalsagamestudio.com/">
+  <meta name="theme-color" content="#173A67">
+
+  <style>
+    html, body {
+      background: #FFF8E8;
+      height: 100%;
+      margin: 0;
+    }
+    #loading {
+      align-items: center;
+      color: #173A67;
+      display: flex;
+      font: 600 1rem system-ui, sans-serif;
+      height: 100%;
+      justify-content: center;
+      text-align: center;
+    }
+  </style>
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="sikhi_word_games_v2">
+  <meta name="apple-mobile-web-app-title" content="Sikhi Word Games">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>sikhi_word_games_v2</title>
+  <title>Sikhi Word Games | Khalsa Game Studio</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <div id="loading" role="status"><span>Loading Sikhi Word Games...<br><small>by Khalsa Game Studio</small></span></div>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

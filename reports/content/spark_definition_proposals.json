@@ -1,0 +1,1509 @@
+{
+  "entries": [
+    {
+      "id": "english_abaca",
+      "word": "ABACA",
+      "currentDefinition": "a kind of hemp obtained from the abaca plant in the Philippines",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_abject",
+      "word": "ABJECT",
+      "currentDefinition": "of the most contemptible kind",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_abysm",
+      "word": "ABYSM",
+      "currentDefinition": "a bottomless gulf or pit; any unfathomable (or apparently unfathomable) cavity or chasm or void extending below (often used figuratively)",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_acacia",
+      "word": "ACACIA",
+      "currentDefinition": "any of various spiny trees or shrubs of the genus Acacia",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_acold",
+      "word": "ACOLD",
+      "currentDefinition": "of persons; feeling cold",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_adagio",
+      "word": "ADAGIO",
+      "currentDefinition": "(music) a composition played in adagio tempo (slowly and gracefully)",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_admit",
+      "word": "ADMIT",
+      "currentDefinition": "declare to be true or admit the existence or reality or truth of",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_adnate",
+      "word": "ADNATE",
+      "currentDefinition": "of unlike parts or organs; growing closely attached",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_adobe",
+      "word": "ADOBE",
+      "currentDefinition": "the clay from which adobe bricks are made",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_agate",
+      "word": "AGATE",
+      "currentDefinition": "an impure form of quartz consisting of banded chalcedony; used as a gemstone and for making mortars and pestles",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_agone",
+      "word": "AGONE",
+      "currentDefinition": "gone by; or in the past",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_album",
+      "word": "ALBUM",
+      "currentDefinition": "one or more recordings issued together; originally released on 12-inch phonograph records (usually with attractive record covers) and later on cassette audiotape and compact disc",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_alder",
+      "word": "ALDER",
+      "currentDefinition": "wood of any of various alder trees; resistant to underwater rot; used for bridges etc",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_algal",
+      "word": "ALGAL",
+      "currentDefinition": "of or relating to alga",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_alpaca",
+      "word": "ALPACA",
+      "currentDefinition": "wool of the alpaca",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_alto",
+      "word": "ALTO",
+      "currentDefinition": "a singer whose voice lies in the alto clef",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_anele",
+      "word": "ANELE",
+      "currentDefinition": "administer an oil or ointment to; often in a religious ceremony of blessing",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_anile",
+      "word": "ANILE",
+      "currentDefinition": "of or like a feeble old woman",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_arrive",
+      "word": "ARRIVE",
+      "currentDefinition": "reach a destination; arrive by movement or progress",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_ashy",
+      "word": "ASHY",
+      "currentDefinition": "of a light grey",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_assign",
+      "word": "ASSIGN",
+      "currentDefinition": "give an assignment to (a person) to a post, or assign a task to (a person)",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_aster",
+      "word": "ASTER",
+      "currentDefinition": "any of various chiefly fall-blooming herbs of the genus Aster with showy daisylike flowers",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_aurous",
+      "word": "AUROUS",
+      "currentDefinition": "of or relating to or containing or derived from gold",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_azotic",
+      "word": "AZOTIC",
+      "currentDefinition": "of or containing nitrogen",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_baize",
+      "word": "BAIZE",
+      "currentDefinition": "a bright green fabric napped to resemble felt; used to cover gaming tables",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bald",
+      "word": "BALD",
+      "currentDefinition": "grow bald; lose hair on one's head",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_baleen",
+      "word": "BALEEN",
+      "currentDefinition": "a horny material from the upper jaws of certain whales; used as the ribs of fans or as stays in corsets",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_balsa",
+      "word": "BALSA",
+      "currentDefinition": "strong lightweight wood of the balsa tree used especially for floats",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_balsam",
+      "word": "BALSAM",
+      "currentDefinition": "any seed plant yielding balsam",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bamboo",
+      "word": "BAMBOO",
+      "currentDefinition": "the hard woody stems of bamboo plants; used in construction and crafts and fishing poles",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_barley",
+      "word": "BARLEY",
+      "currentDefinition": "a grain of barley",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_barrow",
+      "word": "BARROW",
+      "currentDefinition": "the quantity that a barrow will hold",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_basal",
+      "word": "BASAL",
+      "currentDefinition": "especially of leaves; located at the base of a plant or stem; especially arising directly from the root or rootstock or a root-like stem",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_basque",
+      "word": "BASQUE",
+      "currentDefinition": "the language of the Basque people; of no known relation to any other language",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_beaker",
+      "word": "BEAKER",
+      "currentDefinition": "a flatbottomed jar made of glass or plastic; used for chemistry",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_becket",
+      "word": "BECKET",
+      "currentDefinition": "(nautical) a short line with an eye at one end and a knot at the other; used to secure loose items on a ship",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_behalf",
+      "word": "BEHALF",
+      "currentDefinition": "as the agent of or on someone's part (usually expressed as ‘on behalf of’ rather than ‘in behalf of’)",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_behave",
+      "word": "BEHAVE",
+      "currentDefinition": "behave in a certain manner; show a certain behavior; conduct or comport oneself",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_behold",
+      "word": "BEHOLD",
+      "currentDefinition": "see with attention",
+      "decision": "needs_expert_review",
+      "reason": "Definition is meta-referential and not self-contained.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_berry",
+      "word": "BERRY",
+      "currentDefinition": "any of numerous small and pulpy edible fruits; used as desserts or in making jams and jellies and preserves",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_betel",
+      "word": "BETEL",
+      "currentDefinition": "a leaf of a vine from the betel pepper",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bibb",
+      "word": "BIBB",
+      "currentDefinition": "A bibcock. See Bib, n., 3.",
+      "decision": "needs_expert_review",
+      "reason": "Definition uses abbreviation-style formatting or dense multi-sense markup.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_biggin",
+      "word": "BIGGIN",
+      "currentDefinition": "a child's tight-fitting cap; often ties under the chin",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bilge",
+      "word": "BILGE",
+      "currentDefinition": "water accumulated in the bilge of a ship",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_biotic",
+      "word": "BIOTIC",
+      "currentDefinition": "of or relating to living organisms",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_birch",
+      "word": "BIRCH",
+      "currentDefinition": "hard close-grained wood of any of various birch trees; used especially in furniture and interior finishes and plywood",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bladed",
+      "word": "BLADED",
+      "currentDefinition": "bearing or characterized by a blade or sword; often used in combination",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_blazer",
+      "word": "BLAZER",
+      "currentDefinition": "lightweight single-breasted jacket; often striped in the colors of a club or school",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_blood",
+      "word": "BLOOD",
+      "currentDefinition": "the fluid (red in vertebrates) that is pumped through the body by the heart and contains plasma, blood cells, and platelets",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_blowzy",
+      "word": "BLOWZY",
+      "currentDefinition": "characteristic of or befitting a slut or slattern; used especially of women",
+      "decision": "needs_expert_review",
+      "reason": "Definition includes explicit/sexual wording that is unsuitable for game play.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_blue",
+      "word": "BLUE",
+      "currentDefinition": "blue color or pigment; resembling the color of the clear sky in the daytime",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bluish",
+      "word": "BLUISH",
+      "currentDefinition": "of the color intermediate between green and violet; having a color similar to that of a clear unclouded sky",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bodied",
+      "word": "BODIED",
+      "currentDefinition": "having a body or a body of a specified kind; often used in combination",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bolero",
+      "word": "BOLERO",
+      "currentDefinition": "music written in the rhythm of the bolero dance",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_borax",
+      "word": "BORAX",
+      "currentDefinition": "an ore of boron consisting of hydrated sodium borate; used as a flux or cleansing agent",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bowl",
+      "word": "BOWL",
+      "currentDefinition": "a round vessel that is open at the top; used chiefly for holding grains or liquids",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_brahma",
+      "word": "BRAHMA",
+      "currentDefinition": "any of several breeds of Indian cattle; especially a large American heat and tick resistant greyish humped breed evolved in the Gulf States by interbreeding Indian cattle and now used chiefly for crossbreeding",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_brick",
+      "word": "BRICK",
+      "currentDefinition": "rectangular block of clay baked by the sun or in a kiln; used as a building or paving material",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_brisk",
+      "word": "BRISK",
+      "currentDefinition": "become brisk",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bronzy",
+      "word": "BRONZY",
+      "currentDefinition": "of the color of bronze",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_broth",
+      "word": "BROTH",
+      "currentDefinition": "liquid in which meat and vegetables are simmered; used as a basis for e.g. soups or sauces",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_buck",
+      "word": "BUCK",
+      "currentDefinition": "a gymnastic horse without pommels and with one end elongated; used lengthwise for vaulting",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_buckle",
+      "word": "BUCKLE",
+      "currentDefinition": "fastener that fastens together two ends of a belt or strap; often has loose prong",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_bugle",
+      "word": "BUGLE",
+      "currentDefinition": "a brass instrument without valves; used for military calls and fanfares",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_burin",
+      "word": "BURIN",
+      "currentDefinition": "a chisel of tempered steel with a sharp point; used for engraving",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_burl",
+      "word": "BURL",
+      "currentDefinition": "the wood cut from a tree burl or outgrowth; often used decoratively in veneer",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_busy",
+      "word": "BUSY",
+      "currentDefinition": "keep busy with",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_butane",
+      "word": "BUTANE",
+      "currentDefinition": "occurs in natural gas; used in the manufacture of rubber and fuels",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cacao",
+      "word": "CACAO",
+      "currentDefinition": "tropical American tree producing cacao beans",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_caftan",
+      "word": "CAFTAN",
+      "currentDefinition": "a woman's dress style that imitates the caftan cloaks worn by men in the Near East",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_camlet",
+      "word": "CAMLET",
+      "currentDefinition": "a garment made of camlet fabric",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_canna",
+      "word": "CANNA",
+      "currentDefinition": "any plant of the genus Canna having large sheathing leaves and clusters of large showy flowers",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_carbon",
+      "word": "CARBON",
+      "currentDefinition": "an abundant nonmetallic tetravalent element occurring in three allotropic forms: amorphous carbon and graphite and diamond; occurs in all organic compounds",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_carib",
+      "word": "CARIB",
+      "currentDefinition": "the family of languages spoken by the Carib",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_carob",
+      "word": "CAROB",
+      "currentDefinition": "long pod containing small beans and sweetish edible pulp; used as animal feed and source of a chocolate substitute",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_carrot",
+      "word": "CARROT",
+      "currentDefinition": "deep orange edible root of the cultivated carrot plant",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_carton",
+      "word": "CARTON",
+      "currentDefinition": "the quantity contained in a carton",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_carven",
+      "word": "CARVEN",
+      "currentDefinition": "made for or formed by carving (‘carven’ is archaic or literary)",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cask",
+      "word": "CASK",
+      "currentDefinition": "the quantity a cask will hold",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cassia",
+      "word": "CASSIA",
+      "currentDefinition": "any of various trees or shrubs of the genus Cassia having pinnately compound leaves and usually yellow flowers followed by long seedpods",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cattle",
+      "word": "CATTLE",
+      "currentDefinition": "domesticated bovine animals as a group regardless of sex or age",
+      "decision": "needs_expert_review",
+      "reason": "Definition includes explicit/sexual wording that is unsuitable for game play.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cease",
+      "word": "CEASE",
+      "currentDefinition": "(‘cease’ is a noun only in the phrase ‘without cease’) end",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cellar",
+      "word": "CELLAR",
+      "currentDefinition": "the lowermost portion of a structure partly or wholly below ground level; often used for storage",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cement",
+      "word": "CEMENT",
+      "currentDefinition": "concrete pavement is sometimes referred to as cement",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cerium",
+      "word": "CERIUM",
+      "currentDefinition": "a ductile grey metallic element of the lanthanide series; used in lighter flints; the most abundant of the rare-earth group",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cheesy",
+      "word": "CHEESY",
+      "currentDefinition": "of very poor quality; flimsy",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cherry",
+      "word": "CHERRY",
+      "currentDefinition": "wood of any of various cherry trees especially the black cherry",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_child",
+      "word": "CHILD",
+      "currentDefinition": "a young person of either sex",
+      "decision": "needs_expert_review",
+      "reason": "Definition includes explicit/sexual wording that is unsuitable for game play.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_chili",
+      "word": "CHILI",
+      "currentDefinition": "ground beef and chili peppers or chili powder often with tomatoes and kidney beans",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_china",
+      "word": "CHINA",
+      "currentDefinition": "high quality porcelain originally made only in China",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_choose",
+      "word": "CHOOSE",
+      "currentDefinition": "pick out, select, or choose from a number of alternatives",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_chopin",
+      "word": "CHOPIN",
+      "currentDefinition": "the music of Chopin",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_chorea",
+      "word": "CHOREA",
+      "currentDefinition": "chorea in dogs",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_citrus",
+      "word": "CITRUS",
+      "currentDefinition": "any of numerous fruits of the genus Citrus having thick rind and juicy pulp; grown in warm regions",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_civic",
+      "word": "CIVIC",
+      "currentDefinition": "of or relating or belonging to a city",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_clevis",
+      "word": "CLEVIS",
+      "currentDefinition": "a coupler shaped like the letter U with holes through each end so a bolt or pin can pass through the holes to complete the coupling; used to attach a drawbar to a plow or wagon or trailer etc.",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_clonic",
+      "word": "CLONIC",
+      "currentDefinition": "of or relating to abnormal neuromuscular activity characterized by rapidly alternating muscle contraction and relaxation",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_coarse",
+      "word": "COARSE",
+      "currentDefinition": "of textures that are rough to the touch or substances consisting of relatively large particles",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cocker",
+      "word": "COCKER",
+      "currentDefinition": "a small breed with wavy silky hair; originally developed in England",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_coffee",
+      "word": "COFFEE",
+      "currentDefinition": "a beverage consisting of an infusion of ground coffee beans",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cognac",
+      "word": "COGNAC",
+      "currentDefinition": "high quality grape brandy distilled in the Cognac district of France",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_coleus",
+      "word": "COLEUS",
+      "currentDefinition": "any of various Old World tropical plants of the genus Coleus having multicolored decorative leaves and spikes of blue flowers",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cone",
+      "word": "CONE",
+      "currentDefinition": "any cone-shaped artifact",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_copper",
+      "word": "COPPER",
+      "currentDefinition": "a ductile malleable reddish-brown corrosion-resistant diamagnetic metallic element; occurs in various minerals but is the only metal that occurs abundantly in large masses; used as an electrical and thermal conductor",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_coquet",
+      "word": "COQUET",
+      "currentDefinition": "a seductive man who uses his sex appeal to exploit women",
+      "decision": "needs_expert_review",
+      "reason": "Definition includes explicit/sexual wording that is unsuitable for game play.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cork",
+      "word": "CORK",
+      "currentDefinition": "outer bark of the cork oak; used for stoppers for bottles etc.",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cortex",
+      "word": "CORTEX",
+      "currentDefinition": "the layer of unmyelinated neurons (the grey matter) forming the cortex of the cerebrum",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_costal",
+      "word": "COSTAL",
+      "currentDefinition": "of or relating to or near a rib",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cotton",
+      "word": "COTTON",
+      "currentDefinition": "soft silky fibers from cotton plants in their raw state",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cowpea",
+      "word": "COWPEA",
+      "currentDefinition": "fruit or seed of the cowpea plant",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_crate",
+      "word": "CRATE",
+      "currentDefinition": "a rugged box (usually made of wood); used for shipping",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_creamy",
+      "word": "CREAMY",
+      "currentDefinition": "of the color of cream",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cresol",
+      "word": "CRESOL",
+      "currentDefinition": "any of three poisonous colorless isomeric phenols; derived from coal or wood tar; used as a disinfectant",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_crisp",
+      "word": "CRISP",
+      "currentDefinition": "a thin crisp slice of potato fried in deep fat",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_crocus",
+      "word": "CROCUS",
+      "currentDefinition": "any of numerous low-growing plants of the genus Crocus having slender grasslike leaves and white or yellow or purple flowers; native chiefly to the Mediterranean region but widely cultivated",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_crummy",
+      "word": "CRUMMY",
+      "currentDefinition": "of very poor quality; flimsy",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_crutch",
+      "word": "CRUTCH",
+      "currentDefinition": "a wooden or metal staff that fits under the armpit and reaches to the ground; used by disabled person while walking",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cubeb",
+      "word": "CUBEB",
+      "currentDefinition": "spicy fruit of the cubeb vine; when dried and crushed is used medicinally or in perfumery and sometimes smoked in cigarettes",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_curd",
+      "word": "CURD",
+      "currentDefinition": "a coagulated liquid resembling milk curd",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_curfew",
+      "word": "CURFEW",
+      "currentDefinition": "the time that the curfew signal is sounded",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_curry",
+      "word": "CURRY",
+      "currentDefinition": "(East Indian cookery) a pungent dish of vegetables or meats flavored with curry powder and usually eaten with rice",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_cystic",
+      "word": "CYSTIC",
+      "currentDefinition": "of or relating to a normal cyst (as the gallbladder or urinary bladder)",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dahlia",
+      "word": "DAHLIA",
+      "currentDefinition": "any of several plants of or developed from the species Dahlia pinnata having tuberous roots and showy rayed variously colored flower heads; native to the mountains of Mexico and Central America and Colombia",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dairy",
+      "word": "DAIRY",
+      "currentDefinition": "a farm where dairy products are produced",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_damask",
+      "word": "DAMASK",
+      "currentDefinition": "a table linen made from linen with a damask pattern",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_damson",
+      "word": "DAMSON",
+      "currentDefinition": "dark purple plum of the damson tree",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dank",
+      "word": "DANK",
+      "currentDefinition": "of high quality especially of marijuana",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_daub",
+      "word": "DAUB",
+      "currentDefinition": "material used to daub walls",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dear",
+      "word": "DEAR",
+      "currentDefinition": "a beloved person; used as terms of endearment",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_deckle",
+      "word": "DECKLE",
+      "currentDefinition": "rough edge left by a deckle on handmade paper or produced artificially on machine-made paper",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_deft",
+      "word": "DEFT",
+      "currentDefinition": "skillful in physical movements; especially of the hands",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_denim",
+      "word": "DENIM",
+      "currentDefinition": "(used in the plural) close-fitting trousers of heavy denim for manual work or casual wear",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dermal",
+      "word": "DERMAL",
+      "currentDefinition": "of or relating to a cuticle or cuticula",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dermic",
+      "word": "DERMIC",
+      "currentDefinition": "of or relating to or located in the dermis",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dibber",
+      "word": "DIBBER",
+      "currentDefinition": "a wooden hand tool with a pointed end; used to make holes in the ground for planting seeds or bulbs",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dibble",
+      "word": "DIBBLE",
+      "currentDefinition": "a wooden hand tool with a pointed end; used to make holes in the ground for planting seeds or bulbs",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dice",
+      "word": "DICE",
+      "currentDefinition": "a small cube with 1 to 6 spots on the six faces; used in gambling to generate random numbers",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dimity",
+      "word": "DIMITY",
+      "currentDefinition": "a strong cotton fabric with a raised pattern; used for bedcovers and curtains",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dirty",
+      "word": "DIRTY",
+      "currentDefinition": "make soiled, filthy, or dirty",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_disc",
+      "word": "DISC",
+      "currentDefinition": "sound recording consisting of a disk with a continuous groove; used to reproduce music by rotating while a phonograph needle tracks in the groove",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dispel",
+      "word": "DISPEL",
+      "currentDefinition": "force to go away; used both with concrete and metaphoric meanings",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dixie",
+      "word": "DIXIE",
+      "currentDefinition": "a large metal pot (12 gallon camp kettle) for cooking; used in military camps",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dizzy",
+      "word": "DIZZY",
+      "currentDefinition": "make dizzy or giddy",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dobson",
+      "word": "DOBSON",
+      "currentDefinition": "large brown aquatic larva of the dobsonfly; used as fishing bait",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_doll",
+      "word": "DOLL",
+      "currentDefinition": "a small replica of a person; used as a toy",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_domine",
+      "word": "DOMINE",
+      "currentDefinition": "a clergyman; especially a settled minister or parson",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_doric",
+      "word": "DORIC",
+      "currentDefinition": "of or pertaining to the Doric style of architecture",
+      "decision": "needs_expert_review",
+      "reason": "Definition is circular or depends on the headword form.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dray",
+      "word": "DRAY",
+      "currentDefinition": "a low heavy horse cart without sides; used for haulage",
+      "decision": "keep",
+      "reason": "Definition has compressed multi-clause structure that may be difficult to read as a game clue.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_dreamy",
+      "word": "DREAMY",
+      "currentDefinition": "dreamy in mood or nature",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    },
+    {
+      "id": "english_drench",
+      "word": "DRENCH",
+      "currentDefinition": "drench or submerge or be drenched or submerged",
+      "decision": "needs_expert_review",
+      "reason": "Definition directly echoes the answer and may reveal the target too much.",
+      "proposedReplacement": null,
+      "replacementSourceUrl": null,
+      "replacementSourceLicense": null
+    }
+  ],
+  "decisionCounts": {
+    "needs_expert_review": 103,
+    "keep": 47
+  },
+  "reviewedCount": 150
+}

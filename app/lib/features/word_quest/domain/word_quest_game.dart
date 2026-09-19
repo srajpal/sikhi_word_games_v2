@@ -1,5 +1,7 @@
 import 'package:characters/characters.dart';
 
+import '../../../core/language/gurmukhi_normalization.dart';
+
 /// The state of a Chardi Kala: Word Quest round.
 enum WordQuestStatus { playing, won, lost }
 
@@ -252,7 +254,8 @@ class WordQuestGame {
     }
   }
 
-  static String _normaliseWord(String value) => value.trim().toUpperCase();
+  static String _normaliseWord(String value) =>
+      normalizeGurmukhi(value.trim().toUpperCase());
 
   static String? _normaliseGuess(String value) {
     final normalised = _normaliseWord(value);

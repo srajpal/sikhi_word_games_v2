@@ -1,0 +1,906 @@
+{
+  "checkedAtUtc": "2026-09-19T22:21:42.261824+00:00",
+  "source": "https://api.osv.dev/v1/querybatch",
+  "lockfileSha256": "6239d2cd569b6d950a1a48813978a19d62a006ec91d4c37e01c15dfa4f5d3c4b",
+  "packageCount": 112,
+  "vulnerabilityCount": 0,
+  "scope": "Hosted Pub packages only. Flutter SDK, native SDKs and unpublished issues are not covered.",
+  "packages": [
+    {
+      "package": {
+        "name": "_fe_analyzer_shared",
+        "ecosystem": "Pub"
+      },
+      "version": "103.0.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "analyzer",
+        "ecosystem": "Pub"
+      },
+      "version": "13.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "args",
+        "ecosystem": "Pub"
+      },
+      "version": "2.7.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "async",
+        "ecosystem": "Pub"
+      },
+      "version": "2.13.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers",
+        "ecosystem": "Pub"
+      },
+      "version": "6.8.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_android",
+        "ecosystem": "Pub"
+      },
+      "version": "5.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_darwin",
+        "ecosystem": "Pub"
+      },
+      "version": "6.5.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_linux",
+        "ecosystem": "Pub"
+      },
+      "version": "4.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_platform_interface",
+        "ecosystem": "Pub"
+      },
+      "version": "7.2.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_web",
+        "ecosystem": "Pub"
+      },
+      "version": "5.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_windows",
+        "ecosystem": "Pub"
+      },
+      "version": "4.4.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "boolean_selector",
+        "ecosystem": "Pub"
+      },
+      "version": "2.1.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "characters",
+        "ecosystem": "Pub"
+      },
+      "version": "1.4.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "cli_config",
+        "ecosystem": "Pub"
+      },
+      "version": "0.2.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "clock",
+        "ecosystem": "Pub"
+      },
+      "version": "1.1.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "code_assets",
+        "ecosystem": "Pub"
+      },
+      "version": "1.2.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "collection",
+        "ecosystem": "Pub"
+      },
+      "version": "1.19.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "convert",
+        "ecosystem": "Pub"
+      },
+      "version": "3.1.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "coverage",
+        "ecosystem": "Pub"
+      },
+      "version": "1.15.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "crypto",
+        "ecosystem": "Pub"
+      },
+      "version": "3.0.7",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "cupertino_icons",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.9",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "cupertino_ui",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "fake_async",
+        "ecosystem": "Pub"
+      },
+      "version": "1.3.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "ffi",
+        "ecosystem": "Pub"
+      },
+      "version": "2.2.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "file",
+        "ecosystem": "Pub"
+      },
+      "version": "7.0.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "fixnum",
+        "ecosystem": "Pub"
+      },
+      "version": "1.1.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "flutter_lints",
+        "ecosystem": "Pub"
+      },
+      "version": "6.0.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "flutter_riverpod",
+        "ecosystem": "Pub"
+      },
+      "version": "3.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "frontend_server_client",
+        "ecosystem": "Pub"
+      },
+      "version": "4.0.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "glob",
+        "ecosystem": "Pub"
+      },
+      "version": "2.1.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "go_router",
+        "ecosystem": "Pub"
+      },
+      "version": "18.0.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "hooks",
+        "ecosystem": "Pub"
+      },
+      "version": "2.0.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "http",
+        "ecosystem": "Pub"
+      },
+      "version": "1.6.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "http_multi_server",
+        "ecosystem": "Pub"
+      },
+      "version": "3.2.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "http_parser",
+        "ecosystem": "Pub"
+      },
+      "version": "4.1.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "intl",
+        "ecosystem": "Pub"
+      },
+      "version": "0.20.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "io",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.5",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "jni",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "jni_flutter",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "jni_util",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "leak_tracker",
+        "ecosystem": "Pub"
+      },
+      "version": "11.0.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "leak_tracker_flutter_testing",
+        "ecosystem": "Pub"
+      },
+      "version": "3.0.10",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "leak_tracker_testing",
+        "ecosystem": "Pub"
+      },
+      "version": "3.0.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "lints",
+        "ecosystem": "Pub"
+      },
+      "version": "6.1.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "listen",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "logging",
+        "ecosystem": "Pub"
+      },
+      "version": "1.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "matcher",
+        "ecosystem": "Pub"
+      },
+      "version": "0.12.20",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "material_color_utilities",
+        "ecosystem": "Pub"
+      },
+      "version": "0.13.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "material_ui",
+        "ecosystem": "Pub"
+      },
+      "version": "1.1.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "meta",
+        "ecosystem": "Pub"
+      },
+      "version": "1.18.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "mime",
+        "ecosystem": "Pub"
+      },
+      "version": "2.0.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "node_preamble",
+        "ecosystem": "Pub"
+      },
+      "version": "2.0.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "objective_c",
+        "ecosystem": "Pub"
+      },
+      "version": "9.5.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "package_config",
+        "ecosystem": "Pub"
+      },
+      "version": "2.2.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path",
+        "ecosystem": "Pub"
+      },
+      "version": "1.9.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider",
+        "ecosystem": "Pub"
+      },
+      "version": "2.1.6",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider_android",
+        "ecosystem": "Pub"
+      },
+      "version": "2.3.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider_foundation",
+        "ecosystem": "Pub"
+      },
+      "version": "2.6.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider_linux",
+        "ecosystem": "Pub"
+      },
+      "version": "2.2.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider_platform_interface",
+        "ecosystem": "Pub"
+      },
+      "version": "2.1.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider_windows",
+        "ecosystem": "Pub"
+      },
+      "version": "2.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "platform",
+        "ecosystem": "Pub"
+      },
+      "version": "3.1.6",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "plugin_platform_interface",
+        "ecosystem": "Pub"
+      },
+      "version": "2.1.8",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "pool",
+        "ecosystem": "Pub"
+      },
+      "version": "1.5.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "process",
+        "ecosystem": "Pub"
+      },
+      "version": "5.0.5",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "pub_semver",
+        "ecosystem": "Pub"
+      },
+      "version": "2.2.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "record_use",
+        "ecosystem": "Pub"
+      },
+      "version": "0.6.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "riverpod",
+        "ecosystem": "Pub"
+      },
+      "version": "3.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shared_preferences",
+        "ecosystem": "Pub"
+      },
+      "version": "2.5.5",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shared_preferences_android",
+        "ecosystem": "Pub"
+      },
+      "version": "2.4.27",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shared_preferences_foundation",
+        "ecosystem": "Pub"
+      },
+      "version": "2.5.6",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shared_preferences_linux",
+        "ecosystem": "Pub"
+      },
+      "version": "2.4.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shared_preferences_platform_interface",
+        "ecosystem": "Pub"
+      },
+      "version": "2.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shared_preferences_web",
+        "ecosystem": "Pub"
+      },
+      "version": "2.4.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shared_preferences_windows",
+        "ecosystem": "Pub"
+      },
+      "version": "2.4.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shelf",
+        "ecosystem": "Pub"
+      },
+      "version": "1.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shelf_packages_handler",
+        "ecosystem": "Pub"
+      },
+      "version": "3.0.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shelf_static",
+        "ecosystem": "Pub"
+      },
+      "version": "1.1.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "shelf_web_socket",
+        "ecosystem": "Pub"
+      },
+      "version": "3.0.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "source_map_stack_trace",
+        "ecosystem": "Pub"
+      },
+      "version": "2.1.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "source_maps",
+        "ecosystem": "Pub"
+      },
+      "version": "0.10.14",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "source_span",
+        "ecosystem": "Pub"
+      },
+      "version": "1.10.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "stack_trace",
+        "ecosystem": "Pub"
+      },
+      "version": "1.12.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "state_notifier",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "stream_channel",
+        "ecosystem": "Pub"
+      },
+      "version": "2.1.4",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "string_scanner",
+        "ecosystem": "Pub"
+      },
+      "version": "1.4.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "sync_http",
+        "ecosystem": "Pub"
+      },
+      "version": "0.3.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "synchronized",
+        "ecosystem": "Pub"
+      },
+      "version": "3.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "term_glyph",
+        "ecosystem": "Pub"
+      },
+      "version": "1.2.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "test",
+        "ecosystem": "Pub"
+      },
+      "version": "1.31.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "test_api",
+        "ecosystem": "Pub"
+      },
+      "version": "0.7.12",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "test_core",
+        "ecosystem": "Pub"
+      },
+      "version": "0.6.18",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "typed_data",
+        "ecosystem": "Pub"
+      },
+      "version": "1.4.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher",
+        "ecosystem": "Pub"
+      },
+      "version": "6.3.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_android",
+        "ecosystem": "Pub"
+      },
+      "version": "6.3.33",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_ios",
+        "ecosystem": "Pub"
+      },
+      "version": "6.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_linux",
+        "ecosystem": "Pub"
+      },
+      "version": "3.2.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_macos",
+        "ecosystem": "Pub"
+      },
+      "version": "3.2.6",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_platform_interface",
+        "ecosystem": "Pub"
+      },
+      "version": "2.3.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_web",
+        "ecosystem": "Pub"
+      },
+      "version": "2.4.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_windows",
+        "ecosystem": "Pub"
+      },
+      "version": "3.1.6",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "uuid",
+        "ecosystem": "Pub"
+      },
+      "version": "4.6.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "vector_math",
+        "ecosystem": "Pub"
+      },
+      "version": "2.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "vm_service",
+        "ecosystem": "Pub"
+      },
+      "version": "15.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "watcher",
+        "ecosystem": "Pub"
+      },
+      "version": "1.2.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "web",
+        "ecosystem": "Pub"
+      },
+      "version": "1.1.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "web_socket",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "web_socket_channel",
+        "ecosystem": "Pub"
+      },
+      "version": "3.0.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "webdriver",
+        "ecosystem": "Pub"
+      },
+      "version": "3.1.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "webkit_inspection_protocol",
+        "ecosystem": "Pub"
+      },
+      "version": "1.2.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "xdg_directories",
+        "ecosystem": "Pub"
+      },
+      "version": "1.1.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "yaml",
+        "ecosystem": "Pub"
+      },
+      "version": "3.1.3",
+      "vulnerabilities": []
+    }
+  ]
+}
