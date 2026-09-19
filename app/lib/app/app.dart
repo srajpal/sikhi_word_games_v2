@@ -1,3 +1,4 @@
+import '../core/themes/game_ui.dart';
 import '../core/persistence/reset_sections.dart';
 import '../features/learn_letters/data/learn_letters_repository.dart';
 import '../features/learn_letters/presentation/learn_letters_page.dart';
@@ -268,13 +269,27 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
   Future<void> _changeTheme(AppThemeChoice choice) async {
     setState(() => _settings = _settings.copyWith(theme: choice));
     _router.refresh();
-    await widget.settingsRepository.save(_settings);
+    await _saveSettings();
   }
 
   Future<void> _changeFeedbackSettings(AppSettings settings) async {
     setState(() => _settings = settings);
     _router.refresh();
-    await widget.settingsRepository.save(_settings);
+    await _saveSettings();
+  }
+
+  Future<void> _saveSettings() async {
+    try {
+      await widget.settingsRepository.save(_settings);
+    } on Object {
+      if (!mounted) return;
+      final context = _router.routerDelegate.navigatorKey.currentContext;
+      if (context == null || !context.mounted) return;
+      showGameSnackBar(
+        context,
+        'Settings could not be saved on this device. They still apply for this session.',
+      );
+    }
   }
 
   @override

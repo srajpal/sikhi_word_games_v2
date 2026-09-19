@@ -166,9 +166,25 @@ class GameLibraryPage extends StatelessWidget {
       ),
     );
     if (options != null && context.mounted) {
-      await launchPreferencesRepository.save(kind, options);
+      await _saveLaunchPreferences(context, kind, options);
       if (!context.mounted) return;
       context.push(_pathFor(kind), extra: options);
+    }
+  }
+
+  Future<void> _saveLaunchPreferences(
+    BuildContext context,
+    GameKind kind,
+    GameLaunchOptions options,
+  ) async {
+    try {
+      await launchPreferencesRepository.save(kind, options);
+    } on Object {
+      if (!context.mounted) return;
+      showGameSnackBar(
+        context,
+        'Game options could not be saved on this device. You can still play.',
+      );
     }
   }
 
@@ -271,7 +287,7 @@ class GameLibraryPage extends StatelessWidget {
     final options = GameLaunchOptions(
       language: result == 'random' ? null : LanguageMode.values.byName(result),
     );
-    await launchPreferencesRepository.save(GameKind.wordBridges, options);
+    await _saveLaunchPreferences(context, GameKind.wordBridges, options);
     if (context.mounted) context.push('/word-bridges', extra: options);
   }
 

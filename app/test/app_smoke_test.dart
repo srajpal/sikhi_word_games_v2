@@ -1,3 +1,6 @@
+import 'package:sikhi_word_games_v2/features/game_library/presentation/game_library_page.dart';
+import 'package:sikhi_word_games_v2/features/game_library/data/game_launch_preferences_repository.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/presentation/guess_the_word_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -18,6 +21,54 @@ import 'package:sikhi_word_games_v2/features/word_search/data/word_search_sessio
 import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
+  testWidgets('rejected preference writes preserve settings and game launch', (
+    tester,
+  ) async {
+    final store = _RejectingWrites();
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(store),
+        launchPreferencesRepository: GameLaunchPreferencesRepository(store),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await tester.pumpAndSettle();
+    var library = tester.widget<GameLibraryPage>(find.byType(GameLibraryPage));
+    library.onThemeChanged(AppThemeChoice.dark);
+    await tester.pumpAndSettle();
+    library = tester.widget<GameLibraryPage>(find.byType(GameLibraryPage));
+    expect(
+      Theme.of(tester.element(find.byType(GameLibraryPage))).brightness,
+      Brightness.dark,
+    );
+    expect(
+      find.text(
+        'Settings could not be saved on this device. They still apply for this session.',
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    library.onFeedbackSettingsChanged(
+      const AppSettings(theme: AppThemeChoice.dark, reducedMotion: true),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text('Dismiss'));
+    await tester.pumpAndSettle();
+    await _openNewGameOptions(tester);
+    await tester.tap(find.text('Start new game'));
+    await tester.pumpAndSettle();
+    expect(find.byType(GuessTheWordPage), findsOneWidget);
+    expect(
+      tester
+          .widget<GuessTheWordPage>(find.byType(GuessTheWordPage))
+          .reducedMotion,
+      isTrue,
+    );
+    expect(tester.takeException(), isNull);
+    expect(store.attempts, 3);
+  });
+
   testWidgets('shows the current app version on the home page', (tester) async {
     await tester.pumpWidget(
       SikhiWordGamesApp(
@@ -1076,3 +1127,12 @@ const _khojCompactVocabulary = MemoryVocabularyRepository([
     source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
 ]);
+
+class _RejectingWrites extends MemoryKeyValueStore {
+  int attempts = 0;
+  @override
+  Future<void> setString(String key, String value) async {
+    attempts++;
+    throw StateError('Storage blocked');
+  }
+}

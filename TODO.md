@@ -1,5 +1,16 @@
 # Sikhi Word Games V2 — TODO
 
+## Issue #8: rejected settings and launch preference writes
+
+- [x] Catch settings save failures while retaining the active theme and feedback
+  settings; show the shared dismissible notice. Save launch options best-effort
+  for both standard games and Jodo, then navigate if still mounted.
+- [x] Widget regression uses a throwing store to verify theme changes, feedback
+  settings reaching Bujho and successful launch without an unhandled exception.
+- Validation: targeted regression and all 295 tests passed; formatting and
+  analysis are clean.
+  No content, web cache or platform configuration changes.
+
 ## September 19 external audit follow-up (#3, #4, #5)
 
 - [x] #5 W7: Android release signing reads private key.properties and has no
