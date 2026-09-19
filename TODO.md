@@ -2,6 +2,10 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W16: reconcile the old Quest layout specification with the approved
+  1.6 redesign: full wrapped clues, wrapping status pills and garden-only bloom
+  semantics. Do not revert to truncated clues or add a redundant path counter.
+
 - [x] #5 W14: dictionary minimum query length counts graphemes after
   normalization. A single precomposed or decomposed nukta letter is insufficient.
 

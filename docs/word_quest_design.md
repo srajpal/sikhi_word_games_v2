@@ -84,26 +84,29 @@ action remain reachable.
 
 From top to bottom, the round screen contains these sections:
 
-1. **App bar (56 px minimum):** back button; title `Chardi Kala: Word Quest`;
-   subtitle `<language> · <N> letters`; overflow menu with **New word**, **Game
+1. **App bar (56 px minimum):** back button; two-line `Chardi Kala` / `Word Quest`
+   title; overflow menu with **New word**, **Game
    settings**, and **How to play**. Keep the app bar structure consistent with
    Bujho: Guess the Word.
-2. **Quest status strip:** a compact `Round` label and a text counter such as
-   `3 of 8 path steps` / `2 letters found`. This is text, not color alone.
-3. **Clue card:** a labeled `Clue` heading and a one-line definition preview.
-   If the definition does not fit one line, end it with an ellipsis and expose
-   a small action that displays the complete concise definition in a floating
-   message. The card must not include the answer or an answer-length spelling
-   hint that makes Gurmukhi grapheme behavior unclear.
+2. **Quest status strip:** wrapping language/word-length and remaining-tries
+   pills, Hint and the full-keyboard toggle. Counts use text, not color alone.
+   The approved 1.6 redesign does not add a separate Round/path-step counter;
+   revealed tiles show letter progress and the garden has a numeric semantic label.
+3. **Clue card:** a `Your clue` heading, category and the full concise definition,
+   wrapped for reading as approved in `product_decisions.md`. Do not truncate it
+   behind a floating-message action. Long clues may increase the scrollable page
+   height. The card must not include the answer or an answer-length spelling hint
+   that makes Gurmukhi grapheme behavior unclear.
 4. **Word card:** one large, centered tile per solution grapheme. Unknown tiles
    show an accessible “hidden letter” label and a neutral shape; revealed tiles
    show the grapheme. Preserve spaces only if the content policy later allows
    multiword entries; V1 of this mode is single-word only.
-5. **Garden path panel:** a quiet row/arc of eight secular stones, sprouts, or flowers,
-   with completed steps highlighted by `tokens.correct`. Include a text
-   alternative (`3 of 8 steps`) and do not use a sacred symbol as the endpoint.
+5. **Garden path panel:** eight secular blooms using shared theme artwork colors.
+   Its semantic text alternative reads, for example, `3 of 8 garden blooms growing`;
+   do not use a sacred symbol as the endpoint.
    When the full keyboard is open, replace the garden with a simple separator
-   so the expanded keyboard remains usable in one phone viewport.
+   so the expanded keyboard remains usable in one phone viewport. The garden's
+   decorative progress label is hidden with it; word-tile states and tries remain.
 6. **Feedback line:** one live status line for `Letter found`, `Try another
    letter`, hint confirmation, or the positive terminal message. Use
    `Semantics(liveRegion: true)` where supported; do not rely on a transient
