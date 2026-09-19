@@ -131,6 +131,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
   Future<void> _load() async {
     try {
       _entries = await widget.vocabularyRepository.load();
+      if (!mounted) return;
       if (!widget.startFresh) {
         final restored = widget.sessionRepository.restore();
         if (restored != null) {
@@ -138,6 +139,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
             _mode = restored.mode;
             _wordSize = restored.wordSize;
             await widget.sessionRepository.clear();
+            if (!mounted) return;
             _newPuzzle();
             return;
           }
@@ -162,6 +164,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
           return;
         }
         await widget.sessionRepository.clear();
+        if (!mounted) return;
       }
       _mode = widget.initialMode ?? _randomMode();
       _wordSize = widget.initialWordSize ?? _randomWordSize(_mode);
@@ -185,6 +188,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
   );
 
   void _newPuzzle() {
+    if (!mounted) return;
     VictoryCelebration.stop(context);
     final entries = _entries;
     if (entries == null) return;
@@ -321,7 +325,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
         ),
       ),
     );
-    if (mode == null || mode == _mode) return;
+    if (!mounted || mode == null || mode == _mode) return;
     setState(() => _mode = mode);
     _newPuzzle();
   }

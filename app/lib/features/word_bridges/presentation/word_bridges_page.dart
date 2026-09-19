@@ -112,8 +112,8 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
       );
 
   Future<void> _newSet({LanguageMode? mode}) async {
-    VictoryCelebration.stop(context);
     if (_busy || !mounted) return;
+    VictoryCelebration.stop(context);
     final nextMode = mode ?? _mode;
     final decks = _content!.decksFor(nextMode);
     if (decks.isEmpty) return;

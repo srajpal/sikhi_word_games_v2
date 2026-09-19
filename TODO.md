@@ -2,6 +2,11 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #4: guard Word Search and Quest after asynchronous loads, clears and
+  settings sheets; guard new-round context access, including Jodo. Bujho and
+  Learn Letters already guard their post-await UI updates. Regression tests pop
+  Search and Quest during vocabulary load and session clear.
+
 - [x] PR #2 already merged at 5297874; fast-forwarded local branch. PR #1
   validate and goldens both green on that head (run 35470349206).
 - [x] #3: normalize both vocabulary and saved Bujho solutions during restore.

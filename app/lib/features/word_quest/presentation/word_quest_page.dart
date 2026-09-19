@@ -175,6 +175,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
         }
       }
       await widget.sessionRepository.clear();
+      if (!mounted) return;
     }
     _mode = widget.initialMode ?? _randomMode();
     _wordSize = widget.initialWordSize ?? _randomWordSize(_mode);
@@ -198,6 +199,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   Future<void> _startNewWord() async {
+    if (!mounted) return;
     VictoryCelebration.stop(context);
     final vocabulary = _vocabulary;
     if (vocabulary == null || !mounted) return;
@@ -432,7 +434,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
         ),
       ),
     );
-    if (result != null) {
+    if (mounted && result != null) {
       _mode = result.$1;
       _wordSize = result.$2;
       _startNewWord();
