@@ -59,7 +59,7 @@ class WordPool {
     int limit = 50,
   }) {
     final normalized = normalizeGurmukhi(query.trim()).toLowerCase();
-    if (normalized.length < 2 || limit <= 0) return const [];
+    if (normalized.characters.length < 2 || limit <= 0) return const [];
     final index = _searchIndexes.putIfAbsent(
       mode,
       () => [

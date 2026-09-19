@@ -2,6 +2,9 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W14: dictionary minimum query length counts graphemes after
+  normalization. A single precomposed or decomposed nukta letter is insufficient.
+
 - [x] #5 W13: validate CI runs the OSV dependency audit and fails on advisories
   or incomplete queries. Local audit: 112 hosted Pub packages, zero known
   advisories. SDK/native dependencies remain outside this audit's scope.

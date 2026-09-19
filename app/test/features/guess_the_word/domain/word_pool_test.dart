@@ -6,6 +6,20 @@ import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/word_pool.dart';
 
 void main() {
+  test(
+    'search minimum counts visible Gurmukhi letters after normalization',
+    () {
+      final pool = WordPool([
+        _entry('word', VocabularyLanguage.panjabi, 'SHABAD', gurmukhi: 'ਸ਼ਬਦ'),
+      ]);
+      expect(pool.search(mode: LanguageMode.gurmukhi, query: 'ਸ਼'), isEmpty);
+      expect(pool.search(mode: LanguageMode.gurmukhi, query: 'ਸ਼'), isEmpty);
+      expect(
+        pool.search(mode: LanguageMode.gurmukhi, query: 'ਸ਼ਬ').single.id,
+        'word',
+      );
+    },
+  );
   test('incremental search retains matches beyond the displayed limit', () {
     final pool = WordPool([
       for (var i = 0; i < 60; i++)
@@ -193,12 +207,17 @@ void main() {
         source:
             'Project editorial definition; original text for Sikhi Word Games',
       ),
-      _entry('other', VocabularyLanguage.panjabi, 'PHALI', gurmukhi: 'ਫੁਲੀ'),
+      _entry(
+        'other',
+        VocabularyLanguage.panjabi,
+        'PHULLAN',
+        gurmukhi: 'ਫੁੱਲਾਂ',
+      ),
     ]);
 
     expect(
       pool
-          .search(mode: LanguageMode.gurmukhi, query: 'ਫੁ', limit: 2)
+          .search(mode: LanguageMode.gurmukhi, query: 'ਫੁੱਲ', limit: 2)
           .map((entry) => entry.id),
       ['reviewed', 'other'],
     );
