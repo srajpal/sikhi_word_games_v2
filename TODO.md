@@ -2,6 +2,9 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W9: grid pans claim the gesture before surrounding vertical scrolling.
+  Short-screen regression verifies a vertical word is found without moving the grid.
+
 - [x] #5 W8: generator retries eight fresh grids and fails rather than silently
   reducing its requested count. Page explicitly requests up to six available
   targets. Seeded integrity tests assert exact counts; impossible targets fail.

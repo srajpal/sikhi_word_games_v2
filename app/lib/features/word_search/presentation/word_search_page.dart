@@ -6,6 +6,7 @@ import '../../game_library/domain/game_launch_options.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
@@ -783,21 +784,35 @@ class _WordSearchBoard extends StatelessWidget {
                             : 'Word search grid. Use arrow keys to move. Press Enter or Space to choose a start cell.',
                         child: SizedBox.square(
                           dimension: boardDimension,
-                          child: GestureDetector(
-                            onPanStart: (details) => onStartSelection(
-                              _pointFor(
-                                details.localPosition,
-                                Size.square(boardDimension),
-                              ),
-                            ),
-                            onPanUpdate: (details) => onExtendSelection(
-                              _pointFor(
-                                details.localPosition,
-                                Size.square(boardDimension),
-                              ),
-                            ),
-                            onPanEnd: (_) => onCompleteSelection(),
-                            onPanCancel: onCompleteSelection,
+                          child: RawGestureDetector(
+                            gestures: {
+                              _GridPanGestureRecognizer:
+                                  GestureRecognizerFactoryWithHandlers<
+                                    _GridPanGestureRecognizer
+                                  >(_GridPanGestureRecognizer.new, (
+                                    recognizer,
+                                  ) {
+                                    recognizer.dragStartBehavior =
+                                        DragStartBehavior.down;
+                                    recognizer.onStart = (details) =>
+                                        onStartSelection(
+                                          _pointFor(
+                                            details.localPosition,
+                                            Size.square(boardDimension),
+                                          ),
+                                        );
+                                    recognizer.onUpdate = (details) =>
+                                        onExtendSelection(
+                                          _pointFor(
+                                            details.localPosition,
+                                            Size.square(boardDimension),
+                                          ),
+                                        );
+                                    recognizer.onEnd = (_) =>
+                                        onCompleteSelection();
+                                    recognizer.onCancel = onCompleteSelection;
+                                  }),
+                            },
                             child: GridView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
@@ -1159,5 +1174,14 @@ class _WordTargetCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// Grid drags claim their pointer before the surrounding vertical scroll view.
+class _GridPanGestureRecognizer extends PanGestureRecognizer {
+  @override
+  void addAllowedPointer(PointerDownEvent event) {
+    super.addAllowedPointer(event);
+    resolve(GestureDisposition.accepted);
   }
 }

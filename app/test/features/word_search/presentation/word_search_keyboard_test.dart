@@ -11,6 +11,61 @@ import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzz
 import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
+  testWidgets('vertical grid drag wins over scrolling on a short screen', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(400, 550);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final repository = WordSearchSessionRepository(MemoryKeyValueStore());
+    final cells = List.generate(10, (_) => List.filled(10, 'A'));
+    for (var i = 0; i < 4; i++) {
+      cells[i][0] = 'TEST'[i];
+      cells[6][i] = 'PLAY'[i];
+    }
+    await repository.save(
+      mode: LanguageMode.english,
+      wordSize: 4,
+      puzzle: WordSearchPuzzle(
+        cells: cells,
+        words: [
+          PlacedWord(
+            word: 'TEST',
+            start: const GridPoint(0, 0),
+            direction: WordSearchDirection.south,
+          ),
+          PlacedWord(
+            word: 'PLAY',
+            start: const GridPoint(6, 0),
+            direction: WordSearchDirection.east,
+          ),
+        ],
+      ),
+      foundWords: {},
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.modern),
+        home: WordSearchPage(
+          vocabularyRepository: _vocabulary,
+          sessionRepository: repository,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final start = find.byKey(const ValueKey('word-search-cell-0-0'));
+    final end = find.byKey(const ValueKey('word-search-cell-3-0'));
+    await tester.ensureVisible(start);
+    final before = tester.getTopLeft(start);
+    final drag = await tester.startGesture(tester.getCenter(start));
+    await drag.moveTo(tester.getCenter(end));
+    await drag.up();
+    await tester.pumpAndSettle();
+    expect(repository.restore()!.foundWords, contains('TEST'));
+    expect(tester.getTopLeft(start), before);
+    expect(tester.takeException(), isNull);
+  });
   testWidgets('keyboard finds a word forward and backward', (tester) async {
     for (final reverse in [false, true]) {
       final store = MemoryKeyValueStore();
