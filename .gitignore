@@ -11,6 +11,7 @@ Thumbs.db
 **/.env.*
 !**/.env.example
 **/local.properties
+**/key.properties
 **/*.jks
 **/*.keystore
 **/*.p12

@@ -1,13 +1,16 @@
 {
   "version": "1.9.0+17",
-  "verifiedOn": "2026-09-18",
+  "verifiedOn": "2026-09-19",
   "archive": "app/dist/sikhi-word-games-web-1.9.0+17.zip",
-  "bytes": 17708408,
-  "sha256": "8b429a2d207e2a13fb7e610257de14ec1958ec0d229d6b7c8a99df6d5f487a88",
-  "files": 87,
-  "uncompressedBytes": 62680597,
+  "bytes": 17710913,
+  "sha256": "586416cc49eb8fb6aed3f3abe1888c3264e38582083f444990a40a1621121f6d",
+  "files": 95,
+  "uncompressedBytes": 62689058,
   "sourceAssetsExcluded": true,
   "relativeBase": true,
   "learnLettersClips": 35,
-  "itchHtmlLimitsPassed": true
+  "packagedBootstrapMatchesBuild": true,
+  "updateNoticeBehaviorPassed": true,
+  "browserIframeVerification": "Not performed by this package audit.",
+  "distribution": "Local audit build; not uploaded."
 }

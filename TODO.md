@@ -2,6 +2,18 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W7: Android release signing reads private key.properties and has no
+  debug-key fallback. Properties/keystores are ignored. Gradle preReleaseBuild
+  compiles the configuration and fails with the intended missing-credentials
+  message. A signed APK was not produced; no signing secrets were created.
+- [x] Final audit batch: 293 tests, clean analysis/format, release web build,
+  worker/update-notice checks and final ZIP audit pass. The compiled bootstrap,
+  cache manifest, relative base and 35 letter clips are verified. Package evidence
+  is in reports/release/package_audit.json; hosted iframe verification remains
+  separate. Keep PR #1 draft and unmerged.
+- Optional suggestions are deferred to keep this pass focused on the required
+  findings. No page splitting, Git LFS migration or other large refactor.
+
 - [x] #5 W11: Jodo explains when Continue replaces a saved set whose vocabulary
   is no longer valid. The stale-definition restore regression checks the notice.
 

@@ -50,6 +50,15 @@ content from the local V1 source. It is not a normal validation step. Generated
 assets are tracked; the V1 source folder is excluded from publication. Editorial
 changes belong in the curation layer described in the content documentation.
 
+## Android release signing
+
+Android release variants require a private `app/android/key.properties` containing
+`storeFile`, `storePassword`, `keyAlias` and `keyPassword`. The keystore path may be
+absolute or relative to `app/android/`. Both properties and keystores are ignored
+by Git. Release builds fail when signing configuration is missing; they never
+fall back to the debug key. A signed APK still requires separate device/release
+validation. Web builds do not require these credentials.
+
 ## itch.io release workflow
 
 The first itch.io distribution is **Public playtest 1.9.0+17**. This candidate includes keyboard play, shared themes, corrected Punjabi
