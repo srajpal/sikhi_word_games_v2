@@ -165,10 +165,12 @@ class _WordQuestPageState extends State<WordQuestPage> {
           spelling: restored.game.solution,
         );
         if (word != null) {
+          // Set the mode before building the bank so distractors come from
+          // the restored language rather than the default.
+          _mode = restored.mode;
+          _wordSize = restored.wordSize;
           final bank = _buildLetterBank(restored.game);
           setState(() {
-            _mode = restored.mode;
-            _wordSize = restored.wordSize;
             _word = word;
             _game = restored.game;
             _letterBank = bank;

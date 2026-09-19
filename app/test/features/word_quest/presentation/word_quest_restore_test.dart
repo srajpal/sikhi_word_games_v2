@@ -99,7 +99,76 @@ void main() {
       semantics.dispose();
     }
   });
+  testWidgets('restores a Gurmukhi quest with a Gurmukhi-only letter bank', (
+    tester,
+  ) async {
+    final repository = WordQuestSessionRepository(MemoryKeyValueStore());
+    final game = WordQuestGame(solution: 'ਸਤਿਗੁਰ')..guess('ਸ');
+    await repository.save(mode: LanguageMode.gurmukhi, wordSize: 4, game: game);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+        home: WordQuestPage(
+          vocabularyRepository: _gurmukhiVocabulary,
+          hapticLevel: HapticFeedbackLevel.off,
+          reducedMotion: true,
+          sessionRepository: repository,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    final bankKeys = tester
+        .widgetList(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget.key is ValueKey<String> &&
+                (widget.key! as ValueKey<String>).value.startsWith(
+                  'word-quest-key-',
+                ),
+          ),
+        )
+        .map((widget) => (widget.key! as ValueKey<String>).value.substring(15))
+        .toList();
+    expect(bankKeys, isNotEmpty);
+    final gurmukhi = RegExp(r'^[਀-੿]+$');
+    for (final letter in bankKeys) {
+      expect(gurmukhi.hasMatch(letter), isTrue, reason: 'Latin key: $letter');
+    }
+    expect(tester.takeException(), isNull);
+  });
 }
+
+const _gurmukhiVocabulary = MemoryVocabularyRepository([
+  VocabularyEntry(
+    id: 'punjabi_satgur',
+    language: VocabularyLanguage.panjabi,
+    latin: 'SATGUR',
+    gurmukhi: 'ਸਤਿਗੁਰ',
+    englishDefinition: 'The true Guru',
+    latinLength: 6,
+    gurmukhiLength: 4,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'Project editorial definition; original text for Sikhi Word Games',
+  ),
+  VocabularyEntry(
+    id: 'punjabi_paani',
+    language: VocabularyLanguage.panjabi,
+    latin: 'PAANI',
+    gurmukhi: 'ਪਾਣੀ',
+    englishDefinition: 'Water',
+    latinLength: 5,
+    gurmukhiLength: 2,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.machineChecked,
+    source: 'Project editorial definition; original text for Sikhi Word Games',
+  ),
+]);
 
 const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
