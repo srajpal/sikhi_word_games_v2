@@ -2,6 +2,9 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W2: propagate false SharedPreferences write results as failures;
+  regression verifies a later queued retry still succeeds.
+
 - [x] #4: guard Word Search and Quest after asynchronous loads, clears and
   settings sheets; guard new-round context access, including Jodo. Bujho and
   Learn Letters already guard their post-await UI updates. Regression tests pop

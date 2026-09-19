@@ -44,7 +44,9 @@ class SharedPreferencesKeyValueStore implements KeyValueStore {
 
   @override
   Future<void> setString(String key, String value) async {
-    await _preferences.setString(key, value);
+    if (!await _preferences.setString(key, value)) {
+      throw StateError('Unable to save app data');
+    }
   }
 
   @override
