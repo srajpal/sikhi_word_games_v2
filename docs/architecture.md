@@ -184,7 +184,10 @@ web build. It caches only a bounded allowlist of same-origin files within the
 worker's exact registration scope. Cache names include the full encoded scope,
 and activation removes only older caches for that same scope. A failed install
 removes its partial cache. Updates wait until older controlled pages close, which
-keeps one page from loading a mixture of two builds. These controls support nested
+keeps one page from loading a mixture of two builds. The bootstrap detects waiting
+updates and shows a dismissible notice to finish the round, close all game tabs
+and reopen. It also checks for updates on focus; it never forces activation or a
+mid-round reload. These controls support nested
 itch.io paths, but actual offline reload still requires verification in the hosted
 draft because iframe and browser storage policies can restrict service workers.
 

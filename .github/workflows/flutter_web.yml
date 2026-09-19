@@ -28,6 +28,8 @@ jobs:
         run: flutter test test/tool/generate_web_app_cache_test.dart --suppress-analytics
       - name: Verify release worker runtime behavior
         run: node tool/test_web_app_cache_service_worker.mjs
+      - name: Verify update notices
+        run: node tool/test_web_update_notice.mjs
       - run: dart run tool/audit_content.dart
       - run: flutter build web --release --no-web-resources-cdn --suppress-analytics
       - uses: browser-actions/setup-chrome@v2

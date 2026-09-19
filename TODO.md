@@ -2,6 +2,12 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W12: detect installed/waiting updates, show a dismissible close-and-reopen
+  notice and check on focus. Preserve conservative worker activation. Tests cover
+  first install, updates, dismissal and offline checks. Release web build and
+  package pass; test the compiled bootstrap, ZIP integrity, relative base and
+  cache manifest. This is package-level evidence, not a hosted iframe playtest.
+
 - [x] #5 W5: native vocabulary decode uses a compute isolate; web yields between
   shards and batches of 250 records. Keep coalesced/cache behavior and identify
   malformed records. Browser JSON parsing itself remains per-shard main-thread work.
@@ -47,7 +53,7 @@
   validate and goldens both green on that head (run 35470349206).
 - [x] #3: normalize both vocabulary and saved Bujho solutions during restore.
   Widget regression preserves a played turn over two launches with a
-  precomposed nukta solution. W1 will separately preserve the distinct letter ੜ.
+  precomposed nukta solution. W1 separately preserves the distinct letter ੜ.
 
 ## Current itch.io preparation: 1.9.0+17 (September 18, 2026)
 
