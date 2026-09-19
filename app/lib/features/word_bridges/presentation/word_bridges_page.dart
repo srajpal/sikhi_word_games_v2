@@ -89,6 +89,12 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
           ? requested
           : content.availableModes.first;
       await _newSet();
+      if (mounted && restored != null) {
+        setState(
+          () => _message =
+              'Your saved set was no longer valid, so a new one was started.',
+        );
+      }
     } on Object {
       if (mounted) {
         setState(() => _error = 'Unable to load Jodo. Please try again.');

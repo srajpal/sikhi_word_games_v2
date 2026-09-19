@@ -281,6 +281,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(repository.restore()!.game.roundId, isNot(stale.roundId));
     expect(find.textContaining('Old definition'), findsNothing);
+    expect(
+      find.text(
+        'Your saved set was no longer valid, so a new one was started.',
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('completed set can retry a failed statistics save once', (

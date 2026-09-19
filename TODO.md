@@ -2,6 +2,9 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W11: Jodo explains when Continue replaces a saved set whose vocabulary
+  is no longer valid. The stale-definition restore regression checks the notice.
+
 - [x] #5 W16: reconcile the old Quest layout specification with the approved
   1.6 redesign: full wrapped clues, wrapping status pills and garden-only bloom
   semantics. Do not revert to truncated clues or add a redundant path counter.
