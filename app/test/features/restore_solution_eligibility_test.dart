@@ -16,6 +16,55 @@ import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzz
 import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
+  testWidgets('Bujho restores precomposed nukta solutions with played turns', (
+    tester,
+  ) async {
+    final store = MemoryKeyValueStore();
+    final games = GuessGameRepository(store);
+    const words = {'ਸ਼ਬਦਕ', 'ਕਲਮਕ'};
+    final game = GuessGame(solution: 'ਸ਼ਬਦਕ', acceptedGuesses: words);
+    game.submit('ਕਲਮਕ');
+    await games.save(mode: LanguageMode.gurmukhi, game: game);
+    final vocabulary = MemoryVocabularyRepository([
+      for (final word in words)
+        VocabularyEntry(
+          id: word,
+          language: VocabularyLanguage.panjabi,
+          latin: 'TEST',
+          gurmukhi: word,
+          englishDefinition: 'A test fixture',
+          latinLength: 4,
+          gurmukhiLength: 4,
+          acceptedGuess: true,
+          solutionEligible: true,
+          reviewStatus: ReviewStatus.machineChecked,
+          source: 'Project editorial definition; original text for Sikhi Word Games',
+        ),
+    ]);
+    for (var launch = 0; launch < 2; launch++) {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemes.forChoice(AppThemeChoice.modern),
+          home: GuessTheWordPage(
+            vocabularyRepository: vocabulary,
+            statisticsRepository: GuessStatisticsRepository(store),
+            gameRepository: games,
+            solutionHistoryRepository: SolutionHistoryRepository(store),
+            hapticLevel: HapticFeedbackLevel.off,
+            reducedMotion: true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final restored = games.restore((_, _) => words)!;
+      expect(restored.mode, LanguageMode.gurmukhi);
+      expect(restored.game.solution, game.solution);
+      expect(restored.game.turns.single.guess, 'ਕਲਮਕ');
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+  });
+
   testWidgets('Bujho replaces a restored target that is now guess-only', (
     tester,
   ) async {

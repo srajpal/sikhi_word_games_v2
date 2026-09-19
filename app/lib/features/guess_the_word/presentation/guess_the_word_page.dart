@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/language/gurmukhi_normalization.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/widgets/game_guide.dart';
@@ -217,8 +218,11 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     int length,
     String solution,
   ) {
+    final wanted = normalizeGurmukhi(solution.trim().toUpperCase());
     for (final entry in _playableSolutions(mode, length)) {
-      if (WordPool.spelling(entry, mode)?.trim().toUpperCase() == solution) {
+      final spelling = WordPool.spelling(entry, mode);
+      if (spelling != null &&
+          normalizeGurmukhi(spelling.trim().toUpperCase()) == wanted) {
         return entry;
       }
     }

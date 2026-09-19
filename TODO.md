@@ -1,5 +1,13 @@
 # Sikhi Word Games V2 — TODO
 
+## September 19 external audit follow-up (#3, #4, #5)
+
+- [x] PR #2 already merged at 5297874; fast-forwarded local branch. PR #1
+  validate and goldens both green on that head (run 35470349206).
+- [x] #3: normalize both vocabulary and saved Bujho solutions during restore.
+  Widget regression preserves a played turn over two launches with a
+  precomposed nukta solution. W1 will separately preserve the distinct letter ੜ.
+
 ## Current itch.io preparation: 1.9.0+17 (September 18, 2026)
 
 - [x] Revalidate the accumulated implementation: 277 Flutter tests pass,
