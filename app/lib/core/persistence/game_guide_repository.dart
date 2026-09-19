@@ -1,3 +1,4 @@
+import 'reset_sections.dart';
 import '../../features/game_library/domain/game_launch_options.dart';
 import 'key_value_store.dart';
 
@@ -16,9 +17,9 @@ class GameGuideRepository {
     'seen',
   );
 
-  Future<void> resetAll() async {
-    for (final game in GameKind.values) {
-      await KeyValueStoreWrites.remove(_store, 'gameGuide.v1.${game.name}');
-    }
-  }
+  Future<void> resetAll() => resetSections({
+    for (final game in GameKind.values)
+      game.name: () =>
+          KeyValueStoreWrites.remove(_store, 'gameGuide.v1.${game.name}'),
+  });
 }

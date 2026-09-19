@@ -1,3 +1,4 @@
+import '../core/persistence/reset_sections.dart';
 import '../features/learn_letters/data/learn_letters_repository.dart';
 import '../features/learn_letters/presentation/learn_letters_page.dart';
 
@@ -243,16 +244,19 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
   Future<void> _resetAllData() async {
     // Only the library exposes reset: game routes must be closed first.
     try {
-      await widget.gameRepository.resetAll();
-      await widget.statisticsRepository.resetAll();
-      await widget.solutionHistoryRepository.resetAll();
-      await widget.wordSearchSessionRepository.resetAll();
-      await widget.wordQuestSessionRepository.resetAll();
-      await widget.wordBridgesRepository.resetAll();
-      await widget.learnLettersRepository.resetAll();
-      await widget.launchPreferencesRepository.resetAll();
-      await widget.guideRepository?.resetAll();
-      await widget.settingsRepository.reset();
+      await resetSections({
+        'Bujho game': widget.gameRepository.resetAll,
+        'Bujho statistics': widget.statisticsRepository.resetAll,
+        'Word history': widget.solutionHistoryRepository.resetAll,
+        'Word Search': widget.wordSearchSessionRepository.resetAll,
+        'Word Quest': widget.wordQuestSessionRepository.resetAll,
+        'Jodo': widget.wordBridgesRepository.resetAll,
+        'Learn Letters': widget.learnLettersRepository.resetAll,
+        'Game preferences': widget.launchPreferencesRepository.resetAll,
+        if (widget.guideRepository case final guide?)
+          'Tutorials': guide.resetAll,
+        'Settings': widget.settingsRepository.reset,
+      });
     } finally {
       if (mounted) {
         setState(() => _settings = widget.settingsRepository.load());

@@ -1,3 +1,4 @@
+import '../../../core/persistence/reset_sections.dart';
 import '../../../core/statistics/game_statistics_repository.dart';
 
 import 'dart:convert';
@@ -70,10 +71,10 @@ class WordQuestSessionRepository {
     }
   }
 
-  Future<void> resetAll() async {
-    await clear();
-    await statistics.resetAll();
-  }
+  Future<void> resetAll() => resetSections({
+    'Saved game': () => clear(),
+    'Statistics': statistics.resetAll,
+  });
 
   Future<void> clear({Future<void>? after}) =>
       KeyValueStoreWrites.remove(_store, storageKey, after: after);

@@ -1,3 +1,5 @@
+import '../persistence/reset_sections.dart';
+
 import 'package:flutter/material.dart';
 
 Future<void> showResetAppDataDialog(
@@ -19,6 +21,7 @@ class _ResetAppDataDialog extends StatefulWidget {
 class _ResetAppDataDialogState extends State<_ResetAppDataDialog> {
   bool _busy = false;
   bool _failed = false;
+  String? _failedSections;
 
   Future<void> _reset() async {
     if (_busy) return;
@@ -36,11 +39,14 @@ class _ResetAppDataDialogState extends State<_ResetAppDataDialog> {
           content: Text('App data reset. Ready for a fresh start.'),
         ),
       );
-    } on Object {
+    } on Object catch (error) {
       if (!mounted) return;
       setState(() {
         _busy = false;
         _failed = true;
+        _failedSections = error is ResetDataFailure
+            ? error.sections.join(', ')
+            : null;
       });
     }
   }
@@ -66,6 +72,8 @@ class _ResetAppDataDialogState extends State<_ResetAppDataDialog> {
             const SizedBox(height: 16),
             const LinearProgressIndicator(semanticsLabel: 'Resetting app data'),
           ],
+          if (_failedSections != null)
+            Text('Could not reset: $_failedSections.'),
           if (_failed) ...[
             const SizedBox(height: 16),
             Semantics(

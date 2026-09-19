@@ -178,6 +178,11 @@ void main() {
     );
     expect(store.getString('unrelated.preference'), 'keep me');
     store.failRemove = false;
+    expect(find.text('Could not reset: Bujho statistics.'), findsOneWidget);
+    expect(store.values.keys.toSet(), {
+      'unrelated.preference',
+      GuessStatisticsRepository.storageKey,
+    });
     final retry = find.text('Reset all data');
     if (retry.evaluate().isEmpty) {
       await _tapVisible(tester, find.text('Reset all app data'));
