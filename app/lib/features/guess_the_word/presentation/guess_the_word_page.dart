@@ -254,15 +254,17 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       _message = null;
       _loading = false;
     });
-    widget.gameRepository.save(game: _game!, mode: _mode);
+    _persist(widget.gameRepository.save(game: _game!, mode: _mode));
     WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
   }
 
   void _saveSolutionHistory() {
-    widget.solutionHistoryRepository.save(
-      SolutionHistory(
-        usedIds: _selector.usedIds,
-        lastSelectedId: _selector.lastSelectedId,
+    _persist(
+      widget.solutionHistoryRepository.save(
+        SolutionHistory(
+          usedIds: _selector.usedIds,
+          lastSelectedId: _selector.lastSelectedId,
+        ),
       ),
     );
   }
@@ -292,10 +294,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           won: game.status == GuessGameStatus.won,
           attempts: game.turns.length,
         );
-        widget.statisticsRepository.save(_statistics);
-        widget.gameRepository.clear();
+        _persist(
+          widget.gameRepository.clear(
+            after: widget.statisticsRepository.save(_statistics),
+          ),
+        );
       } else {
-        widget.gameRepository.save(game: game, mode: _mode);
+        _persist(widget.gameRepository.save(game: game, mode: _mode));
       }
       _controller.clear();
       _message = null;
@@ -487,6 +492,18 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         context.push('/dictionary');
       case _GameMenuAction.copyResult:
         _copyResult();
+    }
+  }
+
+  Future<void> _persist(Future<void> write) async {
+    try {
+      await write;
+    } on Object {
+      if (!mounted) return;
+      showGameSnackBar(
+        context,
+        'Progress could not be saved on this device. You can keep playing.',
+      );
     }
   }
 

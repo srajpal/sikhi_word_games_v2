@@ -237,10 +237,12 @@ class _WordQuestPageState extends State<WordQuestPage> {
       _message = '';
       _loading = false;
     });
-    await widget.sessionRepository.save(
-      mode: _mode,
-      wordSize: _wordSize,
-      game: game,
+    await _persist(
+      widget.sessionRepository.save(
+        mode: _mode,
+        wordSize: _wordSize,
+        game: game,
+      ),
     );
   }
 
@@ -254,7 +256,13 @@ class _WordQuestPageState extends State<WordQuestPage> {
       _showFullKeyboard = false;
       _message = '';
     });
-    widget.sessionRepository.save(mode: _mode, wordSize: _wordSize, game: game);
+    _persist(
+      widget.sessionRepository.save(
+        mode: _mode,
+        wordSize: _wordSize,
+        game: game,
+      ),
+    );
   }
 
   List<String> _buildLetterBank(WordQuestGame game) {
@@ -332,18 +340,23 @@ class _WordQuestPageState extends State<WordQuestPage> {
       if (game.status == WordQuestStatus.won) {
         VictoryCelebration.celebrate(context);
       }
-      widget.sessionRepository.statistics.record(
-        mode: _mode.name,
-        size: game.solutionGraphemes.length,
-        won: game.status == WordQuestStatus.won,
-        hintsUsed: game.hintsUsed,
+      _persist(
+        widget.sessionRepository.clear(
+          after: widget.sessionRepository.statistics.record(
+            mode: _mode.name,
+            size: game.solutionGraphemes.length,
+            won: game.status == WordQuestStatus.won,
+            hintsUsed: game.hintsUsed,
+          ),
+        ),
       );
-      widget.sessionRepository.clear();
     } else {
-      widget.sessionRepository.save(
-        mode: _mode,
-        wordSize: _wordSize,
-        game: game,
+      _persist(
+        widget.sessionRepository.save(
+          mode: _mode,
+          wordSize: _wordSize,
+          game: game,
+        ),
       );
     }
     _haptic(correct: correct, complete: game.isComplete);
@@ -360,18 +373,23 @@ class _WordQuestPageState extends State<WordQuestPage> {
       if (game.status == WordQuestStatus.won) {
         VictoryCelebration.celebrate(context);
       }
-      widget.sessionRepository.statistics.record(
-        mode: _mode.name,
-        size: game.solutionGraphemes.length,
-        won: game.status == WordQuestStatus.won,
-        hintsUsed: game.hintsUsed,
+      _persist(
+        widget.sessionRepository.clear(
+          after: widget.sessionRepository.statistics.record(
+            mode: _mode.name,
+            size: game.solutionGraphemes.length,
+            won: game.status == WordQuestStatus.won,
+            hintsUsed: game.hintsUsed,
+          ),
+        ),
       );
-      widget.sessionRepository.clear();
     } else {
-      widget.sessionRepository.save(
-        mode: _mode,
-        wordSize: _wordSize,
-        game: game,
+      _persist(
+        widget.sessionRepository.save(
+          mode: _mode,
+          wordSize: _wordSize,
+          game: game,
+        ),
       );
     }
     _haptic(correct: true);
@@ -442,6 +460,18 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   void _showHelp() => showGameHelp(context, GameKind.wordQuest);
+
+  Future<void> _persist(Future<void> write) async {
+    try {
+      await write;
+    } on Object {
+      if (!mounted) return;
+      showGameSnackBar(
+        context,
+        'Progress could not be saved on this device. You can keep playing.',
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

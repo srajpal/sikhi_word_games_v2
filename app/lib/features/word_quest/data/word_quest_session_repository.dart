@@ -75,5 +75,6 @@ class WordQuestSessionRepository {
     await statistics.resetAll();
   }
 
-  Future<void> clear() => KeyValueStoreWrites.remove(_store, storageKey);
+  Future<void> clear({Future<void>? after}) =>
+      KeyValueStoreWrites.remove(_store, storageKey, after: after);
 }

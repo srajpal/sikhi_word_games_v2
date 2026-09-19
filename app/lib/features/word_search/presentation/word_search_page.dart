@@ -230,11 +230,13 @@ class _WordSearchPageState extends State<WordSearchPage> {
         _keyboardPoint = const GridPoint(0, 0);
         _keyboardSelecting = false;
       });
-      widget.sessionRepository.save(
-        mode: _mode,
-        wordSize: _wordSize,
-        puzzle: puzzle,
-        foundWords: _foundWords,
+      _persist(
+        widget.sessionRepository.save(
+          mode: _mode,
+          wordSize: _wordSize,
+          puzzle: puzzle,
+          foundWords: _foundWords,
+        ),
       );
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && ModalRoute.of(context)?.isCurrent != false) {
@@ -412,19 +414,24 @@ class _WordSearchPageState extends State<WordSearchPage> {
     final complete = _foundWords.length == puzzle.words.length;
     if (complete) {
       VictoryCelebration.celebrate(context);
-      widget.sessionRepository.statistics.record(
-        mode: _mode.name,
-        size: _wordSize,
-        won: true,
-        wordsFound: puzzle.words.length,
+      _persist(
+        widget.sessionRepository.clear(
+          after: widget.sessionRepository.statistics.record(
+            mode: _mode.name,
+            size: _wordSize,
+            won: true,
+            wordsFound: puzzle.words.length,
+          ),
+        ),
       );
-      widget.sessionRepository.clear();
     } else {
-      widget.sessionRepository.save(
-        mode: _mode,
-        wordSize: _wordSize,
-        puzzle: puzzle,
-        foundWords: _foundWords,
+      _persist(
+        widget.sessionRepository.save(
+          mode: _mode,
+          wordSize: _wordSize,
+          puzzle: puzzle,
+          foundWords: _foundWords,
+        ),
       );
     }
     HapticFeedback.selectionClick();
@@ -512,6 +519,18 @@ class _WordSearchPageState extends State<WordSearchPage> {
   }
 
   void _showHelp() => showGameHelp(context, GameKind.wordSearch);
+
+  Future<void> _persist(Future<void> write) async {
+    try {
+      await write;
+    } on Object {
+      if (!mounted) return;
+      showGameSnackBar(
+        context,
+        'Progress could not be saved on this device. You can keep playing.',
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

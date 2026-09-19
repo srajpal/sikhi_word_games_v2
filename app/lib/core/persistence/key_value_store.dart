@@ -30,8 +30,19 @@ class KeyValueStoreWrites {
     String value,
   ) => run(store, key, () => store.setString(key, value));
 
-  static Future<void> remove(KeyValueStore store, String key) =>
-      run(store, key, () => store.remove(key));
+  static Future<void> remove(
+    KeyValueStore store,
+    String key, {
+    Future<void>? after,
+  }) {
+    // Observe immediately even when earlier writes delay the queued action.
+    // Awaiting the same future below still propagates failures to the caller.
+    after?.ignore();
+    return run(store, key, () async {
+      await after;
+      await store.remove(key);
+    });
+  }
 }
 
 class SharedPreferencesKeyValueStore implements KeyValueStore {

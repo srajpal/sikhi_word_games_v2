@@ -2,6 +2,10 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W3: handle asynchronous save failures in Bujho, Search and Quest with
+  a mounted-safe notice. Queue completion cleanup behind successful statistics
+  persistence and before subsequent round saves; test both failure and ordering.
+
 - [x] #5 W2: propagate false SharedPreferences write results as failures;
   regression verifies a later queued retry still succeeds.
 
