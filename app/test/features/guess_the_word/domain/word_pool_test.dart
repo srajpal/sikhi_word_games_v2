@@ -6,6 +6,26 @@ import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/word_pool.dart';
 
 void main() {
+  test('incremental search retains matches beyond the displayed limit', () {
+    final pool = WordPool([
+      for (var i = 0; i < 60; i++)
+        _entry('$i', VocabularyLanguage.english, 'APPLE$i'),
+      _entry('target', VocabularyLanguage.english, 'APRICOT'),
+    ]);
+    expect(pool.search(mode: LanguageMode.english, query: 'AP'), hasLength(50));
+    expect(
+      pool.search(mode: LanguageMode.english, query: 'APR').single.id,
+      'target',
+    );
+    expect(
+      pool.search(mode: LanguageMode.english, query: 'AP', limit: 100),
+      hasLength(61),
+    );
+    expect(
+      pool.search(mode: LanguageMode.english, query: 'PLE', limit: 100),
+      hasLength(60),
+    );
+  });
   test('deduplicates canonically equivalent Gurmukhi spellings', () {
     final pool = WordPool([
       _entry(

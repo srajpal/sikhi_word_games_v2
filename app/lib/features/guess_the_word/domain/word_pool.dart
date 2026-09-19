@@ -11,6 +11,9 @@ class WordPool {
     : _entries = List.unmodifiable(entries);
 
   final List<VocabularyEntry> _entries;
+  final _searchIndexes = <LanguageMode, List<(VocabularyEntry, String)>>{};
+  final _previousSearches =
+      <LanguageMode, (String, List<(VocabularyEntry, String)>)>{};
 
   List<VocabularyEntry> solutions({
     required LanguageMode mode,
@@ -57,17 +60,28 @@ class WordPool {
   }) {
     final normalized = normalizeGurmukhi(query.trim()).toLowerCase();
     if (normalized.length < 2 || limit <= 0) return const [];
-    final matches = <VocabularyEntry>[];
-    for (final entry in _entries) {
-      if (!entry.acceptedGuess || !_supportsLanguage(entry, mode)) continue;
-      final rawSpelling = spelling(entry, mode);
-      if (rawSpelling == null) continue;
-      final activeSpelling = normalizeGurmukhi(rawSpelling).toLowerCase();
-      if (activeSpelling.contains(normalized)) {
-        matches.add(entry);
-      }
-    }
-    return List.unmodifiable(_bestBySpelling(matches, mode).take(limit));
+    final index = _searchIndexes.putIfAbsent(
+      mode,
+      () => [
+        for (final entry in _bestBySpelling(
+          _entries.where(
+            (entry) => entry.acceptedGuess && _supportsLanguage(entry, mode),
+          ),
+          mode,
+        ))
+          (entry, normalizeGurmukhi(spelling(entry, mode)!).toLowerCase()),
+      ],
+    );
+    final previous = _previousSearches[mode];
+    final candidates = previous != null && normalized.startsWith(previous.$1)
+        ? previous.$2
+        : index;
+    final matches = candidates
+        .where((entry) => entry.$2.contains(normalized))
+        .toList(growable: false);
+    // Keep every match for incremental filtering, not just the displayed 50.
+    _previousSearches[mode] = (normalized, matches);
+    return List.unmodifiable(matches.take(limit).map((entry) => entry.$1));
   }
 
   static List<VocabularyEntry> _bestBySpelling(

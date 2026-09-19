@@ -2,6 +2,10 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W6: cache normalized dictionary spellings per language, debounce input
+  150 ms and narrow the complete previous match set for extending queries.
+  Regression covers matches beyond the display limit and backspacing/query changes.
+
 - [x] #5 W10: reset attempts every repository and nested saved-game/statistics/
   tutorial key, then names failures in the retry dialog. Regression checks that
   only the failed key and unrelated data remain after a partial failure.

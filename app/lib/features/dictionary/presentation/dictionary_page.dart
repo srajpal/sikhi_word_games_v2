@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,6 +29,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode(debugLabel: 'Dictionary keyboard');
   WordPool? _pool;
+  Timer? _searchTimer;
   LanguageMode _mode = LanguageMode.english;
   List<VocabularyEntry> _results = const [];
   String? _error;
@@ -39,6 +42,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   void dispose() {
+    _searchTimer?.cancel();
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -49,9 +53,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
       final entries = await widget.vocabularyRepository.load();
       if (!mounted) return;
       setState(() => _pool = WordPool(entries));
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) => _focusNode.requestFocus(),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _focusNode.requestFocus();
+      });
     } on Object catch (error) {
       if (!mounted) return;
       setState(() => _error = 'Unable to load the offline dictionary: $error');
@@ -59,9 +63,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
   }
 
   void _runSearch() {
-    setState(() {
-      _results =
-          _pool?.search(mode: _mode, query: _controller.text) ?? const [];
+    _searchTimer?.cancel();
+    setState(() => _results = const []);
+    if (_controller.text.characters.length < 2) return;
+    _searchTimer = Timer(const Duration(milliseconds: 150), () {
+      if (!mounted) return;
+      setState(
+        () => _results =
+            _pool?.search(mode: _mode, query: _controller.text) ?? const [],
+      );
     });
   }
 
@@ -94,6 +104,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   }
 
   void _changeMode(LanguageMode mode) {
+    _searchTimer?.cancel();
     setState(() {
       _mode = mode;
       _controller.clear();

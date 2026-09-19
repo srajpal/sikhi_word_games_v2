@@ -563,6 +563,11 @@ void main() {
     }
     expect(
       find.descendant(of: find.byType(ListTile), matching: find.text('APPLE')),
+      findsNothing,
+    );
+    await tester.pump(const Duration(milliseconds: 150));
+    expect(
+      find.descendant(of: find.byType(ListTile), matching: find.text('APPLE')),
       findsOneWidget,
     );
     expect(find.text('English'), findsWidgets);
