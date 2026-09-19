@@ -6,6 +6,29 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_vocabu
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test('both decoding paths identify a malformed record', () async {
+    const documents = ['[{"id":"broken_record"}]'];
+    final failure = isA<FormatException>().having(
+      (e) => e.message,
+      'record identity',
+      contains('broken_record'),
+    );
+    expect(() => decodeVocabularyDocuments(documents), throwsA(failure));
+    await expectLater(
+      decodeVocabularyCooperatively(documents),
+      throwsA(failure),
+    );
+  });
+  test('web decoding yields before work and matches native decoding', () async {
+    var completed = false;
+    final result = decodeVocabularyCooperatively(['[]', '[]']).then((entries) {
+      completed = true;
+      return entries;
+    });
+    await Future<void>.value();
+    expect(completed, isFalse);
+    expect(await result, decodeVocabularyDocuments(['[]', '[]']));
+  });
 
   test(
     'loads the full offline vocabulary and curated starter solutions',

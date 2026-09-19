@@ -13,6 +13,11 @@
 
 Shared vocabulary models, content loading, persistence contracts, themes, accessibility conventions, and reusable widgets.
 
+Vocabulary loading coalesces concurrent requests and caches immutable entries.
+Native platforms decode and construct entries in a `compute` isolate. Web yields
+before each JSON shard and every 250 constructed records; individual shard JSON
+parsing still runs on the browser thread. Malformed records report their IDs.
+
 `GameThemeTokens` owns panel, control and tile treatment. `GameArtwork` provides
 decorative library previews, and `GameSceneColors` supplies the Word Quest garden
 palette. All three game modes use the active theme; Word Quest does not maintain

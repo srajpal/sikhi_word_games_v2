@@ -2,6 +2,10 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W5: native vocabulary decode uses a compute isolate; web yields between
+  shards and batches of 250 records. Keep coalesced/cache behavior and identify
+  malformed records. Browser JSON parsing itself remains per-shard main-thread work.
+
 - [x] #5 W6: cache normalized dictionary spellings per language, debounce input
   150 ms and narrow the complete previous match set for extending queries.
   Regression covers matches beyond the display limit and backspacing/query changes.
