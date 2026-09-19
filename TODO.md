@@ -2,6 +2,9 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W1: preserve ੜ as a distinct core letter, verified against Unicode
+  decomposition data. Document the old snapshot policy; no content files edited.
+
 - [x] #5 W4: Jodo offers Retry saving after a write failure, including a
   completed set; the existing round-ID deduplication keeps retries idempotent.
 

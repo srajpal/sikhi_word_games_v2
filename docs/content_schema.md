@@ -25,6 +25,10 @@
 
 - IDs are stable and unique.
 - Spellings are normalized to an agreed Unicode form.
+- Runtime matching decomposes only the six canonically equivalent Gurmukhi
+  nukta letters. ੜ (U+0A5C) stays distinct from ਡ਼: it has no Unicode
+  decomposition. Old saved targets using the retired alias are not rewritten
+  ambiguously; normal restore eligibility checks replace an invalid target.
 - Calculated Latin and Gurmukhi grapheme lengths are stored only in generated output, not trusted from hand-edited data.
 - Every curated solution is also an accepted guess for the same mode.
 - Duplicate spellings within a mode are either merged or explicitly disambiguated.

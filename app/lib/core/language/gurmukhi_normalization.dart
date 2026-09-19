@@ -8,7 +8,6 @@ String normalizeGurmukhi(String value) {
     0x0A59: '\u0A16\u0A3C', // ਖ਼ -> ਖ਼
     0x0A5A: '\u0A17\u0A3C', // ਗ਼ -> ਗ਼
     0x0A5B: '\u0A1C\u0A3C', // ਜ਼ -> ਜ਼
-    0x0A5C: '\u0A21\u0A3C', // ੜ -> ਡ਼
     0x0A5E: '\u0A2B\u0A3C', // ਫ਼ -> ਫ਼
   };
   final result = StringBuffer();
