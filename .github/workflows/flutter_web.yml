@@ -19,6 +19,8 @@ jobs:
           flutter-version: 3.47.2
           cache: true
       - run: flutter pub get
+      - name: Audit hosted dependency vulnerabilities
+        run: python tool/audit_dependencies.py
       - run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
       - run: flutter analyze --suppress-analytics
       - run: flutter test --exclude-tags=golden --suppress-analytics

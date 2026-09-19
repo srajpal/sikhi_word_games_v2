@@ -1,8 +1,8 @@
 {
-  "checkedAtUtc": "2026-09-12T03:18:09.249310+00:00",
+  "checkedAtUtc": "2026-09-19T22:21:42.261824+00:00",
   "source": "https://api.osv.dev/v1/querybatch",
-  "lockfileSha256": "161f0d2e1f71c76f9d1d158ffbf681bc075aa3757932966183b18effeab686b8",
-  "packageCount": 85,
+  "lockfileSha256": "6239d2cd569b6d950a1a48813978a19d62a006ec91d4c37e01c15dfa4f5d3c4b",
+  "packageCount": 112,
   "vulnerabilityCount": 0,
   "scope": "Hosted Pub packages only. Flutter SDK, native SDKs and unpublished issues are not covered.",
   "packages": [
@@ -40,6 +40,62 @@
     },
     {
       "package": {
+        "name": "audioplayers",
+        "ecosystem": "Pub"
+      },
+      "version": "6.8.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_android",
+        "ecosystem": "Pub"
+      },
+      "version": "5.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_darwin",
+        "ecosystem": "Pub"
+      },
+      "version": "6.5.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_linux",
+        "ecosystem": "Pub"
+      },
+      "version": "4.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_platform_interface",
+        "ecosystem": "Pub"
+      },
+      "version": "7.2.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_web",
+        "ecosystem": "Pub"
+      },
+      "version": "5.3.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "audioplayers_windows",
+        "ecosystem": "Pub"
+      },
+      "version": "4.4.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
         "name": "boolean_selector",
         "ecosystem": "Pub"
       },
@@ -68,6 +124,14 @@
         "ecosystem": "Pub"
       },
       "version": "1.1.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "code_assets",
+        "ecosystem": "Pub"
+      },
+      "version": "1.2.1",
       "vulnerabilities": []
     },
     {
@@ -192,6 +256,22 @@
     },
     {
       "package": {
+        "name": "hooks",
+        "ecosystem": "Pub"
+      },
+      "version": "2.0.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "http",
+        "ecosystem": "Pub"
+      },
+      "version": "1.6.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
         "name": "http_multi_server",
         "ecosystem": "Pub"
       },
@@ -220,6 +300,30 @@
         "ecosystem": "Pub"
       },
       "version": "1.0.5",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "jni",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "jni_flutter",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "jni_util",
+        "ecosystem": "Pub"
+      },
+      "version": "1.0.0",
       "vulnerabilities": []
     },
     {
@@ -320,6 +424,14 @@
     },
     {
       "package": {
+        "name": "objective_c",
+        "ecosystem": "Pub"
+      },
+      "version": "9.5.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
         "name": "package_config",
         "ecosystem": "Pub"
       },
@@ -332,6 +444,30 @@
         "ecosystem": "Pub"
       },
       "version": "1.9.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider",
+        "ecosystem": "Pub"
+      },
+      "version": "2.1.6",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider_android",
+        "ecosystem": "Pub"
+      },
+      "version": "2.3.1",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "path_provider_foundation",
+        "ecosystem": "Pub"
+      },
+      "version": "2.6.0",
       "vulnerabilities": []
     },
     {
@@ -396,6 +532,14 @@
         "ecosystem": "Pub"
       },
       "version": "2.2.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "record_use",
+        "ecosystem": "Pub"
+      },
+      "version": "0.6.0",
       "vulnerabilities": []
     },
     {
@@ -560,6 +704,14 @@
     },
     {
       "package": {
+        "name": "synchronized",
+        "ecosystem": "Pub"
+      },
+      "version": "3.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
         "name": "term_glyph",
         "ecosystem": "Pub"
       },
@@ -596,6 +748,70 @@
         "ecosystem": "Pub"
       },
       "version": "1.4.0",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher",
+        "ecosystem": "Pub"
+      },
+      "version": "6.3.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_android",
+        "ecosystem": "Pub"
+      },
+      "version": "6.3.33",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_ios",
+        "ecosystem": "Pub"
+      },
+      "version": "6.4.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_linux",
+        "ecosystem": "Pub"
+      },
+      "version": "3.2.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_macos",
+        "ecosystem": "Pub"
+      },
+      "version": "3.2.6",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_platform_interface",
+        "ecosystem": "Pub"
+      },
+      "version": "2.3.2",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_web",
+        "ecosystem": "Pub"
+      },
+      "version": "2.4.3",
+      "vulnerabilities": []
+    },
+    {
+      "package": {
+        "name": "url_launcher_windows",
+        "ecosystem": "Pub"
+      },
+      "version": "3.1.6",
       "vulnerabilities": []
     },
     {

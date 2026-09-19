@@ -2,6 +2,10 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W13: validate CI runs the OSV dependency audit and fails on advisories
+  or incomplete queries. Local audit: 112 hosted Pub packages, zero known
+  advisories. SDK/native dependencies remain outside this audit's scope.
+
 - [x] #5 W12: detect installed/waiting updates, show a dismissible close-and-reopen
   notice and check on focus. Preserve conservative worker activation. Tests cover
   first install, updates, dismissal and offline checks. Release web build and
