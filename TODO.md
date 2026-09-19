@@ -2,6 +2,9 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W4: Jodo offers Retry saving after a write failure, including a
+  completed set; the existing round-ID deduplication keeps retries idempotent.
+
 - [x] #5 W3: handle asynchronous save failures in Bujho, Search and Quest with
   a mounted-safe notice. Queue completion cleanup behind successful statistics
   persistence and before subsequent round saves; test both failure and ordering.

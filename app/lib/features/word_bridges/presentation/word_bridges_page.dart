@@ -625,6 +625,10 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
                               if (_saveError != null) ...[
                                 const SizedBox(height: 8),
                                 Text(_saveError!),
+                                TextButton(
+                                  onPressed: _pendingSaves > 0 ? null : _save,
+                                  child: const Text('Retry saving'),
+                                ),
                               ],
                             ],
                           ),

@@ -283,6 +283,38 @@ void main() {
     expect(find.textContaining('Old definition'), findsNothing);
   });
 
+  testWidgets('completed set can retry a failed statistics save once', (
+    tester,
+  ) async {
+    final store = _RetryStore();
+    final repository = WordBridgesRepository(store);
+    final pairs = shippedContent.decksFor(LanguageMode.english).first.pairs;
+    final game = WordBridgesGame(pairs: pairs);
+    for (final pair in pairs.take(3)) {
+      game.selectWord(pair.id);
+      game.selectMeaning(pair.id);
+    }
+    await repository.save(mode: LanguageMode.english, game: game);
+    await tester.pumpWidget(page(repository));
+    await tester.pumpAndSettle();
+    store.fail = true;
+    for (final side in ['word', 'meaning']) {
+      final target = find.byKey(ValueKey('bridge-$side-${pairs.last.id}'));
+      await tester.ensureVisible(target);
+      await tester.tap(target);
+      await tester.pumpAndSettle();
+    }
+    expect(repository.total.finishedSets, 0);
+    store.fail = false;
+    final retry = find.text('Retry saving');
+    await tester.ensureVisible(retry);
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+    expect(repository.total.finishedSets, 1);
+    expect(retry, findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('failed storage leaves matching playable with clear feedback', (
     tester,
   ) async {
@@ -321,6 +353,15 @@ class _FailingStore extends MemoryKeyValueStore {
   @override
   Future<void> setString(String key, String value) async =>
       throw StateError('Storage unavailable');
+}
+
+class _RetryStore extends MemoryKeyValueStore {
+  bool fail = false;
+  @override
+  Future<void> setString(String key, String value) async {
+    if (fail) throw StateError('Storage unavailable');
+    await super.setString(key, value);
+  }
 }
 
 class _DelayedStore extends MemoryKeyValueStore {
