@@ -34,7 +34,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('ੴ'), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Feedback settings'));
+    await tester.tap(find.byTooltip('App settings'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Medium').last);
     await tester.pumpAndSettle();
@@ -57,8 +57,8 @@ void main() {
     await tester.pump();
     await launch();
     await tester.pumpAndSettle();
-    expect(find.text('Continue game'), findsOneWidget);
-    await tester.tap(find.text('Continue game'));
+    expect(find.text('Continue'), findsOneWidget);
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
     expect(
