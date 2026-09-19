@@ -2,6 +2,10 @@
 
 ## September 19 external audit follow-up (#3, #4, #5)
 
+- [x] #5 W8: generator retries eight fresh grids and fails rather than silently
+  reducing its requested count. Page explicitly requests up to six available
+  targets. Seeded integrity tests assert exact counts; impossible targets fail.
+
 - [x] #5 W15: Quest uses five-second, dismissible inline feedback;
   remove the permanent instruction row as designed. Screen-reader persistence
   follows the shared accessibility policy. Widget test covers timeout and dismiss.

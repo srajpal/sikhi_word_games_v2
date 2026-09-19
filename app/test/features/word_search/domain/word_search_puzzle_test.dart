@@ -4,6 +4,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzzle.dart';
 
 void main() {
+  test('does not silently lower an impossible target count', () {
+    expect(
+      () => WordSearchGenerator(random: Random(1)).generate(
+        candidates: ['CAT'],
+        fillerCharacters: ['A'],
+        targetWordCount: 2,
+      ),
+      throwsArgumentError,
+    );
+    expect(
+      () => WordSearchGenerator(random: Random(1)).generate(
+        candidates: ['AAAA', 'BBBB', 'CCCC', 'DDDD', 'EEEE'],
+        fillerCharacters: ['A'],
+        size: 4,
+        targetWordCount: 5,
+      ),
+      throwsStateError,
+    );
+  });
   test(
     'generator places requested words and selection recognizes both directions',
     () {

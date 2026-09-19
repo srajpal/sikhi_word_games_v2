@@ -55,8 +55,9 @@ void main() {
               : ['ਕਿਤਾਬ', 'ਪਰਿਵਾਰ', 'ਕਿਤਾਬ', 'ਸਿਮਰਨ'],
           fillerCharacters: seed.isEven ? ['A', 'E', 'L'] : ['ਕਿ', 'ਤਾ', 'ਬ'],
           size: 6,
-          targetWordCount: 4,
+          targetWordCount: seed.isEven ? 4 : 3,
         );
+        expect(puzzle.words, hasLength(seed.isEven ? 4 : 3));
         final restored = WordSearchPuzzle.fromJson(
           jsonDecode(jsonEncode(puzzle.toJson())) as Map<String, Object?>,
         );

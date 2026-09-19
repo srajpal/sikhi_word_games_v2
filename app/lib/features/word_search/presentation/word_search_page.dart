@@ -211,10 +211,12 @@ class _WordSearchPageState extends State<WordSearchPage> {
           : candidates
                 .where((word) => word.characters.length == _wordSize)
                 .toList(growable: false);
+      final available = selectedCandidates.isEmpty
+          ? candidates
+          : selectedCandidates;
       final puzzle = _generator.generate(
-        candidates: selectedCandidates.isEmpty
-            ? candidates
-            : selectedCandidates,
+        candidates: available,
+        targetWordCount: math.min(6, available.length),
         fillerCharacters: _mode == LanguageMode.gurmukhi
             ? _gurmukhiFiller
             : _latinFiller,

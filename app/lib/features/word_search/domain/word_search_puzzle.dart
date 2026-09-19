@@ -237,33 +237,46 @@ class WordSearchGenerator {
       words.add(word);
     }
     if (words.isEmpty) throw StateError('No words fit this word-search grid.');
-    words.shuffle(_random);
+    if (targetWordCount < 1 || words.length < targetWordCount) {
+      throw ArgumentError(
+        'The requested target count exceeds the available words.',
+      );
+    }
+    for (var attempt = 0; attempt < 8; attempt++) {
+      words.shuffle(_random);
 
-    final cells = List.generate(size, (_) => List<String?>.filled(size, null));
-    final placed = <PlacedWord>[];
-    for (final word in words) {
-      if (placed.length >= targetWordCount) break;
-      final placement = _findPlacement(cells, word, placed);
-      if (placement == null) continue;
-      final letters = word.characters.toList(growable: false);
-      for (var index = 0; index < letters.length; index++) {
-        cells[placement.start.row +
-                placement.direction.rowStep * index][placement.start.column +
-                placement.direction.columnStep * index] =
-            letters[index];
+      final cells = List.generate(
+        size,
+        (_) => List<String?>.filled(size, null),
+      );
+      final placed = <PlacedWord>[];
+      for (final word in words) {
+        if (placed.length >= targetWordCount) break;
+        final placement = _findPlacement(cells, word, placed);
+        if (placement == null) continue;
+        final letters = word.characters.toList(growable: false);
+        for (var index = 0; index < letters.length; index++) {
+          cells[placement.start.row +
+                  placement.direction.rowStep * index][placement.start.column +
+                  placement.direction.columnStep * index] =
+              letters[index];
+        }
+        placed.add(placement);
       }
-      placed.add(placement);
-    }
-    if (placed.isEmpty) throw StateError('Unable to place a word-search word.');
-    for (var row = 0; row < size; row++) {
-      for (var column = 0; column < size; column++) {
-        cells[row][column] ??=
-            fillerCharacters[_random.nextInt(fillerCharacters.length)];
+      if (placed.length != targetWordCount) continue;
+      for (var row = 0; row < size; row++) {
+        for (var column = 0; column < size; column++) {
+          cells[row][column] ??=
+              fillerCharacters[_random.nextInt(fillerCharacters.length)];
+        }
       }
+      return WordSearchPuzzle(
+        cells: [for (final row in cells) row.cast<String>()],
+        words: List.unmodifiable(placed),
+      );
     }
-    return WordSearchPuzzle(
-      cells: [for (final row in cells) row.cast<String>()],
-      words: List.unmodifiable(placed),
+    throw StateError(
+      'Unable to place every target after eight attempts. Try a new puzzle.',
     );
   }
 
