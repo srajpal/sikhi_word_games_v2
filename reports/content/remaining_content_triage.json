@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "method": "licensed_definition_triage_v1",
+  "source": "Open English WordNet 2025 (CC BY 4.0)",
+  "verifiedCorrectionPendingCount": 0,
+  "manualReviewCount": 0,
+  "verifiedCurrentCount": 5,
+  "dictionaryAuditFlagsRemaining": 5446,
+  "entries": [
+    {
+      "id": "english_give",
+      "word": "GIVE",
+      "currentDefinition": "transfer possession of something concrete or abstract to somebody",
+      "recommendedDefinition": "transfer possession of something concrete or abstract to somebody",
+      "classification": "verified_current",
+      "recommendedAction": "none",
+      "reason": "The selected neutral OEWN sense and answer eligibility are already applied.",
+      "source": "Open English WordNet 2025 (CC BY 4.0)"
+    },
+    {
+      "id": "english_lust",
+      "word": "LUST",
+      "currentDefinition": "have a craving, appetite, or great desire for",
+      "recommendedDefinition": "have a craving, appetite, or great desire for",
+      "classification": "verified_current",
+      "recommendedAction": "none",
+      "reason": "The selected neutral OEWN sense and answer eligibility are already applied.",
+      "source": "Open English WordNet 2025 (CC BY 4.0)"
+    },
+    {
+      "id": "english_stud",
+      "word": "STUD",
+      "currentDefinition": "an upright in house framing",
+      "recommendedDefinition": "an upright in house framing",
+      "classification": "verified_current",
+      "recommendedAction": "none",
+      "reason": "The selected neutral OEWN sense and answer eligibility are already applied.",
+      "source": "Open English WordNet 2025 (CC BY 4.0)"
+    },
+    {
+      "id": "english_take",
+      "word": "TAKE",
+      "currentDefinition": "pick out, select, or choose from a number of alternatives",
+      "recommendedDefinition": "pick out, select, or choose from a number of alternatives",
+      "classification": "verified_current",
+      "recommendedAction": "none",
+      "reason": "The selected neutral OEWN sense and answer eligibility are already applied.",
+      "source": "Open English WordNet 2025 (CC BY 4.0)"
+    },
+    {
+      "id": "english_want",
+      "word": "WANT",
+      "currentDefinition": "a specific feeling of desire",
+      "recommendedDefinition": "a specific feeling of desire",
+      "classification": "verified_current",
+      "recommendedAction": "none",
+      "reason": "The selected neutral OEWN sense and answer eligibility are already applied.",
+      "source": "Open English WordNet 2025 (CC BY 4.0)"
+    }
+  ]
+}

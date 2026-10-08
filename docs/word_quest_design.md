@@ -46,7 +46,7 @@ remain pure Dart; this document describes the presentation contract around it.
 
 ## Round rules
 
-1. Select one curated, solution-eligible entry from the active `LanguageMode`
+1. Select one solution-eligible entry from the active `LanguageMode`
    and a 4-, 5-, or 6-grapheme length. A solution must have a short usable
    definition; if the source definition is long or a cross-reference, display a
    shortened/fallback clue rather than exposing the answer.
@@ -84,26 +84,29 @@ action remain reachable.
 
 From top to bottom, the round screen contains these sections:
 
-1. **App bar (56 px minimum):** back button; title `Chardi Kala: Word Quest`;
-   subtitle `<language> · <N> letters`; overflow menu with **New word**, **Game
+1. **App bar (56 px minimum):** back button; two-line `Chardi Kala` / `Word Quest`
+   title; overflow menu with **New word**, **Game
    settings**, and **How to play**. Keep the app bar structure consistent with
    Bujho: Guess the Word.
-2. **Quest status strip:** a compact `Round` label and a text counter such as
-   `3 of 8 path steps` / `2 letters found`. This is text, not color alone.
-3. **Clue card:** a labeled `Clue` heading and a one-line definition preview.
-   If the definition does not fit one line, end it with an ellipsis and expose
-   a small action that displays the complete concise definition in a floating
-   message. The card must not include the answer or an answer-length spelling
-   hint that makes Gurmukhi grapheme behavior unclear.
+2. **Quest status strip:** wrapping language/word-length and remaining-tries
+   pills, Hint and the full-keyboard toggle. Counts use text, not color alone.
+   The approved 1.6 redesign does not add a separate Round/path-step counter;
+   revealed tiles show letter progress and the garden has a numeric semantic label.
+3. **Clue card:** a `Your clue` heading, category and the full concise definition,
+   wrapped for reading as approved in `product_decisions.md`. Do not truncate it
+   behind a floating-message action. Long clues may increase the scrollable page
+   height. The card must not include the answer or an answer-length spelling hint
+   that makes Gurmukhi grapheme behavior unclear.
 4. **Word card:** one large, centered tile per solution grapheme. Unknown tiles
    show an accessible “hidden letter” label and a neutral shape; revealed tiles
    show the grapheme. Preserve spaces only if the content policy later allows
    multiword entries; V1 of this mode is single-word only.
-5. **Garden path panel:** a quiet row/arc of eight secular stones, sprouts, or flowers,
-   with completed steps highlighted by `tokens.correct`. Include a text
-   alternative (`3 of 8 steps`) and do not use a sacred symbol as the endpoint.
+5. **Garden path panel:** eight secular blooms using shared theme artwork colors.
+   Its semantic text alternative reads, for example, `3 of 8 garden blooms growing`;
+   do not use a sacred symbol as the endpoint.
    When the full keyboard is open, replace the garden with a simple separator
-   so the expanded keyboard remains usable in one phone viewport.
+   so the expanded keyboard remains usable in one phone viewport. The garden's
+   decorative progress label is hidden with it; word-tile states and tries remain.
 6. **Feedback line:** one live status line for `Letter found`, `Try another
    letter`, hint confirmation, or the positive terminal message. Use
    `Semantics(liveRegion: true)` where supported; do not rely on a transient
@@ -191,14 +194,15 @@ From top to bottom, the round screen contains these sections:
 ## Messaging, accessibility, and feedback
 
 - Use encouraging, concrete copy: `Nice find!`, `That letter is not in this
-  word. Try another one.`, `Hint used — the first letter is showing.`, `You
+  word. Try another one.`, `Hint used. A letter is now showing.`, `You
   found the word!`, and `The word is ready to discover. Let’s learn it
   together.` Avoid shame, streak pressure, or “wrong child” language.
-- Show momentary gameplay feedback in an accessible floating message instead
-  of reserving a permanent status row. Do not show an instructional message
+- Following the approved 1.6 illustrated redesign, show momentary gameplay
+  feedback inline so it cannot cover keyboard targets. Do not show an instructional message
   before the child has acted; the clue and keyboard make the first action clear.
 - All game feedback messages use a five-second timeout and include a `Dismiss`
-  action. The action must not make the message persistent.
+  action. Keep feedback until dismissed when accessible navigation is enabled;
+  otherwise the action must not make the message persistent.
 - Every tile/key has a useful semantic label and state. The word board reads in
   order as `Letter 1, hidden` / `Letter 1, <grapheme>, revealed`; the garden
   panel reads its numeric progress. Do not expose decorative symbols twice.
@@ -236,20 +240,29 @@ From top to bottom, the round screen contains these sections:
 
 ## Acceptance checklist
 
-- [ ] Game Library presents `Chardi Kala: Word Quest` with a clear kid-friendly
+- [x] Game Library presents `Chardi Kala: Word Quest` with a clear gameplay
       description and opens the new route.
-- [ ] A round selects a reviewed 4–6 grapheme solution in all four language
+- [x] A round selects a solution-eligible 4–6 grapheme word in all four language
       modes and persists/restores its state safely.
-- [ ] Correct/repeated/incorrect letters follow the rules; the adaptive 5/6/7
+- [x] Correct/repeated/incorrect letters follow the rules; the adaptive 5/6/7
       miss budget produces the positive learning finish with the answer and definition.
-- [ ] Adaptive non-punitive hints provide 0/1/2 hints for 4/5/6-grapheme words,
+- [x] Adaptive non-punitive hints provide 0/1/2 hints for 4/5/6-grapheme words,
       announce their effect, and cannot be reused.
-- [ ] Latin Easy reduced bank plus `Show all letters` and Gurmukhi
+- [x] Latin Easy reduced bank plus `Show all letters` and Gurmukhi
       answer-specific whole-grapheme bank are deterministic and Unicode-safe.
-- [ ] No mutable board state contains or damages sacred marks; all decorative
+- [x] No mutable board state contains or damages sacred marks; all decorative
       marks are static and semantically handled.
 - [ ] Screen sections, focus order, semantic labels, text scaling, haptics,
       Reduce motion, compact height, and 320 px width are verified in widget
       tests and a web/mobile preview.
 - [ ] `flutter analyze`, affected unit/widget tests, and a release web build
       pass before the mode is considered complete.
+
+## Current content qualification
+
+The garden design targets a gentle learning experience, but present solution
+eligibility includes bulk machine decisions. Clue structure and short spelling
+do not prove child suitability or common usage. The 2026-09-12 audit found
+unsuitable and obscure candidates; known exclusions are recorded in curation,
+and a complete common-word/age-suitability review remains open in TODO.md.
+Do not describe the whole vocabulary or Dictionary as verified for children.

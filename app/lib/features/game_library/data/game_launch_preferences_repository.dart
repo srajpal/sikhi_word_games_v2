@@ -61,23 +61,26 @@ class GameLaunchPreferencesRepository {
     }
   }
 
-  Future<void> save(GameKind kind, GameLaunchOptions options) async {
-    Map<String, Object?> preferences = {};
-    final encoded = _store.getString(storageKey);
-    if (encoded != null) {
-      try {
-        preferences = Map<String, Object?>.from(
-          jsonDecode(encoded) as Map<String, Object?>,
-        );
-      } on Object catch (_) {
-        preferences = {};
-      }
-    }
-    preferences['schemaVersion'] = schemaVersion;
-    preferences[kind.name] = {
-      'language': options.language?.name,
-      'wordSize': options.wordSize,
-    };
-    await _store.setString(storageKey, jsonEncode(preferences));
-  }
+  Future<void> save(GameKind kind, GameLaunchOptions options) =>
+      KeyValueStoreWrites.run(_store, storageKey, () async {
+        Map<String, Object?> preferences = {};
+        final encoded = _store.getString(storageKey);
+        if (encoded != null) {
+          try {
+            preferences = Map<String, Object?>.from(
+              jsonDecode(encoded) as Map<String, Object?>,
+            );
+          } on Object catch (_) {
+            preferences = {};
+          }
+        }
+        preferences['schemaVersion'] = schemaVersion;
+        preferences[kind.name] = {
+          'language': options.language?.name,
+          'wordSize': options.wordSize,
+        };
+        await _store.setString(storageKey, jsonEncode(preferences));
+      });
+
+  Future<void> resetAll() => KeyValueStoreWrites.remove(_store, storageKey);
 }

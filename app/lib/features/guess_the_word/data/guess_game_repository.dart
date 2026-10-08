@@ -17,10 +17,37 @@ class GuessGameRepository {
   static const storageKey = 'guessTheWord.activeGame';
   final KeyValueStore _store;
 
-  bool get hasActiveGame => _store.getString(storageKey) != null;
+  bool get hasActiveGame {
+    final encoded = _store.getString(storageKey);
+    if (encoded == null) return false;
+    try {
+      final json = jsonDecode(encoded) as Map<String, Object?>;
+      if (json['schemaVersion'] != 1 ||
+          json['mode'] is! String ||
+          json['game'] is! Map<String, Object?>) {
+        return false;
+      }
+      final game = json['game']! as Map<String, Object?>;
+      if (!LanguageMode.values.any((mode) => mode.name == json['mode']) ||
+          game['solution'] is! String ||
+          game['guesses'] is! List) {
+        return false;
+      }
+      final accepted = <String>{game['solution']! as String};
+      for (final guess in game['guesses']! as List<Object?>) {
+        if (guess is! String) return false;
+        accepted.add(guess);
+      }
+      return GuessGame.restore(json: game, acceptedGuesses: accepted).status ==
+          GuessGameStatus.playing;
+    } on Object catch (_) {
+      return false;
+    }
+  }
 
   Future<void> save({required GuessGame game, required LanguageMode mode}) =>
-      _store.setString(
+      KeyValueStoreWrites.setString(
+        _store,
         storageKey,
         jsonEncode({
           'schemaVersion': 1,
@@ -66,5 +93,8 @@ class GuessGameRepository {
     }
   }
 
-  Future<void> clear() => _store.remove(storageKey);
+  Future<void> resetAll() => clear();
+
+  Future<void> clear({Future<void>? after}) =>
+      KeyValueStoreWrites.remove(_store, storageKey, after: after);
 }

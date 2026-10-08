@@ -34,7 +34,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('ੴ'), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Feedback settings'));
+    await tester.tap(find.byTooltip('App settings'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Medium').last);
     await tester.pumpAndSettle();
@@ -44,7 +44,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(settings.load().hapticLevel, HapticFeedbackLevel.off);
 
-    await tester.tap(find.text('Play prototype'));
+    await tester.tap(find.text('New game').first);
     await tester.pumpAndSettle();
     for (final letter in 'GRAPE'.characters) {
       await tester.tap(find.byKey(ValueKey('key-$letter')));
@@ -57,7 +57,8 @@ void main() {
     await tester.pump();
     await launch();
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Play prototype'));
+    expect(find.text('Continue'), findsOneWidget);
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
     expect(
@@ -82,7 +83,7 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'integration-test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
   VocabularyEntry(
     id: 'english_grape',
@@ -95,6 +96,6 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: false,
     reviewStatus: ReviewStatus.machineChecked,
-    source: 'integration-test',
+    source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
 ]);

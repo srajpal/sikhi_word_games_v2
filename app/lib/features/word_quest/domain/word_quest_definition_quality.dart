@@ -45,10 +45,10 @@ class WordQuestDefinitionQuality {
         .firstMatch(concise);
     if (firstSentence != null) return firstSentence.group(1)!.trim();
 
-    final prefix = concise.substring(0, maximumClueCharacters - 1);
+    final prefix = concise.substring(0, maximumClueCharacters - 3);
     final lastSpace = prefix.lastIndexOf(' ');
     concise =
-        '${prefix.substring(0, lastSpace > 40 ? lastSpace : prefix.length)}…';
+        '${prefix.substring(0, lastSpace > 40 ? lastSpace : prefix.length)}...';
     return concise.trim();
   }
 

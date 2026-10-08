@@ -1,0 +1,68 @@
+name: Flutter web checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.2
+          cache: true
+      - run: flutter pub get
+      - name: Audit hosted dependency vulnerabilities
+        run: python tool/audit_dependencies.py
+      - run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
+      - run: flutter analyze --suppress-analytics
+      - run: flutter test --exclude-tags=golden --suppress-analytics
+      - run: dart run tool/build_release_content.dart --check
+      - run: dart run tool/audit_release_content.dart
+      - name: Verify release worker manifest generation
+        run: flutter test test/tool/generate_web_app_cache_test.dart --suppress-analytics
+      - name: Verify release worker runtime behavior
+        run: node tool/test_web_app_cache_service_worker.mjs
+      - name: Verify update notices
+        run: node tool/test_web_update_notice.mjs
+      - run: dart run tool/audit_content.dart
+      - run: flutter build web --release --no-web-resources-cdn --suppress-analytics
+      - uses: browser-actions/setup-chrome@v2
+        id: chrome
+        with:
+          chrome-version: stable
+          install-chromedriver: true
+      - name: Start ChromeDriver
+        run: '"${{ steps.chrome.outputs.chromedriver-path }}" --port=4444 &'
+      - name: Run browser integration flow
+        timeout-minutes: 5
+        run: >-
+          flutter drive
+          --driver=test_driver/integration_test.dart
+          --target=integration_test/app_flow_test.dart
+          --chrome-binary="${{ steps.chrome.outputs.chrome-path }}"
+          -d web-server
+          --headless
+          --release
+
+  goldens:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.2
+          cache: true
+      - run: flutter pub get
+      - run: flutter test --tags=golden --suppress-analytics

@@ -34,6 +34,34 @@ void main() {
       GuessGameRepository(store).restore((mode, length) => {'APPLE'}),
       isNull,
     );
+    expect(GuessGameRepository(store).hasActiveGame, isFalse);
+  });
+
+  test('does not advertise structurally invalid saved data', () {
+    final store = MemoryKeyValueStore()
+      ..values[GuessGameRepository.storageKey] =
+          '{"schemaVersion":1,"mode":"english","game":'
+          '{"schemaVersion":1,"solution":"APPLE",'
+          '"maximumAttempts":0,"guesses":[]}}';
+
+    final repository = GuessGameRepository(store);
+    expect(repository.hasActiveGame, isFalse);
+    expect(repository.restore((mode, length) => {'APPLE'}), isNull);
+  });
+
+  test('does not advertise invalid guesses or a completed game', () async {
+    final store = MemoryKeyValueStore();
+    final repository = GuessGameRepository(store);
+    store.values[GuessGameRepository.storageKey] =
+        '{"schemaVersion":1,"mode":"english","game":'
+        '{"schemaVersion":1,"solution":"APPLE",'
+        '"maximumAttempts":6,"guesses":[123]}}';
+    expect(repository.hasActiveGame, isFalse);
+
+    final completed = GuessGame(solution: 'APPLE', acceptedGuesses: {'APPLE'})
+      ..submit('APPLE');
+    await repository.save(game: completed, mode: LanguageMode.english);
+    expect(repository.hasActiveGame, isFalse);
   });
 
   test('does not restore a completed game', () async {

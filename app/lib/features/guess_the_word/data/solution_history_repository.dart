@@ -38,7 +38,8 @@ class SolutionHistoryRepository {
     }
   }
 
-  Future<void> save(SolutionHistory history) => _store.setString(
+  Future<void> save(SolutionHistory history) => KeyValueStoreWrites.setString(
+    _store,
     storageKey,
     jsonEncode({
       'schemaVersion': 2,
@@ -46,4 +47,6 @@ class SolutionHistoryRepository {
       'lastSelectedId': history.lastSelectedId,
     }),
   );
+
+  Future<void> resetAll() => KeyValueStoreWrites.remove(_store, storageKey);
 }

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:characters/characters.dart';
+
 void main() {
   final appDirectory = Directory.current;
   final generated = Directory(
@@ -38,9 +40,14 @@ void main() {
       '${Platform.pathSeparator}editorial_overrides.json',
     ).readAsStringSync(),
   ) as Map<String, Object?>;
-  final entriesById = {
-    for (final entry in entries) entry['id']! as String: entry,
-  };
+  final entriesById = <String, Map<String, Object?>>{};
+  for (final entry in entries) {
+    final id = entry['id']! as String;
+    if (entriesById.containsKey(id)) {
+      throw FormatException('Duplicate vocabulary ID: $id');
+    }
+    entriesById[id] = entry;
+  }
   for (final item in overridesDocument['entries']! as List<Object?>) {
     final override = item! as Map<String, Object?>;
     final entry = entriesById[override['id']];
@@ -54,6 +61,13 @@ void main() {
     if (override['gurmukhi'] is String) {
       entry['gurmukhi'] = override['gurmukhi'];
     }
+    if (override['latin'] is String) entry['latin'] = override['latin'];
+    final latin = entry['latin']! as String;
+    final gurmukhi = entry['gurmukhi'] as String?;
+    entry['lengths'] = {
+      'latin': latin.characters.length,
+      'gurmukhi': gurmukhi?.characters.length,
+    };
   }
 
   final spellingGroups = <String, List<String>>{};

@@ -3,6 +3,24 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.d
 
 void main() {
   group('WordQuestGame', () {
+    test('rejects guesses recorded after the round would have ended', () {
+      final snapshot = WordQuestGame(solution: 'SEVA').toJson();
+      for (final guesses in [
+        ['B', 'C', 'D', 'F', 'G', 'H'],
+        ['B', 'C', 'D', 'F', 'G', 'S', 'E', 'V', 'A'],
+      ]) {
+        expect(
+          () =>
+              WordQuestGame.restore({...snapshot, 'guessedGraphemes': guesses}),
+          throwsFormatException,
+        );
+      }
+      final lost = WordQuestGame(solution: 'SEVA');
+      for (final guess in ['B', 'C', 'D', 'F', 'G']) {
+        lost.guess(guess);
+      }
+      expect(WordQuestGame.restore(lost.toJson()).status, WordQuestStatus.lost);
+    });
     test('reveals every matching Latin grapheme and folds case', () {
       final game = WordQuestGame(solution: 'Seva');
 
@@ -28,6 +46,17 @@ void main() {
       expect(repeated.letterBankGraphemes, const ['ਕਾ']);
       repeated.guess('ਕਾ');
       expect(repeated.revealedGraphemes, const ['ਕਾ', 'ਕਾ']);
+    });
+
+    test('matches precomposed and decomposed Gurmukhi letter guesses', () {
+      final game = WordQuestGame(solution: 'ਖ਼ਬਰ');
+
+      expect(game.solutionGraphemes, const ['ਖ਼', 'ਬ', 'ਰ']);
+      expect(game.guess('ਖ਼').result, WordQuestGuessResult.correct);
+      expect(game.revealedGraphemes.first, 'ਖ਼');
+      game.guess('ਬ');
+      game.guess('ਰ');
+      expect(game.status, WordQuestStatus.won);
     });
 
     test('repeated guesses are harmless', () {

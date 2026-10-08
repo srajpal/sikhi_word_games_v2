@@ -1,6 +1,6 @@
 import '../../guess_the_word/domain/language_mode.dart';
 
-enum GameKind { guessTheWord, wordSearch, wordQuest }
+enum GameKind { guessTheWord, wordSearch, wordQuest, wordBridges, learnLetters }
 
 class GameLaunchOptions {
   const GameLaunchOptions({

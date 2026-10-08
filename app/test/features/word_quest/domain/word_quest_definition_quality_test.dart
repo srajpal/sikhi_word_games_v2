@@ -23,10 +23,15 @@ void main() {
 
     expect(result, isNotNull);
     expect(result!.length, lessThanOrEqualTo(96));
-    expect(result, endsWith('…'));
+    expect(result, endsWith('...'));
   });
 
   test('still rejects cross references and answer-revealing clues', () {
+    final unbroken = WordQuestDefinitionQuality.usableClue(
+      answer: 'WORD',
+      clue: List.filled(120, 'a').join(),
+    );
+    expect(unbroken!.length, lessThanOrEqualTo(96));
     expect(
       WordQuestDefinitionQuality.usableClue(
         answer: 'GARDEN',

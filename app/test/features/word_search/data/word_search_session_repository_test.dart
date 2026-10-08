@@ -8,7 +8,11 @@ void main() {
   test('round-trips an unfinished puzzle', () async {
     final repository = WordSearchSessionRepository(MemoryKeyValueStore());
     final puzzle = WordSearchPuzzle(
-      cells: List.generate(5, (_) => List.filled(5, 'A')),
+      cells: [
+        ['C', 'A', 'T', 'A', 'A'],
+        ['D', 'O', 'G', 'A', 'A'],
+        ...List.generate(3, (_) => List.filled(5, 'A')),
+      ],
       words: [
         const PlacedWord(
           word: 'CAT',

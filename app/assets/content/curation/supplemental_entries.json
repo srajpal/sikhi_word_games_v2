@@ -187160,6 +187160,2162 @@
       "sources": [
         "Mahan Kosh multilingual dataset; commit fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6; vol. 4, p. 99"
       ]
+    },
+    {
+      "id": "panjabi_curated_1-65-10",
+      "language": "panjabi",
+      "latin": "UPBAN",
+      "gurmukhi": "ਉਪਬਨ",
+      "definitions": {
+        "en": [
+          "A garden or planted green space."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-448-20",
+      "language": "panjabi",
+      "latin": "GULJAR",
+      "gurmukhi": "ਗੁਲਜਾਰ",
+      "definitions": {
+        "en": [
+          "A garden or planted green space."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-76-14",
+      "language": "panjabi",
+      "latin": "ULFAT",
+      "gurmukhi": "ਉਲਫ਼ਤ",
+      "definitions": {
+        "en": [
+          "Love or friendship."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-417-33",
+      "language": "panjabi",
+      "latin": "SAPRITI",
+      "gurmukhi": "ਸਪ੍ਰੀਤਿ",
+      "definitions": {
+        "en": [
+          "With love or affection."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-417-34",
+      "language": "panjabi",
+      "latin": "SAPREM",
+      "gurmukhi": "ਸਪ੍ਰੇਮ",
+      "definitions": {
+        "en": [
+          "With love or affection."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_4-424-22",
+      "language": "panjabi",
+      "latin": "MUHABBATI",
+      "gurmukhi": "ਮੁਹਬਤੀ",
+      "definitions": {
+        "en": [
+          "A loving person."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 9,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-68-2",
+      "language": "panjabi",
+      "latin": "UPVAS",
+      "gurmukhi": "ਉਪਵਾਸ",
+      "definitions": {
+        "en": [
+          "Going without food for a time."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-178-0",
+      "language": "panjabi",
+      "latin": "ANAHAR",
+      "gurmukhi": "ਅਨਾਹਾਰ",
+      "definitions": {
+        "en": [
+          "Going without food for a time."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-178-1",
+      "language": "panjabi",
+      "latin": "ANAHARI",
+      "gurmukhi": "ਅਨਾਹਾਰੀ",
+      "definitions": {
+        "en": [
+          "A person who does not eat or is fasting."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-62-6",
+      "language": "panjabi",
+      "latin": "UNHAL",
+      "gurmukhi": "ਉਨ੍ਹਲ",
+      "definitions": {
+        "en": [
+          "The summer season."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-183-5",
+      "language": "panjabi",
+      "latin": "ANUDIN",
+      "gurmukhi": "ਅਨੁਦਿਨ",
+      "definitions": {
+        "en": [
+          "Daily or every day."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-497-2",
+      "language": "panjabi",
+      "latin": "NAUBAHAR",
+      "gurmukhi": "ਨੌਬਹਾਰ",
+      "definitions": {
+        "en": [
+          "The spring season."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-154-0",
+      "language": "panjabi",
+      "latin": "ATHVARA",
+      "gurmukhi": "ਅਠਵਾਰਾ",
+      "definitions": {
+        "en": [
+          "A week."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-519-21",
+      "language": "panjabi",
+      "latin": "PAHUNAI",
+      "gurmukhi": "ਪਹੁਣਾਈ",
+      "definitions": {
+        "en": [
+          "The state of being a guest."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-465-27",
+      "language": "panjabi",
+      "latin": "NIPAJNA",
+      "gurmukhi": "ਨਿਪਜਨਾ",
+      "definitions": {
+        "en": [
+          "To grow or be produced."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-171-9",
+      "language": "panjabi",
+      "latin": "ADHYAY",
+      "gurmukhi": "ਅਧ੍ਯਾਯ",
+      "definitions": {
+        "en": [
+          "A chapter of a book."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-215-12",
+      "language": "panjabi",
+      "latin": "AMRAI",
+      "gurmukhi": "ਅਮਰਾਈ",
+      "definitions": {
+        "en": [
+          "A grove of mango trees."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-230-6",
+      "language": "panjabi",
+      "latin": "ARHAR",
+      "gurmukhi": "ਅਰਹਰ",
+      "definitions": {
+        "en": [
+          "Pigeon pea, a type of pulse."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-260-27",
+      "language": "panjabi",
+      "latin": "ASABANDH",
+      "gurmukhi": "ਆਸਾਬੰਧ",
+      "definitions": {
+        "en": [
+          "Hopeful or expectant."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-260-28",
+      "language": "panjabi",
+      "latin": "ASABANDHU",
+      "gurmukhi": "ਆਸਾਬੰਧੂ",
+      "definitions": {
+        "en": [
+          "Hopeful or expectant."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 9,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-243-24",
+      "language": "panjabi",
+      "latin": "ALMAS",
+      "gurmukhi": "ਅਲਮਾਸ",
+      "definitions": {
+        "en": [
+          "A diamond."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-274-13",
+      "language": "panjabi",
+      "latin": "ATITHY",
+      "gurmukhi": "ਆਤਿਥਯ",
+      "definitions": {
+        "en": [
+          "Warm service and respect for guests."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-342-16",
+      "language": "panjabi",
+      "latin": "IMDAD",
+      "gurmukhi": "ਇਮਦਾਦ",
+      "definitions": {
+        "en": [
+          "Help or support."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-377-16",
+      "language": "panjabi",
+      "latin": "SAHAITA",
+      "gurmukhi": "ਸਹਾਇਤਾ",
+      "definitions": {
+        "en": [
+          "Help or support."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_4-416-3",
+      "language": "panjabi",
+      "latin": "MUAVIN",
+      "gurmukhi": "ਮੁਆਵਿਨ",
+      "definitions": {
+        "en": [
+          "A helper or assistant."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-342-17",
+      "language": "panjabi",
+      "latin": "IMROZ",
+      "gurmukhi": "ਇਮਰੋਜ਼",
+      "definitions": {
+        "en": [
+          "Today or this day."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-356-28",
+      "language": "panjabi",
+      "latin": "ETBAR",
+      "gurmukhi": "ਏਤਬਾਰ",
+      "definitions": {
+        "en": [
+          "Trust or confidence."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-543-2",
+      "language": "panjabi",
+      "latin": "PATIANA",
+      "gurmukhi": "ਪਤਿਆਨਾ",
+      "definitions": {
+        "en": [
+          "To trust or have faith."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-543-3",
+      "language": "panjabi",
+      "latin": "PATIAR",
+      "gurmukhi": "ਪਤਿਆਰ",
+      "definitions": {
+        "en": [
+          "Trust or confidence."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-389-25",
+      "language": "panjabi",
+      "latin": "SAGGARATTA",
+      "gurmukhi": "ਸੱਗਰੱਤਾ",
+      "definitions": {
+        "en": [
+          "Close and loving."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 10,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-411-21",
+      "language": "panjabi",
+      "latin": "SANMAN",
+      "gurmukhi": "ਸਨਮਾਨ",
+      "definitions": {
+        "en": [
+          "Respect or honour."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-478-19",
+      "language": "panjabi",
+      "latin": "SAKSHAR",
+      "gurmukhi": "ਸਾਕਸ਼ਰ",
+      "definitions": {
+        "en": [
+          "A person who can read and write."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-516-23",
+      "language": "panjabi",
+      "latin": "SIKHLANA",
+      "gurmukhi": "ਸਿਖਲਾਨਾ",
+      "definitions": {
+        "en": [
+          "To teach."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-545-30",
+      "language": "panjabi",
+      "latin": "SITALTA",
+      "gurmukhi": "ਸੀਤਲਤਾ",
+      "definitions": {
+        "en": [
+          "Coolness."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-591-11",
+      "language": "panjabi",
+      "latin": "SULAUNA",
+      "gurmukhi": "ਸੁਲਾਉਣਾ",
+      "definitions": {
+        "en": [
+          "To put someone to sleep."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-555-16",
+      "language": "panjabi",
+      "latin": "SUKARAM",
+      "gurmukhi": "ਸੁਕਰਮ",
+      "definitions": {
+        "en": [
+          "Good or noble work."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-608-4",
+      "language": "panjabi",
+      "latin": "SHERDIL",
+      "gurmukhi": "ਸ਼ੇਰਦਿਲ",
+      "definitions": {
+        "en": [
+          "Brave or lion-hearted."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-560-11",
+      "language": "panjabi",
+      "latin": "SUKHASAN",
+      "gurmukhi": "ਸੁਖਾਸਨ",
+      "definitions": {
+        "en": [
+          "A soft and comfortable seat."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-601-4",
+      "language": "panjabi",
+      "latin": "SURAMTA",
+      "gurmukhi": "ਸੂਰਮਤਾ",
+      "definitions": {
+        "en": [
+          "Bravery or courage."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_4-126-7",
+      "language": "panjabi",
+      "latin": "BAVARCHI",
+      "gurmukhi": "ਬਾਵਰਚੀ",
+      "definitions": {
+        "en": [
+          "A cook."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_4-515-3",
+      "language": "panjabi",
+      "latin": "RASOIA",
+      "gurmukhi": "ਰਸੋਇਆ",
+      "definitions": {
+        "en": [
+          "A cook."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-619-2",
+      "language": "panjabi",
+      "latin": "SONJUHI",
+      "gurmukhi": "ਸੋਨਜੂਹੀ",
+      "definitions": {
+        "en": [
+          "A light yellow jasmine flower."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-212-16",
+      "language": "panjabi",
+      "latin": "KIRSAN",
+      "gurmukhi": "ਕਿਰਸਾਣ",
+      "definitions": {
+        "en": [
+          "A farmer."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-669-23",
+      "language": "panjabi",
+      "latin": "SVASATH",
+      "gurmukhi": "ਸ੍ਵਾਸਥ",
+      "definitions": {
+        "en": [
+          "Health or a sound physical state."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-669-24",
+      "language": "panjabi",
+      "latin": "SVASTH",
+      "gurmukhi": "ਸ੍ਵਸਥ",
+      "definitions": {
+        "en": [
+          "Healthy or in a sound state."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-651-24",
+      "language": "panjabi",
+      "latin": "SANPURAN",
+      "gurmukhi": "ਸੰਪੂਰਨ",
+      "definitions": {
+        "en": [
+          "Whole, complete, or full."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-659-21",
+      "language": "panjabi",
+      "latin": "SRAMIT",
+      "gurmukhi": "ਸ੍ਰਮਿਤ",
+      "definitions": {
+        "en": [
+          "Tired from hard work."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_1-657-0",
+      "language": "panjabi",
+      "latin": "STHAPAK",
+      "gurmukhi": "ਸਥਾਪਕ",
+      "definitions": {
+        "en": [
+          "A founder or one who establishes something."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-33-17",
+      "language": "panjabi",
+      "latin": "HAKIKAT",
+      "gurmukhi": "ਹਕੀਕਤ",
+      "definitions": {
+        "en": [
+          "Truth or reality."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-60-3",
+      "language": "panjabi",
+      "latin": "HALACHAL",
+      "gurmukhi": "ਹਲਚਲ",
+      "definitions": {
+        "en": [
+          "Movement or activity."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-61-8",
+      "language": "panjabi",
+      "latin": "HALUNNA",
+      "gurmukhi": "ਹਲੁਨਣਾ",
+      "definitions": {
+        "en": [
+          "To shake or move back and forth."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-56-13",
+      "language": "panjabi",
+      "latin": "HARIAL",
+      "gurmukhi": "ਹਰੀਅਲ",
+      "definitions": {
+        "en": [
+          "A green pigeon."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-43-12",
+      "language": "panjabi",
+      "latin": "HAMDAM",
+      "gurmukhi": "ਹਮਦਮ",
+      "definitions": {
+        "en": [
+          "A close friend."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-70-28",
+      "language": "panjabi",
+      "latin": "HIKMATI",
+      "gurmukhi": "ਹਿਕਮਤੀ",
+      "definitions": {
+        "en": [
+          "Wise and skilled."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-135-12",
+      "language": "panjabi",
+      "latin": "KAMJOR",
+      "gurmukhi": "ਕਮਜੋਰ",
+      "definitions": {
+        "en": [
+          "Weak or feeble."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-116-1",
+      "language": "panjabi",
+      "latin": "KATARNA",
+      "gurmukhi": "ਕਤਰਣਾ",
+      "definitions": {
+        "en": [
+          "To cut into pieces."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-155-0",
+      "language": "panjabi",
+      "latin": "KARABAT",
+      "gurmukhi": "ਕਰਾਬਤ",
+      "definitions": {
+        "en": [
+          "A close family relationship."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-195-2",
+      "language": "panjabi",
+      "latin": "KARKUN",
+      "gurmukhi": "ਕਾਰਕੁਨ",
+      "definitions": {
+        "en": [
+          "A worker or manager."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-196-20",
+      "language": "panjabi",
+      "latin": "KARBARI",
+      "gurmukhi": "ਕਾਰਬਾਰੀ",
+      "definitions": {
+        "en": [
+          "A worker."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-195-6",
+      "language": "panjabi",
+      "latin": "KARXANA",
+      "gurmukhi": "ਕਾਰਖਾਨਾ",
+      "definitions": {
+        "en": [
+          "A workshop."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-196-21",
+      "language": "panjabi",
+      "latin": "KARMANA",
+      "gurmukhi": "ਕਾਰਮਣਾ",
+      "definitions": {
+        "en": [
+          "To arrange for work to be done."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-668-2",
+      "language": "panjabi",
+      "latin": "JALRUH",
+      "gurmukhi": "ਜਲਰੁਹ",
+      "definitions": {
+        "en": [
+          "A lotus flower."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-246-4",
+      "language": "panjabi",
+      "latin": "KURELNA",
+      "gurmukhi": "ਕੁਰੇਲਣਾ",
+      "definitions": {
+        "en": [
+          "To scrape the ground."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-286-0",
+      "language": "panjabi",
+      "latin": "KRIPALU",
+      "gurmukhi": "ਕ੍ਰਿਪਾਲੁ",
+      "definitions": {
+        "en": [
+          "Kind and merciful."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-325-6",
+      "language": "panjabi",
+      "latin": "ARDASA",
+      "gurmukhi": "ਅਰਦਾਸਾ",
+      "definitions": {
+        "en": [
+          "A prayer."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-505-18",
+      "language": "panjabi",
+      "latin": "NRITY",
+      "gurmukhi": "ਨ੍ਰਿਤ੍ਯ",
+      "definitions": {
+        "en": [
+          "A dance."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 5,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-389-7",
+      "language": "panjabi",
+      "latin": "GALAUNA",
+      "gurmukhi": "ਗਲਾਉਣਾ",
+      "definitions": {
+        "en": [
+          "To speak or make a sound."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-449-5",
+      "language": "panjabi",
+      "latin": "GULDAN",
+      "gurmukhi": "ਗੁਲਦਾਨ",
+      "definitions": {
+        "en": [
+          "A flower vase."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-421-12",
+      "language": "panjabi",
+      "latin": "GUNHNA",
+      "gurmukhi": "ਗੁੰਨ੍ਹਣਾ",
+      "definitions": {
+        "en": [
+          "To knead into a mass."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-426-2",
+      "language": "panjabi",
+      "latin": "GURGABI",
+      "gurmukhi": "ਗੁਰਗਾਬੀ",
+      "definitions": {
+        "en": [
+          "A type of wooden shoe."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-455-7",
+      "language": "panjabi",
+      "latin": "CHAURAHA",
+      "gurmukhi": "ਚਉਰਾਹਾ",
+      "definitions": {
+        "en": [
+          "A crossing where four paths meet."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-593-3",
+      "language": "panjabi",
+      "latin": "CHANGIARA",
+      "gurmukhi": "ਚੰਗਿਆੜਾ",
+      "definitions": {
+        "en": [
+          "An ember or spark."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 9,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-611-20",
+      "language": "panjabi",
+      "latin": "CHHALLANG",
+      "gurmukhi": "ਛਲਲੰਗ",
+      "definitions": {
+        "en": [
+          "A jump or leap."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 9,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-733-13",
+      "language": "panjabi",
+      "latin": "PHUDAKNA",
+      "gurmukhi": "ਫੁਡ਼ਕਨਾ",
+      "definitions": {
+        "en": [
+          "To jump or hop."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-665-1",
+      "language": "panjabi",
+      "latin": "JALKHAG",
+      "gurmukhi": "ਜਲਖਗ",
+      "definitions": {
+        "en": [
+          "A water bird."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-665-5",
+      "language": "panjabi",
+      "latin": "JALCHAR",
+      "gurmukhi": "ਜਲਚਰ",
+      "definitions": {
+        "en": [
+          "An animal that lives in water."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-665-7",
+      "language": "panjabi",
+      "latin": "JALCHARI",
+      "gurmukhi": "ਜਲਚਰੀ",
+      "definitions": {
+        "en": [
+          "A fish."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-667-17",
+      "language": "panjabi",
+      "latin": "JALPHAL",
+      "gurmukhi": "ਜਲਫਲ",
+      "definitions": {
+        "en": [
+          "A water chestnut."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-671-1",
+      "language": "panjabi",
+      "latin": "JALABAL",
+      "gurmukhi": "ਜਲਬਲ",
+      "definitions": {
+        "en": [
+          "A stream or river."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-727-6",
+      "language": "panjabi",
+      "latin": "JOTIJUT",
+      "gurmukhi": "ਜੋਤਿਜੁਤ",
+      "definitions": {
+        "en": [
+          "Lit or filled with light."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-737-7",
+      "language": "panjabi",
+      "latin": "JYAMITI",
+      "gurmukhi": "ਜ੍ਯਾਮਿਤੀ",
+      "definitions": {
+        "en": [
+          "The study of shapes and measurements."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-691-27",
+      "language": "panjabi",
+      "latin": "JIGYASU",
+      "gurmukhi": "ਜਿਗਿਆਸੂ",
+      "definitions": {
+        "en": [
+          "A person eager to learn."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_2-730-15",
+      "language": "panjabi",
+      "latin": "JORMEL",
+      "gurmukhi": "ਜੋਰਮੇਲ",
+      "definitions": {
+        "en": [
+          "A gathering or fair."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-50-9",
+      "language": "panjabi",
+      "latin": "TAPAKNA",
+      "gurmukhi": "ਟਪਕਣਾ",
+      "definitions": {
+        "en": [
+          "To drip or trickle."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-48-10",
+      "language": "panjabi",
+      "latin": "TAHALNA",
+      "gurmukhi": "ਟਹਲਣਾ",
+      "definitions": {
+        "en": [
+          "To walk at an easy pace."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-32-13",
+      "language": "panjabi",
+      "latin": "PAHUNCHANA",
+      "gurmukhi": "ਪਹੁੰਚਾਣਾ",
+      "definitions": {
+        "en": [
+          "To carry and deliver."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 10,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-33-14",
+      "language": "panjabi",
+      "latin": "PAKAUNA",
+      "gurmukhi": "ਪਕਾਉਣਾ",
+      "definitions": {
+        "en": [
+          "To cook or boil well."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-546-14",
+      "language": "panjabi",
+      "latin": "PATRIKA",
+      "gurmukhi": "ਪਤ੍ਰਿਕਾ",
+      "definitions": {
+        "en": [
+          "A letter."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-121-17",
+      "language": "panjabi",
+      "latin": "TARKARI",
+      "gurmukhi": "ਤਰਕਾਰੀ",
+      "definitions": {
+        "en": [
+          "A cooked vegetable dish."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-101-8",
+      "language": "panjabi",
+      "latin": "TAHMAT",
+      "gurmukhi": "ਤਹਮਤ",
+      "definitions": {
+        "en": [
+          "A cloth worn below the waist."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-107-26",
+      "language": "panjabi",
+      "latin": "TATKARA",
+      "gurmukhi": "ਤਤਕਰਾ",
+      "definitions": {
+        "en": [
+          "A book index or contents list."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-116-28",
+      "language": "panjabi",
+      "latin": "TAFRIH",
+      "gurmukhi": "ਤਫ਼ਰੀਹ",
+      "definitions": {
+        "en": [
+          "Joy or happiness."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-127-0",
+      "language": "panjabi",
+      "latin": "TARAINU",
+      "gurmukhi": "ਤਰਾਇਣੁ",
+      "definitions": {
+        "en": [
+          "To help someone swim or cross a river."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-209-29",
+      "language": "panjabi",
+      "latin": "THIAUNA",
+      "gurmukhi": "ਥਿਆਉਣਾ",
+      "definitions": {
+        "en": [
+          "To achieve or find."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-263-22",
+      "language": "panjabi",
+      "latin": "DIKHALNA",
+      "gurmukhi": "ਦਿਖਾਲਣਾ",
+      "definitions": {
+        "en": [
+          "To show."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-303-15",
+      "language": "panjabi",
+      "latin": "DURASTH",
+      "gurmukhi": "ਦੂਰਸਥ",
+      "definitions": {
+        "en": [
+          "Far away."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 7,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-402-7",
+      "language": "panjabi",
+      "latin": "NAVNIT",
+      "gurmukhi": "ਨਵਨੀਤ",
+      "definitions": {
+        "en": [
+          "Fresh butter."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 6,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
+    },
+    {
+      "id": "panjabi_curated_3-384-18",
+      "language": "panjabi",
+      "latin": "NAJIKANA",
+      "gurmukhi": "ਨਜਿਕਾਨਾ",
+      "definitions": {
+        "en": [
+          "To come close."
+        ],
+        "pa": []
+      },
+      "lengths": {
+        "latin": 8,
+        "gurmukhi": 4
+      },
+      "acceptedGuess": true,
+      "solutionEligible": true,
+      "reviewStatus": "machineChecked",
+      "sources": [
+        "Project editorial definition; original text for Sikhi Word Games"
+      ]
     }
   ]
 }

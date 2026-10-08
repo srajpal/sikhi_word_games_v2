@@ -24,5 +24,11 @@ class GuessStatisticsRepository {
   }
 
   Future<void> save(GuessStatisticsBook statistics) =>
-      _store.setString(storageKey, jsonEncode(statistics.toJson()));
+      KeyValueStoreWrites.setString(
+        _store,
+        storageKey,
+        jsonEncode(statistics.toJson()),
+      );
+
+  Future<void> resetAll() => KeyValueStoreWrites.remove(_store, storageKey);
 }

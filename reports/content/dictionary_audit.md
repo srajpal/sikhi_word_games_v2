@@ -1,15 +1,15 @@
 # Dictionary Audit
 
-- Records audited: 46995
-- Flags raised: 5446
+- Records audited: 47093
+- Flags raised: 7931
 
 ## Flag counts
 
-- duplicate_spelling: 16
-- long_definition: 2180
-- missing_definition: 2
+- duplicate_spelling: 83
+- long_definition: 1011
+- missing_definition: 5103
 - missing_gurmukhi: 8
-- reference_definition: 3240
+- reference_definition: 1726
 
 ## Workflow
 

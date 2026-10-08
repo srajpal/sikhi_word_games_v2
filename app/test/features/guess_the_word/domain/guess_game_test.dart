@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/guess_game.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/domain/guess_evaluator.dart';
 
 void main() {
   test('rejects invalid guesses without consuming an attempt', () {
@@ -37,6 +38,20 @@ void main() {
     expect(game.submit('ਘਰ').isAccepted, isTrue);
     expect(game.submit('ਬਾਗ').isAccepted, isTrue);
     expect(game.status, GuessGameStatus.won);
+  });
+
+  test('accepts a canonically equivalent Gurmukhi winning guess', () {
+    final game = GuessGame(solution: 'ਖ਼ਬਰ', acceptedGuesses: {'ਖ਼ਬਰ'});
+
+    expect(game.wordLength, 3);
+    expect(game.submit('ਖ਼ਬਰ').isAccepted, isTrue);
+    expect(game.status, GuessGameStatus.won);
+    expect(
+      game.turns.single.evaluation.every(
+        (letter) => letter.result == LetterResult.correct,
+      ),
+      isTrue,
+    );
   });
 
   test('round-trips an interrupted game through a versioned snapshot', () {
