@@ -1,3 +1,5 @@
+import '../../../core/themes/paper_page.dart';
+import '../../guess_the_word/domain/language_mode.dart';
 import '../../../core/themes/game_heading.dart';
 
 import 'package:flutter/material.dart';
@@ -54,10 +56,12 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
     }
   }
 
-  void _newRound() {
+  void _newRound({LetterPracticeMode? mode}) {
     VictoryCelebration.stop(context);
     setState(() {
-      _game = widget.repository.newGame();
+      _game = widget.repository.newGame(
+        practiceMode: mode ?? _game.practiceMode,
+      );
       _feedback = 'Take your time. There is no timer.';
     });
     _save();
@@ -73,7 +77,7 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
     setState(
       () => _feedback = correct
           ? 'Correct! This letter is ${_game.currentLetter.name}.'
-          : 'Not quite. Try another name.',
+          : 'Not quite. Try another choice.',
     );
     if (correct && _game.isComplete) VictoryCelebration.celebrate(context);
     _save();
@@ -87,51 +91,72 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
     _save();
   }
 
+  Future<void> _practiceSettings() async {
+    final mode = await showModalBottomSheet<LetterPracticeMode>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const ListTile(
+              title: Text('Practice mode'),
+              subtitle: Text('Changing mode starts a new round.'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.text_fields),
+              title: const Text('See the letter, find its name'),
+              onTap: () => Navigator.pop(context, LetterPracticeMode.name),
+            ),
+            ListTile(
+              leading: const Icon(Icons.hearing),
+              title: const Text('Hear the name, find the letter'),
+              onTap: () => Navigator.pop(context, LetterPracticeMode.listening),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (mode != null && mounted) _newRound(mode: mode);
+  }
+
   void _statistics() {
     final statistics = widget.repository.statistics;
     final mastery = widget.repository.mastery;
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Letter progress'),
-        scrollable: true,
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('${statistics.roundsCompleted} rounds completed'),
-            Text('${statistics.firstTryCorrect} first-try answers'),
-            const SizedBox(height: 12),
-            const Text(
-              'Mark a letter Practiced by naming it correctly on your first try in three completed rounds.',
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Computer-generated pronunciation preview. Please check the audio.',
-            ),
-            for (final letter in learnLetters)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${letter.gurmukhi}  ${letter.name}\n${(mastery[letter.id] ?? 0) >= 3 ? 'Practiced' : '${mastery[letter.id] ?? 0} of 3 first-try answers'}',
-                    ),
-                    LetterPronunciationButton(
-                      letterId: letter.id,
-                      label: 'Hear ${letter.name}',
-                    ),
-                  ],
-                ),
-              ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+    showPaperDetails(
+      context,
+      title: 'Letter progress',
+      introduction: 'Your practice, saved on this device.',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('${statistics.roundsCompleted} rounds completed'),
+          Text('${statistics.firstTryCorrect} first-try answers'),
+          const SizedBox(height: 12),
+          const Text(
+            'Mark a letter Practiced by naming it correctly on your first try in three completed rounds.',
           ),
+          const SizedBox(height: 12),
+          const Text(
+            'Computer-generated pronunciation preview. Please check the audio.',
+          ),
+          for (final letter in learnLetters)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${letter.gurmukhi}  ${letter.name}\n${(mastery[letter.id] ?? 0) >= 3 ? 'Practiced' : '${mastery[letter.id] ?? 0} of 3 first-try answers'}',
+                  ),
+                  LetterPronunciationButton(
+                    letterId: letter.id,
+                    label: 'Hear ${letter.name}',
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
@@ -143,6 +168,11 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: const PaperTexture(),
+        bottom: GameLanguageHeader(
+          textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
+          mode: LanguageMode.gurmukhi,
+          wordLength: null,
+        ),
         toolbarHeight: gameToolbarHeight(context),
         title: const GameHeading(identity: GameIdentity.letters, compact: true),
         actions: [
@@ -154,6 +184,8 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                   _newRound();
                 case 'help':
                   showGameHelp(context, GameKind.learnLetters);
+                case 'practice':
+                  _practiceSettings();
                 case 'statistics':
                   _statistics();
                 case 'celebration':
@@ -162,6 +194,7 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
             },
             itemBuilder: (_) => const [
               PopupMenuItem(value: 'new', child: Text('New round')),
+              PopupMenuItem(value: 'practice', child: Text('Game settings')),
               PopupMenuItem(value: 'help', child: Text('Help')),
               PopupMenuItem(
                 value: 'statistics',
@@ -261,37 +294,49 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                       GamePanel(
                         child: Column(
                           children: [
-                            const Text(
-                              'Choose this letter’s name',
+                            Text(
+                              _game.practiceMode == LetterPracticeMode.listening
+                                  ? 'Listen, then find the letter'
+                                  : 'Choose this letter’s name',
                               textAlign: TextAlign.center,
                             ),
-                            Semantics(
-                              label:
-                                  'Gurmukhi letter ${_game.currentLetter.gurmukhi}',
-                              excludeSemantics: true,
-                              child: Text(
-                                _game.currentLetter.gurmukhi,
-                                key: const ValueKey('letter-target'),
-                                style: theme.textTheme.displayLarge?.copyWith(
-                                  fontSize: 88,
+                            if (_game.practiceMode == LetterPracticeMode.name ||
+                                _game.answered)
+                              Semantics(
+                                label:
+                                    'Gurmukhi letter ${_game.currentLetter.gurmukhi}',
+                                excludeSemantics: true,
+                                child: Text(
+                                  _game.currentLetter.gurmukhi,
+                                  key: const ValueKey('letter-target'),
+                                  style: theme.textTheme.displayLarge?.copyWith(
+                                    fontSize: 88,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
-                            ),
                             if (_game.answered) ...[
                               Text(
                                 _game.currentLetter.name,
                                 style: theme.textTheme.titleLarge,
                               ),
-                              LetterPronunciationButton(
-                                letterId: _game.currentLetter.id,
-                                label: 'Hear ${_game.currentLetter.name}',
-                              ),
-                              const Text(
-                                'Computer-generated pronunciation preview. Please check the audio.',
-                                textAlign: TextAlign.center,
-                              ),
                             ],
+                            if (_game.practiceMode ==
+                                    LetterPracticeMode.listening &&
+                                !_game.answered)
+                              Icon(
+                                Icons.hearing,
+                                size: 64,
+                                color: theme.colorScheme.primary,
+                              ),
+                            const SizedBox(height: 8),
+                            LetterPronunciationButton(
+                              key: ValueKey(
+                                'target-audio-${_game.currentLetter.id}',
+                              ),
+                              letterId: _game.currentLetter.id,
+                              label: 'Hear letter name',
+                            ),
                           ],
                         ),
                       ),
@@ -311,7 +356,9 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                               padding: const EdgeInsets.all(14),
                             ),
                             child: Text(
-                              choice.name,
+                              _game.practiceMode == LetterPracticeMode.listening
+                                  ? choice.gurmukhi
+                                  : choice.name,
                               textAlign: TextAlign.center,
                             ),
                           ),

@@ -1,3 +1,4 @@
+import '../../../core/themes/paper_page.dart';
 import '../../../core/themes/game_heading.dart';
 
 import 'dart:math' as math;
@@ -451,18 +452,11 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
 
   Future<void> _showStatistics() {
     final statistics = _statistics.forGame(_mode, _wordLength);
-    return showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('${_mode.label} · $_wordLength letters'),
-        content: _StatisticsContent(statistics: statistics),
-        actions: [
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
+    return showPaperDetails(
+      context,
+      title: 'Bujho statistics',
+      introduction: '${_mode.label} · $_wordLength letters',
+      child: _StatisticsContent(statistics: statistics),
     );
   }
 
@@ -516,18 +510,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: const PaperTexture(),
-        toolbarHeight: gameToolbarHeight(context, subtitle: true),
-        title: GameHeading(
-          identity: GameIdentity.bujho,
-          compact: true,
-          subtitle: Text(
-            '${_mode.label} · $_wordLength letters',
-            key: const ValueKey('guess-game-subtitle'),
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Theme.of(context).appBarTheme.foregroundColor,
-            ),
-          ),
+        bottom: GameLanguageHeader(
+          textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
+          mode: _mode,
+          wordLength: game?.wordLength,
         ),
+        toolbarHeight: gameToolbarHeight(context),
+        title: const GameHeading(identity: GameIdentity.bujho, compact: true),
         actions: [
           PopupMenuButton<_GameMenuAction>(
             key: const ValueKey('game-menu'),
@@ -611,102 +600,119 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                           final tokens = Theme.of(context)
                               .extension<GameThemeTokens>()!;
                           final compact = constraints.maxHeight < 650;
-                          return KeyboardListener(
-                            focusNode: _gameFocusNode,
-                            autofocus: true,
-                            onKeyEvent: _handleHardwareKey,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: GamePanel(
-                                    padding: const EdgeInsets.all(10),
-                                    child: _Board(
-                                      turns: game.turns,
-                                      wordLength: game.wordLength,
-                                      maximumAttempts: game.maximumAttempts,
-                                      reducedMotion: widget.reducedMotion,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: compact ? 6 : 12),
-                                if (isComplete) ...[
-                                  Text(
-                                    game.solution,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge,
-                                  ),
-                                  Text(
-                                    _solutionEntry!.displayDefinition,
-                                    textAlign: TextAlign.center,
-                                    maxLines: compact ? 1 : 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 6),
-                                ],
-                                if (!isComplete)
-                                  Semantics(
-                                    textField: true,
-                                    readOnly: true,
-                                    label: _mode == LanguageMode.gurmukhi
-                                        ? 'Gurmukhi guess'
-                                        : 'Your guess',
-                                    value: _controller.text,
-                                    child: GestureDetector(
-                                      key: const ValueKey('guess-display'),
-                                      onTap: _focusInput,
-                                      child: InputDecorator(
-                                        isFocused: _gameFocusNode.hasFocus,
-                                        decoration: InputDecoration(
-                                          labelText:
-                                              _mode == LanguageMode.gurmukhi
-                                              ? 'Gurmukhi guess'
-                                              : 'Your guess',
-                                          border: OutlineInputBorder(
-                                            borderRadius: tokens.tileRadius,
-                                          ),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                horizontal: 12,
-                                                vertical: 8,
-                                              ),
-                                        ),
-                                        child: Text(
-                                          _controller.text.isEmpty
-                                              ? ' '
-                                              : _controller.text,
-                                          key: const ValueKey('guess-value'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
+                          final scale =
+                              MediaQuery.textScalerOf(context).scale(14) / 14;
+                          return SingleChildScrollView(
+                            child: SizedBox(
+                              height: math.max(
+                                constraints.maxHeight,
+                                (_mode == LanguageMode.gurmukhi
+                                        ? 650.0
+                                        : scale > 1.5
+                                        ? 500.0
+                                        : 0.0) *
+                                    scale,
+                              ),
+                              child: KeyboardListener(
+                                focusNode: _gameFocusNode,
+                                autofocus: true,
+                                onKeyEvent: _handleHardwareKey,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: GamePanel(
+                                        padding: const EdgeInsets.all(10),
+                                        child: _Board(
+                                          turns: game.turns,
+                                          wordLength: game.wordLength,
+                                          maximumAttempts: game.maximumAttempts,
+                                          reducedMotion: widget.reducedMotion,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                if (!isComplete) ...[
-                                  SizedBox(height: compact ? 4 : 8),
-                                  GameKeyboard(
-                                    mode: _mode,
-                                    letterResults: keyboardLetterResults(
-                                      game.turns,
-                                    ),
-                                    enabled: true,
-                                    disabledCharacters:
-                                        unavailableKeyboardCharacters(
+                                    SizedBox(height: compact ? 6 : 12),
+                                    if (isComplete) ...[
+                                      Text(
+                                        game.solution,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge,
+                                      ),
+                                      Text(
+                                        _solutionEntry!.displayDefinition,
+                                        textAlign: TextAlign.center,
+                                        maxLines: compact ? 1 : 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 6),
+                                    ],
+                                    if (!isComplete)
+                                      Semantics(
+                                        textField: true,
+                                        readOnly: true,
+                                        label: _mode == LanguageMode.gurmukhi
+                                            ? 'Gurmukhi guess'
+                                            : 'Your guess',
+                                        value: _controller.text,
+                                        child: GestureDetector(
+                                          key: const ValueKey('guess-display'),
+                                          onTap: _focusInput,
+                                          child: InputDecorator(
+                                            isFocused: _gameFocusNode.hasFocus,
+                                            decoration: InputDecoration(
+                                              labelText:
+                                                  _mode == LanguageMode.gurmukhi
+                                                  ? 'Gurmukhi guess'
+                                                  : 'Your guess',
+                                              border: OutlineInputBorder(
+                                                borderRadius: tokens.tileRadius,
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 8,
+                                                  ),
+                                            ),
+                                            child: Text(
+                                              _controller.text.isEmpty
+                                                  ? ' '
+                                                  : _controller.text,
+                                              key: const ValueKey(
+                                                'guess-value',
+                                              ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    if (!isComplete) ...[
+                                      SizedBox(height: compact ? 4 : 8),
+                                      GameKeyboard(
+                                        mode: _mode,
+                                        letterResults: keyboardLetterResults(
                                           game.turns,
                                         ),
-                                    compact: compact,
-                                    onCharacter: _appendCharacter,
-                                    onBackspace: _backspace,
-                                    onEnter: _submit,
-                                  ),
-                                ],
-                                if (isComplete)
-                                  FilledButton(
-                                    onPressed: () => _startGame(),
-                                    child: const Text('New game'),
-                                  ),
-                              ],
+                                        enabled: true,
+                                        disabledCharacters:
+                                            unavailableKeyboardCharacters(
+                                              game.turns,
+                                            ),
+                                        compact: compact,
+                                        onCharacter: _appendCharacter,
+                                        onBackspace: _backspace,
+                                        onEnter: _submit,
+                                      ),
+                                    ],
+                                    if (isComplete)
+                                      FilledButton(
+                                        onPressed: () => _startGame(),
+                                        child: const Text('New game'),
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
                           );
                         },

@@ -151,6 +151,8 @@ void main() {
       expect(preferences.wordSize, 5);
     }
 
+    await tester.pageBack();
+    await tester.pumpAndSettle();
     final play = find.byKey(const ValueKey('new-game-guessTheWord'));
     await tester.ensureVisible(play);
     await tester.pumpAndSettle();

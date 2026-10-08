@@ -38,7 +38,12 @@ class WordQuestSessionRepository {
     _store,
     storageKey,
     jsonEncode({
-      'schemaVersion': 1,
+      'schemaVersion':
+          game.maximumTries ==
+              WordQuestGame.recommendedMaximumTriesForSolution(game.solution) +
+                  2
+          ? 1
+          : 2,
       'mode': mode.name,
       'wordSize': wordSize,
       'game': game.toJson(),
@@ -50,7 +55,7 @@ class WordQuestSessionRepository {
     if (encoded == null) return null;
     try {
       final json = jsonDecode(encoded) as Map<String, Object?>;
-      if (json['schemaVersion'] != 1 ||
+      if (!const [1, 2].contains(json['schemaVersion']) ||
           json['mode'] is! String ||
           json['wordSize'] is! int ||
           !const [4, 5, 6].contains(json['wordSize']) ||
@@ -61,9 +66,10 @@ class WordQuestSessionRepository {
         (value) => value.name == json['mode'],
       );
       final game = WordQuestGame.restore(json['game']! as Map<String, Object?>);
-      if (game.isComplete ||
-          game.maximumTries !=
-              WordQuestGame.recommendedMaximumTriesForSolution(game.solution)) {
+      final budget = json['schemaVersion'] == 1
+          ? WordQuestGame.recommendedMaximumTriesForSolution(game.solution) + 2
+          : WordQuestGame.recommendedMaximumTriesForSolution(game.solution);
+      if (game.isComplete || game.maximumTries != budget) {
         return null;
       }
       return WordQuestSession(

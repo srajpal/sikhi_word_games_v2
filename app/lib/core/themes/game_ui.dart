@@ -2,24 +2,98 @@ import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
 import 'paper_assets.dart';
+import '../../features/guess_the_word/domain/language_mode.dart';
+
+/// Identical, non-interactive language information on every game route.
+class GameLanguageHeader extends StatelessWidget
+    implements PreferredSizeWidget {
+  const GameLanguageHeader({
+    required this.mode,
+    this.wordLength,
+    this.textScale = 1,
+    super.key,
+  });
+  final LanguageMode mode;
+  final int? wordLength;
+  final double textScale;
+  @override
+  Size get preferredSize =>
+      Size.fromHeight(textScale > 1.5 ? 64 * textScale / 2 : 36);
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+    child: Text(
+      '${mode.label}${wordLength == null ? '' : ' · $wordLength letters'}',
+      key: const ValueKey('game-language-status'),
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.labelMedium,
+    ),
+  );
+}
 
 const gameSnackBarDuration = Duration(seconds: 5);
 
 void showGameSnackBar(BuildContext context, String message) {
   final messenger = ScaffoldMessenger.of(context);
+  final media = MediaQuery.of(context);
+  final scheme = Theme.of(context).colorScheme;
+  final appBar = context.findAncestorWidgetOfExactType<Scaffold>()?.appBar;
+  final scaler = media.textScaler;
+  final header = GameLanguageHeader(
+    mode: LanguageMode.english,
+    textScale: scaler.scale(12) / 12,
+  );
+  final toolbarHeight =
+      scaler.scale(20) * 2.5 +
+      scaler.scale(12) +
+      36 +
+      header.preferredSize.height;
+  // Float below the toolbar without changing board geometry or covering keys.
+  final painter = TextPainter(
+    text: TextSpan(
+      text: message,
+      style: Theme.of(context).textTheme.bodyMedium,
+    ),
+    textDirection: Directionality.of(context),
+    textScaler: media.textScaler,
+  )..layout(maxWidth: (media.size.width - 140).clamp(100, 650));
+  final height = painter.height + 48;
+  painter.dispose();
+  final bottom =
+      (media.size.height -
+              media.padding.top -
+              media.padding.bottom -
+              (appBar?.preferredSize.height ?? toolbarHeight) -
+              height -
+              12)
+          .clamp(12.0, double.infinity);
   messenger
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
-        content: Text(message, textAlign: TextAlign.center),
+        backgroundColor: scheme.surface,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: scheme.outlineVariant),
+        ),
+        content: IgnorePointer(
+          child: Semantics(
+            liveRegion: true,
+            child: Text(message, style: TextStyle(color: scheme.onSurface)),
+          ),
+        ),
         action: SnackBarAction(
           label: 'Dismiss',
-          onPressed: () => messenger.hideCurrentSnackBar(),
+          textColor: scheme.primary,
+          onPressed: messenger.hideCurrentSnackBar,
         ),
         behavior: SnackBarBehavior.floating,
+        hitTestBehavior: HitTestBehavior.translucent,
+        dismissDirection: DismissDirection.none,
+        margin: EdgeInsets.fromLTRB(12, 0, 12, bottom),
         duration: gameSnackBarDuration,
-        // Give screen-reader users time to hear and dismiss feedback.
-        persist: MediaQuery.accessibleNavigationOf(context),
+        persist: media.accessibleNavigation,
       ),
     );
 }
@@ -257,9 +331,44 @@ class PaperTexture extends StatelessWidget {
               : .7,
         ),
       ),
-      child: const SizedBox.expand(),
+      child: tokens.sikhiStyle && !panel
+          ? CustomPaint(
+              painter: _WovenPaper(theme.colorScheme.primary),
+              child: const SizedBox.expand(),
+            )
+          : const SizedBox.expand(),
     );
   }
+}
+
+/// A quiet geometric woven border distinguishes Sikhi from Modern paper.
+class _WovenPaper extends CustomPainter {
+  const _WovenPaper(this.ink);
+  final Color ink;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = ink.withValues(alpha: .16)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+    for (final x in [8.0, size.width - 8]) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+      for (var y = 14.0; y < size.height; y += 24) {
+        canvas.drawPath(
+          Path()
+            ..moveTo(x, y - 6)
+            ..lineTo(x + 5, y)
+            ..lineTo(x, y + 6)
+            ..lineTo(x - 5, y)
+            ..close(),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_WovenPaper old) => old.ink != ink;
 }
 
 /// Deterministic deckled edges keep labels tactile without animating texture.

@@ -33,7 +33,7 @@ void main() {
     );
     game.submit('GRAPE');
     expect(
-      buildSpoilerSafeResult(game: game, mode: LanguageMode.mixedLatin),
+      buildSpoilerSafeResult(game: game, mode: LanguageMode.english),
       contains('X/1'),
     );
   });

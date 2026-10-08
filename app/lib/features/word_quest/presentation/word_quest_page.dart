@@ -3,7 +3,7 @@ import '../../../core/statistics/game_statistics_dialog.dart';
 import '../../../core/widgets/game_guide.dart';
 import '../../../core/widgets/victory_celebration.dart';
 import '../../game_library/domain/game_launch_options.dart';
-import '../../../core/themes/game_artwork.dart';
+import '../../../core/themes/quest_lantern.dart';
 
 import 'dart:async';
 import 'dart:math';
@@ -103,7 +103,6 @@ class _WordQuestPageState extends State<WordQuestPage> {
   int _wordSize = 4;
   List<String> _letterBank = const [];
   String _message = '';
-  Timer? _feedbackTimer;
   bool _loading = true;
   bool _showFullKeyboard = false;
   int _startRequest = 0;
@@ -116,7 +115,6 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   @override
   void dispose() {
-    _feedbackTimer?.cancel();
     _keyboardFocusNode.dispose();
     super.dispose();
   }
@@ -208,7 +206,6 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   Future<void> _startNewWord() async {
     if (!mounted) return;
-    _feedbackTimer?.cancel();
     VictoryCelebration.stop(context);
     final vocabulary = _vocabulary;
     if (vocabulary == null || !mounted) return;
@@ -256,7 +253,6 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   void _retryWord() {
-    _feedbackTimer?.cancel();
     final word = _word;
     if (word == null) return;
     final game = WordQuestGame(solution: word.spelling);
@@ -405,19 +401,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     _haptic(correct: true);
   }
 
-  void _dismissFeedback() {
-    _feedbackTimer?.cancel();
-    if (mounted) setState(() => _message = '');
-  }
-
-  void _showFeedback(String message) {
-    if (!mounted) return;
-    _feedbackTimer?.cancel();
-    setState(() => _message = _game?.isComplete == true ? '' : message);
-    if (_message.isNotEmpty && !MediaQuery.accessibleNavigationOf(context)) {
-      _feedbackTimer = Timer(gameSnackBarDuration, _dismissFeedback);
-    }
-  }
+  void _showFeedback(String message) => showGameSnackBar(context, message);
 
   Future<void> _showSettings() async {
     var mode = _mode;
@@ -501,6 +485,11 @@ class _WordQuestPageState extends State<WordQuestPage> {
       backgroundColor: scheme.surface,
       appBar: AppBar(
         flexibleSpace: const PaperTexture(),
+        bottom: GameLanguageHeader(
+          textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
+          mode: _mode,
+          wordLength: _word?.graphemeLength,
+        ),
         centerTitle: true,
         toolbarHeight: gameToolbarHeight(context),
         title: const GameHeading(identity: GameIdentity.quest, compact: true),
@@ -678,9 +667,10 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                     ),
                                     const SizedBox(height: 10),
                                   ] else ...[
-                                    _GardenPath(
-                                      game: game,
-                                      reducedMotion: widget.reducedMotion,
+                                    QuestLantern(
+                                      missesLeft: game.triesRemaining,
+                                      maximumMisses: game.maximumTries,
+                                      won: game.status == WordQuestStatus.won,
                                     ),
                                     const SizedBox(height: 10),
                                   ],
@@ -706,26 +696,6 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                       showRomanization:
                                           _mode == LanguageMode.gurmukhi,
                                     ),
-                                    if (_message.isNotEmpty)
-                                      Semantics(
-                                        liveRegion: true,
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                _message,
-                                                key: const ValueKey(
-                                                  'word-quest-feedback',
-                                                ),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              onPressed: _dismissFeedback,
-                                              child: const Text('Dismiss'),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
                                   ],
                                 ],
                               ),
@@ -823,123 +793,6 @@ class _WordTiles extends StatelessWidget {
       },
     );
   }
-}
-
-class _GardenPath extends StatelessWidget {
-  const _GardenPath({required this.game, required this.reducedMotion});
-  final WordQuestGame game;
-  final bool reducedMotion;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = Theme.of(context).extension<GameThemeTokens>()!;
-    final scene = GameSceneColors(Theme.of(context));
-    final distinct = game.solutionGraphemes.toSet();
-    final found = distinct.where(game.isGuessed).length;
-    final progress = distinct.isEmpty
-        ? 0
-        : (found / distinct.length * 8).ceil();
-    return Semantics(
-      label: '$progress of 8 garden blooms growing',
-      child: Container(
-        height: 84,
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: scene.sky,
-          borderRadius: tokens.panelRadius,
-          border: Border.all(color: tokens.tileBorder.withValues(alpha: .4)),
-          boxShadow: tokens.tileShadow,
-        ),
-        child: Stack(
-          children: [
-            const Positioned.fill(
-              child: GameScene(kind: GameArtworkKind.garden),
-            ),
-
-            Positioned.fill(
-              child: CustomPaint(
-                painter: _GardenPainter(
-                  progress: progress,
-                  bloomColor: scene.sun,
-                  scene: scene,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 9, 12, 13),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const SizedBox(width: 26),
-                  for (var i = 0; i < 8; i++)
-                    AnimatedContainer(
-                      duration: reducedMotion
-                          ? Duration.zero
-                          : const Duration(milliseconds: 250),
-                      width: 20,
-                      height: 13,
-                      decoration: BoxDecoration(
-                        color: i < progress ? scene.leaf : scene.hill,
-                        borderRadius: const BorderRadius.all(
-                          Radius.elliptical(22, 15),
-                        ),
-                        border: Border.all(color: Colors.white70),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black26,
-                            offset: Offset(0, 3),
-                            blurRadius: 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                  const SizedBox(width: 26),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _GardenPainter extends CustomPainter {
-  const _GardenPainter({
-    required this.progress,
-    required this.bloomColor,
-    required this.scene,
-  });
-
-  final GameSceneColors scene;
-
-  final int progress;
-  final Color bloomColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final stemPaint = Paint()
-      ..color = scene.stem
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
-    for (var i = 0; i < progress; i++) {
-      final x = 58 + i * ((size.width - 116) / 7);
-      final y = size.height - 13 - (i.isEven ? 2 : 8);
-      canvas.drawLine(Offset(x, y), Offset(x, y - 10), stemPaint);
-      canvas.drawOval(
-        Rect.fromCenter(center: Offset(x - 3, y - 7), width: 7, height: 4),
-        Paint()..color = scene.leaf,
-      );
-      canvas.drawCircle(Offset(x, y - 13), 4, Paint()..color = bloomColor);
-      canvas.drawCircle(Offset(x, y - 13), 1.5, Paint()..color = scene.sun);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _GardenPainter oldDelegate) =>
-      oldDelegate.progress != progress ||
-      oldDelegate.bloomColor != bloomColor ||
-      oldDelegate.scene.sky != scene.sky;
 }
 
 class _LetterBank extends StatelessWidget {
@@ -1157,12 +1010,8 @@ class _QuestStatusBar extends StatelessWidget {
     crossAxisAlignment: WrapCrossAlignment.center,
     children: [
       _StatusPill(
-        icon: Icons.translate_rounded,
-        label: '$language · $letters letters',
-      ),
-      _StatusPill(
-        icon: Icons.favorite_rounded,
-        label: '$tries ${tries == 1 ? 'try' : 'tries'}',
+        icon: Icons.light_mode_outlined,
+        label: '$tries ${tries == 1 ? 'miss' : 'misses'} left',
         accent: Theme.of(context).colorScheme.tertiaryContainer,
         foreground: Theme.of(context).colorScheme.onTertiaryContainer,
       ),

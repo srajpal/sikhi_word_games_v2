@@ -62,11 +62,11 @@ class WordQuestGame {
 
   static const int schemaVersion = 2;
 
-  /// Gives shorter words a smaller, still forgiving miss budget.
+  /// Only incorrect, distinct letters consume this budget.
   ///
-  /// The supported 4-, 5-, and 6-grapheme rounds receive 5, 6, and 7 tries.
+  /// The supported 4-, 5-, and 6-grapheme rounds receive 3, 4, and 5 misses.
   static int recommendedMaximumTriesForSolution(String solution) =>
-      (_normaliseWord(solution).characters.length + 1).clamp(5, 7);
+      (_normaliseWord(solution).characters.length - 1).clamp(3, 5);
 
   /// Scales hints with word length: none for four letters, one for five, and
   /// two for six or more letters.

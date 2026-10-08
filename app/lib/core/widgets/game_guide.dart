@@ -75,7 +75,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
     ),
     (
       title: 'Play your way',
-      body: 'Tap cards or use Tab and Enter or Space on a keyboard. With a screen reader, focus and activate each card. No dragging is needed. Use New set or Language above the cards. Open the game menu for Statistics or these instructions.',
+      body: 'Tap cards or use Tab and Enter or Space on a keyboard. With a screen reader, focus and activate each card. No dragging is needed. Use New set above the cards or Game settings in the menu to choose a language. Open the game menu for Statistics or these instructions.',
     ),
   ],
   GameKind.guessTheWord => const [
@@ -109,15 +109,15 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
   GameKind.wordQuest => const [
     (
       title: 'Reveal the hidden word',
-      body: 'Read the definition clue and choose one letter at a time using the on-screen letters or a physical keyboard. A correct letter reveals every place it appears and helps your garden grow.',
+      body: 'Read the definition clue and choose one letter at a time using the on-screen letters or a physical keyboard. A correct letter reveals every place it appears without dimming your paper lantern.',
     ),
     (
-      title: 'Keep your hearts',
-      body: 'A wrong letter costs one heart. Choosing a letter again costs nothing. Four-letter words start with five hearts, five-letter words with six, and six-letter words with seven. Reveal the word before your hearts run out.',
+      title: 'Keep the light',
+      body: 'A new missed letter dims one lantern fold. Correct or repeated letters cost nothing. Four-letter words allow three misses, five-letter words four, and six-letter words five. Reveal the word before the last light dims.',
     ),
     (
       title: 'Use a hint',
-      body: 'A hint reveals a hidden letter without costing a heart. Four-letter words have no hints, five-letter words have one, and six-letter words have two. The answer is shown when the round ends. Open the game menu to read these instructions again.',
+      body: 'A hint reveals a hidden letter without dimming the lantern. Four-letter words have no hints, five-letter words have one, and six-letter words have two. The answer is shown when the round ends. Open the game menu to read these instructions again.',
     ),
   ],
 };
@@ -156,21 +156,21 @@ Future<void> showGameHelp(BuildContext context, GameKind game) async {
               ),
               const SizedBox(height: 8),
               const Text(
-                'The simple letter bank includes the answer letters and some extra choices. Use Show all letters for the full bank, or Show simple letters to switch back. After a missed word, Try again starts the same word with fresh hearts and hints. Each finished attempt counts in Statistics, including retries.',
+                'The simple letter bank includes the answer letters and some extra choices. Use Show all letters for the full bank, or Show simple letters to switch back. After a missed word, Try again starts the same word with fresh lights and hints. Each finished attempt counts in Statistics, including retries.',
               ),
               const SizedBox(height: 16),
             ],
             if (game == GameKind.learnLetters)
               const Text(
-                'Choose with touch, Tab and Enter, or a screen reader. Pronunciation clips are generated previews for review, not verified recordings. Hear each name after answering or in your letter collection. The installed app and its bundled clips work offline. Web offline reload requires the first download and caching to finish.',
+                'Choose with touch, Tab and Enter, or a screen reader. Pronunciation clips are generated previews for review, not verified recordings. Hear each name below the letter at any time. Game settings also offers Hear the name, find the letter. The target stays hidden until answered in listening practice. The installed app and its bundled clips work offline. Web offline reload requires the first download and caching to finish.',
               )
             else if (game == GameKind.wordBridges)
               const Text(
-                'Choose English, Romanized Punjabi, or Gurmukhi words. Meanings are in English. Each fixed set includes different word lengths. Sets may repeat. The installed app works offline. On the web, offline reload requires a completed first download and browser caching support.',
+                'Choose English, Romanized Punjabi, or Gurmukhi words. Meanings are in English. Shuffled sets use different word lengths and prefer words you have not seen. Sets cycle when the available pool is used. The installed app works offline. On the web, offline reload requires a completed first download and browser caching support.',
               )
             else
               const Text(
-                'English uses English words. Romanized Punjabi uses Punjabi words in Latin letters. Mixed accepts both. Gurmukhi uses Punjabi script; each visible letter group counts as one tile. The installed app works offline. On the web, the first visit needs a connection; offline reload is available only after caching finishes and the browser allows it.',
+                'English uses English words. Romanized Punjabi uses Punjabi words in Latin letters. Gurmukhi uses Punjabi script; each visible letter group counts as one tile. The installed app works offline. On the web, the first visit needs a connection; offline reload is available only after caching finishes and the browser allows it.',
               ),
           ],
         ),

@@ -329,11 +329,43 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.textContaining('Progress could not be saved'), findsOneWidget);
     final cards = find.byType(OutlinedButton);
+    await tester.ensureVisible(cards.first);
     await tester.tap(cards.first);
     await tester.pumpAndSettle();
     expect(find.text('Selected'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'ambiguous content explains unavailability without loading forever',
+    (tester) async {
+      final entries = await tester.runAsync(
+        () => AssetVocabularyRepository().load(),
+      );
+      final selected = entries!
+          .where(
+            (entry) =>
+                entry.id.startsWith('english_') &&
+                entry.solutionEligible &&
+                entry.hasDistributableDefinition,
+          )
+          .take(4)
+          .toList();
+      final content = WordBridgesContent([
+        for (var index = 0; index < selected.length; index++)
+          selected[index].copyWith(
+            englishDefinition: 'A large round red fruit number $index',
+          ),
+      ]);
+      final repository = WordBridgesRepository(MemoryKeyValueStore());
+      await tester.pumpWidget(page(repository, content: Future.value(content)));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('No clear matching sets'), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(repository.restore(), isNull);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'empty content explains unavailability and late load is disposal safe',

@@ -284,7 +284,6 @@ class _WordSearchPageState extends State<WordSearchPage> {
         LanguageMode.english => entry.language == VocabularyLanguage.english,
         LanguageMode.romanizedPanjabi ||
         LanguageMode.gurmukhi => entry.language == VocabularyLanguage.panjabi,
-        LanguageMode.mixedLatin => true,
       };
 
   VocabularyEntry? _entryForWord(String word) {
@@ -339,7 +338,6 @@ class _WordSearchPageState extends State<WordSearchPage> {
   String _languageDescription(LanguageMode mode) => switch (mode) {
     LanguageMode.english => 'English words from the offline dictionary',
     LanguageMode.romanizedPanjabi => 'Punjabi written with Latin letters',
-    LanguageMode.mixedLatin => 'English and romanized Punjabi together',
     LanguageMode.gurmukhi => 'Punjabi written in Gurmukhi',
   };
 
@@ -542,6 +540,11 @@ class _WordSearchPageState extends State<WordSearchPage> {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: const PaperTexture(),
+        bottom: GameLanguageHeader(
+          textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
+          mode: _mode,
+          wordLength: _wordSize,
+        ),
         leading: IconButton(
           tooltip: 'Back',
           onPressed: () => context.pop(),

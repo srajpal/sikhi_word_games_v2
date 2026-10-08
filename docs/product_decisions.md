@@ -38,24 +38,21 @@ First playable scope:
   pattern, first-launch guide, Help replay and per-game statistics. Record
   finished sets and matching attempts without inventing a cross-game win rate.
 
-The candidate has four fixed decks of four pairs: two English decks and two
-Punjabi decks. The Punjabi decks are available in Romanized Punjabi and Gurmukhi;
-all meanings are English. These are 16 source entries, not separate content
-pools for each script. Mixed-language decks and script-to-script matching remain
-future scope. The small starter selection is intended to validate the game;
-replay variety needs playtest feedback before expanding it.
+As of 1.11.0+22, new sets draw from the eligible shipped vocabulary in the
+chosen script, across word lengths. All meanings are English. Four legacy starter
+decks remain as content regression fixtures, not the live randomization boundary.
+New sets prefer unused words and avoid the previous set where the pool permits.
+Used/previous IDs persist per language in the existing Jodo state. A completed set
+also records distinct matched IDs, perfect four-attempt sets and sets with longer
+words, atomically with its existing statistics and completion-ID deduplication.
 
-Decks resolve stable vocabulary IDs against the shipped release repository.
-Every entry must still be an accepted guess, solution eligible, and have a
-distributable definition. A missing, duplicate, held, wrong-language, or unusable
-record disables the entire affected deck. Gurmukhi also requires a nonempty
-script spelling. Each deck requires distinct spellings and meanings. Original
-source definitions and provenance remain unchanged; corrections continue through
-the existing content curation workflow, never hand-edited release files.
-
-The starter groups were checked by an agent for clear, distinct matches against
-the current shipped records. This does not constitute human editorial approval
-or a claim that automated eligibility alone establishes age suitability.
+Entries must remain accepted, solution eligible and sourced; words and meanings
+are deduplicated. Definitions longer than 180 characters are omitted. A set
+rejects overlapping clue tokens or a word named by another clue. These mechanical
+checks reduce ambiguity; they do not establish human approval, familiarity or age
+suitability. Source definitions and provenance are unchanged. A restored pair is
+checked against its current eligible spelling and meaning. Vocabulary corrections
+still use curation and the release builder.
 
 ### Journey Through Punjab: experimental prototype
 
@@ -83,7 +80,7 @@ Proposed acceptance criteria:
 
 | Concept | Core loop | Review before implementation |
 | --- | --- | --- |
-| Word Garden | Rearrange grapheme tiles from a definition clue; grow a persistent secular garden. | Distinguish it from Word Quest's existing garden imagery and letter-reveal loop; provide non-drag controls. |
+| Word Garden | Rearrange grapheme tiles from a definition clue; grow a persistent secular garden. | Distinguish it from Word Quest's lantern imagery and letter-reveal loop; provide non-drag controls. |
 | Find the Connection | Sort words into related groups such as foods, instruments or everyday objects. | Hand-curate groups, check overlapping categories, and avoid depending on obscure cultural knowledge. |
 | Build the Sentence | Arrange words into useful Punjabi sentences with optional pronunciation support. | Review Punjabi grammar, valid alternative orders, translations and any audio sources. |
 | Akhar Pachhaan (working name) | Recognize a single Gurmukhi letter from three Romanized choices, then build a mastered-letter collection through short practice rounds. | Separate letter names from sounds, review aliases and near-confusable options, and verify any generated pronunciation clips with a fluent speaker. |
@@ -97,7 +94,7 @@ Dictionary saved words remain separate product follow-ups.
 - English uses Latin script.
 - Romanized Punjabi uses Latin script.
 - English and romanized Punjabi share one on-screen Latin keyboard.
-- Mixed English/Punjabi selects English or romanized Punjabi solutions and accepts valid guesses from both pools.
+- Exactly three selectable modes: English, Romanized Punjabi and Gurmukhi. Random language chooses among these. Retired mixed-mode active saves start a fresh supported round; historical statistics remain intact.
 - Gurmukhi is a separate mode with a purpose-built on-screen keyboard.
 - Every Gurmukhi on-screen keyboard shows a short romanized pronunciation under
   each key and uses the shared pronunciation/label components.
@@ -406,3 +403,35 @@ Enlarged text uses labelled controls and flexible layout. Amber and gray
 feedback use dark ink; green feedback uses white. Bujho keyboard feedback
 retains the strongest grapheme clue across duplicate letters and later guesses,
 with spoken status values alongside visual colors.
+
+
+## October 8 play consistency and achievements: 1.11.0+22
+
+- Every game has the shared, text-only language line below its English/Punjabi
+  heading. Word length is also shown where it describes the round. Learn Letters
+  is intrinsically Gurmukhi. Game language changes belong in Game settings.
+- Word Quest uses a secular paper lantern with one lit fold per remaining missed
+  letter allowance. New words allow length minus one misses: 3/4/5 for 4/5/6
+  graphemes. Correct/repeated letters cost nothing. Hints are 0/1/2. Old valid
+  unfinished saves retain their 5/6/7 allowance until finished or replaced.
+- All transient game feedback uses the shared five-second, dismissible paper
+  toast below the toolbar. It does not move the board or cover the keyboard;
+  accessible navigation retains it until dismissed.
+- Learn Letters always puts explicit audio playback below the target. Its menu
+  also offers listening practice: hear the letter name, choose its Gurmukhi glyph;
+  the target is hidden until answered. The practice mode persists with the round.
+  Audio assets remain generated previews awaiting the planned sound review.
+- Modern uses cooler ivory/teal and rounded controls. Sikhi uses saffron paper,
+  navy ink, woven borders and squarer controls; Dark keeps midnight paper.
+  The shared bilingual tile wordmark is vector/native text, responsive and offline.
+- Settings, Dictionary, Progress and Achievements are dedicated pages; each
+  game's statistics/letter collection also uses a full shared paper page.
+- Achievements contains 50 stable goals, ten per game, with illustrated shield
+  badges, locked/earned text and numeric progress. Goals cover language, word
+  sizes, solved counts, quick guesses, hint usage, variety, perfect sets and
+  letter practice. No timed/daily goals, punitive streak resets or networking.
+  Badges are a read-only projection of durable statistics, not a second score.
+  Older statistics count where their recorded fields support a goal. Previously
+  unrecorded Jodo variety/perfect/long-word and listening/perfect-letter facts
+  start at this update. All new facts share the existing atomic game keys and
+  reset with those repositories. No unlock timestamps are invented.

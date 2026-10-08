@@ -8,6 +8,36 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.d
 
 void main() {
   test(
+    'old unfinished quests keep their original budget across repeated saves',
+    () async {
+      final store = MemoryKeyValueStore();
+      final repository = WordQuestSessionRepository(store);
+      store.values[WordQuestSessionRepository.storageKey] = jsonEncode({
+        'schemaVersion': 1,
+        'mode': 'english',
+        'wordSize': 5,
+        'game': (WordQuestGame(
+          solution: 'APPLE',
+          maximumTries: 6,
+        )..guess('A')).toJson(),
+      });
+      final old = repository.restore()!;
+      expect(old.game.maximumTries, 6);
+      await repository.save(
+        mode: old.mode,
+        wordSize: old.wordSize,
+        game: old.game,
+      );
+      expect(repository.restore()!.game.maximumTries, 6);
+      await repository.save(
+        mode: LanguageMode.english,
+        wordSize: 5,
+        game: WordQuestGame(solution: 'APPLE'),
+      );
+      expect(repository.restore()!.game.maximumTries, 4);
+    },
+  );
+  test(
     'rejects unsupported word sizes and changed adaptive try budgets',
     () async {
       final store = MemoryKeyValueStore();

@@ -15,7 +15,7 @@
     "tool/content/vocabulary_sources.dart": "77b0424a636a64c143da8b91e65aa0ab4a0ce654441c693e969d2658a4072893",
     "tool/content/punjabi_quality.dart": "04d6c885577d4b15a46f9f9e459513940088edd90200f70430b925df77aa452e",
     "tool/content/mahan_kosh_text.dart": "37ff0a3b6a20759c776fbe5edb31a96a492c76d5bda13522f545417ec88692cf",
-    "lib/features/word_bridges/domain/word_bridges_content.dart": "f7c961bf5626b471e6f770a224242ef84349842b203603845947284677aa5342",
+    "lib/features/word_bridges/domain/word_bridges_content.dart": "86f521b0b6c33356e90975c741a13b6dab6e9e0b1c95e2a663e18f3ac917cd54",
     "lib/features/word_quest/domain/word_quest_definition_quality.dart": "4bcab3217aed2a9fe45ec3afb2256be653100f8a45027bbc9a1ef4fb9ab2dea4",
     "lib/core/language/gurmukhi_normalization.dart": "fc976174f2c86a6b368af4299b1abbe79dfe149fc576ec16446827b23bb61641"
   },

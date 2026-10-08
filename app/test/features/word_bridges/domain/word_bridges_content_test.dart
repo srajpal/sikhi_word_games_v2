@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
@@ -57,7 +58,6 @@ void main() {
           }
         }
       }
-      expect(content.decksFor(LanguageMode.mixedLatin), isEmpty);
     },
   );
 
@@ -124,36 +124,33 @@ void main() {
     },
   );
 
-  test(
-    'romanization excludes omitted Gurmukhi decks and trims source text',
-    () {
-      final trimmed = WordBridgesContent([
-        for (final entry in release)
-          entry.id == 'panjabi_ghar'
-              ? VocabularyEntry(
-                  id: entry.id,
-                  language: entry.language,
-                  latin: '  GHAR  ',
-                  gurmukhi: entry.gurmukhi,
-                  englishDefinition: entry.englishDefinition,
-                  latinLength: entry.latinLength,
-                  gurmukhiLength: entry.gurmukhiLength,
-                  acceptedGuess: entry.acceptedGuess,
-                  solutionEligible: entry.solutionEligible,
-                  reviewStatus: entry.reviewStatus,
-                  source: entry.source,
-                )
-              : entry,
-      ]);
-      expect(trimmed.romanizedFor('panjabi_ghar'), 'GHAR');
-      final missing = WordBridgesContent(
-        release.where((entry) => entry.id != 'panjabi_ghar'),
-      );
-      expect(missing.romanizedFor('panjabi_ghar'), isNull);
-      expect(missing.romanizedFor('panjabi_pani'), isNull);
-      expect(missing.romanizedFor('panjabi_phull'), isNotNull);
-    },
-  );
+  test('romanization excludes missing words and trims source text', () {
+    final trimmed = WordBridgesContent([
+      for (final entry in release)
+        entry.id == 'panjabi_ghar'
+            ? VocabularyEntry(
+                id: entry.id,
+                language: entry.language,
+                latin: '  GHAR  ',
+                gurmukhi: entry.gurmukhi,
+                englishDefinition: entry.englishDefinition,
+                latinLength: entry.latinLength,
+                gurmukhiLength: entry.gurmukhiLength,
+                acceptedGuess: entry.acceptedGuess,
+                solutionEligible: entry.solutionEligible,
+                reviewStatus: entry.reviewStatus,
+                source: entry.source,
+              )
+            : entry,
+    ]);
+    expect(trimmed.romanizedFor('panjabi_ghar'), 'GHAR');
+    final missing = WordBridgesContent(
+      release.where((entry) => entry.id != 'panjabi_ghar'),
+    );
+    expect(missing.romanizedFor('panjabi_ghar'), isNull);
+    expect(missing.romanizedFor('panjabi_pani'), 'PANI');
+    expect(missing.romanizedFor('panjabi_phull'), isNotNull);
+  });
 
   test('decks and pairs cannot be changed by callers', () {
     final content = WordBridgesContent(release);
@@ -161,5 +158,45 @@ void main() {
     expect(() => decks.clear(), throwsUnsupportedError);
     expect(() => decks.first.pairs.clear(), throwsUnsupportedError);
     expect(() => content.availableModes.clear(), throwsUnsupportedError);
+  });
+
+  test('new sets use a broad eligible pool, varying lengths and avoiding recent words', () {
+    final content = WordBridgesContent(release);
+    final eligible = {for (final entry in release) entry.id: entry};
+    for (final mode in LanguageMode.values) {
+      final used = <String>{};
+      var previous = <String>{};
+      final random = Random(92);
+      final lengths = <int>{};
+      for (var i = 0; i < 20; i++) {
+        final pairs = content.chooseSet(
+          mode,
+          random: random,
+          usedIds: used,
+          previousIds: previous,
+        )!;
+        final ids = pairs.map((p) => p.id).toSet();
+        expect(ids.intersection(previous), isEmpty);
+        for (final pair in pairs) {
+          final entry = eligible[pair.id]!;
+          expect(
+            entry.solutionEligible && entry.hasDistributableDefinition,
+            isTrue,
+          );
+          lengths.add(
+            mode == LanguageMode.gurmukhi
+                ? entry.gurmukhiLength!
+                : entry.latinLength,
+          );
+          for (final other in pairs.where((p) => p.id != pair.id)) {
+            expect(WordBridgesContent.ambiguous(pair, other), isFalse);
+          }
+        }
+        used.addAll(ids);
+        previous = ids;
+      }
+      expect(used.length, greaterThan(60));
+      expect(lengths.length, greaterThan(1));
+    }
   });
 }

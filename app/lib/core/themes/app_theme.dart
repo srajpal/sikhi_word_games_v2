@@ -38,8 +38,8 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
   final LinearGradient panelGradient;
   final List<BoxShadow> elevationShadow;
 
-  BorderRadius get panelRadius => BorderRadius.circular(16);
-  BorderRadius get controlRadius => BorderRadius.circular(28);
+  BorderRadius get panelRadius => BorderRadius.circular(sikhiStyle ? 10 : 16);
+  BorderRadius get controlRadius => BorderRadius.circular(sikhiStyle ? 12 : 28);
   Color get paperEdge => tileBorder.withValues(alpha: .35);
   List<BoxShadow> get tileShadow => [
     BoxShadow(
@@ -144,7 +144,7 @@ abstract final class AppThemes {
       radius: 8,
       borderWidth: 1.25,
       sikhiStyle: false,
-      backgroundGradient: const [Color(0xFFF7F1E7), Color(0xFFEDE4D5)],
+      backgroundGradient: const [Color(0xFFF5F6EF), Color(0xFFE6EDE6)],
       panelGradient: const [Color(0xFFFFFCF5), Color(0xFFFFFCF5)],
     ),
     AppThemeChoice.sikhi => _theme(
@@ -153,7 +153,7 @@ abstract final class AppThemes {
       radius: 5,
       borderWidth: 1.75,
       sikhiStyle: true,
-      backgroundGradient: const [Color(0xFFFFF8E8), Color(0xFFF0E4C9)],
+      backgroundGradient: const [Color(0xFFF8DEA5), Color(0xFFE8BC67)],
       panelGradient: const [Color(0xFFFFFCF2), Color(0xFFFFFCF2)],
     ),
     AppThemeChoice.dark => _theme(
@@ -255,7 +255,7 @@ abstract final class AppThemes {
           tileBorder: dark
               ? const Color(0xFF8296B4)
               : sikhiStyle
-              ? const Color(0xFF8F7959)
+              ? const Color(0xFF173A67)
               : const Color(0xFF869D99),
           tileRadius: BorderRadius.all(Radius.circular(radius)),
           tileBorderWidth: borderWidth,

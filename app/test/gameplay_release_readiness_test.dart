@@ -70,7 +70,7 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('word-quest-keyboard-toggle')));
     await tester.pump();
-    for (final letter in ['B', 'C', 'D', 'F', 'G', 'H']) {
+    for (final letter in ['B', 'C', 'D', 'F']) {
       await tester.ensureVisible(
         find.byKey(ValueKey('word-quest-key-$letter')),
       );
@@ -85,7 +85,7 @@ void main() {
     await tester.pump();
 
     expect(find.text('The word is ready to discover'), findsNothing);
-    expect(find.text('6 tries'), findsOneWidget);
+    expect(find.text('4 misses left'), findsOneWidget);
     await tester.sendKeyDownEvent(LogicalKeyboardKey.keyA, character: 'a');
     await tester.sendKeyUpEvent(LogicalKeyboardKey.keyA);
     await tester.pump();

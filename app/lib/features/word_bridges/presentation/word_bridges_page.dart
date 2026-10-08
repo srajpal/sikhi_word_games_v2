@@ -1,3 +1,4 @@
+import '../../../core/themes/paper_page.dart';
 import '../../../core/themes/game_heading.dart';
 
 import 'dart:math';
@@ -103,41 +104,36 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
     }
   }
 
-  bool _canRestore(WordBridgesSession session) => _content!
-      .decksFor(session.mode)
-      .any(
-        (deck) =>
-            deck.pairs.length == session.game.wordOrder.length &&
-            session.game.wordOrder.every(
-              (saved) => deck.pairs.any(
-                (pair) =>
-                    pair.id == saved.id &&
-                    pair.word == saved.word &&
-                    pair.meaning == saved.meaning,
-              ),
-            ),
-      );
+  bool _canRestore(WordBridgesSession session) => session.game.wordOrder.every(
+    (pair) => _content!.containsPair(session.mode, pair),
+  );
 
   Future<void> _newSet({LanguageMode? mode}) async {
     if (_busy || !mounted) return;
     VictoryCelebration.stop(context);
     final nextMode = mode ?? _mode;
-    final decks = _content!.decksFor(nextMode);
-    if (decks.isEmpty) return;
-    final previousIds = _game?.wordOrder.map((p) => p.id).toSet();
-    final alternatives = decks
-        .where(
-          (deck) =>
-              previousIds == null ||
-              !deck.pairs.every((p) => previousIds.contains(p.id)),
-        )
-        .toList();
-    final choices = alternatives.isEmpty ? decks : alternatives;
+    final pairs = _content!.chooseSet(
+      nextMode,
+      random: _random,
+      usedIds: widget.repository.usedWords(nextMode),
+      previousIds: widget.repository.previousWords(nextMode),
+    );
+    if (pairs == null) {
+      if (_game == null) {
+        setState(
+          () => _error = 'No clear matching sets are available for this language. Please try another language.',
+        );
+        return;
+      }
+      showGameSnackBar(
+        context,
+        'No unambiguous matching sets are available for this language.',
+      );
+      return;
+    }
     setState(() {
       _mode = nextMode;
-      _game = WordBridgesGame(
-        pairs: choices[_random.nextInt(choices.length)].pairs,
-      );
+      _game = WordBridgesGame(pairs: pairs);
       _error = null;
       _message = 'Choose a word and its meaning, in either order.';
     });
@@ -188,39 +184,55 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
     await _save();
   }
 
+  Future<void> _gameSettings() async {
+    final mode = await showModalBottomSheet<LanguageMode>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const ListTile(
+              title: Text('Game settings'),
+              subtitle: Text(
+                'Choose a language to start a new set. Word lengths vary.',
+              ),
+            ),
+            for (final mode in _content!.availableModes)
+              ListTile(
+                title: Text(mode.label),
+                selected: mode == _mode,
+                onTap: () => Navigator.pop(context, mode),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (mode != null && mounted) await _newSet(mode: mode);
+  }
+
   void _statistics() {
     final current = widget.repository.forMode(_mode);
     final total = widget.repository.total;
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Jodo statistics'),
-        scrollable: true,
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(_mode.label, style: Theme.of(context).textTheme.titleMedium),
-            Text('Finished sets: ${current.finishedSets}'),
-            Text('Pairs matched: ${current.pairsMatched}'),
-            Text('Match attempts: ${current.attempts}'),
-            const SizedBox(height: 16),
-            Text(
-              'All languages',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Text('Finished sets: ${total.finishedSets}'),
-            Text('Pairs matched: ${total.pairsMatched}'),
-            Text('Match attempts: ${total.attempts}'),
-            const SizedBox(height: 12),
-            const Text(
-              'Only finished sets count. Each word and meaning you try together counts as one attempt. There is no timer or losing score. Saved on this device.',
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+    showPaperDetails(
+      context,
+      title: 'Jodo statistics',
+      introduction: 'Your practice, saved on this device.',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(_mode.label, style: Theme.of(context).textTheme.titleMedium),
+          Text('Finished sets: ${current.finishedSets}'),
+          Text('Pairs matched: ${current.pairsMatched}'),
+          Text('Match attempts: ${current.attempts}'),
+          const SizedBox(height: 16),
+          Text('All languages', style: Theme.of(context).textTheme.titleMedium),
+          Text('Finished sets: ${total.finishedSets}'),
+          Text('Pairs matched: ${total.pairsMatched}'),
+          Text('Match attempts: ${total.attempts}'),
+          const SizedBox(height: 12),
+          const Text(
+            'Only finished sets count. Each word and meaning you try together counts as one attempt. There is no timer or losing score. Saved on this device.',
           ),
         ],
       ),
@@ -470,12 +482,19 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       flexibleSpace: const PaperTexture(),
+      bottom: GameLanguageHeader(
+        textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
+        mode: _mode,
+        wordLength: null,
+      ),
       toolbarHeight: gameToolbarHeight(context),
       title: const GameHeading(identity: GameIdentity.jodo, compact: true),
       actions: [
         PopupMenuButton<String>(
           tooltip: 'Jodo menu',
           onSelected: (action) {
+            if (action == 'new') _newSet();
+            if (action == 'settings') _gameSettings();
             if (action == 'help') showGameHelp(context, GameKind.wordBridges);
             if (action == 'statistics') _statistics();
             if (action == 'celebrations') {
@@ -483,6 +502,8 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
             }
           },
           itemBuilder: (_) => const [
+            PopupMenuItem(value: 'new', child: Text('New set')),
+            PopupMenuItem(value: 'settings', child: Text('Game settings')),
             PopupMenuItem(value: 'help', child: Text('How to play')),
             PopupMenuItem(value: 'statistics', child: Text('Statistics')),
             PopupMenuItem(
@@ -539,29 +560,6 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
                           runSpacing: 12,
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
-                            PopupMenuButton<LanguageMode>(
-                              tooltip: 'Change language',
-                              enabled: !_busy,
-                              onSelected: (mode) => _newSet(mode: mode),
-                              itemBuilder: (_) => [
-                                for (final mode in _content!.availableModes)
-                                  PopupMenuItem(
-                                    value: mode,
-                                    child: Text(mode.label),
-                                  ),
-                              ],
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  spacing: 4,
-                                  children: [
-                                    Text('Language: ${_mode.label}'),
-                                    const Icon(Icons.arrow_drop_down),
-                                  ],
-                                ),
-                              ),
-                            ),
                             GameGradientButton(
                               label: 'New set',
                               onPressed: _busy ? null : _newSet,

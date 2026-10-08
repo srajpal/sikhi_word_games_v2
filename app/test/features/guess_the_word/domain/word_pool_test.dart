@@ -102,11 +102,11 @@ void main() {
     );
   });
 
-  test('Mixed English/Punjabi accepts both English and romanized Punjabi', () {
+  test('English only accepts English guesses', () {
     expect(
       WordPool(entries)
-          .acceptedGuesses(mode: LanguageMode.mixedLatin, wordLength: 4),
-      {'HERO', 'BAAG', 'JUNA'},
+          .acceptedGuesses(mode: LanguageMode.english, wordLength: 4),
+      {'HERO'},
     );
   });
 
@@ -138,7 +138,7 @@ void main() {
     final pool = WordPool(entries);
     expect(
       pool
-          .search(mode: LanguageMode.mixedLatin, query: 'ju', limit: 2)
+          .search(mode: LanguageMode.romanizedPanjabi, query: 'ju', limit: 2)
           .map((entry) => entry.id),
       ['panjabi_juna'],
     );
@@ -147,7 +147,7 @@ void main() {
       'panjabi_baag',
     );
     expect(
-      pool.search(mode: LanguageMode.mixedLatin, query: 'definition'),
+      pool.search(mode: LanguageMode.romanizedPanjabi, query: 'definition'),
       isEmpty,
     );
     expect(pool.search(mode: LanguageMode.english, query: 'b'), isEmpty);

@@ -87,7 +87,9 @@ void main() {
       expect(find.text('1 rounds finished'), findsOneWidget);
       expect(find.text('4 words solved'), findsOneWidget);
       expect(find.text('1 sets finished, 4 pairs matched'), findsOneWidget);
-      await tester.tap(find.text('Close'));
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.pageBack();
       await tester.pumpAndSettle();
       await tester.scrollUntilVisible(launch, -250);
       await tester.pumpAndSettle();
