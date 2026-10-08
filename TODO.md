@@ -22,6 +22,9 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
   Settings/Achievements, historical badge credit and exactly three language
   choices. A fresh five-letter Quest shows four misses, one hint and the lantern;
   no browser console errors were observed during these checks.
+- [x] Rebuild the vocabulary report through the pipeline after Jodo selection
+  code changed. Only its code fingerprint changed; release content and holds
+  remain unchanged, with no pool coverage failures or unsourced solutions.
 - [x] Install and launch build 21 on K70 PRO with `adb install -r`, preserving
   data. Installation Success, launch Status ok, version 1.11.0/code 21 and
   running PID verified. Visible device gameplay still needs a hands-on check.
