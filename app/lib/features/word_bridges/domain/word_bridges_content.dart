@@ -1,5 +1,5 @@
 import '../../../core/content/vocabulary_entry.dart';
-import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/content/vocabulary_source.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import 'word_bridges_game.dart';
 

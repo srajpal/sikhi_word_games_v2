@@ -12,14 +12,19 @@
     "en": ["Orchard"],
     "pa": []
   },
-  "categories": ["nature", "places"],
-  "difficulty": 1,
-  "acceptedGuessModes": ["romanized", "gurmukhi", "mixedLatin"],
-  "solutionModes": ["romanized", "gurmukhi"],
+  "lengths": {"latin": 4, "gurmukhi": 2},
+  "acceptedGuess": true,
+  "solutionEligible": false,
   "reviewStatus": "unreviewed",
   "sources": []
 }
 ```
+
+This is the persisted import/supplemental/runtime shape. Curation overrides use
+`id` plus partial fields such as `englishDefinition`, eligibility, spelling,
+source and review method. Category/difficulty labels and per-mode eligibility
+arrays are future design options, not fields consumed by the current runtime.
+The release builder always recomputes grapheme lengths.
 
 ## Required validation
 
@@ -51,6 +56,14 @@ Curated words that do not exist in V1 live in
 runtime record shape, retain their external source attribution, and are loaded
 after generated imports. Stable IDs must remain unique across both sources.
 
+Machine quarantine decisions live separately in
+`app/assets/content/curation/vocabulary_holds.json`, maintained by
+`dart run tool/vocabulary_pipeline.dart --write`. They contain stable IDs,
+public-content fingerprints and reasons. Holds hide definitions and disable
+solutions without changing accepted guesses or promoting review status. A stale
+fingerprint fails building and requires a recheck. See `docs/definition_sources.md`
+for preview, checking, source locking and the small semantic-review sample.
+
 The four-letter English review queue cross-references Open English WordNet,
 SCOWL, and modern usage frequency. Its numeric score only prioritizes human
 review; it never grants editorial approval by itself. The reproducible JSON and
@@ -78,7 +91,7 @@ need complex relational queries.
 
 ## Initial V1 import findings
 
-The reproducible V1 import produced 38,510 accepted-guess records: 20,859 English and 17,651 Punjabi. Curated supplements currently bring the canonical total to 47,093 records. The sanitized release assets retain 45,416 accepted guesses, 14,701 answer records, 16,756 visible sourced definitions, and 30,337 records whose unclear or held definitions are hidden. All V1 word and definition keys align and no duplicate stable IDs were found in the original import. Imported entries default to `solutionEligible: false` until a source-matched or explicit editorial decision makes them playable.
+The reproducible V1 import produced 38,510 accepted-guess records: 20,859 English and 17,651 Punjabi. Curated supplements currently bring the canonical total to 47,093 records. The October 7 recheck keeps all 45,416 accepted guesses, 14,689 answer records and 16,739 visible definitions; 30,354 definitions are hidden, including 17 fresh holds. All V1 word and definition keys align and no duplicate stable IDs were found in the original import. Imported entries default to `solutionEligible: false` until a source-matched or explicit editorial decision makes them playable.
 
 The authoring-archive audit is intentionally broader than the release audit and
 can contain empty, malformed, long, reference-only, or duplicate records that
@@ -87,17 +100,17 @@ archive flags and `reports/content/v1_import_report.md` for the original import
 findings. Those flags must not be reported as defects in the sanitized release
 assets unless the release audit also finds them.
 
-## Measured release coverage (2026-09-12)
+## Measured release coverage (2026-10-07)
 
 After source filtering and the release-QA exclusions, the release-content audit
 produced these unique Bujho answer counts using the actual bundled assets.
 
 | Mode | 4 | 5 | 6 |
 | --- | ---: | ---: | ---: |
-| English | 1,713 | 2,567 | 4,030 |
-| Romanized Punjabi | 990 | 1,383 | 1,106 |
-| Mixed Latin | 2,632 | 3,941 | 5,128 |
-| Gurmukhi | 342 | 2,346 | 533 |
+| English | 1,712 | 2,563 | 4,028 |
+| Romanized Punjabi | 990 | 1,378 | 1,106 |
+| Mixed Latin | 2,631 | 3,932 | 5,126 |
+| Gurmukhi | 337 | 2,346 | 533 |
 
 Regression checks require every mode and length to retain at least 300 unique
 Bujho answers and 250 Word Quest clues. Counts above are unique spellings; the

@@ -41,6 +41,8 @@ Run from `app/`:
 dart format --output=none --set-exit-if-changed lib test integration_test tool
 flutter analyze --suppress-analytics
 flutter test --suppress-analytics
+python tool/fetch_vocabulary_sources.py
+dart run tool/vocabulary_pipeline.dart --check
 dart run tool\audit_content.dart
 flutter build web --release --no-web-resources-cdn --suppress-analytics
 ```
@@ -49,6 +51,14 @@ Run the integration target on a configured supported device separately. It is
 not included in `flutter test` by default. Keep formatter changes scoped when
 preserving another contributor's work. The content audit may finish successfully
 while reporting editorial defects; its issue counts must be reviewed.
+
+The vocabulary pipeline verifies locked source bytes before producing decisions.
+Tests cover exact lemma/sense membership, Punjabi headword and sense-index
+requirements, corrupt/missing/extra source files, stale hold fingerprints,
+preserved guess IDs and explicit exclusions, and unique projected coverage.
+CI and the itch.io helper require a fresh report/hold/release check. A semantic
+sample and unresolved exceptions remain separate from these automated gates;
+machine checks never advance an entry to human-reviewed status.
 
 For itch.io, also verify the packaged relative base path, root `index.html`,
 archive size/file limits, local renderer assets, nested-path loading, iframe

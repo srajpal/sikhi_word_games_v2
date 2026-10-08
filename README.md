@@ -37,6 +37,8 @@ Run from `app/`:
 dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
 flutter analyze --suppress-analytics
 flutter test --suppress-analytics
+python tool/fetch_vocabulary_sources.py
+dart run tool/vocabulary_pipeline.dart --check
 dart run tool\audit_content.dart
 flutter build web --release --no-web-resources-cdn --suppress-analytics
 ```
@@ -50,6 +52,13 @@ content from the local V1 source. It is not a normal validation step. Generated
 assets are tracked; the V1 source folder is excluded from publication. Editorial
 changes belong in the curation layer described in the content documentation.
 
+For vocabulary maintenance, run `dart run tool/vocabulary_pipeline.dart` to
+preview the effective-content exception queue. Use `--write` to apply reversible
+holds and rebuild/audit release content, then `--check` to verify freshness.
+The pinned source cache is ignored and never bundled. See
+[definition workflow](docs/definition_sources.md) for source verification,
+focused improvements and the remaining linguistic checks.
+
 ## Android release signing
 
 Android release variants require a private `app/android/key.properties` containing
@@ -61,11 +70,12 @@ validation. Web builds do not require these credentials.
 
 ## itch.io release workflow
 
-The first itch.io distribution is **Public playtest 1.9.0+17**. This candidate includes keyboard play, shared themes, corrected Punjabi
-spellings, clearer definitions, and a broader curated answer rotation. It is prepared locally; a commit or
-successful CI run does not publish the itch.io game. Do not reset the version
-history because itch.io is a new host. Change both version sources together and
-increment the build number for the next distributed rebuild.
+The existing itch.io **draft** uses 1.9.0+17, uploaded September 18. It predates
+the later audit fixes and October vocabulary recheck. A commit or successful CI
+run does not publish or replace that uploaded game. For the next distributed
+candidate, change both version sources together, increment the build number and
+rebuild from validated current source. Do not reset the version history because
+itch.io is a new host.
 
 1. Resolve the release blockers in [TODO.md](TODO.md), including definition
    suitability and content provenance. Passing tests alone is insufficient.
@@ -78,7 +88,9 @@ increment the build number for the next distributed rebuild.
 3. Serve the package through HTTP under a nested directory and verify all five
    games, Dictionary, Gurmukhi rendering, refresh, and real browser persistence.
    Do not test by opening `index.html` through a file URL.
-4. Create an unpublished itch.io HTML project and upload the ZIP as playable in
+4. Use the existing unpublished itch.io project 5023423 at
+   [Khalsa Game Studio](https://khalsagamestudio.itch.io/sikhi-word-games) and
+   upload the new ZIP as playable in
    the browser. Start with a 960 by 720 desktop viewport, fullscreen enabled,
    and click-to-play. Enable mobile support only after touch/browser checks.
 5. Test the actual draft iframe: focus, keyboard, touch selection, fullscreen,
@@ -113,7 +125,8 @@ Test the actual host before advertising offline reload there.
 - `.github/workflows/flutter_web.yml` runs the automated release checks. Visual
   baselines and a browser integration target supplement unit/widget tests.
 
-Use `app/dist/sikhi-word-games-web-1.9.0+17.zip` for the draft upload. The directory
-is ignored by Git; the ZIP is built from the committed sources. Artwork sources
+The historical `app/dist/sikhi-word-games-web-1.9.0+17.zip` is not a package of
+current source. Use the newly validated, versioned ZIP for the next draft upload.
+The directory is ignored by Git. Artwork sources
 live in `branding/`; cover and real gameplay screenshots live in `reports/release/`.
 Keep `THIRD_PARTY_NOTICES.txt` and both bundled-font license files in the package.

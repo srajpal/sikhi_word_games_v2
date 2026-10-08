@@ -4,12 +4,23 @@ import 'dart:io';
 import 'package:characters/characters.dart';
 
 import 'content/punjabi_quality.dart';
+import 'content/vocabulary_checks.dart';
 
 /// Builds the only vocabulary files intended for distribution.
 /// Authoring imports and curation records remain unchanged.
 void main(List<String> arguments) {
   final write = arguments.contains('--write');
   final check = arguments.contains('--check');
+  final holdFile = File('assets/content/curation/vocabulary_holds.json');
+  final holds = <String, Map<String, Object?>>{};
+  if (holdFile.existsSync()) {
+    for (final item in _read(holdFile.path)['entries']! as List) {
+      final hold = item as Map<String, Object?>;
+      final id = hold['id']! as String;
+      if (holds.containsKey(id)) throw FormatException('Duplicate hold: $id');
+      holds[id] = hold;
+    }
+  }
   final solutionIds =
       (_read('assets/content/curation/starter_solutions.json')['solutionIds']!
               as List<Object?>)
@@ -41,6 +52,7 @@ void main(List<String> arguments) {
           entry,
           override: overrides[entry['id']],
           solutionIds: solutionIds,
+          hold: holds[entry['id']],
         ),
       );
     }
@@ -55,6 +67,7 @@ void main(List<String> arguments) {
       entry,
       override: overrides[entry['id']],
       solutionIds: solutionIds,
+      hold: holds[entry['id']],
     );
     final lengths = releaseEntry['lengths']! as Map<String, Object?>;
     final latin = lengths['latin']! as int;
@@ -66,6 +79,9 @@ void main(List<String> arguments) {
   }
   final output = Directory('assets/content/release')
     ..createSync(recursive: true);
+  if (!seen.containsAll(holds.keys)) {
+    throw StateError('Unknown vocabulary hold ID.');
+  }
   var trusted = 0;
   var hidden = 0;
   var stale = 0;
@@ -106,6 +122,7 @@ Map<String, Object?> buildReleaseEntry(
   Map<String, Object?> sourceEntry, {
   Map<String, Object?>? override,
   Set<String> solutionIds = const {},
+  Map<String, Object?>? hold,
 }) {
   final entry = Map<String, Object?>.from(sourceEntry);
   final id = entry['id']! as String;
@@ -168,7 +185,7 @@ Map<String, Object?> buildReleaseEntry(
       accepted && trusted && standalone && solution && passesPunjabiPolicy;
   entry['reviewStatus'] = reviewStatus;
   entry['sources'] = sources;
-  return entry;
+  return hold == null ? entry : applyVocabularyHold(entry, hold);
 }
 
 bool _trustedSource(String source) =>
