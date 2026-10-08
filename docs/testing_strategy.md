@@ -102,6 +102,13 @@ past successes after relevant code or content changes.
 
 ## Theme and input follow-up
 
+The October 7 regression pass covers rejected stale-save cleanup in Bujho,
+Khoj and Word Quest, including empty-save startup in Khoj/Quest. Word Quest
+tests reject unsupported saved size preferences, changed adaptive try budgets
+and guesses after completion. Focused letter keys activate with hardware Space
+in both Latin and Gurmukhi rounds. These widget checks establish Flutter input
+behavior; actual browser/iframe and screen-reader checks remain separate.
+
 The visual refresh keeps all three themes and game rules intact. Contrast tests
 cover primary/secondary action labels, normal surface text, and correct/present/
 absent tile labels. Khoj input tests cover forward and reverse words, arrow-key

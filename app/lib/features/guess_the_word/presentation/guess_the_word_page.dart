@@ -159,7 +159,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         restored.game.solution,
       );
       if (solutionEntry == null) {
-        await widget.gameRepository.clear();
+        await _persist(widget.gameRepository.clear());
         if (!mounted) return;
         _mode = restored.mode;
         _wordLength = restored.game.wordLength;

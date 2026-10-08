@@ -40,6 +40,14 @@ Small implementations for local storage, sharing, haptics, and other platform-sp
 
 The first persistence adapter wraps `SharedPreferences` behind a small key-value interface. App settings and active-game snapshots carry explicit schema versions and fall back safely when stored data is malformed or from an unsupported schema. Tests use an in-memory implementation of the same interface.
 
+Removing an obsolete active save is best-effort during game recovery: Bujho,
+Khoj and Word Quest report rejected cleanup through the shared save notice and
+still start a replacement round. Cleanup and replacement saves retain their
+ordering in the shared key queue. Word Quest validates the saved 4/5/6 size
+preference and adaptive try budget, and replays guesses to reject moves after
+completion. Explicit custom budgets remain a domain capability, separate from
+the app's saved-session contract.
+
 ### Game-library launch flow
 
 The game library owns the shared launch experience for every playable mode. A

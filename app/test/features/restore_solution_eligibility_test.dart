@@ -11,11 +11,102 @@ import 'package:sikhi_word_games_v2/features/guess_the_word/domain/guess_game.da
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/presentation/guess_the_word_page.dart';
 import 'package:sikhi_word_games_v2/features/settings/data/app_settings_repository.dart';
+import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_repository.dart';
+import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.dart';
+import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
 import 'package:sikhi_word_games_v2/features/word_search/data/word_search_session_repository.dart';
 import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzzle.dart';
 import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
+  for (final kind in ['Bujho', 'Khoj', 'Quest']) {
+    for (final stale in [false, true]) {
+      if (kind == 'Bujho' && !stale) continue;
+      testWidgets(
+        '$kind starts despite rejected ${stale ? 'stale' : 'empty'} save cleanup',
+        (tester) async {
+          final store = _RejectedClearStore();
+          final guesses = GuessGameRepository(store);
+          final search = WordSearchSessionRepository(store);
+          final quest = WordQuestSessionRepository(store);
+          if (stale) {
+            switch (kind) {
+              case 'Bujho':
+                await guesses.save(
+                  mode: LanguageMode.english,
+                  game: GuessGame(
+                    solution: 'HOLD',
+                    acceptedGuesses: {'HOLD', 'PLAY'},
+                  ),
+                );
+              case 'Khoj':
+                await search.save(
+                  mode: LanguageMode.english,
+                  wordSize: 4,
+                  puzzle: _puzzle('HOLD'),
+                  foundWords: const {},
+                );
+              case 'Quest':
+                await quest.save(
+                  mode: LanguageMode.english,
+                  wordSize: 4,
+                  game: WordQuestGame(solution: 'HOLD'),
+                );
+            }
+          }
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: AppThemes.forChoice(AppThemeChoice.modern),
+              home: switch (kind) {
+                'Bujho' => GuessTheWordPage(
+                  vocabularyRepository: _restoreVocabulary,
+                  statisticsRepository: GuessStatisticsRepository(store),
+                  gameRepository: guesses,
+                  solutionHistoryRepository: SolutionHistoryRepository(store),
+                  hapticLevel: HapticFeedbackLevel.off,
+                  reducedMotion: true,
+                ),
+                'Khoj' => WordSearchPage(
+                  vocabularyRepository: _restoreVocabulary,
+                  sessionRepository: search,
+                  initialMode: LanguageMode.english,
+                  initialWordSize: 4,
+                ),
+                _ => WordQuestPage(
+                  vocabularyRepository: _restoreVocabulary,
+                  sessionRepository: quest,
+                  initialMode: LanguageMode.english,
+                  initialWordSize: 4,
+                  hapticLevel: HapticFeedbackLevel.off,
+                  reducedMotion: true,
+                ),
+              },
+            ),
+          );
+          await tester.pumpAndSettle();
+          switch (kind) {
+            case 'Bujho':
+              expect(
+                guesses.restore((_, _) => {'HOLD', 'PLAY'})?.game.solution,
+                'PLAY',
+              );
+            case 'Khoj':
+              expect(search.restore()?.puzzle.words.single.word, 'PLAY');
+            case 'Quest':
+              expect(quest.restore()?.game.solution, 'PLAY');
+          }
+          expect(find.textContaining('Unable to load'), findsNothing);
+          expect(
+            find.text(
+              'Progress could not be saved on this device. You can keep playing.',
+            ),
+            findsOneWidget,
+          );
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
   testWidgets('Bujho restores precomposed nukta solutions with played turns', (
     tester,
   ) async {
@@ -174,6 +265,12 @@ void main() {
     expect(sessions.restore()!.puzzle.cells, _puzzle('PLAY').cells);
     expect(sessions.restore()!.puzzle.words.single.word, 'PLAY');
   });
+}
+
+class _RejectedClearStore extends MemoryKeyValueStore {
+  @override
+  Future<void> remove(String key) async =>
+      throw StateError('Storage rejected removal');
 }
 
 WordSearchPuzzle _puzzle(String word) => WordSearchPuzzle(

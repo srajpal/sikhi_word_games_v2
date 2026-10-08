@@ -131,8 +131,10 @@ class _WordQuestPageState extends State<WordQuestPage> {
     }
     final character = event.character;
     if (character == null || character.isEmpty) return KeyEventResult.ignored;
-    if (_mode != LanguageMode.gurmukhi &&
-        !RegExp(r'^[A-Za-z]$').hasMatch(character)) {
+    final isLetter = _mode == LanguageMode.gurmukhi
+        ? RegExp(r'^[\u0A00-\u0A7F]+$').hasMatch(character)
+        : RegExp(r'^[A-Za-z]$').hasMatch(character);
+    if (!isLetter) {
       return KeyEventResult.ignored;
     }
     _guess(character);
@@ -179,7 +181,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
           return;
         }
       }
-      await widget.sessionRepository.clear();
+      await _persist(widget.sessionRepository.clear());
       if (!mounted) return;
     }
     _mode = widget.initialMode ?? _randomMode();

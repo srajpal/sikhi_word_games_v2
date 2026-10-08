@@ -53,6 +53,7 @@ class WordQuestSessionRepository {
       if (json['schemaVersion'] != 1 ||
           json['mode'] is! String ||
           json['wordSize'] is! int ||
+          !const [4, 5, 6].contains(json['wordSize']) ||
           json['game'] is! Map<String, Object?>) {
         return null;
       }
@@ -60,7 +61,11 @@ class WordQuestSessionRepository {
         (value) => value.name == json['mode'],
       );
       final game = WordQuestGame.restore(json['game']! as Map<String, Object?>);
-      if (game.isComplete) return null;
+      if (game.isComplete ||
+          game.maximumTries !=
+              WordQuestGame.recommendedMaximumTriesForSolution(game.solution)) {
+        return null;
+      }
       return WordQuestSession(
         mode: mode,
         wordSize: json['wordSize']! as int,

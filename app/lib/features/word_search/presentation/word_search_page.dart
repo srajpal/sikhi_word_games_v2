@@ -139,7 +139,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
           if (!_canRestore(restored)) {
             _mode = restored.mode;
             _wordSize = restored.wordSize;
-            await widget.sessionRepository.clear();
+            await _persist(widget.sessionRepository.clear());
             if (!mounted) return;
             _newPuzzle();
             return;
@@ -164,7 +164,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
           });
           return;
         }
-        await widget.sessionRepository.clear();
+        await _persist(widget.sessionRepository.clear());
         if (!mounted) return;
       }
       _mode = widget.initialMode ?? _randomMode();

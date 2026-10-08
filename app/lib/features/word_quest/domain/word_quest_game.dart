@@ -235,16 +235,15 @@ class WordQuestGame {
         )) {
       throw const FormatException('Snapshot contains invalid hint state.');
     }
-    game._guessed.addAll(guessed);
-    game._hinted.addAll(hinted);
-    game._incorrectGuesses = guessed
-        .where((letter) => !game._solutionGraphemes.contains(letter))
-        .length;
-    if (game._incorrectGuesses >= game.maximumTries) {
-      game._status = WordQuestStatus.lost;
-    } else {
-      game._updateWinStatus();
+    // Replay insertion order so snapshots cannot add guesses after a win/loss.
+    for (final letter in guessed) {
+      if (!game.guess(letter).changedRound) {
+        throw const FormatException(
+          'Snapshot contains guesses after completion.',
+        );
+      }
     }
+    game._hinted.addAll(hinted);
     return game;
   }
 

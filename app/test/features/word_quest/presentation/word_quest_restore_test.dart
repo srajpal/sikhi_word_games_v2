@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
@@ -12,6 +13,45 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.d
 import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
 
 void main() {
+  for (final gurmukhi in [false, true]) {
+    testWidgets(
+      '${gurmukhi ? 'Gurmukhi' : 'Latin'} letter key activates with keyboard Space',
+      (tester) async {
+        final repository = WordQuestSessionRepository(MemoryKeyValueStore());
+        await repository.save(
+          mode: gurmukhi ? LanguageMode.gurmukhi : LanguageMode.english,
+          wordSize: gurmukhi ? 4 : 5,
+          game: WordQuestGame(solution: gurmukhi ? 'ਸਤਿਗੁਰ' : 'APPLE'),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppThemes.forChoice(AppThemeChoice.modern),
+            home: WordQuestPage(
+              vocabularyRepository: gurmukhi
+                  ? _gurmukhiVocabulary
+                  : _vocabulary,
+              hapticLevel: HapticFeedbackLevel.off,
+              reducedMotion: true,
+              sessionRepository: repository,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final letter = gurmukhi ? 'ਤਿ' : 'P';
+        final key = find.byKey(ValueKey('word-quest-key-$letter'));
+        final center = find
+            .descendant(of: key, matching: find.byType(Center))
+            .last;
+        Focus.of(tester.element(center)).requestFocus();
+        await tester.pump();
+        await tester.sendKeyEvent(LogicalKeyboardKey.space, character: ' ');
+        await tester.pumpAndSettle();
+        expect(repository.restore()?.game.guessedGraphemes, contains(letter));
+        expect(repository.restore()?.game.incorrectGuesses, 0);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
   testWidgets('feedback dismisses manually and after five seconds', (
     tester,
   ) async {

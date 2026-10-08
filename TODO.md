@@ -1,5 +1,30 @@
 # Sikhi Word Games V2 — TODO
 
+## October 7 GitHub issue review and regression fixes
+
+- [x] Review all five GitHub issues (#3, #4, #5, #6, #8) and their
+  discussions against the current release branch. Their required fixes are
+  already present. The owner authorized closing the resolved issues and merging
+  the release PR on October 7 after validation. Optional audit suggestions remain
+  deferred unless covered by the focused fixes below. Merging source changes
+  does not clear the separate publication gates below.
+- [x] Recover from rejected active-save cleanup in Bujho, Khoj and Word Quest.
+  Keep cleanup ordered through the existing queue, report failures through the
+  shared notice, and still start a playable replacement round. Regressions cover
+  stale targets in all three games and empty saves in Khoj/Quest.
+- [x] Validate Word Quest snapshots: saved word-size preferences must be 4, 5
+  or 6 and the app's adaptive try budget must match the solution. Replay saved
+  guesses through the engine so impossible guesses after completion cannot
+  restore. The domain's explicit custom try budget remains supported.
+- [x] Let Space activate a focused Gurmukhi Word Quest letter key. Ignore
+  non-Gurmukhi hardware text in that mode rather than consuming activation keys
+  or treating Latin text as a guess. Both Latin and Gurmukhi keyboard activation
+  have widget regressions.
+- Validation: all 304 Flutter tests pass, including visual baselines; all 147
+  Dart files are format-clean; analysis is clean and the release web build passes.
+  No vocabulary or web-cache changes. Hosted iframe, real browser storage,
+  physical screen-reader and audio checks remain separate release gates below.
+
 ## Issue #8: rejected settings and launch preference writes
 
 - [x] Catch settings save failures while retaining the active theme and feedback
@@ -21,7 +46,8 @@
   worker/update-notice checks and final ZIP audit pass. The compiled bootstrap,
   cache manifest, relative base and 35 letter clips are verified. Package evidence
   is in reports/release/package_audit.json; hosted iframe verification remains
-  separate. Keep PR #1 draft and unmerged.
+  separate. PR #1 was kept draft at that time; the owner authorized merging it
+  on October 7 after validation.
 - Optional suggestions are deferred to keep this pass focused on the required
   findings. No page splitting, Git LFS migration or other large refactor.
 
