@@ -18,6 +18,7 @@ void main() {
         (scheme.primary, scheme.onPrimary),
         (scheme.secondary, scheme.onSecondary),
         (scheme.surface, scheme.onSurface),
+        (scheme.secondaryContainer, scheme.onSecondaryContainer),
         (tokens.correct, Colors.white),
         (tokens.present, Colors.white),
         (tokens.absent, Colors.white),

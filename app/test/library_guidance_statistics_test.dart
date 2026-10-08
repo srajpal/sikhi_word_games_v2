@@ -20,6 +20,9 @@ import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_
 void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    await (FontLoader('NotoSerif')
+          ..addFont(rootBundle.load('assets/fonts/noto_serif/NotoSerif.ttf')))
+        .load();
     await (FontLoader(
       'NotoSans',
     )..addFont(rootBundle.load('assets/fonts/noto_sans/NotoSans.ttf'))).load();
@@ -95,14 +98,21 @@ void main() {
       final bujhoTree = bujho.toStringDeep();
       final khojTree = khoj.toStringDeep();
       expect(bujho.id, isNot(khoj.id));
-      expect(bujhoTree, contains('Bujho: Guess the Word'));
+      expect(bujhoTree, contains('Bujho'));
+      expect(bujhoTree, contains('Guess the Word'));
       expect(bujhoTree, contains('Find the hidden word using letter clues.'));
       expect(bujhoTree, contains('New game'));
-      expect(bujhoTree, isNot(contains('Khoj: Word Search')));
-      expect(khojTree, contains('Khoj: Word Search'));
+      expect(bujhoTree, isNot(contains('Khoj')));
+      expect(khojTree, contains('Khoj'));
+      expect(khojTree, contains('Word Search'));
       expect(khojTree, contains('Trace hidden words in a letter grid.'));
       expect(khojTree, contains('New game'));
-      expect(khojTree, isNot(contains('Bujho: Guess the Word')));
+      expect(khojTree, isNot(contains('Bujho')));
+      expect(
+        tester.getCenter(find.byKey(const ValueKey('new-game-wordSearch'))).dy,
+        tester.getCenter(find.byKey(const ValueKey('new-game-wordQuest'))).dy,
+        reason: 'Tablet game-card actions should align across each row',
+      );
     } finally {
       semantics.dispose();
     }
@@ -140,10 +150,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('Choose a game'), findsNothing);
-    await tester.tap(find.byTooltip('App settings'));
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Your statistics'));
-    await tester.tap(find.text('Your statistics'));
+    await tester.tap(find.text('Progress'));
     await tester.pumpAndSettle();
     expect(find.text('3 rounds finished'), findsOneWidget);
     expect(find.text('7 words solved'), findsOneWidget);

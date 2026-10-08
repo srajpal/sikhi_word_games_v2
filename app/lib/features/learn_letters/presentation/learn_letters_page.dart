@@ -1,3 +1,5 @@
+import '../../../core/themes/game_heading.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/themes/game_ui.dart';
@@ -140,7 +142,8 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Akhar Pachhaan'),
+        toolbarHeight: gameToolbarHeight(context),
+        title: const GameHeading(identity: GameIdentity.letters, compact: true),
         actions: [
           PopupMenuButton<String>(
             tooltip: 'Akhar Pachhaan menu',
@@ -181,9 +184,10 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'Akhar Pachhaan: Learn Letters',
-                      style: theme.textTheme.titleLarge,
+                    const GameSectionIntro(
+                      identity: GameIdentity.letters,
+                      instruction:
+                          'Look, listen and learn. One letter at a time.',
                     ),
                     const SizedBox(height: 16),
                     if (_game.isComplete) ...[

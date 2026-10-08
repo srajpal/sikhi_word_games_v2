@@ -32,6 +32,9 @@ void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     bridgesContent = await WordBridgesContent.load(AssetVocabularyRepository());
+    await (FontLoader('NotoSerif')
+          ..addFont(rootBundle.load('assets/fonts/noto_serif/NotoSerif.ttf')))
+        .load();
     await (FontLoader(
       'NotoSans',
     )..addFont(rootBundle.load('assets/fonts/noto_sans/NotoSans.ttf'))).load();
@@ -102,38 +105,54 @@ void main() {
   for (final themeChoice in AppThemeChoice.values) {
     final themeName = themeChoice.name;
 
-    testWidgets('library game identities render in $themeName', (tester) async {
-      _setGoldenSurface(tester);
-      final store = MemoryKeyValueStore();
-      final games = GuessGameRepository(store);
-      await games.save(
-        mode: LanguageMode.english,
-        game: GuessGame(solution: 'APPLE', acceptedGuesses: {'APPLE', 'GRAPE'}),
+    for (final phone in [false, true]) {
+      testWidgets(
+        'library ${phone ? 'phone' : 'tablet'} game identities render in $themeName',
+        (tester) async {
+          _setGoldenSurface(tester);
+          tester.view.physicalSize = phone
+              ? const Size(360, 900)
+              : const Size(800, 1100);
+          final store = MemoryKeyValueStore();
+          final games = GuessGameRepository(store);
+          await games.save(
+            mode: LanguageMode.english,
+            game: GuessGame(
+              solution: 'APPLE',
+              acceptedGuesses: {'APPLE', 'GRAPE'},
+            ),
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: AppThemes.forChoice(themeChoice),
+              home: GameLibraryPage(
+                onThemeChanged: (_) {},
+                settings: AppSettings(theme: themeChoice, reducedMotion: true),
+                onFeedbackSettingsChanged: (_) {},
+                guessGameRepository: games,
+                wordSearchSessionRepository: WordSearchSessionRepository(store),
+                wordQuestSessionRepository: WordQuestSessionRepository(store),
+                launchPreferencesRepository: GameLaunchPreferencesRepository(
+                  store,
+                ),
+                wordBridgesRepository: WordBridgesRepository(store),
+                loadWordBridgesContent: () async => bridgesContent,
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+          await expectLater(
+            find.byType(Scaffold),
+            matchesGoldenFile(
+              'images/library_${phone ? 'phone_' : ''}$themeName.png',
+            ),
+          );
+        },
+        tags: 'golden',
       );
-      await tester.pumpWidget(
-        MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: AppThemes.forChoice(themeChoice),
-          home: GameLibraryPage(
-            onThemeChanged: (_) {},
-            settings: AppSettings(theme: themeChoice, reducedMotion: true),
-            onFeedbackSettingsChanged: (_) {},
-            guessGameRepository: games,
-            wordSearchSessionRepository: WordSearchSessionRepository(store),
-            wordQuestSessionRepository: WordQuestSessionRepository(store),
-            launchPreferencesRepository: GameLaunchPreferencesRepository(store),
-            wordBridgesRepository: WordBridgesRepository(store),
-            loadWordBridgesContent: () async => bridgesContent,
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-      await expectLater(
-        find.byType(Scaffold),
-        matchesGoldenFile('images/library_$themeName.png'),
-      );
-    }, tags: 'golden');
+    }
 
     testWidgets(
       'Jodo Gurmukhi matched and selected cards render in $themeName',

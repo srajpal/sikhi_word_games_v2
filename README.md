@@ -18,7 +18,8 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current public-playtest candidate is `1.9.0` (build `17`). The version follows
+The current testing build is `1.10.0` (build `19`). The uploaded web draft remains
+`1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
 release, and the major version for breaking product or data changes. Increment

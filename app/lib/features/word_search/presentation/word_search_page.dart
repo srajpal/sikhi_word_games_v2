@@ -1,3 +1,4 @@
+import '../../../core/themes/game_heading.dart';
 import '../../../core/statistics/game_statistics_dialog.dart';
 import '../../../core/widgets/game_guide.dart';
 import '../../../core/widgets/victory_celebration.dart';
@@ -545,11 +546,8 @@ class _WordSearchPageState extends State<WordSearchPage> {
           onPressed: () => context.pop(),
           icon: const Icon(Icons.arrow_back),
         ),
-        title: const Text(
-          'Khoj: Word Search',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+        toolbarHeight: gameToolbarHeight(context),
+        title: const GameHeading(identity: GameIdentity.khoj, compact: true),
         actions: [
           PopupMenuButton<_WordSearchAction>(
             tooltip: 'Khoj: Word Search menu',

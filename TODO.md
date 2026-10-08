@@ -1,6 +1,6 @@
 # Sikhi Word Games V2 TODO
 
-This is the current checklist, reconciled on October 7, 2026. Open boxes describe
+This is the current checklist, reconciled on October 8, 2026. Open boxes describe
 remaining work. Completed milestones are evidence, not sign-off for a newer
 package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. Do not approve vocabulary merely to fill a pool quota.
@@ -12,7 +12,8 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
   GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
   from that review. The focused save/restore and keyboard fixes are in
   `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- App version remains 1.9.0+17. The September 18 ZIP and uploaded itch.io draft
+- Current Android testing version: 1.10.0+19, Paper & Play. The September 18 ZIP and uploaded
+  itch.io draft remain 1.9.0+17 and
   predate the subsequent audit fixes and October vocabulary recheck. They are
   historical artifacts, not packages of current source. Increment both version
   sources and the build number when producing the next distributed package.
@@ -27,6 +28,52 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
 - All five games, shared content/settings/statistics, offline save handling,
   Modern/Sikhi/Dark themes, responsive shells and Unicode-safe matching exist.
   Reusing these foundations is completed work, not an outstanding new module.
+
+## October 8 Paper & Play redesign: 1.10.0+19
+
+- [x] Replace the shared visual treatment across all five games and the library
+  with paper surfaces, offset tile shadows, flat drawn illustrations and bundled
+  serif headings. Preserve exactly Modern, Sikhi and Dark, game rules and saves.
+- [x] Standardize smaller English titles above larger Romanized Punjabi game
+  names using shared identities, including game headers and progress summaries.
+- [x] Add direct offline Dictionary and existing Progress shortcuts. Feature
+  Bujho above four responsive game cards; enlarged text can use one column.
+- [x] Validate all game headings at 320/800 logical pixels and 100/200% text
+  size across all themes. Review updated game/component/completion goldens.
+- [x] Final validation: 327 Flutter tests pass against reviewed goldens without
+  updating them, clean analysis, 154 Dart files formatted, and successful release
+  web / debug Android builds. Shortcut tests cover Dictionary navigation and
+  persisted Progress totals; tablet gallery actions align within each row.
+- [x] Install 1.10.0+19 on K70 PRO with `adb install -r`, preserving existing
+  data. Installation returned Success, launch Status ok, package version and
+  running PID verified. The tablet still shows its lock/notification surface,
+  so no visible device screenshot or hands-on gameplay verification is claimed.
+- APK: `app/dist/sikhi-word-games-android-1.10.0+19-debug.apk`, 205,910,434 bytes.
+  SHA-256: `3a127e6dba32af5c2534f45d642173d8f9bc42b0b54e01e7c4fdd2923e45b529`.
+  The APK contains exactly three byte-identical current release vocabulary
+  shards, 35 letter WAV clips, bundled Noto Serif and all three font licenses;
+  no authoring content assets. This is a debug testing build, not production
+  signing or release-performance evidence. No web upload/publication occurred.
+- Physical phone/tablet playtesting and browser/offline/audio checks remain
+  separate release gates. Updated widget screens do not establish these checks.
+
+## October 8 tablet testing build: 1.9.1+18 (superseded candidate)
+
+- [x] Build current source as an Android debug APK, without changing production
+  signing. Verify package/version, all three current release vocabulary shards,
+  all 35 letter clips and absence of authoring-only assets.
+- [x] Install on the connected K70 PRO (M70_A), Android 16, arm64, 800 by 1280.
+  ADB installation returned Success; installed versionName 1.9.1/versionCode 18
+  and the running app process were verified. No previous current-ID package was
+  present and no application data was cleared. Launch intent returned Status ok.
+- The tablet lock/notification surface still covers the app. A visible gameplay
+  screenshot was not captured; the owner must unlock it for hands-on testing.
+  This establishes build/install evidence, not completed tablet gameplay,
+  accessibility, persistence, pronunciation or release-performance QA.
+- APK: `app/dist/sikhi-word-games-android-1.9.1+18-debug.apk`, 174,610,843 bytes.
+  SHA-256: `7a335f23e432f1711ca64adddc05a4839e768cf7fe155e7ade340018fdf5ab45`.
+  The vocabulary pipeline check passes; Android compilation succeeds. The
+  unchanged gameplay baseline previously passed 311 tests. No new web upload.
 
 ## Vocabulary recheck and improvement plan
 

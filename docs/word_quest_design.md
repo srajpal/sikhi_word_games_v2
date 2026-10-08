@@ -102,6 +102,8 @@ From top to bottom, the round screen contains these sections:
    show the grapheme. Preserve spaces only if the content policy later allows
    multiword entries; V1 of this mode is single-word only.
 5. **Garden path panel:** eight secular blooms using shared theme artwork colors.
+   In Paper & Play this is a flat, clipped paper illustration with solid progress
+   leaves, matching the other games' paper surfaces and tactile letter tiles.
    Its semantic text alternative reads, for example, `3 of 8 garden blooms growing`;
    do not use a sacred symbol as the endpoint.
    When the full keyboard is open, replace the garden with a simple separator

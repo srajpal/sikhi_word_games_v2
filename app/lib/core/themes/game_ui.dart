@@ -34,15 +34,17 @@ class GameBackdrop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          if (tokens.sikhiStyle)
-            Positioned.fill(
+          Positioned.fill(
+            child: RepaintBoundary(
               child: CustomPaint(
-                painter: _PhulkariPainter(
-                  color: Theme.of(context).colorScheme.primary
-                      .withValues(alpha: .025),
+                painter: _PaperPainter(
+                  color: Theme.of(context).colorScheme.onSurface
+                      .withValues(alpha: .045),
+                  phulkari: tokens.sikhiStyle,
                 ),
               ),
             ),
+          ),
           child,
         ],
       ),
@@ -54,21 +56,22 @@ class GamePanel extends StatelessWidget {
   const GamePanel({
     required this.child,
     this.padding = const EdgeInsets.all(20),
+    this.color,
     super.key,
   });
   final Widget child;
   final EdgeInsets padding;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     final tokens = Theme.of(context).extension<GameThemeTokens>()!;
     return Container(
       padding: padding,
       decoration: BoxDecoration(
-        gradient: tokens.panelGradient,
+        color: color,
+        gradient: color == null ? tokens.panelGradient : null,
         borderRadius: tokens.panelRadius,
-        border: Border.all(
-          color: Theme.of(context).colorScheme.primary.withValues(alpha: .18),
-        ),
+        border: Border.all(color: tokens.paperEdge),
         boxShadow: tokens.elevationShadow,
       ),
       child: child,
@@ -88,9 +91,10 @@ class GameStatusPill extends StatelessWidget {
     final tokens = theme.extension<GameThemeTokens>()!;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary,
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: tokens.elevationShadow,
+        color: theme.colorScheme.surface,
+        borderRadius: tokens.controlRadius,
+        border: Border.all(color: tokens.paperEdge),
+        boxShadow: tokens.tileShadow,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -98,7 +102,7 @@ class GameStatusPill extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
-              Icon(icon, size: 18, color: theme.colorScheme.onPrimary),
+              Icon(icon, size: 18, color: theme.colorScheme.primary),
               const SizedBox(width: 8),
             ],
             Flexible(
@@ -106,7 +110,7 @@ class GameStatusPill extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: DefaultTextStyle.merge(
                   style: TextStyle(
-                    color: theme.colorScheme.onPrimary,
+                    color: theme.colorScheme.onSurface,
                     fontWeight: FontWeight.w800,
                   ),
                   child: child,
@@ -204,15 +208,23 @@ class GameGradientButton extends StatelessWidget {
   }
 }
 
-class _PhulkariPainter extends CustomPainter {
-  _PhulkariPainter({required this.color});
+class _PaperPainter extends CustomPainter {
+  _PaperPainter({required this.color, required this.phulkari});
   final Color color;
+  final bool phulkari;
   @override
   void paint(Canvas canvas, Size size) {
     final p = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = .7;
+    // A fixed, sparse print texture. No random noise or animation during play.
+    for (double y = 13; y < size.height; y += 27) {
+      for (double x = 9; x < size.width; x += 31) {
+        canvas.drawLine(Offset(x, y), Offset(x + 2, y + 1), p);
+      }
+    }
+    if (!phulkari) return;
     for (double x = -size.height; x < size.width; x += 72) {
       for (double y = 0; y < size.height; y += 72) {
         final path = Path()
@@ -227,6 +239,6 @@ class _PhulkariPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _PhulkariPainter oldDelegate) =>
-      oldDelegate.color != color;
+  bool shouldRepaint(covariant _PaperPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.phulkari != phulkari;
 }
