@@ -44,7 +44,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(settings.load().hapticLevel, HapticFeedbackLevel.off);
 
-    await tester.tap(find.text('New game').first);
+    await tester.tap(find.byKey(const ValueKey('new-game-guessTheWord')));
     await tester.pumpAndSettle();
     for (final letter in 'GRAPE'.characters) {
       await tester.tap(find.byKey(ValueKey('key-$letter')));
