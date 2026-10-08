@@ -1,3 +1,5 @@
+import '../../../core/themes/game_heading.dart';
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -5,7 +7,6 @@ import 'package:flutter/material.dart';
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/themes/app_theme.dart';
-import '../../../core/themes/game_artwork.dart';
 import '../../../core/widgets/game_guide.dart';
 import '../../../core/widgets/victory_celebration.dart';
 import '../../game_library/domain/game_launch_options.dart';
@@ -468,7 +469,8 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: const Text('Jodo'),
+      toolbarHeight: gameToolbarHeight(context),
+      title: const GameHeading(identity: GameIdentity.jodo, compact: true),
       actions: [
         PopupMenuButton<String>(
           tooltip: 'Jodo menu',
@@ -526,27 +528,9 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Row(
-                          children: [
-                            const GameArtwork(
-                              kind: GameArtworkKind.bridges,
-                              size: 44,
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'ਜੋੜੋ · Word Bridges',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                        const GameSectionIntro(
+                          identity: GameIdentity.jodo,
+                          instruction: 'Four words. Four meanings. Make the connections.',
                         ),
                         const SizedBox(height: 16),
                         Wrap(

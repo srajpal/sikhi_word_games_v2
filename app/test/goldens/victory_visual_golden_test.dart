@@ -10,6 +10,9 @@ import 'package:sikhi_word_games_v2/features/settings/data/app_settings_reposito
 void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    await (FontLoader('NotoSerif')
+          ..addFont(rootBundle.load('assets/fonts/noto_serif/NotoSerif.ttf')))
+        .load();
     await (FontLoader(
       'NotoSans',
     )..addFont(rootBundle.load('assets/fonts/noto_sans/NotoSans.ttf'))).load();

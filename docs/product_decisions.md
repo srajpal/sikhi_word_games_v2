@@ -126,11 +126,26 @@ Dictionary saved words remain separate product follow-ups.
 - Keep game rules independent of visual themes.
 - Modern uses teal actions and light neutral surfaces. Sikhi uses navy actions,
   warm cream surfaces and restrained geometric decoration. Dark uses deep blue
-  surfaces with pale blue actions. Keep readable sans-serif text in all three.
+  surfaces with pale blue actions. Keep readable sans-serif gameplay text in all
+  three. The Paper & Play direction uses bundled Noto Serif for display headings
+  and Noto Sans / Noto Sans Gurmukhi for controls, clues and letter recognition.
 - Game previews and garden illustration colors belong in the shared theme
   components. Sacred marks remain static header decoration, never game pieces.
 - Give Continue game the strongest emphasis when a saved game exists; otherwise
   emphasize New game. Keep options visually secondary.
+- Paper & Play is the shared design language, not a fourth theme. Use warm paper
+  surfaces, sparse printed texture, flat cut-paper illustrations and offset tile
+  shadows. Modern has teal and terracotta accents, Sikhi has navy and warm gold,
+  and Dark has blue paper surfaces and pale blue actions. Draw illustrations in
+  the shared theme layer; do not bake game names or Gurmukhi text into images.
+- Every game heading places the smaller English title above its larger Punjabi
+  name: Guess the Word / Bujho, Word Search / Khoj, Word Quest / Chardi Kala,
+  Word Bridges / Jodo, Learn Letters / Akhar Pachhaan. Use the shared
+  `GameIdentity` / `GameHeading` source for library, game headers, help naming
+  and progress summaries. These Punjabi names use Romanized spelling consistently.
+- The library features Bujho above four compact game cards, with two columns on
+  tablets when text size permits and one scrolling column on phones. Dictionary
+  and Progress shortcuts use the existing offline dictionary and saved statistics.
 
 ## Progress and first-time guidance
 

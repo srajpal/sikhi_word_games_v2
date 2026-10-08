@@ -1,4 +1,5 @@
 import 'package:sikhi_word_games_v2/features/game_library/presentation/game_library_page.dart';
+import 'package:sikhi_word_games_v2/features/dictionary/presentation/dictionary_page.dart';
 import 'package:sikhi_word_games_v2/features/game_library/data/game_launch_preferences_repository.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/presentation/guess_the_word_page.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,6 +22,30 @@ import 'package:sikhi_word_games_v2/features/word_search/data/word_search_sessio
 import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
+  testWidgets(
+    'library Dictionary shortcut opens offline content and returns to Play',
+    (tester) async {
+      tester.view.physicalSize = const Size(360, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        SikhiWordGamesApp(
+          settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+          vocabularyRepository: _vocabulary,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Dictionary'));
+      await tester.pumpAndSettle();
+      expect(find.byType(DictionaryPage), findsOneWidget);
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+      expect(find.byType(GameLibraryPage), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('rejected preference writes preserve settings and game launch', (
     tester,
   ) async {
@@ -95,11 +120,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    for (final title in [
-      'Bujho: Guess the Word',
-      'Khoj: Word Search',
-      'Chardi Kala: Word Quest',
-    ]) {
+    for (final title in ['Bujho', 'Khoj', 'Chardi Kala']) {
       final titleFinder = find.text(title);
       await tester.ensureVisible(titleFinder);
       await tester.pumpAndSettle();
@@ -165,7 +186,7 @@ void main() {
     );
     await _startNewGame(tester);
     await tester.pumpAndSettle();
-    expect(find.text('Bujho: Guess the Word'), findsOneWidget);
+    expect(find.text('Bujho'), findsOneWidget);
   });
 
   testWidgets(
@@ -214,7 +235,7 @@ void main() {
     await tester.tap(find.text('Start new game'));
     await tester.pumpAndSettle();
     await tester.pumpAndSettle();
-    expect(find.text('Khoj: Word Search'), findsOneWidget);
+    expect(find.text('Khoj'), findsOneWidget);
     expect(find.text('KHOJ'), findsNothing);
     expect(find.text('TARGET WORDS'), findsNothing);
     final hint = find.bySemanticsLabel(
@@ -256,7 +277,7 @@ void main() {
     expect(find.text('Dictionary'), findsOneWidget);
     await tester.pageBack();
     await tester.pumpAndSettle();
-    expect(find.text('Khoj: Word Search'), findsOneWidget);
+    expect(find.text('Khoj'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Khoj: Word Search menu'));
     await tester.pumpAndSettle();
@@ -593,7 +614,7 @@ void main() {
     await tester.pumpAndSettle();
     await _chooseGameMenu(tester, 'How to play');
 
-    expect(find.text('How to play Bujho'), findsOneWidget);
+    expect(find.text('How to play Bujho: Guess the Word'), findsOneWidget);
     expect(find.text('Read the tile clues'), findsOneWidget);
     expect(
       find.textContaining('Romanized Punjabi uses Punjabi words'),
@@ -604,7 +625,7 @@ void main() {
 
     await tester.tap(find.text('Got it'));
     await tester.pumpAndSettle();
-    expect(find.text('How to play Bujho'), findsNothing);
+    expect(find.text('How to play Bujho: Guess the Word'), findsNothing);
 
     await _chooseGameMenu(tester, 'Dictionary');
     expect(find.text('Dictionary'), findsOneWidget);
@@ -966,11 +987,7 @@ Future<void> _openNewGameOptions(
   WidgetTester tester, {
   int cardIndex = 0,
 }) async {
-  const titles = [
-    'Bujho: Guess the Word',
-    'Khoj: Word Search',
-    'Chardi Kala: Word Quest',
-  ];
+  const titles = ['Bujho', 'Khoj', 'Chardi Kala'];
   final titleFinder = find.text(titles[cardIndex]);
   await tester.ensureVisible(titleFinder);
   await tester.pumpAndSettle();

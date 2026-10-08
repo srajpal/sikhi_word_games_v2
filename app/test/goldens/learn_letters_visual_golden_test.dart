@@ -13,6 +13,9 @@ import 'package:sikhi_word_games_v2/features/learn_letters/presentation/learn_le
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
+    await (FontLoader('NotoSerif')
+          ..addFont(rootBundle.load('assets/fonts/noto_serif/NotoSerif.ttf')))
+        .load();
     await (FontLoader(
       'NotoSans',
     )..addFont(rootBundle.load('assets/fonts/noto_sans/NotoSans.ttf'))).load();

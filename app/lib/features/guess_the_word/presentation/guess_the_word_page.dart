@@ -1,3 +1,5 @@
+import '../../../core/themes/game_heading.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -513,21 +515,17 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     final isComplete = game?.status != GuessGameStatus.playing;
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Bujho: Guess the Word'),
-            Text(
-              '${_mode.label} · $_wordLength letters',
-              key: const ValueKey('guess-game-subtitle'),
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color:
-                    Theme.of(context).appBarTheme.foregroundColor ??
-                    Theme.of(context).colorScheme.onSurface,
-              ),
+        toolbarHeight: gameToolbarHeight(context, subtitle: true),
+        title: GameHeading(
+          identity: GameIdentity.bujho,
+          compact: true,
+          subtitle: Text(
+            '${_mode.label} · $_wordLength letters',
+            key: const ValueKey('guess-game-subtitle'),
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).appBarTheme.foregroundColor,
             ),
-          ],
+          ),
         ),
         actions: [
           PopupMenuButton<_GameMenuAction>(

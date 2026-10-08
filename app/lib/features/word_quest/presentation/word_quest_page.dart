@@ -1,3 +1,4 @@
+import '../../../core/themes/game_heading.dart';
 import '../../../core/statistics/game_statistics_dialog.dart';
 import '../../../core/widgets/game_guide.dart';
 import '../../../core/widgets/victory_celebration.dart';
@@ -500,30 +501,8 @@ class _WordQuestPageState extends State<WordQuestPage> {
       backgroundColor: scheme.surface,
       appBar: AppBar(
         centerTitle: true,
-        title: const FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Chardi Kala',
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: .2,
-                  fontSize: 18,
-                ),
-              ),
-              Text(
-                'Word Quest',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: .2,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        ),
+        toolbarHeight: gameToolbarHeight(context),
+        title: const GameHeading(identity: GameIdentity.quest, compact: true),
         actions: [
           PopupMenuButton<String>(
             key: const ValueKey('word-quest-menu'),
@@ -863,12 +842,9 @@ class _GardenPath extends StatelessWidget {
       label: '$progress of 8 garden blooms growing',
       child: Container(
         height: 84,
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [scene.sky, scene.horizon],
-          ),
+          color: scene.sky,
           borderRadius: tokens.panelRadius,
           border: Border.all(color: tokens.tileBorder.withValues(alpha: .4)),
           boxShadow: tokens.tileShadow,
@@ -898,11 +874,7 @@ class _GardenPath extends StatelessWidget {
                       width: 20,
                       height: 13,
                       decoration: BoxDecoration(
-                        gradient: i < progress
-                            ? LinearGradient(colors: [scene.sun, scene.leaf])
-                            : LinearGradient(
-                                colors: [scene.horizon, scene.hill],
-                              ),
+                        color: i < progress ? scene.leaf : scene.hill,
                         borderRadius: const BorderRadius.all(
                           Radius.elliptical(22, 15),
                         ),

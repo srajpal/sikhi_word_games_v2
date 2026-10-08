@@ -36,12 +36,18 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
   final LinearGradient panelGradient;
   final List<BoxShadow> elevationShadow;
 
-  BorderRadius get panelRadius => BorderRadius.circular(sikhiStyle ? 22 : 20);
-  BorderRadius get controlRadius => BorderRadius.circular(sikhiStyle ? 12 : 14);
+  BorderRadius get panelRadius => const BorderRadius.only(
+    topLeft: Radius.circular(8),
+    topRight: Radius.circular(8),
+    bottomLeft: Radius.circular(8),
+    bottomRight: Radius.circular(24),
+  );
+  BorderRadius get controlRadius => BorderRadius.circular(sikhiStyle ? 6 : 8);
+  Color get paperEdge => tileBorder.withValues(alpha: .42);
   List<BoxShadow> get tileShadow => [
     BoxShadow(
-      color: tileBorder.withValues(alpha: .16),
-      offset: const Offset(0, 2),
+      color: tileBorder.withValues(alpha: .24),
+      offset: const Offset(0, 3),
     ),
   ];
 
@@ -101,31 +107,31 @@ abstract final class AppThemes {
   static ThemeData forChoice(AppThemeChoice choice) => switch (choice) {
     AppThemeChoice.modern => _theme(
       seed: const Color(0xFF0B6F66),
-      background: const Color(0xFFF5F8F7),
-      radius: 12,
+      background: const Color(0xFFF3EDE1),
+      radius: 8,
       borderWidth: 1.25,
       sikhiStyle: false,
-      backgroundGradient: const [Color(0xFFF6FAF8), Color(0xFFE7F0EF)],
-      panelGradient: const [Color(0xFFFFFFFF), Color(0xFFF6FAF9)],
+      backgroundGradient: const [Color(0xFFF7F1E7), Color(0xFFEDE4D5)],
+      panelGradient: const [Color(0xFFFFFCF5), Color(0xFFFFFCF5)],
     ),
     AppThemeChoice.sikhi => _theme(
       seed: const Color(0xFFE28A16),
       background: const Color(0xFFFFF8E8),
-      radius: 8,
+      radius: 5,
       borderWidth: 1.75,
       sikhiStyle: true,
-      backgroundGradient: const [Color(0xFFFFFAEF), Color(0xFFF7E4BC)],
-      panelGradient: const [Color(0xFFFFFDF7), Color(0xFFFFF5DF)],
+      backgroundGradient: const [Color(0xFFFFF8E8), Color(0xFFF0E4C9)],
+      panelGradient: const [Color(0xFFFFFCF2), Color(0xFFFFFCF2)],
     ),
     AppThemeChoice.dark => _theme(
       seed: const Color(0xFF8FB4FF),
       background: const Color(0xFF111318),
-      radius: 12,
+      radius: 8,
       borderWidth: 1.25,
       sikhiStyle: false,
       brightness: Brightness.dark,
-      backgroundGradient: const [Color(0xFF0D1727), Color(0xFF172D3D)],
-      panelGradient: const [Color(0xFF1C2B40), Color(0xFF172436)],
+      backgroundGradient: const [Color(0xFF101C2B), Color(0xFF172436)],
+      panelGradient: const [Color(0xFF223247), Color(0xFF223247)],
     ),
   };
 
@@ -153,13 +159,21 @@ abstract final class AppThemes {
               ? const Color(0xFFA6DBC9)
               : sikhiStyle
               ? const Color(0xFF88550C)
-              : const Color(0xFF52658B),
+              : const Color(0xFFA5412D),
+          secondaryContainer: dark
+              ? const Color(0xFF3A455E)
+              : sikhiStyle
+              ? const Color(0xFFF5D68C)
+              : const Color(0xFFF4C2AA),
+          onSecondaryContainer: dark
+              ? const Color(0xFFE9EFF8)
+              : const Color(0xFF382B22),
           onSecondary: dark ? const Color(0xFF103B30) : Colors.white,
           surface: dark
-              ? const Color(0xFF172436)
+              ? const Color(0xFF223247)
               : sikhiStyle
-              ? const Color(0xFFFFFDF7)
-              : Colors.white,
+              ? const Color(0xFFFFFCF2)
+              : const Color(0xFFFFFCF5),
           onSurface: dark ? const Color(0xFFE9EFF8) : const Color(0xFF202D3D),
         );
     final base = ThemeData(
@@ -185,35 +199,23 @@ abstract final class AppThemes {
           fontFamilyFallback: const ['NotoSansGurmukhi'],
         ),
       ),
-      cardTheme: sikhiStyle
-          ? const CardThemeData(
-              color: Color(0xFFFFFCF4),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(22),
-                  topRight: Radius.circular(22),
-                  bottomLeft: Radius.circular(5),
-                  bottomRight: Radius.circular(5),
-                ),
-                side: BorderSide(color: Color(0xFF173A67), width: 1.5),
-              ),
-            )
-          : null,
-      filledButtonTheme: sikhiStyle
-          ? FilledButtonThemeData(
-              style: FilledButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(14),
-                    topRight: Radius.circular(14),
-                    bottomLeft: Radius.circular(4),
-                    bottomRight: Radius.circular(4),
-                  ),
-                  side: BorderSide(color: Color(0xFF173A67), width: 1.5),
-                ),
-              ),
-            )
-          : null,
+      cardTheme: CardThemeData(
+        color: scheme.surface,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(color: scheme.onSurface.withValues(alpha: .2)),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: scheme.surface,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: scheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
       extensions: [
         GameThemeTokens(
           correct: const Color(0xFF28734F),
@@ -239,9 +241,8 @@ abstract final class AppThemes {
           ),
           elevationShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: dark ? .24 : .08),
-              blurRadius: 20,
-              offset: const Offset(0, 6),
+              color: scheme.onSurface.withValues(alpha: dark ? .12 : .13),
+              offset: const Offset(3, 4),
             ),
           ],
         ),
@@ -252,7 +253,7 @@ abstract final class AppThemes {
         style: FilledButton.styleFrom(
           minimumSize: const Size(48, 48),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(sikhiStyle ? 6 : 8),
           ),
           textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
         ),
@@ -261,7 +262,7 @@ abstract final class AppThemes {
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(48, 48),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(sikhiStyle ? 6 : 8),
           ),
         ),
       ),
@@ -269,6 +270,15 @@ abstract final class AppThemes {
         style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
       ),
       textTheme: base.textTheme.copyWith(
+        displayLarge: base.textTheme.displayLarge?.copyWith(
+          fontFamily: 'NotoSerif',
+        ),
+        displayMedium: base.textTheme.displayMedium?.copyWith(
+          fontFamily: 'NotoSerif',
+        ),
+        displaySmall: base.textTheme.displaySmall?.copyWith(
+          fontFamily: 'NotoSerif',
+        ),
         headlineLarge: base.textTheme.headlineLarge?.copyWith(
           fontWeight: FontWeight.w800,
           letterSpacing: -1,

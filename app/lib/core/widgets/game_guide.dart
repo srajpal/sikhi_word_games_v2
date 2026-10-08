@@ -1,3 +1,5 @@
+import '../themes/game_heading.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../features/game_library/domain/game_launch_options.dart';
@@ -45,13 +47,7 @@ class _GameGuideState extends State<GameGuide> {
 
 typedef _GuideStep = ({String title, String body});
 
-String _gameName(GameKind game) => switch (game) {
-  GameKind.guessTheWord => 'Bujho',
-  GameKind.wordSearch => 'Khoj',
-  GameKind.wordQuest => 'Word Quest',
-  GameKind.wordBridges => 'Jodo: Word Bridges',
-  GameKind.learnLetters => 'Akhar Pachhaan: Learn Letters',
-};
+String _gameName(GameKind game) => GameIdentity.forGame(game).fullName;
 
 List<_GuideStep> _steps(GameKind game) => switch (game) {
   GameKind.learnLetters => const [

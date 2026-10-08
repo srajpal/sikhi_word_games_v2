@@ -1,3 +1,4 @@
+import '../../../core/themes/game_heading.dart';
 import '../../learn_letters/data/learn_letters_repository.dart';
 import '../../../core/widgets/game_guide.dart';
 import '../../../core/themes/game_artwork.dart';
@@ -202,13 +203,7 @@ class GameLibraryPage extends StatelessWidget {
     );
   }
 
-  String _gameName(GameKind kind) => switch (kind) {
-    GameKind.guessTheWord => 'Bujho: Guess the Word',
-    GameKind.wordSearch => 'Khoj: Word Search',
-    GameKind.wordQuest => 'Word Quest',
-    GameKind.wordBridges => 'Jodo: Word Bridges',
-    GameKind.learnLetters => 'Akhar Pachhaan: Learn Letters',
-  };
+  String _gameName(GameKind game) => GameIdentity.forGame(game).fullName;
 
   Future<void> _showBridgesOptions(BuildContext context) async {
     final loader = loadWordBridgesContent;
@@ -466,6 +461,15 @@ class GameLibraryPage extends StatelessWidget {
     }
   }
 
+  void _showProgress(BuildContext context) => showLibraryStatistics(
+    context,
+    bujho: guessStatisticsRepository?.load() ?? const GuessStatisticsBook(),
+    khoj: wordSearchSessionRepository.statistics.total,
+    quest: wordQuestSessionRepository.statistics.total,
+    bridges: wordBridgesRepository?.total,
+    letters: learnLettersRepository?.statistics,
+  );
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -535,6 +539,15 @@ class GameLibraryPage extends StatelessWidget {
                     const SizedBox(height: 4),
                   ],
                   Text(
+                    'A little wordplay.',
+                    style: theme.textTheme.displaySmall?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -1.2,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
                     'Offline word games in English, Punjabi and Gurmukhi',
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium,
@@ -546,17 +559,53 @@ class GameLibraryPage extends StatelessWidget {
                     style: theme.textTheme.labelMedium,
                   ),
                   const SizedBox(height: 16),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      Semantics(
+                        selected: true,
+                        child: const GameStatusPill(
+                          icon: Icons.grid_view_rounded,
+                          child: Text('Play'),
+                        ),
+                      ),
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          iconSize: 18,
+                          textStyle: theme.textTheme.labelMedium,
+                        ),
+                        onPressed: () => context.push('/dictionary'),
+                        icon: const Icon(Icons.menu_book_outlined),
+                        label: const Text('Dictionary'),
+                      ),
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          iconSize: 18,
+                          textStyle: theme.textTheme.labelMedium,
+                        ),
+                        onPressed: () => _showProgress(context),
+                        icon: const Icon(Icons.bar_chart_rounded),
+                        label: const Text('Progress'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 22),
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final twoColumns =
-                          constraints.maxWidth >= 720 &&
+                          constraints.maxWidth >= 600 &&
                           MediaQuery.textScalerOf(context).scale(14) <= 21;
                       final cardWidth = twoColumns
                           ? (constraints.maxWidth - 16) / 2
                           : constraints.maxWidth;
                       final cards = <Widget>[
                         _GameCard(
-                          title: 'Bujho: Guess the Word',
+                          grid: twoColumns,
+                          featured: true,
                           description:
                               'Find the hidden word using letter clues.',
                           gameKind: GameKind.guessTheWord,
@@ -571,7 +620,7 @@ class GameLibraryPage extends StatelessWidget {
                           ),
                         ),
                         _GameCard(
-                          title: 'Khoj: Word Search',
+                          grid: twoColumns,
                           description: 'Trace hidden words in a letter grid.',
                           gameKind: GameKind.wordSearch,
                           hasActiveGame: _hasActiveGame(GameKind.wordSearch),
@@ -583,7 +632,7 @@ class GameLibraryPage extends StatelessWidget {
                               _showNewGameOptions(context, GameKind.wordSearch),
                         ),
                         _GameCard(
-                          title: 'Chardi Kala: Word Quest',
+                          grid: twoColumns,
                           description:
                               'Use a clue and choose letters to find the word.',
                           gameKind: GameKind.wordQuest,
@@ -596,7 +645,7 @@ class GameLibraryPage extends StatelessWidget {
                               _showNewGameOptions(context, GameKind.wordQuest),
                         ),
                         _GameCard(
-                          title: 'Jodo: Word Bridges',
+                          grid: twoColumns,
                           description: 'Connect four words to their meanings.',
                           gameKind: GameKind.wordBridges,
                           hasActiveGame: _hasActiveGame(GameKind.wordBridges),
@@ -607,7 +656,7 @@ class GameLibraryPage extends StatelessWidget {
                           onNewGameOptions: () => _showBridgesOptions(context),
                         ),
                         _GameCard(
-                          title: 'Akhar Pachhaan: Learn Letters',
+                          grid: twoColumns,
                           description: 'Recognize Gurmukhi letters and learn their names.',
                           gameKind: GameKind.learnLetters,
                           hasActiveGame: _hasActiveGame(GameKind.learnLetters),
@@ -623,7 +672,23 @@ class GameLibraryPage extends StatelessWidget {
                         spacing: 16,
                         runSpacing: 16,
                         children: [
-                          for (final card in cards)
+                          SizedBox(
+                            width: constraints.maxWidth,
+                            child: cards.first,
+                          ),
+                          SizedBox(
+                            width: constraints.maxWidth,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8, bottom: 2),
+                              child: Text(
+                                'More ways to play',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ),
+                          for (final card in cards.skip(1))
                             SizedBox(width: cardWidth, child: card),
                         ],
                       );
@@ -676,7 +741,8 @@ class GameLibraryPage extends StatelessWidget {
 
 class _GameCard extends StatelessWidget {
   const _GameCard({
-    required this.title,
+    this.featured = false,
+    this.grid = false,
     required this.description,
     required this.gameKind,
     this.hasActiveGame = false,
@@ -685,7 +751,8 @@ class _GameCard extends StatelessWidget {
     this.onNewGameOptions,
   });
 
-  final String title;
+  final bool featured;
+  final bool grid;
   final String description;
   final GameKind gameKind;
   final bool hasActiveGame;
@@ -705,36 +772,69 @@ class _GameCard extends StatelessWidget {
       child: FocusTraversalGroup(
         child: GamePanel(
           padding: const EdgeInsets.all(16),
+          color: featured ? theme.colorScheme.secondaryContainer : null,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GameArtwork(
-                    kind: switch (gameKind) {
-                      GameKind.guessTheWord => GameArtworkKind.deduction,
-                      GameKind.wordSearch => GameArtworkKind.search,
-                      GameKind.wordQuest => GameArtworkKind.garden,
-                      GameKind.wordBridges => GameArtworkKind.bridges,
-                      GameKind.learnLetters => GameArtworkKind.letters,
-                    },
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final identity = GameIdentity.forGame(gameKind);
+                  final largeText =
+                      MediaQuery.textScalerOf(context).scale(14) > 21;
+                  final heading = GameHeading(
+                    identity: identity,
+                    prominent: featured,
+                  );
+                  final descriptionText = Text(
+                    description,
+                    style: theme.textTheme.bodyMedium,
+                  );
+                  final art = GameArtwork(
+                    kind: identity.artwork,
+                    size: featured
+                        ? (constraints.maxWidth >= 550 ? 160 : 112)
+                        : 72,
+                  );
+                  if (largeText) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        heading,
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            art,
+                            const SizedBox(width: 12),
+                            Expanded(child: descriptionText),
+                          ],
+                        ),
+                      ],
+                    );
+                  }
+                  final copy = Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Semantics(
-                          header: true,
-                          child: Text(title, style: theme.textTheme.titleLarge),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(description, style: theme.textTheme.bodyMedium),
+                        heading,
+                        const SizedBox(height: 8),
+                        descriptionText,
                       ],
                     ),
-                  ),
-                ],
+                  );
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: grid && !featured
+                          ? (constraints.maxWidth < 300 ? 164 : 112)
+                          : 0,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: featured
+                          ? [copy, const SizedBox(width: 12), art]
+                          : [art, const SizedBox(width: 16), copy],
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 12),
               LayoutBuilder(

@@ -1,3 +1,5 @@
+import '../../../core/themes/game_heading.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/statistics/game_statistics_repository.dart';
@@ -41,21 +43,21 @@ Future<void> showLibraryStatistics(
             ),
             const SizedBox(height: 16),
             _Summary(
-              title: 'Bujho',
+              identity: GameIdentity.bujho,
               detail: '$bujhoPlayed finished, $bujhoWon won',
             ),
             _Summary(
-              title: 'Khoj',
+              identity: GameIdentity.khoj,
               detail:
                   '${khoj.played} puzzles finished, ${khoj.wordsFound} words found',
             ),
             _Summary(
-              title: 'Word Quest',
+              identity: GameIdentity.quest,
               detail: '${quest.played} finished, ${quest.won} won',
             ),
             const SizedBox(height: 8),
             _Summary(
-              title: 'Jodo: Word Bridges',
+              identity: GameIdentity.jodo,
               detail:
                   '${bridges?.finishedSets ?? 0} sets finished, ${bridges?.pairsMatched ?? 0} pairs matched',
             ),
@@ -64,7 +66,7 @@ Future<void> showLibraryStatistics(
             ),
             const SizedBox(height: 12),
             _Summary(
-              title: 'Akhar Pachhaan: Learn Letters',
+              identity: GameIdentity.letters,
               detail:
                   '${letters?.roundsCompleted ?? 0} rounds finished, ${letters?.firstTryCorrect ?? 0} first-try answers. Letters are counted separately from words.',
             ),
@@ -86,8 +88,8 @@ Future<void> showLibraryStatistics(
 }
 
 class _Summary extends StatelessWidget {
-  const _Summary({required this.title, required this.detail});
-  final String title;
+  const _Summary({required this.identity, required this.detail});
+  final GameIdentity identity;
   final String detail;
 
   @override
@@ -98,7 +100,7 @@ class _Summary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: Theme.of(context).textTheme.titleMedium),
+          GameHeading(identity: identity),
           Text(detail),
         ],
       ),

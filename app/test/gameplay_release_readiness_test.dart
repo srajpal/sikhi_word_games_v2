@@ -63,7 +63,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final title = find.text('Chardi Kala: Word Quest');
+    final title = find.text('Chardi Kala');
     await tester.scrollUntilVisible(title, 200);
     final card = find.ancestor(of: title, matching: find.byType(GamePanel));
     await _startEnglishGame(tester, card);
@@ -116,17 +116,9 @@ Future<void> _startEnglishGame(WidgetTester tester, Finder card) async {
   await tester.pumpAndSettle();
 }
 
-const _gameTitles = [
-  'Bujho: Guess the Word',
-  'Khoj: Word Search',
-  'Chardi Kala: Word Quest',
-];
+const _gameTitles = ['Bujho', 'Khoj', 'Chardi Kala'];
 
-const _pageTitles = [
-  'Bujho: Guess the Word',
-  'Khoj: Word Search',
-  'Chardi Kala',
-];
+const _pageTitles = ['Bujho', 'Khoj', 'Chardi Kala'];
 
 const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
