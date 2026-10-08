@@ -31,7 +31,6 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() => _saving = true);
     try {
       await widget.onSave(_draft);
-      if (mounted) Navigator.pop(context);
     } on Object {
       if (mounted) {
         showGameSnackBar(

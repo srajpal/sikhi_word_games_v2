@@ -38,7 +38,7 @@ First playable scope:
   pattern, first-launch guide, Help replay and per-game statistics. Record
   finished sets and matching attempts without inventing a cross-game win rate.
 
-As of 1.11.0+21, new sets draw from the eligible shipped vocabulary in the
+As of 1.11.0+22, new sets draw from the eligible shipped vocabulary in the
 chosen script, across word lengths. All meanings are English. Four legacy starter
 decks remain as content regression fixtures, not the live randomization boundary.
 New sets prefer unused words and avoid the previous set where the pool permits.
@@ -405,7 +405,7 @@ retains the strongest grapheme clue across duplicate letters and later guesses,
 with spoken status values alongside visual colors.
 
 
-## October 8 play consistency and achievements: 1.11.0+21
+## October 8 play consistency and achievements: 1.11.0+22
 
 - Every game has the shared, text-only language line below its English/Punjabi
   heading. Word length is also shown where it describes the round. Learn Letters

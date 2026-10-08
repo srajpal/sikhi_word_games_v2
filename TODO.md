@@ -5,7 +5,7 @@ remaining work. Completed milestones are evidence, not sign-off for a newer
 package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. Do not approve vocabulary merely to fill a pool quota.
 
-## October 8 play consistency update: 1.11.0+21
+## October 8 play consistency update: 1.11.0+22
 
 - [x] Three supported game languages, shared language header and menu-only language
   changes. Preserve historical statistics and valid older Quest budgets.
@@ -16,20 +16,23 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
 - [x] Dedicated Settings/Dictionary/Progress/Achievements and per-game progress pages.
 - [x] Fifty achievement badges, ten per game, derived from durable statistics;
   new facts are atomic with game completion, deduplicated and resettable.
-- [x] Final validation: 342 Flutter tests pass against reviewed visual baselines,
+- [x] Final validation: 343 Flutter tests pass against reviewed visual baselines,
   166 Dart files formatted, clean analysis and successful release web/debug APK
   builds. Browser at `http://127.0.0.1:8920/` verifies the new logo, dedicated
   Settings/Achievements, historical badge credit and exactly three language
   choices. A fresh five-letter Quest shows four misses, one hint and the lantern;
   no browser console errors were observed during these checks.
+- [x] Fix the Settings save/route-refresh race. The widget regression and local
+  save/restore fixture pass; the actual release browser returns to the library
+  after Save and retains progress across reload.
 - [x] Rebuild the vocabulary report through the pipeline after Jodo selection
   code changed. Only its code fingerprint changed; release content and holds
   remain unchanged, with no pool coverage failures or unsourced solutions.
-- [x] Install and launch build 21 on K70 PRO with `adb install -r`, preserving
-  data. Installation Success, launch Status ok, version 1.11.0/code 21 and
+- [x] Install and launch build 22 on K70 PRO with `adb install -r`, preserving
+  data. Installation Success, launch Status ok, version 1.11.0/code 22 and
   running PID verified. Visible device gameplay still needs a hands-on check.
-- APK: `app/dist/sikhi-word-games-android-1.11.0+21-debug.apk`.
-  SHA-256: `88ddb92ff28b7ad3b613e0be86943b49a265ead84841ceafbfe7c4e862885c27`.
+- APK: `app/dist/sikhi-word-games-android-1.11.0+22-debug.apk`, 178,128,168 bytes.
+  SHA-256: `271e9cc539d880d8175420cba407ce6dad911ebd8c16c85ef50bd5881d2d06f4`.
 - Sound replacement/review stays a separate task; this update reuses existing
   letter recordings and does not represent pronunciation approval.
 
@@ -40,7 +43,7 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
   GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
   from that review. The focused save/restore and keyboard fixes are in
   `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.11.0+21, Paper & Play. The September 18 ZIP and uploaded
+- Current Android testing version: 1.11.0+22, Paper & Play. The September 18 ZIP and uploaded
   itch.io draft remain 1.9.0+17 and
   predate the subsequent audit fixes and October vocabulary recheck. They are
   historical artifacts, not packages of current source. Increment both version

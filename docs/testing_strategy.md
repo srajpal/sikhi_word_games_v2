@@ -226,7 +226,7 @@ uses the stable new-game key rather than the previous visible button caption.
 Physical gameplay and real browser/offline/audio evidence remain separate.
 
 
-### Play consistency and achievements: 1.11.0+21
+### Play consistency and achievements: 1.11.0+22
 
 Regression checks include the three-language boundary, shared language headings,
 3/4/5 Quest misses and 0/1/2 hints, repeated legacy-budget saves, 20 seeded Jodo
@@ -241,3 +241,6 @@ old-stat projections, no fabricated historical facts, atomic once-only new
 completion facts, reset and all-theme 320px/200% text. New page goldens include
 three achievement galleries and a Settings phone. Review rendered captures before
 accepting changed baselines. Page navigation/reset tests exercise the real routes.
+Saving Settings must return to a playable library after persistence and route
+refresh. The widget regression and browser fixture both assert this transition
+before launching Bujho, then the browser fixture verifies interrupted restore.
