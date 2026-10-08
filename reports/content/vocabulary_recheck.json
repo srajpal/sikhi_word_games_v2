@@ -1,0 +1,880 @@
+{
+  "schemaVersion": 1,
+  "ruleVersion": 1,
+  "inputs": {
+    "assets/content/generated/vocabulary_4.json": "b42d6558c1dabba6f2eaa29c5f89727b16e11dd4bda48b75f553c5b6ca679faa",
+    "assets/content/generated/vocabulary_5.json": "6d6eb084e8012d6353e4277ed3f6cab1609b6c553399439867be73b2e28afbb5",
+    "assets/content/generated/vocabulary_6.json": "f74b16ed5b618aeec0cdc684a028ec65533cb052d0e115e5e86fd6848fd1a554",
+    "assets/content/curation/supplemental_entries.json": "292c93880426b9c9e04733539595832e2e7dee01af96003a36058bfbfa5fc4e7",
+    "assets/content/curation/editorial_overrides.json": "6b4f99e1a72abe12bd5b6823ec0c2d08342ed058452a5f94599ef84675d0537f",
+    "assets/content/curation/starter_solutions.json": "00e11802824ea948f616b37b70c2679776309c9a8d82b691464e717e0ac1ce91",
+    "tool/content/source_lock.json": "ad085b8d8b15e0eccfc78769f0ce24d00be3675d80a6d592dc7a7c3a5d4c9050",
+    "tool/vocabulary_pipeline.dart": "9c24bb3fa80cb7a42d91bdd1b97ce8ac9f6d4eea01401f5c9e3fe28b2de75300",
+    "tool/build_release_content.dart": "5538e0b7e73e05b93c399e8a80b9d3d411458fff0b23b4ac6714d08c9460905a",
+    "tool/content/vocabulary_checks.dart": "6c1fcf29c7ba5552c7977064fe426c365c339ab59a72c41c044d422e57f88243",
+    "tool/content/vocabulary_sources.dart": "77b0424a636a64c143da8b91e65aa0ab4a0ce654441c693e969d2658a4072893",
+    "tool/content/punjabi_quality.dart": "04d6c885577d4b15a46f9f9e459513940088edd90200f70430b925df77aa452e",
+    "tool/content/mahan_kosh_text.dart": "37ff0a3b6a20759c776fbe5edb31a96a492c76d5bda13522f545417ec88692cf",
+    "lib/features/word_bridges/domain/word_bridges_content.dart": "f7c961bf5626b471e6f770a224242ef84349842b203603845947284677aa5342",
+    "lib/features/word_quest/domain/word_quest_definition_quality.dart": "4bcab3217aed2a9fe45ec3afb2256be653100f8a45027bbc9a1ef4fb9ab2dea4",
+    "lib/core/language/gurmukhi_normalization.dart": "fc976174f2c86a6b368af4299b1abbe79dfe149fc576ec16446827b23bb61641"
+  },
+  "sourceFiles": {
+    ".dart_tool/vocabulary_sources/oewn-2025/adj.all.json": "f72c805772f224d9625fa20a79bc7e0fdde8acf52d07770b2c98dd6487748751",
+    ".dart_tool/vocabulary_sources/oewn-2025/adj.pert.json": "23c4eea21809d7a831eca8311d98bf27d5aac4cc07b57a2f545b54150a4a8044",
+    ".dart_tool/vocabulary_sources/oewn-2025/adj.ppl.json": "db20da82eac70f95180bd28df2c1c1f3ea9a39a7754cfef711ac6d67d8ba139a",
+    ".dart_tool/vocabulary_sources/oewn-2025/adv.all.json": "563e725f579b004fcfa426b05bc735c6549fef582328a2d0ee18b4f3ad5ade48",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-0.json": "91574fc92a90b17ce681d0710cdd0272c39b215e0886281ea6c754026af38bb7",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-a.json": "ffc6db81951d8cc20363937415ceed56b523da5f18f00e5e77811348432b3a7b",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-b.json": "9e9ee3780b7d6388ae9a2087458855ffb33513c9fafdb2045290bbda3bd5c2b0",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-c.json": "767092bd54b8487fddff2dd65e8726f2fe50d5923999b899e0c8b69e032a5209",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-d.json": "8d415679b36f8b3b58fe8e20c3d796f330535074416f8b7b813efe590272ca85",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-e.json": "aab0ae86e33f3e66cb54f2a19e472f088ed0911de93d958ec727e19ff2fec899",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-f.json": "96f3c3626262ffb7ddc6a4b76d373929c4cdc65e48a17e36fa831cbe19774b08",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-g.json": "b294eac2da3d2eb47eac9c7b78a68ea335735bf570b012d1ad023b4984c68e1c",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-h.json": "7642c25fa85623126b39809003e96463651f32ba055114fa898736b1e4fe53de",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-i.json": "1af44aa450d74af1a879dac6ee77ee4eb624747a4165cba68a98364cf50fc94b",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-j.json": "c8d5053f06095c8c0d1b9d56d169a873ae0d64ab1fa9bb230de664157a43fc9c",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-k.json": "8274539840e071d0d52e3c06ca2b7258c5c54291475a6cc5cf910d2f00538d21",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-l.json": "27f6d2caa01922fa0eeaefa041ef001e20b1c259f383006ca6827807ea9d595f",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-m.json": "62f693b10f991a45f189745c15c854d7a00d10227f57f8b7aa0430d952895633",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-n.json": "f6e050703d67b508ace1cb8fa37a227492871088a3c85d03038d027cccdfda79",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-o.json": "1cfad6ef31db519828c2fc8e17244f44f3ceb018308462932a4a02404ee07248",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-p.json": "43a23baefe6d2a50a78203a49e91ad245103da7019d69c8ba86181073878be4f",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-q.json": "162a9aad238cfeed2e03c997dca355b6b6cd1e7fe03b9c7fe83e6ab365a171d6",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-r.json": "71f7b68190ee6d2b9cca180e00247f38645fd683a8c4600b4e27054f705d1fd9",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-s.json": "6008e0173989e79da2b053f2662267e0ad5a069e451ebfe51961b0f307cfcd49",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-t.json": "addb9c7e5d2e24af56f144046aa013217d949a37a11c8e6204f3b4c36f7dd4e9",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-u.json": "d1e32eaa312e537e27a2407c680efcd893b5a4d654f7e21582cfa981c8da4f7c",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-v.json": "3f7825310b6c10e666ce754198eadac7446a25e574062d99548e7a1f19a90792",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-w.json": "d4567a03cbacfe9a02c5416d3b21d097f85f1b7feb7a5416a611a0db4cf9dde6",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-x.json": "4b7b9cd2b5eae96a494581b28ff144c46c4dd20dbd14593053486fb9505976eb",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-y.json": "ebb2c156ed2c747164637a4dd87468faf9d777bd9f8d943ec7db363609dea84e",
+    ".dart_tool/vocabulary_sources/oewn-2025/entries-z.json": "dd3331986d9651f60ca7ee177f9acb9ea12c194cbccb2c2be2967d68eb5aebad",
+    ".dart_tool/vocabulary_sources/oewn-2025/frames.json": "336835097d8d95907b817da8d5ad86679cd66ffbd10f41c86b3b1f50ec9f0bfa",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.act.json": "e34fe328993ef6b3643571ecbe99847799d0e5a315619a0ddc52f80294531cde",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.animal.json": "80cc7dd0831e13fd5ec14451de37f5d9b0ce83bf2913ae8f22ac9a1a63a22816",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.artifact.json": "fb19968b95dbaaf084d8d18e932ab23ef817a306ec2f8b7218b1a60786b18a6c",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.attribute.json": "93094f231addb0345349b29bee16ca000e4d3759ea1263f8bea41acc5e074e1b",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.body.json": "7a4a4cd64ebc3fb668e1bfb31f7fdf5ed2eeac9e0096e0bb015a732632a79fa8",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.cognition.json": "8bfdd4334265dd3ef82e009ebdd62f933b5b101d3c963376f9c566d1f8bc51f8",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.communication.json": "dafb17e20a4c805397bb37af4b14127d48bfeef85c5aa53f19a435ff84c2f93f",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.event.json": "0a2f60e9ba7619265b3fbbca037a1939d79a8a02c5349d7344027088c0154d1e",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.feeling.json": "d54db3e39494f8a5199ff3a0fd6da133ceedd01376b10c14629dbc692c46490c",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.food.json": "52dd7bad950d3960fceee565673ec273135291a8950ee9aa02fd0a32847dec2f",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.group.json": "57bb3e87b8bc68c1285e92ad753102ff2723ff79f1376e8c63c20a6f21730139",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.location.json": "75538125fe4a807c457acf01dce3123d33ecc13b063354d62f32a38d0aa9b90b",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.motive.json": "400a11f5c724fe5818cf3fe8590f0444080641601c6b085d1d34c3d942354e4e",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.object.json": "ef367a5344a15519c66d1330213698922bbf9625eea02f63c44ddd0f903ed1a6",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.person.json": "62f082fcb295d7e2fe6ae3e3da90ea45b49a2870b65fdbce9af40e694fcb059f",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.phenomenon.json": "288bfac04aa9b3b2775dce863532f73029e9e1a8e828690083ef73580d3fc92f",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.plant.json": "ea35b41070d1d56500c584fc5d4498a80f626adc896ed84b73d54480cf62f3b4",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.possession.json": "1958e9b8d404f1016cfe090ce0792b82fdca59e3680c4a8270ebd7e54a61c722",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.process.json": "d87e6944b1cabec4d04ba96c16fa8e8156cc07e44cde841c264762e6064a7e4a",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.quantity.json": "429226bb7e2d9b959d36064aaf00d81f69d422ed478cd38b0e7b40379940346e",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.relation.json": "8a53e9b65d49319516f2caae4b0cd51196c642f7797b82dfd0835987769796dd",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.shape.json": "078a5d1d5fbb710793b91793f21fd4989236154e5349d6a0314428eef8a31c3b",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.state.json": "a3c7d67445646f4c280a997cc4f3ce617cee9acfbc7b9319dc2396cc2841f64b",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.substance.json": "254830c862b1adbffa43c7058e4e6ff15500717f9b8ad885c614d6a8aee78203",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.time.json": "565564a47b7ee4de59a0c277491ec9df2692aaf96f3b0e969bd2e972133320f6",
+    ".dart_tool/vocabulary_sources/oewn-2025/noun.Tops.json": "794ababc9530c18c31a0fe9dc21230c2f14501bd407278379ebcc4c91db86760",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.body.json": "3586d8bd302a40db0e81d872a335041252c21720995079ee853b9bd56cda3c98",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.change.json": "d6f7c2f2854726a47aeb2ad0dca0707808c1d53ba86810bace00fa03d04f62fb",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.cognition.json": "f97b340d7d763972ef96277b1f432f8b1ebec23a914dbd9bb61ec03b1d8695a4",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.communication.json": "cbbe0da50c8ecb8439cb3b3606b21a63fca9e9392af45c591f7e6303a2033832",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.competition.json": "525b97ae616f77003662e328d28547c2b4edb678d058f0100c4cdeeb928d6a08",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.consumption.json": "90231f7770aa7616599e54d298a771a9a7cdeb83116511e0062d0ae52d175d80",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.contact.json": "01ade4835e6da82654ff42619e66876cd232eaa96fbba202587deee80871f8cf",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.creation.json": "d7cb37634a1d3a87bf37862d4425a5b4906525376411b26bd9c46392dc970a51",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.emotion.json": "735ed4735a2e93e638f2e60f6adfe08f9c3d1238fd7e382d78037fdc7d02ba0d",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.motion.json": "99b281b6b7e9955875c35306ae75ec832256a4135259b238c52d47376e5ab3cb",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.perception.json": "6dccda2b4334c304dbcc8924215ef0eff21f7e7124dde991ff11acb55b9a8ee0",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.possession.json": "623152cdcc841f82217a25fc421ebc2f17b165c67b62a14ba451e6dc27a468d1",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.social.json": "0e9565585cf7002af20f5a8e61d5dee2ed1eae92ac88af7ce05ac894c4a16e7b",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.stative.json": "e09d4e485f16189746351097972b954777942cb21b4f2268c71de30e53f6f022",
+    ".dart_tool/vocabulary_sources/oewn-2025/verb.weather.json": "81bd2370f89402863dbfc45e867dea9c70ac3d6d58f35e0691e472c5b2c297a9",
+    ".dart_tool/vocabulary_sources/mahan-kosh-core.json": "509c846358f193694690bd465fea80f724d02ae58ca9a3529d880cd112bf2a2f",
+    ".dart_tool/vocabulary_sources/mahan-kosh-en.json": "e4cb0fb407ed462d13f5f61a5cfa00ab7089ec494a64f440c26bb3d67a156f7c"
+  },
+  "summary": {
+    "authoringRecords": 47093,
+    "alreadyHiddenDefinitions": 30337,
+    "visibleBeforeHolds": 16756,
+    "exact_oewn_lemma_and_sense": 10279,
+    "exact_mahan_kosh_headword_and_cleaned_sense": 6184,
+    "source_linked_editorial_paraphrase": 288,
+    "hold:sensitive_or_stigmatizing": 12,
+    "missing_punjabi_source_link": 5,
+    "hold:missing_punjabi_source_link": 5
+  },
+  "heldRecords": 17,
+  "exceptionGroups": 17,
+  "projectedUniquePools": {
+    "english:4": 1712,
+    "mixed:4": 2631,
+    "quest:english:4": 1658,
+    "quest:mixed:4": 2573,
+    "romanized:4": 990,
+    "quest:romanized:4": 979,
+    "romanized:5": 1378,
+    "mixed:5": 3932,
+    "quest:romanized:5": 1364,
+    "quest:mixed:5": 3831,
+    "gurmukhi:4": 337,
+    "quest:gurmukhi:4": 337,
+    "english:5": 2563,
+    "quest:english:5": 2476,
+    "english:6": 4028,
+    "mixed:6": 5126,
+    "quest:english:6": 3925,
+    "quest:mixed:6": 5017,
+    "romanized:6": 1106,
+    "quest:romanized:6": 1100,
+    "gurmukhi:5": 2346,
+    "quest:gurmukhi:5": 2335,
+    "gurmukhi:6": 533,
+    "quest:gurmukhi:6": 532
+  },
+  "coverageFailures": [],
+  "exceptions": [
+    {
+      "ids": [
+        "panjabi_ahsas"
+      ],
+      "language": "panjabi",
+      "word": "AHSAS",
+      "gurmukhi": "ਅਹਿਸਾਸ",
+      "definition": "a feeling or awareness",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "panjabi_amrit"
+      ],
+      "language": "panjabi",
+      "word": "AMRIT",
+      "gurmukhi": "ਅੰਮ੍ਰਿਤ",
+      "definition": "sacred nectar",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "panjabi_arpna"
+      ],
+      "language": "panjabi",
+      "word": "ARPNA",
+      "gurmukhi": "ਅਰਪਣਾ",
+      "definition": "to offer or dedicate",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "english_bidet"
+      ],
+      "language": "english",
+      "word": "BIDET",
+      "gurmukhi": null,
+      "definition": "a basin for washing genitals and anal area",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "english_crazy"
+      ],
+      "language": "english",
+      "word": "CRAZY",
+      "gurmukhi": null,
+      "definition": "someone deranged and possibly dangerous",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": true,
+      "candidates": [
+        {
+          "sourceSenseId": "02082451-s",
+          "definition": "affected with madness or insanity"
+        },
+        {
+          "sourceSenseId": "01842483-s",
+          "definition": "foolish; totally unsound"
+        },
+        {
+          "sourceSenseId": "00923212-s",
+          "definition": "possessed by inordinate excitement"
+        },
+        {
+          "sourceSenseId": "00971086-s",
+          "definition": "bizarre or fantastic"
+        },
+        {
+          "sourceSenseId": "00889690-s",
+          "definition": "intensely enthusiastic about or preoccupied with"
+        }
+      ]
+    },
+    {
+      "ids": [
+        "english_groin"
+      ],
+      "language": "english",
+      "word": "GROIN",
+      "gurmukhi": null,
+      "definition": "the crease at the junction of the inner part of the thigh with the trunk together with the adjacent region and often including the external genitals",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": true,
+      "candidates": [
+        {
+          "sourceSenseId": "03466715-n",
+          "definition": "a curved edge formed by two intersecting vaults"
+        },
+        {
+          "sourceSenseId": "02897867-n",
+          "definition": "a protective structure of stone or concrete; extends from shore into the water to prevent a beach from washing away"
+        },
+        {
+          "sourceSenseId": "01659650-v",
+          "definition": "build with groins"
+        }
+      ]
+    },
+    {
+      "ids": [
+        "english_inguen"
+      ],
+      "language": "english",
+      "word": "INGUEN",
+      "gurmukhi": null,
+      "definition": "the crease at the junction of the inner part of the thigh with the trunk together with the adjacent region and often including the external genitals",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "panjabi_ispat"
+      ],
+      "language": "panjabi",
+      "word": "ISPAT",
+      "gurmukhi": "ਇਸਪਾਤ",
+      "definition": "steel",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "english_lochia"
+      ],
+      "language": "english",
+      "word": "LOCHIA",
+      "gurmukhi": null,
+      "definition": "substance discharged from the vagina (cellular debris and mucus and blood) that gradually decreases in amount during the weeks following childbirth",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "english_stank"
+      ],
+      "language": "english",
+      "word": "STANK",
+      "gurmukhi": null,
+      "definition": "A smell of genitals or sex",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "panjabi_utpad"
+      ],
+      "language": "panjabi",
+      "word": "UTPAD",
+      "gurmukhi": "ਉਤਪਾਦ",
+      "definition": "a product",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ],
+      "wasAnswer": true,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "english_wank"
+      ],
+      "language": "english",
+      "word": "WANK",
+      "gurmukhi": null,
+      "definition": "slang for masturbation",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": true,
+      "candidates": [
+        {
+          "sourceSenseId": "01433266-v",
+          "definition": "get sexual gratification through self-stimulation"
+        }
+      ]
+    },
+    {
+      "ids": [
+        "english_loony"
+      ],
+      "language": "english",
+      "word": "LOONY",
+      "gurmukhi": null,
+      "definition": "someone deranged and possibly dangerous",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": false,
+      "candidates": [
+        {
+          "sourceSenseId": "02082059-s",
+          "definition": "informal or slang terms for mentally irregular"
+        }
+      ]
+    },
+    {
+      "ids": [
+        "english_noma"
+      ],
+      "language": "english",
+      "word": "NOMA",
+      "gurmukhi": null,
+      "definition": "acute ulceration of the mucous membranes of the mouth or genitals; often seen in undernourished children",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": false,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "english_paynim"
+      ],
+      "language": "english",
+      "word": "PAYNIM",
+      "gurmukhi": null,
+      "definition": "a heathen; a person who is not a Christian (especially a Muslim)",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": false,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "english_putz"
+      ],
+      "language": "english",
+      "word": "PUTZ",
+      "gurmukhi": null,
+      "definition": "(Yiddish) a fool; an idiot",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": false,
+      "candidates": []
+    },
+    {
+      "ids": [
+        "english_savage"
+      ],
+      "language": "english",
+      "word": "SAVAGE",
+      "gurmukhi": null,
+      "definition": "a member of an uncivilized people",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ],
+      "wasAnswer": false,
+      "candidates": [
+        {
+          "sourceSenseId": "01266123-s",
+          "definition": "(of persons or their actions) able or disposed to inflict pain or suffering"
+        },
+        {
+          "sourceSenseId": "02398088-s",
+          "definition": "wild and menacing"
+        },
+        {
+          "sourceSenseId": "00413865-s",
+          "definition": "without civilizing influences"
+        },
+        {
+          "sourceSenseId": "02521586-s",
+          "definition": "marked by extreme and violent energy"
+        },
+        {
+          "sourceSenseId": "09864997-n",
+          "definition": "a cruelly rapacious person"
+        },
+        {
+          "sourceSenseId": "01123318-v",
+          "definition": "attack brutally and fiercely"
+        },
+        {
+          "sourceSenseId": "00825488-v",
+          "definition": "criticize harshly or violently"
+        }
+      ]
+    }
+  ],
+  "semanticSample": [
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_fleshy",
+      "word": "FLESHY",
+      "gurmukhi": null,
+      "definition": "usually describes a large person who is fat but has a large frame to carry it"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_vexer",
+      "word": "VEXER",
+      "gurmukhi": null,
+      "definition": "someone given to teasing (as by mocking or stirring curiosity)"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_after",
+      "word": "AFTER",
+      "gurmukhi": null,
+      "definition": "located farther aft"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_sept",
+      "word": "SEPT",
+      "gurmukhi": null,
+      "definition": "people descended from a common ancestor"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_lamely",
+      "word": "LAMELY",
+      "gurmukhi": null,
+      "definition": "in a weak and unconvincing manner"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_boxing",
+      "word": "BOXING",
+      "gurmukhi": null,
+      "definition": "fighting with the fists"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_writ",
+      "word": "WRIT",
+      "gurmukhi": null,
+      "definition": "(law) a legal document issued by a court or judicial officer"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_upmost",
+      "word": "UPMOST",
+      "gurmukhi": null,
+      "definition": "at or nearest to the top"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_lust",
+      "word": "LUST",
+      "gurmukhi": null,
+      "definition": "have a craving, appetite, or great desire for"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_pollex",
+      "word": "POLLEX",
+      "gurmukhi": null,
+      "definition": "the thick short innermost digit of the forelimb"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_dully",
+      "word": "DULLY",
+      "gurmukhi": null,
+      "definition": "without liveliness"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_strum",
+      "word": "STRUM",
+      "gurmukhi": null,
+      "definition": "sound of strumming"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_angry",
+      "word": "ANGRY",
+      "gurmukhi": null,
+      "definition": "feeling or showing anger"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_gall",
+      "word": "GALL",
+      "gurmukhi": null,
+      "definition": "an open sore on the back of a horse caused by ill-fitting or badly adjusted saddle"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_slob",
+      "word": "SLOB",
+      "gurmukhi": null,
+      "definition": "a coarse obnoxious person"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_anchor",
+      "word": "ANCHOR",
+      "gurmukhi": null,
+      "definition": "a mechanical device that prevents a vessel from moving"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_hodman",
+      "word": "HODMAN",
+      "gurmukhi": null,
+      "definition": "a male laborer who carries supplies to masons or bricklayers"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_rush",
+      "word": "RUSH",
+      "gurmukhi": null,
+      "definition": "the act of moving hurriedly and in a careless manner"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_putt",
+      "word": "PUTT",
+      "gurmukhi": null,
+      "definition": "hitting a golf ball that is on the green using a putter"
+    },
+    {
+      "stratum": "english:exact_oewn_lemma_and_sense",
+      "id": "english_upward",
+      "word": "UPWARD",
+      "gurmukhi": null,
+      "definition": "directed up"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "gurmukhi_mahan_kosh_4-757-5",
+      "word": "VYATIKRAM",
+      "gurmukhi": "ਵ੍ਯਤਿਕ੍ਰਮ",
+      "definition": "contrary, reverse"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_kela",
+      "word": "KELA",
+      "gurmukhi": "ਕੇਲਾ",
+      "definition": "horse with deep red colour"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "gurmukhi_mahan_kosh_3-302-14",
+      "word": "DUKHNIVARANU",
+      "gurmukhi": "ਦੁਖਨਿਵਾਰਣੁ",
+      "definition": "who eradicates sufferings"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_jang",
+      "word": "JANG",
+      "gurmukhi": "ਜੰਗ",
+      "definition": "rust"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_anek",
+      "word": "ANEK",
+      "gurmukhi": "ਅਨੇਕ",
+      "definition": "not one, more than one, many, several"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "gurmukhi_mahan_kosh_2-501-29",
+      "word": "GRIHASAT",
+      "gurmukhi": "ਗ੍ਰਿਹਸਤ",
+      "definition": "husband and wife living together as a family"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_chole",
+      "word": "CHOLE",
+      "gurmukhi": "ਚੋਲੇ",
+      "definition": "within the robe"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "gurmukhi_mahan_kosh_3-298-11",
+      "word": "DURBHRAMA",
+      "gurmukhi": "ਦੁਰਭ੍ਰਮਾ",
+      "definition": "free from illusion"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "gurmukhi_mahan_kosh_2-164-20",
+      "word": "KALMASPAD",
+      "gurmukhi": "ਕਲਮਾਸਪਾਦ",
+      "definition": "(one) having black feet"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_rababi",
+      "word": "RABABI",
+      "gurmukhi": "ਰਬਾਬੀ",
+      "definition": "rebeck player"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_dustar",
+      "word": "DUSTAR",
+      "gurmukhi": "ਦੁਸਤਰ",
+      "definition": "difficult to swim across"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_pair",
+      "word": "PAIR",
+      "gurmukhi": "ਪੈਰ",
+      "definition": "feet"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_julm",
+      "word": "JULM",
+      "gurmukhi": "ਜੁਲਮ",
+      "definition": "oppression, violent use of force, excess"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_panjhi",
+      "word": "PANJHI",
+      "gurmukhi": "ਪੰਝੀ",
+      "definition": "twenty-five"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "gurmukhi_mahan_kosh_3-700-2",
+      "word": "PRATAHKAL",
+      "gurmukhi": "ਪ੍ਰਾਤਹਕਾਲ",
+      "definition": "early morning"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_pure",
+      "word": "PURE",
+      "gurmukhi": "ਪੂਰੇ",
+      "definition": "fills"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "gurmukhi_mahan_kosh_2-552-11",
+      "word": "CHARCHARAN",
+      "gurmukhi": "ਚਾਰਚਰਣ",
+      "definition": "animal, quadruped"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_penja",
+      "word": "PENJA",
+      "gurmukhi": "ਪੇਂਜਾ",
+      "definition": "cotton carder, comber"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "gurmukhi_mahan_kosh_2-546-2",
+      "word": "CHASAVIDAR",
+      "gurmukhi": "ਚਾਸਵਦਾਰ",
+      "definition": "a blade in front of the plough, ploughshare"
+    },
+    {
+      "stratum": "panjabi:exact_mahan_kosh_headword_and_cleaned_sense",
+      "id": "panjabi_theth",
+      "word": "THETH",
+      "gurmukhi": "ਠੇਠ",
+      "definition": "solid, pure, genuine"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_pothi",
+      "word": "POTHI",
+      "gurmukhi": "ਪੋਥੀ",
+      "definition": "A book or bound volume"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_pasam",
+      "word": "PASAM",
+      "gurmukhi": "ਪਸਮ",
+      "definition": "The soft wool of sheep or goats"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_tarika",
+      "word": "TARIKA",
+      "gurmukhi": "ਤਰੀਕਾ",
+      "definition": "A route or method"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_curated_2-449-5",
+      "word": "GULDAN",
+      "gurmukhi": "ਗੁਲਦਾਨ",
+      "definition": "A flower vase."
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_hath",
+      "word": "HATH",
+      "gurmukhi": "ਹਥ",
+      "definition": "The body part at the end of an arm"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_nakad",
+      "word": "NAKAD",
+      "gurmukhi": "ਨਕਦ",
+      "definition": "What people use to pay for things"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_fajar",
+      "word": "FAJAR",
+      "gurmukhi": "ਫਜਰ",
+      "definition": "The early part of the day"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_curated_2-727-6",
+      "word": "JOTIJUT",
+      "gurmukhi": "ਜੋਤਿਜੁਤ",
+      "definition": "Lit or filled with light."
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_olagi",
+      "word": "OLAGI",
+      "gurmukhi": "ਓਲਗੀ",
+      "definition": "A worker in a village supported by donations"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_mashki",
+      "word": "MASHKI",
+      "gurmukhi": "ਮਾਸ਼ਕੀ",
+      "definition": "A person who carries water"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_curated_3-384-18",
+      "word": "NAJIKANA",
+      "gurmukhi": "ਨਜਿਕਾਨਾ",
+      "definition": "To come close."
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_curated_3-263-22",
+      "word": "DIKHALNA",
+      "gurmukhi": "ਦਿਖਾਲਣਾ",
+      "definition": "To show."
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_curated_1-68-2",
+      "word": "UPVAS",
+      "gurmukhi": "ਉਪਵਾਸ",
+      "definition": "Going without food for a time."
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_curated_2-691-27",
+      "word": "JIGYASU",
+      "gurmukhi": "ਜਿਗਿਆਸੂ",
+      "definition": "A person eager to learn."
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_nunh",
+      "word": "NUNH",
+      "gurmukhi": "ਨੂੰਹ",
+      "definition": "A son's wife"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_curated_1-171-9",
+      "word": "ADHYAY",
+      "gurmukhi": "ਅਧ੍ਯਾਯ",
+      "definition": "A chapter of a book."
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_aata",
+      "word": "AATA",
+      "gurmukhi": "ਆਟਾ",
+      "definition": "Ground grain used in cooking"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_pekhna",
+      "word": "PEKHNA",
+      "gurmukhi": "ਪੇਖਨਾ",
+      "definition": "To see or observe"
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_jujdan",
+      "word": "JUJDAN",
+      "gurmukhi": "ਜੁਜਦਾਨ",
+      "definition": "A satchel for book pages."
+    },
+    {
+      "stratum": "panjabi:source_linked_editorial_paraphrase",
+      "id": "panjabi_rajni",
+      "word": "RAJNI",
+      "gurmukhi": "ਰਜਨੀ",
+      "definition": "Nighttime"
+    }
+  ],
+  "limitations": [
+    "Exact source matching does not prove meaning, familiarity, pronunciation or age suitability.",
+    "Editorial paraphrases have source links, not automatic semantic verification.",
+    "Risk rules are conservative and incomplete; samples are not certification.",
+    "Valid guess spellings and explicit editorial exclusions are preserved. No new answers are approved."
+  ]
+}

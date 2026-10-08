@@ -3,6 +3,13 @@
 The dictionary review tool is a local editorial interface. It is not included
 in release builds and binds only to `127.0.0.1`.
 
+Start routine maintenance with the pipeline in `docs/definition_sources.md`.
+Its current report groups effective-content exceptions and prioritizes active
+answers. This interface is useful for focused editorial decisions; its older
+queues are not proof that current release content has been rechecked. After
+applying decisions, run `dart run tool/vocabulary_pipeline.dart --write` and
+`--check` so source evidence, machine holds and release assets stay in sync.
+
 ## Start the tool
 
 From the `app` directory:

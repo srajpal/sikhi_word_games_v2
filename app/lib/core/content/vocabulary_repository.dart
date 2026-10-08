@@ -4,10 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 
 import 'vocabulary_entry.dart';
+import 'vocabulary_source.dart';
 
-abstract interface class VocabularyRepository {
-  Future<List<VocabularyEntry>> load();
-}
+export 'vocabulary_source.dart';
 
 class AssetVocabularyRepository implements VocabularyRepository {
   List<VocabularyEntry>? _cache;

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "ruleVersion": 1,
+  "entries": [
+    {
+      "id": "english_bidet",
+      "fingerprint": "d78ec058921fbfa2295a91b0f3a28516ef20ec1b9ff63a79cd12f3dfa5db4d11",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_crazy",
+      "fingerprint": "2930bd622418afc49652c16cb40099df9ed5fe99afb78fa8c0404125423d8ee1",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_groin",
+      "fingerprint": "64c4d15e4075eaf793511243d138c0c86f8401877a230de476a8cc94ab1cc2a5",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_inguen",
+      "fingerprint": "2e03be780ae8abbf709584182662581d93238b47dbf0adfd0198102aa72d7ded",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_lochia",
+      "fingerprint": "8efe456627d32be9e7a51feecdf90d0ff2a4279f23ffd03e054d2ad0059995dd",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_loony",
+      "fingerprint": "3e8d65048ee1c382b9d0f9b3f930612e14cfb3ae12eb099873f4a71c5d60ed61",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_noma",
+      "fingerprint": "43569d0a5a6f876f9a20c0a39d9d9e4aff6ad2202692ff14be84f3c5af8ec55a",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_paynim",
+      "fingerprint": "2ac55eaa4f87beeb13cf79f0844a310012ceaa05d71198eab71b9b8de579da4e",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_putz",
+      "fingerprint": "5f761403d692f0ebf47304954fa3d6e522b8f3028b9ac0e83e8c30f61aa725cf",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_savage",
+      "fingerprint": "7707a761110b127fdeb6513275dbe5d915c98cbb1c5a63340f260370a891a274",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_stank",
+      "fingerprint": "3a1de0b6a96783260a6e2287f37bc7692721fc425c0b9692c68024f103d5084b",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "english_wank",
+      "fingerprint": "adc97c3dad491ea5ab25d885d2d574fc8e0a733569b750d84e5b6f7af7069987",
+      "reasons": [
+        "sensitive_or_stigmatizing"
+      ]
+    },
+    {
+      "id": "panjabi_ahsas",
+      "fingerprint": "dda1e58434890dbdae2d97b362a81f0517deaeaeef1c7a4e901e47d94983fa69",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ]
+    },
+    {
+      "id": "panjabi_amrit",
+      "fingerprint": "3dbd3bd735f7afe01dead1242d1104a83d57bf6996a180c4ee662f4a86741c52",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ]
+    },
+    {
+      "id": "panjabi_arpna",
+      "fingerprint": "915976250ea33ea73e67d3dc6859b813955a2461d5b5977c369d7c5785d1c28b",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ]
+    },
+    {
+      "id": "panjabi_ispat",
+      "fingerprint": "0086e0da4c206b284223595e540567fc052d3049c2dbd91e43a3005dc2c3e2f8",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ]
+    },
+    {
+      "id": "panjabi_utpad",
+      "fingerprint": "e5b20d18ca31c5d6a4c8f30d714a09f12e8ebac18836fe370cc1523eb2e97373",
+      "reasons": [
+        "missing_punjabi_source_link"
+      ]
+    }
+  ]
+}

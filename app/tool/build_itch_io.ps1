@@ -21,13 +21,9 @@ $archivePath = Join-Path $resolvedOutputDirectory "sikhi-word-games-web-$version
 
 Push-Location $appDirectory
 try {
-    dart run tool\build_release_content.dart --check
+    dart run tool\vocabulary_pipeline.dart --check
     if ($LASTEXITCODE -ne 0) {
-        throw "Release content is stale or could not be verified."
-    }
-    dart run tool\audit_release_content.dart
-    if ($LASTEXITCODE -ne 0) {
-        throw "Release content failed its distribution audit."
+        throw "Vocabulary recheck or release audit failed. Fetch pinned sources with python tool/fetch_vocabulary_sources.py, then preview/recheck vocabulary."
     }
     flutter build web --release --no-web-resources-cdn --pwa-strategy=none --suppress-analytics
     if ($LASTEXITCODE -ne 0) {
