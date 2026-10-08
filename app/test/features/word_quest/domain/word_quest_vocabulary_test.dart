@@ -120,10 +120,8 @@ void main() {
       isNot(contains('SABAD')),
     );
     expect(
-      vocabulary
-          .words(mode: LanguageMode.mixedLatin)
-          .map((word) => word.spelling),
-      containsAll(['SUN', 'BAAG']),
+      vocabulary.words(mode: LanguageMode.english).map((word) => word.spelling),
+      isNot(contains('BAAG')),
     );
   });
 

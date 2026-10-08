@@ -1,3 +1,7 @@
+import '../features/achievements/domain/player_progress.dart';
+import '../features/achievements/presentation/achievements_page.dart';
+import '../features/game_library/presentation/progress_page.dart';
+import '../features/settings/presentation/settings_page.dart';
 import '../core/themes/game_ui.dart';
 import '../core/persistence/reset_sections.dart';
 import '../features/learn_letters/data/learn_letters_repository.dart';
@@ -168,6 +172,23 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
               ),
             ),
             GoRoute(
+              path: 'settings',
+              builder: (context, state) => SettingsPage(
+                settings: _settings,
+                onSave: _changeFeedbackSettings,
+                onResetAllData: _resetAllData,
+              ),
+            ),
+            GoRoute(
+              path: 'progress',
+              builder: (context, state) => ProgressPage(progress: _progress()),
+            ),
+            GoRoute(
+              path: 'achievements',
+              builder: (context, state) =>
+                  AchievementsPage(progress: _progress()),
+            ),
+            GoRoute(
               path: 'dictionary',
               builder: (context, state) => DictionaryPage(
                 vocabularyRepository: widget.vocabularyRepository,
@@ -215,6 +236,14 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
       ],
     );
   }
+
+  PlayerProgress _progress() => PlayerProgress(
+    bujho: widget.statisticsRepository.load(),
+    khoj: widget.wordSearchSessionRepository.statistics.load(),
+    quest: widget.wordQuestSessionRepository.statistics.load(),
+    bridges: widget.wordBridgesRepository,
+    letters: widget.learnLettersRepository,
+  );
 
   Widget _gameShell({required GameKind game, required Widget child}) =>
       VictoryCelebration(

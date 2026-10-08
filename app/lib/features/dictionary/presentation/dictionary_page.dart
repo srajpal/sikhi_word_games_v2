@@ -139,15 +139,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
     LanguageMode.english => 'English',
     LanguageMode.romanizedPanjabi => 'Romanized Punjabi',
     LanguageMode.gurmukhi => 'Gurmukhi · Punjabi',
-    LanguageMode.mixedLatin =>
-      entry.language == VocabularyLanguage.english
-          ? 'English'
-          : 'Romanized Punjabi',
   };
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Dictionary')),
+    appBar: AppBar(
+      flexibleSpace: const PaperTexture(),
+      title: const Text('Dictionary'),
+    ),
     body: GameBackdrop(
       child: SafeArea(
         child: Center(

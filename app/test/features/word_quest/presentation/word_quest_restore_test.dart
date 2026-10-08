@@ -76,13 +76,13 @@ void main() {
     expect(find.text('Nice find! That letter is in the word.'), findsOneWidget);
     await tester.tap(find.text('Dismiss'));
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('word-quest-feedback')), findsNothing);
+    expect(find.byType(SnackBar), findsNothing);
     await tester.tap(find.byKey(const ValueKey('word-quest-key-P')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('word-quest-feedback')), findsOneWidget);
+    expect(find.byType(SnackBar), findsOneWidget);
     await tester.pump(const Duration(seconds: 5));
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('word-quest-feedback')), findsNothing);
+    expect(find.byType(SnackBar), findsNothing);
   });
   testWidgets('restores an unfinished quest into the playable screen', (
     tester,

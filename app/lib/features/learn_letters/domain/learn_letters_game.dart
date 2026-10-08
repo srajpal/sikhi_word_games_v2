@@ -3,11 +3,14 @@ import 'dart:math';
 import 'letter_entry.dart';
 export 'letter_entry.dart';
 
+enum LetterPracticeMode { name, listening }
+
 class LearnLettersGame {
   LearnLettersGame._(
     this._index,
     this._answered, {
     required this.roundId,
+    this.practiceMode = LetterPracticeMode.name,
     required List<String> questionIds,
     required List<List<String>> choiceIds,
     required List<int> wrongCounts,
@@ -22,6 +25,7 @@ class LearnLettersGame {
   factory LearnLettersGame.newRound({
     Map<String, int> mastery = const {},
     Random? random,
+    LetterPracticeMode practiceMode = LetterPracticeMode.name,
   }) {
     final rng = random ?? Random();
     final ranked = [...learnLetters]..shuffle(rng);
@@ -44,6 +48,7 @@ class LearnLettersGame {
     return LearnLettersGame._(
       0,
       false,
+      practiceMode: practiceMode,
       roundId:
           '${DateTime.now().microsecondsSinceEpoch}-${rng.nextInt(0x7fffffff)}',
       questionIds: questions,
@@ -53,6 +58,7 @@ class LearnLettersGame {
   }
 
   final String roundId;
+  final LetterPracticeMode practiceMode;
   final List<String> questionIds;
   final List<List<String>> _choiceIds;
   final List<int> _wrongCounts;
@@ -99,6 +105,7 @@ class LearnLettersGame {
 
   Map<String, Object?> toJson() => {
     'roundId': roundId,
+    'practiceMode': practiceMode.name,
     'questionIds': [...questionIds],
     'choiceIds': _choiceIds.map((row) => [...row]).toList(),
     'wrongCounts': [..._wrongCounts],
@@ -150,6 +157,9 @@ class LearnLettersGame {
     return LearnLettersGame._(
       index,
       answered,
+      practiceMode: LetterPracticeMode.values.byName(
+        json['practiceMode'] as String? ?? 'name',
+      ),
       roundId: roundId,
       questionIds: questions,
       choiceIds: choices,

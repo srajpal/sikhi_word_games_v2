@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:characters/characters.dart';
+
 import '../../../core/persistence/key_value_store.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../domain/word_bridges_game.dart';
@@ -56,6 +58,25 @@ class WordBridgesRepository {
       if (raw == null) return {};
       final state = jsonDecode(raw) as Map<String, Object?>;
       if (state['schemaVersion'] != 1) return {};
+      for (final key in ['perfectSets', 'longWordSets']) {
+        final value = state[key];
+        if (value != null && (value is! int || value < 0)) return {};
+      }
+      for (final key in ['usedWords', 'previousWords']) {
+        final value = state[key];
+        if (value != null &&
+            (value is! Map ||
+                value.values.any(
+                  (row) => row is! List || row.any((id) => id is! String),
+                ))) {
+          return {};
+        }
+      }
+      final words = state['matchedWords'];
+      if (words != null &&
+          (words is! List || words.any((id) => id is! String))) {
+        return {};
+      }
       return state;
     } on Object {
       return {};
@@ -86,6 +107,19 @@ class WordBridgesRepository {
   BridgeStatistics forMode(LanguageMode mode) =>
       _buckets(_load())[mode.name] ?? const BridgeStatistics();
   bool get hasActiveGame => restore() != null;
+  Set<String> usedWords(LanguageMode mode) =>
+      ((_load()['usedWords'] as Map? ?? {})[mode.name] as List? ?? [])
+          .whereType<String>()
+          .toSet();
+  Set<String> previousWords(LanguageMode mode) =>
+      ((_load()['previousWords'] as Map? ?? {})[mode.name] as List? ?? [])
+          .whereType<String>()
+          .toSet();
+  int get perfectSets => _load()['perfectSets'] as int? ?? 0;
+  int get distinctWords =>
+      ((_load()['matchedWords'] as List? ?? []).whereType<String>().toSet())
+          .length;
+  int get longWordSets => _load()['longWordSets'] as int? ?? 0;
 
   WordBridgesSession? restore() {
     try {
@@ -121,6 +155,19 @@ class WordBridgesRepository {
       final completed = state['completedRoundIds'];
       if (completed is List && completed.contains(game.roundId)) return;
       state['session'] = {'mode': mode.name, 'game': snapshot};
+      final history = Map<String, Object?>.from(
+        state['usedWords'] as Map? ?? {},
+      );
+      history[mode.name] = {
+        ...(history[mode.name] as List? ?? []).whereType<String>(),
+        ...game.wordOrder.map((p) => p.id),
+      }.toList();
+      state['usedWords'] = history;
+      final previous = Map<String, Object?>.from(
+        state['previousWords'] as Map? ?? {},
+      );
+      previous[mode.name] = game.wordOrder.map((p) => p.id).toList();
+      state['previousWords'] = previous;
     });
   }
 
@@ -144,6 +191,16 @@ class WordBridgesRepository {
           .whereType<String>()
           .toSet();
       if (completed.add(game.roundId)) {
+        if (attempts == 4) {
+          state['perfectSets'] = (state['perfectSets'] as int? ?? 0) + 1;
+        }
+        if (game.wordOrder.any((p) => p.word.characters.length >= 5)) {
+          state['longWordSets'] = (state['longWordSets'] as int? ?? 0) + 1;
+        }
+        state['matchedWords'] = {
+          ...(state['matchedWords'] as List? ?? []).whereType<String>(),
+          ...game.wordOrder.map((p) => p.id),
+        }.toList();
         final buckets = _buckets(state);
         buckets[mode.name] = (buckets[mode.name] ?? const BridgeStatistics())
             .plus(

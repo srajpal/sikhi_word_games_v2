@@ -63,23 +63,23 @@ void main() {
       final game = WordQuestGame(solution: 'SEVA');
 
       expect(game.guess('x').result, WordQuestGuessResult.incorrect);
-      expect(game.triesRemaining, 4);
+      expect(game.triesRemaining, 2);
       expect(game.guess('X').result, WordQuestGuessResult.repeated);
-      expect(game.triesRemaining, 4);
+      expect(game.triesRemaining, 2);
       expect(game.guess('s').result, WordQuestGuessResult.correct);
       expect(game.guess('S').result, WordQuestGuessResult.repeated);
-      expect(game.triesRemaining, 4);
+      expect(game.triesRemaining, 2);
     });
 
     test('uses an adaptive try budget and ends a learning round', () {
       final game = WordQuestGame(solution: 'SEVA');
 
-      expect(game.maximumTries, 5);
+      expect(game.maximumTries, 3);
       for (final letter in const ['B', 'C', 'D', 'F', 'G']) {
         game.guess(letter);
       }
 
-      expect(game.incorrectGuesses, 5);
+      expect(game.incorrectGuesses, 3);
       expect(game.triesRemaining, 0);
       expect(game.status, WordQuestStatus.lost);
       expect(game.guess('S').result, WordQuestGuessResult.gameOver);
@@ -90,7 +90,7 @@ void main() {
 
       expect(game.guess('SE').result, WordQuestGuessResult.invalid);
       expect(game.guess(' ').result, WordQuestGuessResult.invalid);
-      expect(game.triesRemaining, 5);
+      expect(game.triesRemaining, 3);
     });
 
     test(
@@ -126,11 +126,11 @@ void main() {
       expect(fourLetters.hintsUsed, 0);
     });
 
-    test('assigns 5, 6, and 7 tries to 4-, 5-, and 6-grapheme words', () {
-      expect(WordQuestGame(solution: 'SEVA').maximumTries, 5);
-      expect(WordQuestGame(solution: 'APPLE').maximumTries, 6);
-      expect(WordQuestGame(solution: 'PLANET').maximumTries, 7);
-      expect(WordQuestGame(solution: 'ਕੀਰਤਨ').maximumTries, 5);
+    test('assigns 3, 4, and 5 misses to 4-, 5-, and 6-grapheme words', () {
+      expect(WordQuestGame(solution: 'SEVA').maximumTries, 3);
+      expect(WordQuestGame(solution: 'APPLE').maximumTries, 4);
+      expect(WordQuestGame(solution: 'PLANET').maximumTries, 5);
+      expect(WordQuestGame(solution: 'ਕੀਰਤਨ').maximumTries, 3);
     });
 
     test('round-trips its snapshot and rejects malformed snapshots', () {

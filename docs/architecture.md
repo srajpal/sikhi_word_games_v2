@@ -19,8 +19,8 @@ before each JSON shard and every 250 constructed records; individual shard JSON
 parsing still runs on the browser thread. Malformed records report their IDs.
 
 `GameThemeTokens` owns panel, control and tile treatment. `GameArtwork` provides
-decorative library previews, and `GameSceneColors` supplies the Word Quest garden
-palette. All three game modes use the active theme; Word Quest does not maintain
+decorative library previews, and `QuestLantern` draws a secular countdown from
+the active color scheme. All three game modes use the active theme; Word Quest does not maintain
 a separate fixed palette. Shared actions expose button semantics and a minimum
 44px height.
 
@@ -93,7 +93,7 @@ lib/
 - Text processing uses Unicode grapheme clusters rather than code units.
 - Accepted guesses and eligible solutions are different collections.
 - Random selection can be seeded for deterministic tests.
-- Mixed English/Punjabi accepts both English and romanized Punjabi guesses.
+- The selectable language modes are English, Romanized Punjabi and Gurmukhi; retired mixed saves recover to a supported fresh round while historical statistics remain.
 - Gurmukhi remains a separate mode.
 
 ## Khoj: Word Search rules
@@ -213,7 +213,7 @@ is independent of the Host header. It is a local authoring tool, not a hosted AP
 
 ## Word Bridges
 
-Word Bridges separates its pure Dart matching engine, fixed-deck content resolver,
+Word Bridges separates its pure Dart matching engine, eligible-pool content resolver,
 single-key persistence repository, and Flutter presentation. Four unique pairs are
 shuffled independently on each side. Either side can be selected first; a mismatch
 counts an attempt without removing solved pairs. Completion, per-language statistics,
@@ -236,3 +236,24 @@ VictoryCelebration is a shared route-owned wrapper around GameGuide. Games notif
 Learn Letters uses a separate validated35-entry letter table, a five-question round model, and learnLetters.state.v1 for atomic session/statistics/first-try practice counts/completion IDs. Frozen snapshots enter the shared key write queue; completed round IDs prevent duplicate scoring. Counts update only on completed rounds. App-wide reset includes this key and the guide/settings entries. Global rounds include completed letter rounds, while word totals exclude letters.
 
 LetterPronunciationButton plays bundled WAV previews on explicit activation, stops earlier letter playback, and disposes players with their widgets. Backgrounding stops playback; failures are visible and retryable. Pronunciation playback is independent of optional victory sound settings. Local .audio-tools and .audio-venv are ignored and never packaged.
+
+
+### 1.11 play consistency and progress projection
+
+`GameLanguageHeader` centralizes the text-only language/optional word-size line.
+Shared game toasts float below the toolbar without changing board geometry.
+`PaperPage` owns full-page Settings/Progress/Achievements and per-game details;
+Dictionary retains its dedicated searchable route. The router exposes `/settings`,
+`/progress` and `/achievements` beside the existing game/Dictionary routes.
+
+`PlayerProgress` projects achievement facts from existing repositories without a
+second aggregate store. Jodo saves rotation IDs and completion facts in its atomic
+state; Learn Letters saves the practice mode and listening/perfect-round counts
+in its existing state. Repeated completion IDs remain inert. Missing new fields
+in older states mean zero; malformed new fields fall back safely. App-wide reset
+already owns these keys. Achievement IDs/goals live in a pure Dart catalog.
+
+Quest session schema 2 enforces 3/4/5 misses. Schema 1 still enforces the previous
+5/6/7 budget for valid unfinished legacy rounds and is retained on their next save.
+New rounds always use schema 2. This preserves played moves without accepting
+arbitrary custom budgets as app sessions.

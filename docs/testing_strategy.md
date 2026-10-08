@@ -16,7 +16,7 @@
 ## Required cases
 
 Check exact/present/absent feedback and repeated letters; four-, five-, and
-six-grapheme games in all four language modes; invalid and guess-only words;
+six-grapheme games in all three language modes; invalid and guess-only words;
 random selection/exhaustion; winning and losing; new/continue/back navigation;
 corrupt and unsupported saves; restart and settings isolation. For Khoj include
 drag direction, duplicate target detection, hints, and completion. For Word Quest
@@ -224,3 +224,20 @@ letters and later guesses, and retained input activation. Existing checks cover
 Dictionary navigation and saved Progress totals. The browser integration flow
 uses the stable new-game key rather than the previous visible button caption.
 Physical gameplay and real browser/offline/audio evidence remain separate.
+
+
+### Play consistency and achievements: 1.11.0+21
+
+Regression checks include the three-language boundary, shared language headings,
+3/4/5 Quest misses and 0/1/2 hints, repeated legacy-budget saves, 20 seeded Jodo
+sets per language with over 60 distinct IDs and mixed word lengths, current
+eligibility/provenance and conflicting-clue rejection. Listening tests check that
+answer glyph/name stays hidden before a correct choice, target audio remains
+below the target, and practice mode survives restore. Existing sound clips are
+unchanged; playback requests do not prove speaker audibility or pronunciation.
+
+Achievement tests cover exactly ten stable goals per game, threshold boundaries,
+old-stat projections, no fabricated historical facts, atomic once-only new
+completion facts, reset and all-theme 320px/200% text. New page goldens include
+three achievement galleries and a Settings phone. Review rendered captures before
+accepting changed baselines. Page navigation/reset tests exercise the real routes.

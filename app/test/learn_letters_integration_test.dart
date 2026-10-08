@@ -80,7 +80,7 @@ void main() {
       expect(find.text('1 rounds finished'), findsOneWidget);
       expect(find.text('0 words solved'), findsOneWidget);
       expect(
-        find.textContaining('1 rounds finished, 5 first-try answers.'),
+        find.textContaining('1 rounds finished, 5 first-try answers'),
         findsOneWidget,
       );
       expect(tester.takeException(), isNull);

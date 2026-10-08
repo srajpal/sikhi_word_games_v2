@@ -135,7 +135,6 @@ class WordPool {
         LanguageMode.english => entry.language == VocabularyLanguage.english,
         LanguageMode.romanizedPanjabi ||
         LanguageMode.gurmukhi => entry.language == VocabularyLanguage.panjabi,
-        LanguageMode.mixedLatin => true,
       };
 }
 

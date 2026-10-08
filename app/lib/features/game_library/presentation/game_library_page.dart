@@ -1,3 +1,4 @@
+import '../../../core/themes/studio_logo.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../learn_letters/data/learn_letters_repository.dart';
 import '../../../core/widgets/game_guide.dart';
@@ -9,12 +10,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/app_version.dart';
 import '../../../core/studio_brand.dart';
-import '../../../core/widgets/reset_app_data_dialog.dart';
 import '../../word_bridges/data/word_bridges_repository.dart';
 import '../../word_bridges/domain/word_bridges_content.dart';
 import '../../guess_the_word/data/guess_statistics_repository.dart';
-import '../../guess_the_word/domain/guess_statistics.dart';
-import 'library_statistics.dart';
 import '../../../core/release_feedback.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
@@ -286,189 +284,8 @@ class GameLibraryPage extends StatelessWidget {
     if (context.mounted) context.push('/word-bridges', extra: options);
   }
 
-  Future<void> _showFeedbackSettings(BuildContext context) async {
-    var resetRequested = false;
-    var statisticsRequested = false;
-    var hapticLevel = settings.hapticLevel;
-    var reducedMotion = settings.reducedMotion;
-    var celebrationSettings = settings;
-    final updated = await showDialog<AppSettings>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: const Text('App settings'),
-          scrollable: true,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DropdownButtonFormField<HapticFeedbackLevel>(
-                initialValue: hapticLevel,
-                decoration: const InputDecoration(
-                  labelText: 'Haptic feedback',
-                  helperText: 'Strength for keys, guesses, and errors',
-                ),
-                items: [
-                  for (final level in HapticFeedbackLevel.values)
-                    DropdownMenuItem(value: level, child: Text(level.label)),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setDialogState(() => hapticLevel = value);
-                  }
-                },
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Use your device display settings for larger or bold text. '
-                'Screen-reader controls and letter feedback work without color. '
-                'Your device reduce-motion setting is also respected.',
-              ),
-              const SizedBox(height: 12),
-              SwitchListTile(
-                title: const Text('Reduce motion'),
-                subtitle: const Text('Minimize tile and interface animation'),
-                value: reducedMotion,
-                onChanged: (value) =>
-                    setDialogState(() => reducedMotion = value),
-              ),
-              const Divider(),
-              SwitchListTile(
-                title: const Text('Victory sound'),
-                subtitle: const Text('Play a short fanfare when you win'),
-                value: celebrationSettings.victorySound,
-                onChanged: (value) => setDialogState(() {
-                  celebrationSettings = celebrationSettings.copyWith(
-                    victorySound: value,
-                  );
-                }),
-              ),
-              SwitchListTile(
-                title: const Text('Victory particles'),
-                subtitle: const Text(
-                  'Celebrate wins with colorful bursts. Reduce motion turns these off.',
-                ),
-                value: celebrationSettings.victoryParticles,
-                onChanged: (value) => setDialogState(() {
-                  celebrationSettings = celebrationSettings.copyWith(
-                    victoryParticles: value,
-                  );
-                }),
-              ),
-              ExpansionTile(
-                title: const Text('Per-game celebrations'),
-                subtitle: const Text(
-                  'Turn off sound or particles for individual games',
-                ),
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      'The main switches above apply to every game. Your choices below are kept when you turn them back on.',
-                    ),
-                  ),
-                  for (final game in GameKind.values) ...[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                      child: Text(
-                        _gameName(game),
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    ),
-                    SwitchListTile(
-                      title: Text(
-                        'Sound',
-                        semanticsLabel: '${_gameName(game)} victory sound',
-                      ),
-                      key: ValueKey('victory-sound-${game.name}'),
-                      value: !celebrationSettings.mutedVictoryGames.contains(
-                        game.name,
-                      ),
-                      onChanged: (value) => setDialogState(() {
-                        celebrationSettings = celebrationSettings
-                            .withGameVictory(game, sound: value);
-                      }),
-                    ),
-                    SwitchListTile(
-                      title: Text(
-                        'Particles',
-                        semanticsLabel: '${_gameName(game)} victory particles',
-                      ),
-                      key: ValueKey('victory-particles-${game.name}'),
-                      value: !celebrationSettings.quietVictoryGames.contains(
-                        game.name,
-                      ),
-                      onChanged: (value) => setDialogState(() {
-                        celebrationSettings = celebrationSettings
-                            .withGameVictory(game, particles: value);
-                      }),
-                    ),
-                  ],
-                ],
-              ),
-              const Divider(),
-              TextButton.icon(
-                onPressed: () {
-                  statisticsRequested = true;
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.bar_chart),
-                label: const Text('Your statistics'),
-              ),
-              if (onResetAllData != null) ...[
-                const Divider(),
-                TextButton.icon(
-                  onPressed: () {
-                    resetRequested = true;
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.restart_alt),
-                  label: const Text('Reset all app data'),
-                ),
-              ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(
-                celebrationSettings.copyWith(
-                  hapticLevel: hapticLevel,
-                  reducedMotion: reducedMotion,
-                ),
-              ),
-              child: const Text('Save'),
-            ),
-          ],
-        ),
-      ),
-    );
-    if (updated != null) onFeedbackSettingsChanged(updated);
-    if (statisticsRequested && context.mounted) {
-      showLibraryStatistics(
-        context,
-        bujho: guessStatisticsRepository?.load() ?? const GuessStatisticsBook(),
-        khoj: wordSearchSessionRepository.statistics.total,
-        quest: wordQuestSessionRepository.statistics.total,
-        bridges: wordBridgesRepository?.total,
-        letters: learnLettersRepository?.statistics,
-      );
-    }
-    if (resetRequested && context.mounted) {
-      await showResetAppDataDialog(context, onReset: onResetAllData!);
-    }
-  }
-
-  void _showProgress(BuildContext context) => showLibraryStatistics(
-    context,
-    bujho: guessStatisticsRepository?.load() ?? const GuessStatisticsBook(),
-    khoj: wordSearchSessionRepository.statistics.total,
-    quest: wordQuestSessionRepository.statistics.total,
-    bridges: wordBridgesRepository?.total,
-    letters: learnLettersRepository?.statistics,
-  );
+  void _showFeedbackSettings(BuildContext context) => context.push('/settings');
+  void _showProgress(BuildContext context) => context.push('/progress');
 
   @override
   Widget build(BuildContext context) {
@@ -483,14 +300,7 @@ class GameLibraryPage extends StatelessWidget {
         centerTitle: false,
         toolbarHeight: MediaQuery.textScalerOf(context).scale(28) * 2 + 24,
         flexibleSpace: const PaperTexture(),
-        title: Text(
-          'Sikhi Word Games',
-          style: theme.textTheme.displaySmall?.copyWith(
-            fontSize: MediaQuery.sizeOf(context).width >= 600 ? 36 : 24,
-            fontWeight: FontWeight.w900,
-            letterSpacing: -1.2,
-          ),
-        ),
+        title: const StudioLogo(),
         actions: [
           IconButton(
             tooltip: 'App settings',
@@ -580,6 +390,10 @@ class GameLibraryPage extends StatelessWidget {
                           TextButton(
                             onPressed: () => _showProgress(context),
                             child: const Text('Progress'),
+                          ),
+                          TextButton(
+                            onPressed: () => context.push('/achievements'),
+                            child: const Text('Badges'),
                           ),
                         ];
                         if (MediaQuery.textScalerOf(context).scale(14) > 21) {

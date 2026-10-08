@@ -168,7 +168,6 @@ class WordQuestVocabulary {
         LanguageMode.english => entry.language == VocabularyLanguage.english,
         LanguageMode.romanizedPanjabi ||
         LanguageMode.gurmukhi => entry.language == VocabularyLanguage.panjabi,
-        LanguageMode.mixedLatin => true,
       };
 
   static String _normalize(String spelling) =>

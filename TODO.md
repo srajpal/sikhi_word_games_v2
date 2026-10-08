@@ -5,6 +5,31 @@ remaining work. Completed milestones are evidence, not sign-off for a newer
 package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. Do not approve vocabulary merely to fill a pool quota.
 
+## October 8 play consistency update: 1.11.0+21
+
+- [x] Three supported game languages, shared language header and menu-only language
+  changes. Preserve historical statistics and valid older Quest budgets.
+- [x] Quest lantern countdown, 3/4/5 missed letters, 0/1/2 hints and shared toasts.
+- [x] Jodo draws repeat-aware, unambiguous sets from eligible words across lengths.
+- [x] Always-visible target audio and persisted reverse listening practice.
+- [x] Distinct Modern/Sikhi/Dark surfaces and responsive bilingual tile wordmark.
+- [x] Dedicated Settings/Dictionary/Progress/Achievements and per-game progress pages.
+- [x] Fifty achievement badges, ten per game, derived from durable statistics;
+  new facts are atomic with game completion, deduplicated and resettable.
+- [x] Final validation: 342 Flutter tests pass against reviewed visual baselines,
+  166 Dart files formatted, clean analysis and successful release web/debug APK
+  builds. Browser at `http://127.0.0.1:8920/` verifies the new logo, dedicated
+  Settings/Achievements, historical badge credit and exactly three language
+  choices. A fresh five-letter Quest shows four misses, one hint and the lantern;
+  no browser console errors were observed during these checks.
+- [x] Install and launch build 21 on K70 PRO with `adb install -r`, preserving
+  data. Installation Success, launch Status ok, version 1.11.0/code 21 and
+  running PID verified. Visible device gameplay still needs a hands-on check.
+- APK: `app/dist/sikhi-word-games-android-1.11.0+21-debug.apk`.
+  SHA-256: `88ddb92ff28b7ad3b613e0be86943b49a265ead84841ceafbfe7c4e862885c27`.
+- Sound replacement/review stays a separate task; this update reuses existing
+  letter recordings and does not represent pronunciation approval.
+
 ## Current state
 
 - GitHub issue-review baseline: PR #1 merged into `main` at
@@ -12,7 +37,7 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
   GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
   from that review. The focused save/restore and keyboard fixes are in
   `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.10.1+20, Paper & Play. The September 18 ZIP and uploaded
+- Current Android testing version: 1.11.0+21, Paper & Play. The September 18 ZIP and uploaded
   itch.io draft remain 1.9.0+17 and
   predate the subsequent audit fixes and October vocabulary recheck. They are
   historical artifacts, not packages of current source. Increment both version
@@ -200,7 +225,7 @@ The historical ZIP was 17,708,408 bytes, SHA-256
   atomicity. Decide scope from failure evidence and preserve round-ID deduplication.
 - [ ] Validate the proposed teen/adult learner audience with younger guided and
   older low-vision users. Address intended-audience content/accessibility gaps
-  before claiming family or child suitability; expand Jodo's fixed-set variety.
+  before claiming family or child suitability. Jodo variety is implemented in 1.11.
 
 ## Native and store releases, separate from the web playtest
 

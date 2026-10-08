@@ -4,8 +4,64 @@ import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/features/learn_letters/data/learn_letters_repository.dart';
 import 'package:sikhi_word_games_v2/features/learn_letters/presentation/learn_letters_page.dart';
+import 'package:sikhi_word_games_v2/features/learn_letters/domain/learn_letters_game.dart';
+import 'package:sikhi_word_games_v2/core/widgets/letter_pronunciation_button.dart';
 
 void main() {
+  testWidgets('target audio is below the letter before and after answering', (
+    tester,
+  ) async {
+    final repository = LearnLettersRepository(MemoryKeyValueStore());
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.modern),
+        home: LearnLettersPage(repository: repository),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Hear letter name'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.byType(LetterPronunciationButton)).dy,
+      greaterThan(
+        tester.getBottomLeft(find.byKey(const ValueKey('letter-target'))).dy,
+      ),
+    );
+    final id = repository.restore()!.currentLetter.id;
+    await tester.ensureVisible(find.byKey(ValueKey('letter-choice-$id')));
+    await tester.tap(find.byKey(ValueKey('letter-choice-$id')));
+    await tester.pumpAndSettle();
+    expect(find.text('Hear letter name'), findsOneWidget);
+  });
+  testWidgets(
+    'listening practice hides target until a correct glyph is chosen and restores its mode',
+    (tester) async {
+      final repository = LearnLettersRepository(MemoryKeyValueStore());
+      final game = repository.newGame(
+        practiceMode: LetterPracticeMode.listening,
+      );
+      await repository.save(game);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemes.forChoice(AppThemeChoice.modern),
+          home: LearnLettersPage(repository: repository),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('letter-target')), findsNothing);
+      expect(find.text(game.currentLetter.name), findsNothing);
+      expect(find.text('Hear letter name'), findsOneWidget);
+      expect(find.text(game.currentLetter.gurmukhi), findsOneWidget);
+      await tester.ensureVisible(
+        find.byKey(ValueKey('letter-choice-${game.currentLetter.id}')),
+      );
+      await tester.tap(
+        find.byKey(ValueKey('letter-choice-${game.currentLetter.id}')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('letter-target')), findsOneWidget);
+      expect(repository.restore()!.practiceMode, LetterPracticeMode.listening);
+    },
+  );
   Widget page(LearnLettersRepository repository, {double scale = 1}) =>
       MaterialApp(
         theme: AppThemes.forChoice(AppThemeChoice.modern),
@@ -29,7 +85,7 @@ void main() {
     await tester.ensureVisible(find.byKey(ValueKey('letter-choice-$wrong')));
     await tester.tap(find.byKey(ValueKey('letter-choice-$wrong')));
     await tester.pumpAndSettle();
-    expect(find.text('Not quite. Try another name.'), findsOneWidget);
+    expect(find.text('Not quite. Try another choice.'), findsOneWidget);
     expect(
       tester
           .widget<OutlinedButton>(find.byKey(ValueKey('letter-choice-$wrong')))

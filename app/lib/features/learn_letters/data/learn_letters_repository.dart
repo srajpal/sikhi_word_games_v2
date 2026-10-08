@@ -56,6 +56,13 @@ class LearnLettersRepository {
       final stats = LearnLettersStatistics.fromJson(
         state['statistics'] as Map<String, Object?>,
       );
+      for (final key in ['listeningRounds', 'perfectRounds']) {
+        final count = state[key];
+        if (count != null &&
+            (count is! int || count < 0 || count > stats.roundsCompleted)) {
+          return {};
+        }
+      }
       final mastery = (state['mastery'] as Map<String, Object?>)
           .cast<String, int>();
       final completed = (state['completedRoundIds'] as List).cast<String>();
@@ -89,8 +96,17 @@ class LearnLettersRepository {
     (_load()['mastery'] as Map<String, Object?>? ?? {}).cast<String, int>(),
   );
   bool get hasActiveGame => restore() != null;
-  LearnLettersGame newGame({Random? random}) =>
-      LearnLettersGame.newRound(mastery: mastery, random: random);
+  LearnLettersGame newGame({
+    Random? random,
+    LetterPracticeMode practiceMode = LetterPracticeMode.name,
+  }) => LearnLettersGame.newRound(
+    mastery: mastery,
+    random: random,
+    practiceMode: practiceMode,
+  );
+
+  int get listeningRounds => _load()['listeningRounds'] as int? ?? 0;
+  int get perfectRounds => _load()['perfectRounds'] as int? ?? 0;
 
   LearnLettersGame? restore() {
     try {
@@ -127,6 +143,13 @@ class LearnLettersRepository {
           .cast<String, int>();
       if (frozen.isComplete) {
         completed.add(frozen.roundId);
+        if (frozen.practiceMode == LetterPracticeMode.listening) {
+          state['listeningRounds'] =
+              (state['listeningRounds'] as int? ?? 0) + 1;
+        }
+        if (frozen.firstTryCorrect == 5) {
+          state['perfectRounds'] = (state['perfectRounds'] as int? ?? 0) + 1;
+        }
         stats = LearnLettersStatistics(
           roundsCompleted: stats.roundsCompleted + 1,
           answers: stats.answers + frozen.attempts,

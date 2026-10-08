@@ -40,6 +40,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Off').last);
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Save'));
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     expect(settings.load().hapticLevel, HapticFeedbackLevel.off);

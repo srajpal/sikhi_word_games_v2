@@ -1,3 +1,4 @@
+import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
@@ -19,6 +20,7 @@ void main() {
     await repository.record(mode: 'english', size: 4, won: true);
     await tester.pumpWidget(
       MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.modern),
         builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context)
               .copyWith(textScaler: const TextScaler.linear(2)),
@@ -46,6 +48,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Finished: 1'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    await tester.ensureVisible(find.text('Close'));
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
     expect(find.text('Word Quest statistics'), findsNothing);

@@ -207,7 +207,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final subtitle = tester.widget<Text>(
-        find.byKey(const ValueKey('guess-game-subtitle')),
+        find.byKey(const ValueKey('game-language-status')),
       );
       expect(subtitle.data, matches(RegExp(r'^.+ · [456] letters$')));
       expect(find.textContaining('Round'), findsNothing);
@@ -361,7 +361,7 @@ void main() {
 
     expect(find.text('Chardi Kala'), findsOneWidget);
     expect(find.text('Word Quest'), findsOneWidget);
-    expect(find.text('6 tries'), findsOneWidget);
+    expect(find.text('4 misses left'), findsOneWidget);
     expect(find.byKey(const ValueKey('word-quest-hint')), findsOneWidget);
     final keyboardToggle = find.byKey(
       const ValueKey('word-quest-keyboard-toggle'),
@@ -420,7 +420,7 @@ void main() {
     expect(centers.map((center) => center.dy).toSet(), hasLength(1));
     expect(centers.first.dx, greaterThan(0));
     expect(centers.last.dx, lessThan(320));
-    expect(find.text('7 tries'), findsOneWidget);
+    expect(find.text('5 misses left'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -506,12 +506,12 @@ void main() {
     await tester.pump();
     expect(find.byIcon(Icons.keyboard_hide_outlined), findsOneWidget);
     expect(find.byType(Divider), findsOneWidget);
-    expect(find.bySemanticsLabel(RegExp('garden blooms')), findsNothing);
+    expect(find.bySemanticsLabel(RegExp('Paper lantern')), findsNothing);
     expect(find.byKey(const ValueKey('word-quest-key-ਅ')), findsOneWidget);
     await tester.tap(keyboardToggle);
     await tester.pump();
     expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
-    expect(find.bySemanticsLabel(RegExp('garden blooms')), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('Paper lantern')), findsOneWidget);
 
     for (final grapheme in ['ਕੀ', 'ਰ', 'ਤ', 'ਨ']) {
       await _tapVisible(
@@ -617,7 +617,7 @@ void main() {
       find.textContaining('Romanized Punjabi uses Punjabi words'),
       findsOneWidget,
     );
-    expect(find.textContaining('Mixed accepts both'), findsOneWidget);
+    expect(find.textContaining('Mixed accepts both'), findsNothing);
     expect(find.textContaining('installed app works offline'), findsOneWidget);
 
     await tester.tap(find.text('Got it'));
@@ -645,37 +645,38 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets(
-    'gameplay fits a phone without a system text field or scrolling',
-    (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      await tester.pumpWidget(
-        SikhiWordGamesApp(
-          settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
-          vocabularyRepository: _vocabulary,
-        ),
-      );
-      await _startNewGame(tester);
-      await tester.pumpAndSettle();
-      await _applyGameSettings(
-        tester,
-        language: 'Gurmukhi',
-        length: '4 letters',
-      );
+  testWidgets('gameplay fits a phone without a system text field', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      SikhiWordGamesApp(
+        settingsRepository: AppSettingsRepository(MemoryKeyValueStore()),
+        vocabularyRepository: _vocabulary,
+      ),
+    );
+    await _startNewGame(tester);
+    await tester.pumpAndSettle();
+    await _applyGameSettings(tester, language: 'Gurmukhi', length: '4 letters');
 
-      expect(find.byType(TextField), findsNothing);
-      expect(find.byType(SingleChildScrollView), findsNothing);
-      expect(find.byKey(const ValueKey('key-enter')), findsOneWidget);
-      expect(
-        tester.getCenter(find.byKey(const ValueKey('key-backspace'))).dx,
-        greaterThan(tester.getCenter(find.byKey(const ValueKey('key-ੱ'))).dx),
-      );
-      expect(tester.takeException(), isNull);
-    },
-  );
+    expect(find.byType(TextField), findsNothing);
+    expect(
+      tester
+          .state<ScrollableState>(find.byType(Scrollable).first)
+          .position
+          .maxScrollExtent,
+      0,
+    );
+    expect(find.byKey(const ValueKey('key-enter')), findsOneWidget);
+    expect(
+      tester.getCenter(find.byKey(const ValueKey('key-backspace'))).dx,
+      greaterThan(tester.getCenter(find.byKey(const ValueKey('key-ੱ'))).dx),
+    );
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('four-letter board leaves space above the guess display', (
     tester,
@@ -913,13 +914,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await _chooseGameMenu(tester, 'Statistics');
-    expect(
-      find.descendant(
-        of: find.byType(AlertDialog),
-        matching: find.text('English · 5 letters'),
-      ),
-      findsOneWidget,
-    );
+    expect(find.text('English · 5 letters'), findsOneWidget);
     expect(
       tester.widget<Text>(find.byKey(const ValueKey('stat-Played'))).data,
       '1',
