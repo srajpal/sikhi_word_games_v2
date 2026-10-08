@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
+import 'paper_assets.dart';
 
 const gameSnackBarDuration = Duration(seconds: 5);
 
@@ -28,26 +29,12 @@ class GameBackdrop extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
-    final tokens = Theme.of(context).extension<GameThemeTokens>()!;
-    return DecoratedBox(
-      decoration: BoxDecoration(gradient: tokens.backgroundGradient),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Positioned.fill(
-            child: RepaintBoundary(
-              child: CustomPaint(
-                painter: _PaperPainter(
-                  color: Theme.of(context).colorScheme.onSurface
-                      .withValues(alpha: .045),
-                  phulkari: tokens.sikhiStyle,
-                ),
-              ),
-            ),
-          ),
-          child,
-        ],
-      ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        const Positioned.fill(child: PaperTexture()),
+        child,
+      ],
     );
   }
 }
@@ -70,6 +57,16 @@ class GamePanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         gradient: color == null ? tokens.panelGradient : null,
+        image: DecorationImage(
+          image: const AssetImage(PaperAssets.texture),
+          repeat: ImageRepeat.repeat,
+          scale: 2,
+          colorFilter: ColorFilter.mode(
+            color ?? Theme.of(context).colorScheme.surface,
+            BlendMode.modulate,
+          ),
+          opacity: .45,
+        ),
         borderRadius: tokens.panelRadius,
         border: Border.all(color: tokens.paperEdge),
         boxShadow: tokens.elevationShadow,
@@ -130,9 +127,15 @@ class GameGradientButton extends StatelessWidget {
     this.icon,
     this.onPressed,
     this.prominent = true,
+    this.semanticLabel,
+    this.compact = false,
+    this.iconTrailing = false,
     super.key,
   });
 
+  final bool compact;
+  final bool iconTrailing;
+  final String? semanticLabel;
   final bool prominent;
   final String label;
   final Widget? icon;
@@ -151,16 +154,28 @@ class GameGradientButton extends StatelessWidget {
         : theme.colorScheme.onSurface.withValues(alpha: .45);
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: enabled
-            ? prominent
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.surface
-            : theme.colorScheme.surfaceContainerHighest,
+        gradient: enabled && prominent
+            ? LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.lerp(theme.colorScheme.primary, Colors.white, .07)!,
+                  theme.colorScheme.primary,
+                  Color.lerp(theme.colorScheme.primary, Colors.black, .15)!,
+                ],
+              )
+            : null,
+        color: !enabled
+            ? theme.colorScheme.surfaceContainerHighest
+            : !prominent
+            ? theme.colorScheme.surface
+            : null,
         borderRadius: radius,
         border: Border.all(
           color: enabled
-              ? theme.colorScheme.primary.withValues(alpha: .35)
+              ? theme.colorScheme.surface.withValues(alpha: .85)
               : theme.colorScheme.outline.withValues(alpha: .35),
+          width: 1.5,
         ),
         boxShadow: enabled && prominent ? tokens.tileShadow : null,
       ),
@@ -175,8 +190,8 @@ class GameGradientButton extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 48, minWidth: 48),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
+                padding: EdgeInsets.symmetric(
+                  horizontal: compact ? 8 : 18,
                   vertical: 11,
                 ),
                 child: IconTheme(
@@ -185,10 +200,14 @@ class GameGradientButton extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (icon != null) ...[icon!, const SizedBox(width: 8)],
+                      if (icon != null && !iconTrailing) ...[
+                        icon!,
+                        const SizedBox(width: 8),
+                      ],
                       Flexible(
                         child: Text(
                           label,
+                          semanticsLabel: semanticLabel,
                           textAlign: TextAlign.center,
                           style: theme.textTheme.labelLarge?.copyWith(
                             fontWeight: FontWeight.w800,
@@ -196,6 +215,10 @@ class GameGradientButton extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (icon != null && iconTrailing) ...[
+                        const SizedBox(width: 8),
+                        icon!,
+                      ],
                     ],
                   ),
                 ),
@@ -208,37 +231,89 @@ class GameGradientButton extends StatelessWidget {
   }
 }
 
-class _PaperPainter extends CustomPainter {
-  _PaperPainter({required this.color, required this.phulkari});
-  final Color color;
-  final bool phulkari;
+/// Real paper fibers, tinted centrally for the three app themes.
+class PaperTexture extends StatelessWidget {
+  const PaperTexture({this.panel = false, super.key});
+  final bool panel;
   @override
-  void paint(Canvas canvas, Size size) {
-    final p = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = .7;
-    // A fixed, sparse print texture. No random noise or animation during play.
-    for (double y = 13; y < size.height; y += 27) {
-      for (double x = 9; x < size.width; x += 31) {
-        canvas.drawLine(Offset(x, y), Offset(x + 2, y + 1), p);
-      }
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final tokens = theme.extension<GameThemeTokens>()!;
+    final tint = panel
+        ? theme.colorScheme.surface
+        : tokens.backgroundGradient.colors.first;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: tint,
+        image: DecorationImage(
+          image: const AssetImage(PaperAssets.texture),
+          repeat: ImageRepeat.repeat,
+          scale: 2,
+          colorFilter: ColorFilter.mode(tint, BlendMode.modulate),
+          opacity: theme.brightness == Brightness.dark
+              ? .55
+              : panel
+              ? .5
+              : .7,
+        ),
+      ),
+      child: const SizedBox.expand(),
+    );
+  }
+}
+
+/// Deterministic deckled edges keep labels tactile without animating texture.
+class PaperLabel extends StatelessWidget {
+  const PaperLabel({
+    required this.child,
+    this.padding = const EdgeInsets.all(16),
+    super.key,
+  });
+  final Widget child;
+  final EdgeInsets padding;
+  @override
+  Widget build(BuildContext context) => PhysicalShape(
+    clipper: const _PaperEdge(),
+    color: Theme.of(context).colorScheme.surface,
+    shadowColor: const Color(0x33372B1A),
+    elevation: 2,
+    clipBehavior: Clip.antiAlias,
+    child: Stack(
+      children: [
+        const Positioned.fill(child: PaperTexture(panel: true)),
+        Padding(padding: padding, child: child),
+      ],
+    ),
+  );
+}
+
+class _PaperEdge extends CustomClipper<Path> {
+  const _PaperEdge();
+  @override
+  Path getClip(Size size) {
+    final path = Path()..moveTo(3, 4);
+    const offsets = [2.0, 0.0, 3.0, 1.0, 2.5, .5];
+    for (var i = 0; i <= 24; i++) {
+      path.lineTo(3 + (size.width - 6) * i / 24, offsets[i % offsets.length]);
     }
-    if (!phulkari) return;
-    for (double x = -size.height; x < size.width; x += 72) {
-      for (double y = 0; y < size.height; y += 72) {
-        final path = Path()
-          ..moveTo(x + 18, y)
-          ..lineTo(x + 36, y + 18)
-          ..lineTo(x + 18, y + 36)
-          ..lineTo(x, y + 18)
-          ..close();
-        canvas.drawPath(path, p);
-      }
+    for (var i = 0; i <= 16; i++) {
+      path.lineTo(
+        size.width - offsets[i % offsets.length],
+        3 + (size.height - 6) * i / 16,
+      );
     }
+    for (var i = 24; i >= 0; i--) {
+      path.lineTo(
+        3 + (size.width - 6) * i / 24,
+        size.height - offsets[i % offsets.length],
+      );
+    }
+    for (var i = 16; i >= 0; i--) {
+      path.lineTo(offsets[i % offsets.length], 3 + (size.height - 6) * i / 16);
+    }
+    return path..close();
   }
 
   @override
-  bool shouldRepaint(covariant _PaperPainter oldDelegate) =>
-      oldDelegate.color != color || oldDelegate.phulkari != phulkari;
+  bool shouldReclip(_PaperEdge oldClipper) => false;
 }

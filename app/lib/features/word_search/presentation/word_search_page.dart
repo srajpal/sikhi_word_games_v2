@@ -541,6 +541,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
     final puzzle = _puzzle;
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: const PaperTexture(),
         leading: IconButton(
           tooltip: 'Back',
           onPressed: () => context.pop(),
@@ -832,8 +833,10 @@ class _WordSearchBoard extends StatelessWidget {
                                 final hinted = hintedCells.contains(point);
                                 final keyboardFocused =
                                     showKeyboardFocus && point == keyboardPoint;
-                                final textColor = found || hinted
-                                    ? Colors.white
+                                final textColor = found
+                                    ? tokens.foregroundFor(tokens.correct)
+                                    : hinted
+                                    ? tokens.foregroundFor(tokens.present)
                                     : selected
                                     ? theme.colorScheme.onPrimary
                                     : theme.colorScheme.onSurface;
@@ -1139,7 +1142,7 @@ class _WordTargetCard extends StatelessWidget {
                             Icons.lightbulb_outline,
                             size: 16,
                             color: hintActive
-                                ? Colors.white
+                                ? tokens.foregroundFor(tokens.present)
                                 : theme.colorScheme.primary,
                           ),
                           const SizedBox(height: 1),
@@ -1147,7 +1150,7 @@ class _WordTargetCard extends StatelessWidget {
                               ? GurmukhiKeyLabel(
                                   grapheme: firstGrapheme,
                                   color: hintActive
-                                      ? Colors.white
+                                      ? tokens.foregroundFor(tokens.present)
                                       : theme.colorScheme.onSurface,
                                   gurmukhiFontSize: 13,
                                   romanizationFontSize: 6,
@@ -1156,7 +1159,7 @@ class _WordTargetCard extends StatelessWidget {
                                   firstGrapheme,
                                   style: theme.textTheme.labelMedium?.copyWith(
                                     color: hintActive
-                                        ? Colors.white
+                                        ? tokens.foregroundFor(tokens.present)
                                         : theme.colorScheme.onSurface,
                                     fontWeight: FontWeight.w900,
                                   ),

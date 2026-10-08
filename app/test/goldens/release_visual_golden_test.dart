@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'paper_assets.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,6 +33,7 @@ void main() {
   late WordBridgesContent bridgesContent;
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    await loadPaperAssets();
     bridgesContent = await WordBridgesContent.load(AssetVocabularyRepository());
     await (FontLoader('NotoSerif')
           ..addFont(rootBundle.load('assets/fonts/noto_serif/NotoSerif.ttf')))

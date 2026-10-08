@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'paper_assets.dart';
+
 enum AppThemeChoice { modern, sikhi, dark }
 
 extension AppThemeChoiceLabel on AppThemeChoice {
@@ -36,20 +38,51 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
   final LinearGradient panelGradient;
   final List<BoxShadow> elevationShadow;
 
-  BorderRadius get panelRadius => const BorderRadius.only(
-    topLeft: Radius.circular(8),
-    topRight: Radius.circular(8),
-    bottomLeft: Radius.circular(8),
-    bottomRight: Radius.circular(24),
-  );
-  BorderRadius get controlRadius => BorderRadius.circular(sikhiStyle ? 6 : 8);
-  Color get paperEdge => tileBorder.withValues(alpha: .42);
+  BorderRadius get panelRadius => BorderRadius.circular(16);
+  BorderRadius get controlRadius => BorderRadius.circular(28);
+  Color get paperEdge => tileBorder.withValues(alpha: .35);
   List<BoxShadow> get tileShadow => [
     BoxShadow(
-      color: tileBorder.withValues(alpha: .24),
+      color: const Color(0x332A2118),
       offset: const Offset(0, 3),
+      blurRadius: 3,
+    ),
+    BoxShadow(
+      color: tileBorder.withValues(alpha: .18),
+      offset: const Offset(0, 1),
     ),
   ];
+  Color foregroundFor(Color fill) {
+    final luminance = fill.computeLuminance();
+    if (1.05 / (luminance + .05) >= 4.5) return Colors.white;
+    const ink = Color(0xFF14262B);
+    if ((luminance + .05) / (ink.computeLuminance() + .05) >= 4.5) return ink;
+    return Colors.black;
+  }
+
+  BoxDecoration tileDecoration(
+    Color fill, {
+    Color? border,
+    double? borderWidth,
+  }) => BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color.lerp(fill, Colors.white, .055)!, fill],
+    ),
+    image: DecorationImage(
+      image: const AssetImage(PaperAssets.texture),
+      fit: BoxFit.cover,
+      colorFilter: ColorFilter.mode(fill, BlendMode.modulate),
+      opacity: .35,
+    ),
+    borderRadius: tileRadius,
+    border: Border.all(
+      color: border ?? paperEdge,
+      width: borderWidth ?? tileBorderWidth,
+    ),
+    boxShadow: tileShadow,
+  );
 
   @override
   GameThemeTokens copyWith({
@@ -106,7 +139,7 @@ class GameThemeTokens extends ThemeExtension<GameThemeTokens> {
 abstract final class AppThemes {
   static ThemeData forChoice(AppThemeChoice choice) => switch (choice) {
     AppThemeChoice.modern => _theme(
-      seed: const Color(0xFF0B6F66),
+      seed: const Color(0xFF0C4851),
       background: const Color(0xFFF3EDE1),
       radius: 8,
       borderWidth: 1.25,
@@ -153,7 +186,7 @@ abstract final class AppThemes {
               ? const Color(0xFFA9C9FF)
               : sikhiStyle
               ? const Color(0xFF173A67)
-              : const Color(0xFF0B6F66),
+              : const Color(0xFF0C4851),
           onPrimary: dark ? const Color(0xFF112B4C) : Colors.white,
           secondary: dark
               ? const Color(0xFFA6DBC9)
@@ -174,7 +207,7 @@ abstract final class AppThemes {
               : sikhiStyle
               ? const Color(0xFFFFFCF2)
               : const Color(0xFFFFFCF5),
-          onSurface: dark ? const Color(0xFFE9EFF8) : const Color(0xFF202D3D),
+          onSurface: dark ? const Color(0xFFE9EFF8) : const Color(0xFF14262B),
         );
     final base = ThemeData(
       useMaterial3: true,
@@ -185,16 +218,14 @@ abstract final class AppThemes {
       fontFamilyFallback: const ['NotoSansGurmukhi'],
       appBarTheme: AppBarTheme(
         centerTitle: true,
-        backgroundColor: sikhiStyle ? const Color(0xFF173A67) : scheme.surface,
-        foregroundColor: sikhiStyle
-            ? const Color(0xFFFFF8E8)
-            : scheme.onSurface,
+        backgroundColor: scheme.surface,
+        foregroundColor: scheme.onSurface,
         elevation: 0,
         scrolledUnderElevation: 0,
         titleTextStyle: TextStyle(
           fontSize: 19,
           fontWeight: FontWeight.w800,
-          color: sikhiStyle ? const Color(0xFFFFF8E8) : scheme.onSurface,
+          color: scheme.onSurface,
           fontFamily: fontFamily,
           fontFamilyFallback: const ['NotoSansGurmukhi'],
         ),
@@ -219,8 +250,8 @@ abstract final class AppThemes {
       extensions: [
         GameThemeTokens(
           correct: const Color(0xFF28734F),
-          present: const Color(0xFF866009),
-          absent: dark ? const Color(0xFF465268) : const Color(0xFF566579),
+          present: const Color(0xFFF3B63D),
+          absent: dark ? const Color(0xFF465268) : const Color(0xFFB8BDBB),
           tileBorder: dark
               ? const Color(0xFF8296B4)
               : sikhiStyle
@@ -242,7 +273,8 @@ abstract final class AppThemes {
           elevationShadow: [
             BoxShadow(
               color: scheme.onSurface.withValues(alpha: dark ? .12 : .13),
-              offset: const Offset(3, 4),
+              offset: const Offset(0, 4),
+              blurRadius: 8,
             ),
           ],
         ),
@@ -253,7 +285,7 @@ abstract final class AppThemes {
         style: FilledButton.styleFrom(
           minimumSize: const Size(48, 48),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(sikhiStyle ? 6 : 8),
+            borderRadius: BorderRadius.circular(28),
           ),
           textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
         ),
@@ -262,7 +294,7 @@ abstract final class AppThemes {
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(48, 48),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(sikhiStyle ? 6 : 8),
+            borderRadius: BorderRadius.circular(28),
           ),
         ),
       ),

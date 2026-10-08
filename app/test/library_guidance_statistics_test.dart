@@ -100,12 +100,12 @@ void main() {
       expect(bujho.id, isNot(khoj.id));
       expect(bujhoTree, contains('Bujho'));
       expect(bujhoTree, contains('Guess the Word'));
-      expect(bujhoTree, contains('Find the hidden word using letter clues.'));
+      expect(bujhoTree, contains('Figure out the word, one guess at a time.'));
       expect(bujhoTree, contains('New game'));
       expect(bujhoTree, isNot(contains('Khoj')));
       expect(khojTree, contains('Khoj'));
       expect(khojTree, contains('Word Search'));
-      expect(khojTree, contains('Trace hidden words in a letter grid.'));
+      expect(khojTree, contains('Find hidden words in a sea of letters.'));
       expect(khojTree, contains('New game'));
       expect(khojTree, isNot(contains('Bujho')));
       expect(

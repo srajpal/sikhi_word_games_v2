@@ -4,6 +4,7 @@ import '../../../core/language/gurmukhi_romanization.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/widgets/gurmukhi_key_label.dart';
 import '../domain/language_mode.dart';
+import '../domain/guess_evaluator.dart';
 
 class GameKeyboard extends StatelessWidget {
   const GameKeyboard({
@@ -15,6 +16,7 @@ class GameKeyboard extends StatelessWidget {
     required this.disabledCharacters,
     this.compact = false,
     this.enterLabel = 'ENTER',
+    this.letterResults = const {},
     super.key,
   });
 
@@ -26,6 +28,17 @@ class GameKeyboard extends StatelessWidget {
   final Set<String> disabledCharacters;
   final bool compact;
   final String enterLabel;
+  final Map<String, LetterResult> letterResults;
+
+  Color? _keyFill(BuildContext context, String character) {
+    final tokens = Theme.of(context).extension<GameThemeTokens>()!;
+    return switch (letterResults[character]) {
+      LetterResult.correct => tokens.correct,
+      LetterResult.present => tokens.present,
+      LetterResult.absent => tokens.absent,
+      null => disabledCharacters.contains(character) ? tokens.absent : null,
+    };
+  }
 
   static const _latinRows = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -68,6 +81,13 @@ class GameKeyboard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                         child: _KeyboardButton(
                           key: ValueKey('key-$character'),
+                          fill: _keyFill(context, character),
+                          stateValue: switch (letterResults[character]) {
+                            LetterResult.correct => 'correct position',
+                            LetterResult.present =>
+                              'present in another position',
+                            _ => null,
+                          },
                           label: mode == LanguageMode.gurmukhi
                               ? null
                               : character,
@@ -86,14 +106,13 @@ class GameKeyboard extends StatelessWidget {
                           child: mode == LanguageMode.gurmukhi
                               ? GurmukhiKeyLabel(
                                   grapheme: character,
-                                  color:
-                                      enabled &&
-                                          !disabledCharacters.contains(
-                                            character,
-                                          )
+                                  color: _keyFill(context, character) == null
                                       ? Theme.of(context).colorScheme.onSurface
-                                      : Theme.of(context).colorScheme.onSurface
-                                            .withValues(alpha: 0.45),
+                                      : Theme.of(context)
+                                            .extension<GameThemeTokens>()!
+                                            .foregroundFor(
+                                              _keyFill(context, character)!,
+                                            ),
                                   gurmukhiFontSize: compact ? 13 : 15,
                                   romanizationFontSize: compact ? 6 : 7,
                                 )
@@ -121,6 +140,8 @@ class GameKeyboard extends StatelessWidget {
             child: _KeyboardButton(
               key: const ValueKey('key-enter'),
               label: enterLabel,
+              fill: Theme.of(context).colorScheme.primary,
+              foreground: Theme.of(context).colorScheme.onPrimary,
               semanticLabel: enterLabel == 'ENTER'
                   ? 'Submit guess'
                   : enterLabel.toLowerCase(),
@@ -148,6 +169,9 @@ class _KeyboardButton extends StatelessWidget {
     this.onPressed,
     this.child,
     required this.height,
+    this.fill,
+    this.foreground,
+    this.stateValue,
     super.key,
   });
 
@@ -156,12 +180,16 @@ class _KeyboardButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget? child;
   final double height;
+  final Color? fill;
+  final Color? foreground;
+  final String? stateValue;
 
   @override
   Widget build(BuildContext context) => Semantics(
     button: true,
     enabled: onPressed != null,
     label: semanticLabel ?? label,
+    value: stateValue,
     excludeSemantics: true,
     onTap: onPressed,
     child: Tooltip(
@@ -170,12 +198,22 @@ class _KeyboardButton extends StatelessWidget {
         height: height,
         child: _KeyboardSurface(
           onPressed: onPressed,
+          fill: fill,
+          foreground: foreground,
           child:
               child ??
               Text(
                 label!,
-                style: Theme.of(context).textTheme.labelLarge
-                    ?.copyWith(fontWeight: FontWeight.w800),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color:
+                      foreground ??
+                      (fill == null
+                          ? Theme.of(context).colorScheme.onSurface
+                          : Theme.of(context)
+                                .extension<GameThemeTokens>()!
+                                .foregroundFor(fill!)),
+                ),
               ),
         ),
       ),
@@ -184,48 +222,38 @@ class _KeyboardButton extends StatelessWidget {
 }
 
 class _KeyboardSurface extends StatelessWidget {
-  const _KeyboardSurface({required this.onPressed, required this.child});
+  const _KeyboardSurface({
+    required this.onPressed,
+    required this.child,
+    this.fill,
+    this.foreground,
+  });
 
   final VoidCallback? onPressed;
   final Widget child;
+  final Color? fill;
+  final Color? foreground;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tokens = theme.extension<GameThemeTokens>()!;
     final radius = BorderRadius.circular(9);
-    final enabled = onPressed != null;
+    final color = fill ?? theme.colorScheme.surface;
+    final ink =
+        foreground ??
+        (fill == null
+            ? theme.colorScheme.onSurface
+            : tokens.foregroundFor(color));
     return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: enabled ? tokens.panelGradient : null,
-        color: enabled ? null : theme.colorScheme.surfaceContainerHighest,
-        borderRadius: radius,
-        border: Border.all(
-          color: enabled
-              ? tokens.tileBorder
-              : theme.colorScheme.outline.withValues(alpha: .4),
-          width: enabled ? tokens.tileBorderWidth : 1,
-        ),
-        boxShadow: enabled
-            ? [
-                ...tokens.tileShadow,
-                const BoxShadow(
-                  color: Color(0x332D3B55),
-                  blurRadius: 0,
-                  offset: Offset(0, 4),
-                ),
-              ]
-            : null,
-      ),
+      decoration: tokens.tileDecoration(color),
       child: FilledButton(
         onPressed: onPressed,
         style: FilledButton.styleFrom(
           backgroundColor: Colors.transparent,
           disabledBackgroundColor: Colors.transparent,
-          foregroundColor: theme.colorScheme.onSurface,
-          disabledForegroundColor: theme.colorScheme.onSurface.withValues(
-            alpha: .45,
-          ),
+          foregroundColor: ink,
+          disabledForegroundColor: ink,
           elevation: 0,
           shadowColor: Colors.transparent,
           minimumSize: Size.zero,

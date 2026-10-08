@@ -515,6 +515,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     final isComplete = game?.status != GuessGameStatus.playing;
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: const PaperTexture(),
         toolbarHeight: gameToolbarHeight(context, subtitle: true),
         title: GameHeading(
           identity: GameIdentity.bujho,
@@ -686,6 +687,9 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                   SizedBox(height: compact ? 4 : 8),
                                   GameKeyboard(
                                     mode: _mode,
+                                    letterResults: keyboardLetterResults(
+                                      game.turns,
+                                    ),
                                     enabled: true,
                                     disabledCharacters:
                                         unavailableKeyboardCharacters(
@@ -920,18 +924,9 @@ class _Tile extends StatelessWidget {
               : const Duration(milliseconds: 220),
           curve: Curves.easeOut,
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: tokens.tileRadius,
-            boxShadow: [
-              ...tokens.tileShadow,
-              if (tokens.sikhiStyle)
-                const BoxShadow(color: Color(0x5530342F), offset: Offset(3, 3)),
-            ],
-            border: Border.all(
-              color: letter == null ? tokens.tileBorder : color,
-              width: tokens.tileBorderWidth,
-            ),
+          decoration: tokens.tileDecoration(
+            color,
+            border: letter == null ? tokens.tileBorder : color,
           ),
           child: statusIcon == null
               ? const SizedBox.shrink()
@@ -943,7 +938,7 @@ class _Tile extends StatelessWidget {
                           letter!.grapheme,
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(
-                                color: Colors.white,
+                                color: tokens.foregroundFor(color),
                                 fontWeight: FontWeight.w800,
                               ),
                         ),
@@ -952,7 +947,11 @@ class _Tile extends StatelessWidget {
                     SizedBox(
                       height: 17,
                       child: Center(
-                        child: Icon(statusIcon, size: 13, color: Colors.white),
+                        child: Icon(
+                          statusIcon,
+                          size: 13,
+                          color: tokens.foregroundFor(color),
+                        ),
                       ),
                     ),
                   ],

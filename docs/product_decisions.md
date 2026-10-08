@@ -134,10 +134,11 @@ Dictionary saved words remain separate product follow-ups.
 - Give Continue game the strongest emphasis when a saved game exists; otherwise
   emphasize New game. Keep options visually secondary.
 - Paper & Play is the shared design language, not a fourth theme. Use warm paper
-  surfaces, sparse printed texture, flat cut-paper illustrations and offset tile
-  shadows. Modern has teal and terracotta accents, Sikhi has navy and warm gold,
-  and Dark has blue paper surfaces and pale blue actions. Draw illustrations in
-  the shared theme layer; do not bake game names or Gurmukhi text into images.
+  surfaces with visible paper fibers, dimensional illustrated scenes, torn paper
+  labels, raised letter tiles and gradient pill buttons with an ivory rim. Modern has teal and terracotta accents, Sikhi has navy and warm gold,
+  and Dark has blue paper surfaces and pale blue actions. Bundle the scenic
+  backgrounds locally and render their theme treatment in the shared theme
+  layer. Keep game names, controls and Gurmukhi glyphs as native Flutter text.
 - Every game heading places the smaller English title above its larger Punjabi
   name: Guess the Word / Bujho, Word Search / Khoj, Word Quest / Chardi Kala,
   Word Bridges / Jodo, Learn Letters / Akhar Pachhaan. Use the shared
@@ -156,8 +157,8 @@ Dictionary saved words remain separate product follow-ups.
   unfinished games as losses. Repeated words and finished retries count.
 - Show a short, skippable introduction on the first launch of each game, with
   replay available from How to play. Keep instructions direct and consistent.
-- Replace the large recurring Choose a game panel with a short language/offline
-  line. The individual cards explain each game.
+- Use a short Play / Learn / Grow tagline above the library navigation. The
+  individual cards explain each game, and help describes offline operation.
 - Preserve system text scaling, non-color feedback and all three themes.
   Accessible activation and readable controls take priority over fitting every
   action into a fixed-height surface.
@@ -369,3 +370,39 @@ The owner approved implementation under this exact English title, and explicitly
 The content table is separate from word vocabulary shards. Punjabi University's https://www.learnpunjabi.org/intro1.asp informs the basic alphabet and names-versus-sounds distinction. Romanized spelling is an approximate presentation convention; underdots distinguish retroflex names. The letter-name table and audio remain open to the owner's language review.
 
 35 offline WAV previews were generated locally using eSpeak NG1.52.0's Punjabi voice from native Punjabi letter-name text. These are intentionally labeled computer-generated pronunciation previews and have not received human pronunciation approval. Playback is explicit after a correct answer, on completion, and from Letter progress; no microphone or network service is required. A new clip stops the previous clip. Generated WAVs are bundled; the generator/runtime remain development tools only. Per-clip text, voice, checksums, source and review status live in app/tool/learn_letters_audio_manifest.json. Engine licensing and output-rights notes are recorded separately; do not represent this test build as a teacher-verified audio course.
+
+### Paper & Play artwork recipe (October 8 reference correction)
+
+The earlier flat icons did not deliver the approved concept. The production
+artwork in `app/assets/artwork/paper_play/` was generated with the built-in
+image-generation tool, using the user-supplied Paper & Play board as a style
+reference. Original PNGs are retained in Codex generated images; app assets
+are full-resolution WebP conversions (quality 88), without cropping or
+retouching. The six assets total 2,309,934 bytes.
+
+The common prompt requests tactile handmade paper fibers, warm ivory stock,
+sculptural cut-paper objects, contact shadows, dark teal botanical leaves,
+ochre and vivid burnt orange accents, and soft editorial lighting. Scenes
+are 1536 by 1024 with a quiet left area for a live paper label and illustrated
+objects on the right. Prompts prohibit UI devices, buttons, game labels, sacred
+imagery and generated Gurmukhi text. Scene prompts and asset mapping:
+
+- `bujho.webp`: burnt orange paper, stacked teal/ivory/orange books and four
+  dimensional ivory tiles spelling BOOK. BOOK is decorative, not an answer hint.
+- `khoj.webp`: a folded green paper hedge maze, magnifying glass and blank tiles.
+- `quest.webp`: a winding ochre path, teal pines, blue mountains, a secular
+  orange trail flag and blank tiles.
+- `jodo.webp`: an ochre footbridge over turquoise water, teal plants and blank
+  tiles. The game still matches words to meanings.
+- `letters.webp`: mustard, orange and teal alphabet blocks with blank fronts.
+  Native ਕ, ਖ and ਗ are positioned on the full source canvas before cover
+  fitting, so the glyphs stay on their blocks on phones and tablets.
+- `paper.webp`: a 1254 by 1254 seamless ivory paper fiber texture, without
+  objects, folds, writing, vignettes or borders. Shared surfaces tint it by theme.
+
+Image decoding is awaited before golden capture. Phone rows retain 48-pixel
+launch and options/help actions; saved games keep Continue and New game.
+Enlarged text uses labelled controls and flexible layout. Amber and gray
+feedback use dark ink; green feedback uses white. Bujho keyboard feedback
+retains the strongest grapheme clue across duplicate letters and later guesses,
+with spoken status values alongside visual colors.

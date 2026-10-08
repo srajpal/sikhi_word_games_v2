@@ -469,6 +469,7 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      flexibleSpace: const PaperTexture(),
       toolbarHeight: gameToolbarHeight(context),
       title: const GameHeading(identity: GameIdentity.jodo, compact: true),
       actions: [

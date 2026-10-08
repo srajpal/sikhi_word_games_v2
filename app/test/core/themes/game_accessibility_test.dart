@@ -4,9 +4,85 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/core/themes/game_ui.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/domain/guess_evaluator.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/presentation/game_keyboard.dart';
 
 void main() {
+  testWidgets(
+    'colored keyboard clues stay readable and accessible in every theme',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      try {
+        for (final choice in AppThemeChoice.values) {
+          final theme = AppThemes.forChoice(choice);
+          final tokens = theme.extension<GameThemeTokens>()!;
+          final typed = <String>[];
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: theme,
+              home: Scaffold(
+                body: GameKeyboard(
+                  mode: LanguageMode.english,
+                  enabled: true,
+                  disabledCharacters: const {'C'},
+                  letterResults: const {
+                    'A': LetterResult.correct,
+                    'B': LetterResult.present,
+                    'C': LetterResult.absent,
+                  },
+                  onCharacter: typed.add,
+                  onBackspace: () {},
+                  onEnter: () {},
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          for (final pair in [
+            ('A', tokens.correct),
+            ('B', tokens.present),
+            ('C', tokens.absent),
+          ]) {
+            final label = find.descendant(
+              of: find.byKey(ValueKey('key-${pair.$1}')),
+              matching: find.text(pair.$1),
+            );
+            expect(
+              tester.widget<Text>(label).style!.color,
+              tokens.foregroundFor(pair.$2),
+            );
+          }
+          expect(
+            tester
+                .getSemantics(find.bySemanticsLabel('A'))
+                .getSemanticsData()
+                .value,
+            'correct position',
+          );
+          expect(
+            tester
+                .getSemantics(find.bySemanticsLabel('B'))
+                .getSemanticsData()
+                .value,
+            'present in another position',
+          );
+          await tester.tap(find.byKey(const ValueKey('key-A')));
+          await tester.tap(find.byKey(const ValueKey('key-B')));
+          expect(typed, ['A', 'B']);
+          expect(
+            tester
+                .getSemantics(find.bySemanticsLabel('C, not in the word'))
+                .getSemanticsData()
+                .hasAction(SemanticsAction.tap),
+            isFalse,
+          );
+        }
+      } finally {
+        semantics.dispose();
+      }
+    },
+  );
+
   testWidgets('screen-reader keyboard activation types, deletes and submits', (
     tester,
   ) async {

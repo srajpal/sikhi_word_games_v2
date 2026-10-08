@@ -19,9 +19,9 @@ void main() {
         (scheme.secondary, scheme.onSecondary),
         (scheme.surface, scheme.onSurface),
         (scheme.secondaryContainer, scheme.onSecondaryContainer),
-        (tokens.correct, Colors.white),
-        (tokens.present, Colors.white),
-        (tokens.absent, Colors.white),
+        (tokens.correct, tokens.foregroundFor(tokens.correct)),
+        (tokens.present, tokens.foregroundFor(tokens.present)),
+        (tokens.absent, tokens.foregroundFor(tokens.absent)),
       ]) {
         expect(
           contrast(pair.$1, pair.$2),
