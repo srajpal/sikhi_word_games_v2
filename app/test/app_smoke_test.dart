@@ -129,7 +129,14 @@ void main() {
         matching: find.byType(GamePanel),
       );
       expect(
-        find.descendant(of: card, matching: find.text('New game')),
+        find.descendant(
+          of: card,
+          matching: find.byKey(
+            ValueKey(
+              'new-game-${const {'Bujho': 'guessTheWord', 'Khoj': 'wordSearch', 'Chardi Kala': 'wordQuest'}[title]}',
+            ),
+          ),
+        ),
         findsOneWidget,
       );
       expect(
@@ -180,10 +187,7 @@ void main() {
         vocabularyRepository: _vocabulary,
       ),
     );
-    expect(
-      find.text('Offline word games in English, Punjabi and Gurmukhi'),
-      findsOneWidget,
-    );
+    expect(find.text('PLAY  ·  LEARN  ·  GROW'), findsOneWidget);
     await _startNewGame(tester);
     await tester.pumpAndSettle();
     expect(find.text('Bujho'), findsOneWidget);
@@ -570,10 +574,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(
-      find.text('Offline word games in English, Punjabi and Gurmukhi'),
-      findsOneWidget,
-    );
+    expect(find.text('PLAY  ·  LEARN  ·  GROW'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -594,11 +595,7 @@ void main() {
 
     expect(find.text('ੴ'), findsOneWidget);
     expect(
-      Theme.of(
-        tester.element(
-          find.text('Offline word games in English, Punjabi and Gurmukhi'),
-        ),
-      ).brightness,
+      Theme.of(tester.element(find.text('PLAY  ·  LEARN  ·  GROW'))).brightness,
       Brightness.light,
     );
   });

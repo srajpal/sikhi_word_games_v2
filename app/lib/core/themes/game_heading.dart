@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/game_library/domain/game_launch_options.dart';
 import 'game_artwork.dart';
+import 'game_ui.dart';
 
 /// One naming source for the library, game headers and help screens.
 @immutable
@@ -55,6 +56,7 @@ class GameHeading extends StatelessWidget {
     this.compact = false,
     this.prominent = false,
     this.subtitle,
+    this.titleSize,
     super.key,
   });
 
@@ -62,6 +64,7 @@ class GameHeading extends StatelessWidget {
   final bool compact;
   final bool prominent;
   final Widget? subtitle;
+  final double? titleSize;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,7 @@ class GameHeading extends StatelessWidget {
     final ink = compact
         ? theme.appBarTheme.foregroundColor
         : theme.colorScheme.onSurface;
-    return Column(
+    final heading = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: compact
           ? CrossAxisAlignment.center
@@ -91,11 +94,13 @@ class GameHeading extends StatelessWidget {
             textAlign: compact ? TextAlign.center : null,
             style: theme.textTheme.displaySmall?.copyWith(
               color: ink,
-              fontSize: compact
-                  ? 20
-                  : prominent
-                  ? 36
-                  : 27,
+              fontSize:
+                  titleSize ??
+                  (compact
+                      ? 20
+                      : prominent
+                      ? 36
+                      : 27),
               fontWeight: FontWeight.w900,
               height: 1.25,
             ),
@@ -104,13 +109,19 @@ class GameHeading extends StatelessWidget {
         if (subtitle != null) ...[const SizedBox(height: 2), subtitle!],
       ],
     );
+    return compact
+        ? PaperLabel(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            child: heading,
+          )
+        : heading;
   }
 }
 
 /// Let titles grow with accessibility text instead of shrinking them to fit.
 double gameToolbarHeight(BuildContext context, {bool subtitle = false}) {
   final scale = MediaQuery.textScalerOf(context);
-  return scale.scale(20) * 2.5 + scale.scale(12) * (subtitle ? 2 : 1) + 20;
+  return scale.scale(20) * 2.5 + scale.scale(12) * (subtitle ? 2 : 1) + 36;
 }
 
 /// A small paper illustration and instruction, without a duplicate game title.

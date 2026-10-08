@@ -500,6 +500,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     return Scaffold(
       backgroundColor: scheme.surface,
       appBar: AppBar(
+        flexibleSpace: const PaperTexture(),
         centerTitle: true,
         toolbarHeight: gameToolbarHeight(context),
         title: const GameHeading(identity: GameIdentity.quest, compact: true),
@@ -851,6 +852,10 @@ class _GardenPath extends StatelessWidget {
         ),
         child: Stack(
           children: [
+            const Positioned.fill(
+              child: GameScene(kind: GameArtworkKind.garden),
+            ),
+
             Positioned.fill(
               child: CustomPaint(
                 painter: _GardenPainter(
@@ -913,46 +918,6 @@ class _GardenPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final sun = Paint()..color = scene.sun;
-    canvas.drawCircle(const Offset(24, 22), 10, sun);
-    for (var i = 0; i < 8; i++) {
-      final angle = i * pi / 4;
-      canvas.drawLine(
-        const Offset(24, 22),
-        Offset(24 + cos(angle) * 16, 22 + sin(angle) * 16),
-        Paint()
-          ..color = scene.sun.withValues(alpha: .75)
-          ..strokeWidth = 2,
-      );
-    }
-
-    final backHill = Paint()..color = scene.hill.withValues(alpha: .8);
-    final backPath = Path()
-      ..moveTo(0, size.height)
-      ..quadraticBezierTo(
-        size.width * .25,
-        size.height * .30,
-        size.width * .62,
-        size.height,
-      )
-      ..close();
-    canvas.drawPath(backPath, backHill);
-
-    final frontHill = Path()
-      ..moveTo(size.width * .38, size.height)
-      ..quadraticBezierTo(
-        size.width * .72,
-        size.height * .40,
-        size.width,
-        size.height * .68,
-      )
-      ..lineTo(size.width, size.height)
-      ..close();
-    canvas.drawPath(
-      frontHill,
-      Paint()..color = scene.leaf.withValues(alpha: .72),
-    );
-
     final stemPaint = Paint()
       ..color = scene.stem
       ..strokeWidth = 2
@@ -968,17 +933,6 @@ class _GardenPainter extends CustomPainter {
       canvas.drawCircle(Offset(x, y - 13), 4, Paint()..color = bloomColor);
       canvas.drawCircle(Offset(x, y - 13), 1.5, Paint()..color = scene.sun);
     }
-
-    final treeX = size.width - 23;
-    canvas.drawRect(
-      Rect.fromLTWH(treeX - 2, size.height - 35, 4, 24),
-      Paint()..color = scene.stem,
-    );
-    canvas.drawCircle(
-      Offset(treeX, size.height - 38),
-      progress == 8 ? 15 : 12,
-      Paint()..color = progress == 8 ? bloomColor : scene.leaf,
-    );
   }
 
   @override

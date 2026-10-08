@@ -142,6 +142,7 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: const PaperTexture(),
         toolbarHeight: gameToolbarHeight(context),
         title: const GameHeading(identity: GameIdentity.letters, compact: true),
         actions: [

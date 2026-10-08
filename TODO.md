@@ -12,7 +12,7 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
   GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
   from that review. The focused save/restore and keyboard fixes are in
   `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.10.0+19, Paper & Play. The September 18 ZIP and uploaded
+- Current Android testing version: 1.10.1+20, Paper & Play. The September 18 ZIP and uploaded
   itch.io draft remain 1.9.0+17 and
   predate the subsequent audit fixes and October vocabulary recheck. They are
   historical artifacts, not packages of current source. Increment both version
@@ -29,7 +29,32 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
   Modern/Sikhi/Dark themes, responsive shells and Unicode-safe matching exist.
   Reusing these foundations is completed work, not an outstanding new module.
 
-## October 8 Paper & Play redesign: 1.10.0+19
+## October 8 Paper & Play reference correction: 1.10.1+20
+
+- [x] Replace the rejected flat preview icons with five bundled dimensional
+  scene backgrounds and a real paper texture matching the approved reference.
+- [x] Add shared torn labels, teal/navy/blue gradient pill actions, ivory rims,
+  raised tiles, and consistent native English-above-Punjabi naming. Keep all
+  three themes and native Gurmukhi letters on the illustrated alphabet blocks.
+- [x] Use scenic tablet cards and illustrated phone rows, retaining Continue,
+  New game and options/help controls and flexible enlarged-text layouts.
+- [x] Match amber/gray/green Bujho feedback and keyboard colors with readable
+  ink and spoken clue values; repeated letters retain the strongest result.
+- [x] Final validation: 329 Flutter tests pass against reviewed goldens without
+  updating them, clean analysis, 156 Dart files formatted, successful release
+  web and debug Android builds.
+- [x] Install build 20 on K70 PRO with `adb install -r`, preserving data.
+  Installation returned Success; launch Status ok, version 1.10.1/code 20 and
+  running PID verified. The tablet was locked; visible device gameplay remains
+  a separate check.
+- APK: `app/dist/sikhi-word-games-android-1.10.1+20-debug.apk`, 178,085,300 bytes.
+  SHA-256: `f85490c49b7c5b78ea550004f144337709409d0e4df68566ea1f18498425e09d`.
+  Six artwork assets and three release vocabulary shards are byte-identical to
+  source; all 35 letter WAV clips and bundled Noto Serif are present. The APK
+  has the main.dart kernel and all three Android ABI runtimes. This remains a
+  debug testing build; no web upload or publication occurred.
+
+## October 8 Paper & Play redesign: 1.10.0+19 (superseded visual draft)
 
 - [x] Replace the shared visual treatment across all five games and the library
   with paper surfaces, offset tile shadows, flat drawn illustrations and bundled

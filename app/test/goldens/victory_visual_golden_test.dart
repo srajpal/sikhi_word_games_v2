@@ -1,3 +1,5 @@
+import 'paper_assets.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +12,7 @@ import 'package:sikhi_word_games_v2/features/settings/data/app_settings_reposito
 void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    await loadPaperAssets();
     await (FontLoader('NotoSerif')
           ..addFont(rootBundle.load('assets/fonts/noto_serif/NotoSerif.ttf')))
         .load();

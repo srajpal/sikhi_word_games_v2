@@ -480,7 +480,17 @@ class GameLibraryPage extends StatelessWidget {
         : AppThemeChoice.modern;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sikhi Word Games'),
+        centerTitle: false,
+        toolbarHeight: MediaQuery.textScalerOf(context).scale(28) * 2 + 24,
+        flexibleSpace: const PaperTexture(),
+        title: Text(
+          'Sikhi Word Games',
+          style: theme.textTheme.displaySmall?.copyWith(
+            fontSize: MediaQuery.sizeOf(context).width >= 600 ? 36 : 24,
+            fontWeight: FontWeight.w900,
+            letterSpacing: -1.2,
+          ),
+        ),
         actions: [
           IconButton(
             tooltip: 'App settings',
@@ -539,61 +549,54 @@ class GameLibraryPage extends StatelessWidget {
                     const SizedBox(height: 4),
                   ],
                   Text(
-                    'A little wordplay.',
-                    style: theme.textTheme.displaySmall?.copyWith(
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -1.2,
+                    'PLAY  ·  LEARN  ·  GROW',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      letterSpacing: 3,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Offline word games in English, Punjabi and Gurmukhi',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'by $studioName',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.labelMedium,
+                  const SizedBox(height: 14),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.onSurface.withValues(
+                        alpha: .065,
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final items = [
+                          Semantics(
+                            selected: true,
+                            child: GameGradientButton(
+                              label: 'Play',
+                              onPressed: () {},
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => context.push('/dictionary'),
+                            child: const Text('Dictionary'),
+                          ),
+                          TextButton(
+                            onPressed: () => _showProgress(context),
+                            child: const Text('Progress'),
+                          ),
+                        ];
+                        if (MediaQuery.textScalerOf(context).scale(14) > 21) {
+                          return Wrap(
+                            alignment: WrapAlignment.center,
+                            children: items,
+                          );
+                        }
+                        return Row(
+                          children: [
+                            for (final item in items) Expanded(child: item),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      Semantics(
-                        selected: true,
-                        child: const GameStatusPill(
-                          icon: Icons.grid_view_rounded,
-                          child: Text('Play'),
-                        ),
-                      ),
-                      TextButton.icon(
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          iconSize: 18,
-                          textStyle: theme.textTheme.labelMedium,
-                        ),
-                        onPressed: () => context.push('/dictionary'),
-                        icon: const Icon(Icons.menu_book_outlined),
-                        label: const Text('Dictionary'),
-                      ),
-                      TextButton.icon(
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          iconSize: 18,
-                          textStyle: theme.textTheme.labelMedium,
-                        ),
-                        onPressed: () => _showProgress(context),
-                        icon: const Icon(Icons.bar_chart_rounded),
-                        label: const Text('Progress'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 22),
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final twoColumns =
@@ -607,7 +610,7 @@ class GameLibraryPage extends StatelessWidget {
                           grid: twoColumns,
                           featured: true,
                           description:
-                              'Find the hidden word using letter clues.',
+                              'Figure out the word, one guess at a time.',
                           gameKind: GameKind.guessTheWord,
                           hasActiveGame: _hasActiveGame(GameKind.guessTheWord),
                           onContinue: () =>
@@ -621,7 +624,7 @@ class GameLibraryPage extends StatelessWidget {
                         ),
                         _GameCard(
                           grid: twoColumns,
-                          description: 'Trace hidden words in a letter grid.',
+                          description: 'Find hidden words in a sea of letters.',
                           gameKind: GameKind.wordSearch,
                           hasActiveGame: _hasActiveGame(GameKind.wordSearch),
                           onContinue: () =>
@@ -633,8 +636,7 @@ class GameLibraryPage extends StatelessWidget {
                         ),
                         _GameCard(
                           grid: twoColumns,
-                          description:
-                              'Use a clue and choose letters to find the word.',
+                          description: 'Follow the clues. Find the word.',
                           gameKind: GameKind.wordQuest,
                           hasActiveGame: _hasActiveGame(GameKind.wordQuest),
                           onContinue: () =>
@@ -657,7 +659,7 @@ class GameLibraryPage extends StatelessWidget {
                         ),
                         _GameCard(
                           grid: twoColumns,
-                          description: 'Recognize Gurmukhi letters and learn their names.',
+                          description: 'Explore Gurmukhi letters step by step.',
                           gameKind: GameKind.learnLetters,
                           hasActiveGame: _hasActiveGame(GameKind.learnLetters),
                           onContinue: () =>
@@ -675,18 +677,6 @@ class GameLibraryPage extends StatelessWidget {
                           SizedBox(
                             width: constraints.maxWidth,
                             child: cards.first,
-                          ),
-                          SizedBox(
-                            width: constraints.maxWidth,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 8, bottom: 2),
-                              child: Text(
-                                'More ways to play',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
                           ),
                           for (final card in cards.skip(1))
                             SizedBox(width: cardWidth, child: card),
@@ -763,7 +753,92 @@ class _GameCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final identity = GameIdentity.forGame(gameKind);
     final hasContinue = hasActiveGame && onContinue != null;
+    final largeText = MediaQuery.textScalerOf(context).scale(14) > 21;
+    final scenic = (featured || grid) && !largeText;
+    final copy = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GameHeading(
+          identity: identity,
+          prominent: featured,
+          titleSize: !grid && !featured && !largeText ? 22 : null,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          description,
+          style: !grid && !featured && !largeText
+              ? theme.textTheme.bodySmall
+              : theme.textTheme.bodyMedium,
+        ),
+      ],
+    );
+    final actions = LayoutBuilder(
+      builder: (context, constraints) {
+        final primary = GameGradientButton(
+          key: ValueKey(
+            '${hasContinue ? 'continue' : 'new'}-game-${gameKind.name}',
+          ),
+          label: hasContinue ? 'Continue' : 'Play ${identity.punjabiName}',
+          compact: true,
+          iconTrailing: true,
+          semanticLabel: hasContinue
+              ? 'Continue ${identity.punjabiName}'
+              : 'New game, Play ${identity.punjabiName}',
+          onPressed: hasContinue ? onContinue : onNewGame,
+          icon: hasContinue ? null : const Icon(Icons.arrow_forward, size: 18),
+        );
+        final secondary = hasContinue
+            ? GameGradientButton(
+                key: ValueKey('new-game-${gameKind.name}'),
+                label: 'New game',
+                compact: true,
+                prominent: false,
+                onPressed: onNewGame,
+              )
+            : null;
+        final options = IconButton.filledTonal(
+          tooltip: gameKind == GameKind.learnLetters
+              ? 'How to play'
+              : 'New game options',
+          onPressed: onNewGameOptions,
+          style: IconButton.styleFrom(
+            minimumSize: const Size(48, 48),
+            backgroundColor: theme.colorScheme.surface,
+            foregroundColor: theme.colorScheme.primary,
+          ),
+          icon: Icon(
+            gameKind == GameKind.learnLetters
+                ? Icons.help_outline
+                : Icons.tune_rounded,
+            size: 20,
+          ),
+        );
+        final allFit = constraints.maxWidth >= 238 && !largeText;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(child: primary),
+                if (secondary != null && allFit) ...[
+                  const SizedBox(width: 8),
+                  Expanded(child: secondary),
+                ],
+                const SizedBox(width: 8),
+                options,
+              ],
+            ),
+            if (secondary != null && !allFit) ...[
+              const SizedBox(height: 8),
+              secondary,
+            ],
+          ],
+        );
+      },
+    );
     return Semantics(
       key: ValueKey('game-card-semantics-${gameKind.name}'),
       container: true,
@@ -771,169 +846,114 @@ class _GameCard extends StatelessWidget {
       sortKey: OrdinalSortKey(gameKind.index.toDouble()),
       child: FocusTraversalGroup(
         child: GamePanel(
-          padding: const EdgeInsets.all(16),
-          color: featured ? theme.colorScheme.secondaryContainer : null,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final identity = GameIdentity.forGame(gameKind);
-                  final largeText =
-                      MediaQuery.textScalerOf(context).scale(14) > 21;
-                  final heading = GameHeading(
-                    identity: identity,
-                    prominent: featured,
-                  );
-                  final descriptionText = Text(
-                    description,
-                    style: theme.textTheme.bodyMedium,
-                  );
-                  final art = GameArtwork(
-                    kind: identity.artwork,
-                    size: featured
-                        ? (constraints.maxWidth >= 550 ? 160 : 112)
-                        : 72,
-                  );
-                  if (largeText) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        heading,
-                        const SizedBox(height: 12),
-                        Row(
+          padding: EdgeInsets.zero,
+          child: ClipRRect(
+            borderRadius: theme.extension<GameThemeTokens>()!.panelRadius,
+            child: scenic
+                ? Stack(
+                    children: [
+                      Positioned.fill(child: GameScene(kind: identity.artwork)),
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            art,
-                            const SizedBox(width: 12),
-                            Expanded(child: descriptionText),
+                            LayoutBuilder(
+                              builder: (context, constraints) => Align(
+                                alignment: Alignment.topLeft,
+                                child: SizedBox(
+                                  width: featured
+                                      ? (constraints.maxWidth >= 550
+                                            ? 230
+                                            : 174)
+                                      : constraints.maxWidth * .59,
+                                  child: PaperLabel(
+                                    padding: const EdgeInsets.all(14),
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        minHeight: grid && !featured ? 138 : 0,
+                                      ),
+                                      child: copy,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: featured ? (grid ? 74 : 62) : 26),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxWidth: featured && grid ? 350 : 500,
+                                ),
+                                child: actions,
+                              ),
+                            ),
                           ],
                         ),
-                      ],
-                    );
-                  }
-                  final copy = Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        heading,
-                        const SizedBox(height: 8),
-                        descriptionText,
-                      ],
-                    ),
-                  );
-                  return ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: grid && !featured
-                          ? (constraints.maxWidth < 300 ? 164 : 112)
-                          : 0,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: featured
-                          ? [copy, const SizedBox(width: 12), art]
-                          : [art, const SizedBox(width: 16), copy],
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 12),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final labelStyle = theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  );
-                  final actionStyle = ButtonStyle(
-                    minimumSize: const WidgetStatePropertyAll(Size(48, 48)),
-                    padding: const WidgetStatePropertyAll(
-                      EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                    ),
-                    textStyle: WidgetStatePropertyAll(labelStyle),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: theme
-                            .extension<GameThemeTokens>()!
-                            .controlRadius,
                       ),
-                    ),
-                  );
-                  final primary = FilledButton(
-                    key: hasContinue
-                        ? ValueKey('continue-game-${gameKind.name}')
-                        : ValueKey('new-game-${gameKind.name}'),
-                    onPressed: hasContinue ? onContinue : onNewGame,
-                    style: actionStyle,
-                    child: Text(
-                      hasContinue ? 'Continue' : 'New game',
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                  final secondary = hasContinue
-                      ? OutlinedButton(
-                          key: ValueKey('new-game-${gameKind.name}'),
-                          onPressed: onNewGame,
-                          style: actionStyle,
-                          child: const Text(
-                            'New game',
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      : null;
-                  final options = IconButton.outlined(
-                    tooltip: gameKind == GameKind.learnLetters
-                        ? 'How to play'
-                        : 'New game options',
-                    onPressed: onNewGameOptions,
-                    style: IconButton.styleFrom(
-                      minimumSize: const Size(48, 48),
-                    ),
-                    icon: Icon(
-                      gameKind == GameKind.learnLetters
-                          ? Icons.help_outline
-                          : Icons.tune_rounded,
-                    ),
-                  );
-                  double labelWidth(String text) {
-                    final painter = TextPainter(
-                      text: TextSpan(text: text, style: labelStyle),
-                      textScaler: MediaQuery.textScalerOf(context),
-                      textDirection: Directionality.of(context),
-                    )..layout();
-                    final width = painter.width;
-                    painter.dispose();
-                    return width;
-                  }
-
-                  // Preserve one row on small phones, but let enlarged labels
-                  // move the secondary action below instead of shrinking text.
-                  final widestLabel =
-                      labelWidth('Continue') > labelWidth('New game')
-                      ? labelWidth('Continue')
-                      : labelWidth('New game');
-                  final allFit =
-                      constraints.maxWidth >= (widestLabel + 16) * 2 + 64;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(child: primary),
-                          if (secondary != null && allFit) ...[
-                            const SizedBox(width: 8),
-                            Expanded(child: secondary),
-                          ],
-                          const SizedBox(width: 8),
-                          options,
-                        ],
-                      ),
-                      if (secondary != null && !allFit) ...[
-                        const SizedBox(height: 8),
-                        secondary,
-                      ],
                     ],
-                  );
-                },
-              ),
-            ],
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: !largeText && !featured && !hasContinue
+                        ? Row(
+                            children: [
+                              GameArtwork(kind: identity.artwork, size: 80),
+                              const SizedBox(width: 12),
+                              Expanded(child: copy),
+                              const SizedBox(width: 4),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    key: ValueKey('new-game-${gameKind.name}'),
+                                    tooltip:
+                                        'New game, Play ${identity.punjabiName}',
+                                    onPressed: onNewGame,
+                                    style: IconButton.styleFrom(
+                                      minimumSize: const Size(48, 48),
+                                    ),
+                                    icon: const Icon(Icons.chevron_right),
+                                  ),
+                                  IconButton(
+                                    tooltip: gameKind == GameKind.learnLetters
+                                        ? 'How to play'
+                                        : 'New game options',
+                                    onPressed: onNewGameOptions,
+                                    style: IconButton.styleFrom(
+                                      minimumSize: const Size(48, 48),
+                                    ),
+                                    icon: Icon(
+                                      gameKind == GameKind.learnLetters
+                                          ? Icons.help_outline
+                                          : Icons.tune_rounded,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  GameArtwork(
+                                    kind: identity.artwork,
+                                    size: largeText ? 64 : 92,
+                                  ),
+                                  const SizedBox(width: 14),
+                                  Expanded(child: copy),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              actions,
+                            ],
+                          ),
+                  ),
           ),
         ),
       ),

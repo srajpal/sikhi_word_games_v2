@@ -208,3 +208,19 @@ Victory checks cover global/per-game opt-outs, migration and reset, reduced-moti
 
 
 Learn Letters coverage includes35uniquecontentitems, nonduplicatechoices, wrongretrylimits, manualadvance, priorityselection, roundJSONvalidation, partialrestore, completiondeduplication, savequeue/reset/errorbehavior,21-round practice progression, homeguide/Continue/global totals, and narrow/large-text layouts. Visual baselines cover all3themes and postanswer pronunciation controls. All35 generatedWAVs must be non-silent/unclipped and present in the packaged offline cache. Listening approval remains a separate human check.
+
+### Paper & Play reference verification (October 8)
+
+The 1.10.1+20 UI correction uses decoded, bundled WebP backgrounds and shared
+paper surfaces. Golden setup explicitly awaits image IO; settling animation
+frames alone can capture a missing illustration. All 31 visual cases cover
+Modern/Sikhi/Dark library phone/tablet layouts, game boards and shared
+components. Inspect the rendered captures, not only the generated asset files.
+
+The final full suite passes 329 tests. Keyboard checks cover readable colored
+clues and spoken status values in every theme, strongest clues across repeated
+letters and later guesses, and retained input activation. Existing checks cover
+320/800-pixel headings at 100/200% text, phone game layouts, offline persistence,
+Dictionary navigation and saved Progress totals. The browser integration flow
+uses the stable new-game key rather than the previous visible button caption.
+Physical gameplay and real browser/offline/audio evidence remain separate.
