@@ -1,0 +1,126 @@
+{
+  "reason": "No clearer eligible source definition; wording retained and entries included in release counts.",
+  "word_count": 7,
+  "entries": [
+    {
+      "dataset": "english",
+      "letter_count": 5,
+      "entry": {
+        "word": "ambit",
+        "part_of_speech": "noun",
+        "definition": "an area in which something acts or operates or has power or control:",
+        "synset_id": "noun:05125377",
+        "tag_count": 0,
+        "sense_number": 1
+      }
+    },
+    {
+      "dataset": "english",
+      "letter_count": 6,
+      "entry": {
+        "word": "coerce",
+        "part_of_speech": "verb",
+        "definition": "to cause to do through pressure or necessity, by physical, moral or intellectual means :",
+        "synset_id": "verb:02504562",
+        "tag_count": 2,
+        "sense_number": 1
+      }
+    },
+    {
+      "dataset": "english",
+      "letter_count": 4,
+      "entry": {
+        "word": "doff",
+        "part_of_speech": "verb",
+        "definition": "remove",
+        "synset_id": "verb:01590658",
+        "tag_count": 0,
+        "sense_number": 1
+      }
+    },
+    {
+      "dataset": "english",
+      "letter_count": 4,
+      "entry": {
+        "word": "laid",
+        "part_of_speech": "adjective",
+        "definition": "set down according to a plan:",
+        "synset_id": "adj:01681307",
+        "tag_count": 1,
+        "sense_number": 1
+      }
+    },
+    {
+      "dataset": "english",
+      "letter_count": 6,
+      "entry": {
+        "word": "loiter",
+        "part_of_speech": "verb",
+        "definition": "be about",
+        "synset_id": "verb:02639075",
+        "tag_count": 1,
+        "sense_number": 1
+      }
+    },
+    {
+      "dataset": "punjabi/gurmukhi",
+      "letter_count": 3,
+      "entry": {
+        "script": "gurmukhi",
+        "word": "ਆਸਾਨ",
+        "letter_units": [
+          "ਆ",
+          "ਸਾ",
+          "ਨ"
+        ],
+        "romanizations": [
+          "āsān"
+        ],
+        "original_romanizations": [
+          "āsān"
+        ],
+        "definition": "easy, simple,",
+        "part_of_speech": "adjective",
+        "gurmukhi_word": "ਆਸਾਨ",
+        "source_sense_id": "en-ਆਸਾਨ-pa-adj-Hkt5t84T",
+        "source_record_index": 10383,
+        "source_sense_index": 1,
+        "source_url": "https://en.wiktionary.org/wiki/%E0%A8%86%E0%A8%B8%E0%A8%BE%E0%A8%A8#Punjabi",
+        "source_history_url": "https://en.wiktionary.org/w/index.php?title=%E0%A8%86%E0%A8%B8%E0%A8%BE%E0%A8%A8&action=history",
+        "tags": []
+      }
+    },
+    {
+      "dataset": "punjabi/romanized",
+      "letter_count": 4,
+      "entry": {
+        "script": "romanized",
+        "word": "āsān",
+        "letter_units": [
+          "ā",
+          "s",
+          "ā",
+          "n"
+        ],
+        "gurmukhi_words": [
+          "ਆਸਾਨ"
+        ],
+        "original_romanizations": [
+          "āsān"
+        ],
+        "definition": "easy, simple,",
+        "part_of_speech": "adjective",
+        "gurmukhi_word": "ਆਸਾਨ",
+        "romanizations": [
+          "āsān"
+        ],
+        "source_sense_id": "en-ਆਸਾਨ-pa-adj-Hkt5t84T",
+        "source_record_index": 10383,
+        "source_sense_index": 1,
+        "source_url": "https://en.wiktionary.org/wiki/%E0%A8%86%E0%A8%B8%E0%A8%BE%E0%A8%A8#Punjabi",
+        "source_history_url": "https://en.wiktionary.org/w/index.php?title=%E0%A8%86%E0%A8%B8%E0%A8%BE%E0%A8%A8&action=history",
+        "tags": []
+      }
+    }
+  ]
+}

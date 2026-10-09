@@ -7,6 +7,18 @@ import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_
 import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.dart';
 
 void main() {
+  test('rejects an old conjunct size label while retaining progress', () async {
+    final store = MemoryKeyValueStore()..values['player.progress'] = 'retained';
+    final repository = WordQuestSessionRepository(store);
+    await repository.save(
+      mode: LanguageMode.gurmukhi,
+      wordSize: 4,
+      game: WordQuestGame(solution: 'ਅਪ੍ਰੈਲ'),
+    );
+    expect(repository.restore(), isNull);
+    expect(repository.hasActiveGame, isFalse);
+    expect(store.values['player.progress'], 'retained');
+  });
   test(
     'old unfinished quests keep their original budget across repeated saves',
     () async {

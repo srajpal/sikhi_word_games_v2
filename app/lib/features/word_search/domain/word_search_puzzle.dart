@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:characters/characters.dart';
+import '../../../core/language/word_units.dart';
 
 class GridPoint {
   const GridPoint(this.row, this.column);
@@ -43,7 +43,7 @@ class PlacedWord {
   final GridPoint start;
   final WordSearchDirection direction;
 
-  String get firstGrapheme => word.characters.first;
+  String get firstGrapheme => wordUnits(word).first;
 
   Map<String, Object> toJson() => {
     'word': word,
@@ -70,7 +70,7 @@ class PlacedWord {
   }
 
   List<GridPoint> cells() {
-    final letters = word.characters.length;
+    final letters = wordUnitCount(word);
     return [
       for (var index = 0; index < letters; index++)
         GridPoint(
@@ -102,7 +102,7 @@ class WordSearchPuzzle {
     for (final row in json['cells']! as List<Object?>) {
       if (row is! List<Object?> ||
           row.isEmpty ||
-          row.any((cell) => cell is! String || cell.characters.length != 1)) {
+          row.any((cell) => cell is! String || wordUnitCount(cell) != 1)) {
         throw const FormatException('Malformed word-search cells.');
       }
       cells.add([for (final cell in row) cell! as String]);
@@ -132,7 +132,7 @@ class WordSearchPuzzle {
     final seenWords = <String>{};
     final occupiedPaths = <String>{};
     for (final word in words) {
-      final letters = word.word.characters.toList();
+      final letters = wordUnits(word.word);
       final points = word.cells();
       if (letters.isEmpty ||
           !seenWords.add(word.word) ||
@@ -232,7 +232,7 @@ class WordSearchGenerator {
     final words = <String>[];
     for (final candidate in candidates) {
       final word = candidate.trim().toUpperCase();
-      final length = word.characters.length;
+      final length = wordUnitCount(word);
       if (length < 2 || length > size || !unique.add(word)) continue;
       words.add(word);
     }
@@ -254,7 +254,7 @@ class WordSearchGenerator {
         if (placed.length >= targetWordCount) break;
         final placement = _findPlacement(cells, word, placed);
         if (placement == null) continue;
-        final letters = word.characters.toList(growable: false);
+        final letters = wordUnits(word);
         for (var index = 0; index < letters.length; index++) {
           cells[placement.start.row +
                   placement.direction.rowStep * index][placement.start.column +
@@ -291,7 +291,7 @@ class WordSearchGenerator {
           GridPoint(row, column),
     ]..shuffle(_random);
     final directions = WordSearchDirection.values.toList()..shuffle(_random);
-    final letters = word.characters.toList(growable: false);
+    final letters = wordUnits(word);
     for (final direction in directions) {
       for (final start in starts) {
         final endRow = start.row + direction.rowStep * (letters.length - 1);

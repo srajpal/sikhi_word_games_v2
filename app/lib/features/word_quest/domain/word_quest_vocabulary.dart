@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:characters/characters.dart';
+import '../../../core/language/word_units.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
@@ -29,7 +29,7 @@ class WordQuestWord {
   final String source;
   final String? romanizedSpelling;
 
-  int get graphemeLength => spelling.characters.length;
+  int get graphemeLength => wordUnitCount(spelling);
 
   /// Short words are normally easier for younger players to sound out.
   bool get isKidManageable => graphemeLength >= 2 && graphemeLength <= 7;
@@ -38,9 +38,8 @@ class WordQuestWord {
 /// Builds language-aware, de-duplicated Word Quest candidates from the
 /// curated, solution-eligible vocabulary.
 ///
-/// Word Quest is aimed at children, so ordinary guess-only dictionary entries
-/// are never promoted to answers. A word must be explicitly solution eligible
-/// and have a standalone clue that passes the child-facing quality gate.
+/// Owner-approved native entries retain their complete supplied clues. Legacy
+/// in-memory entries must explicitly allow solutions and provide a usable clue.
 class WordQuestVocabulary {
   WordQuestVocabulary(Iterable<VocabularyEntry> entries)
     : _entries = List.unmodifiable(entries);
@@ -84,7 +83,7 @@ class WordQuestVocabulary {
         mode,
         () => List.unmodifiable(
           words(mode: mode)
-              .expand((word) => word.spelling.characters)
+              .expand((word) => wordUnits(word.spelling))
               .map(normalizeGurmukhi)
               .toSet(),
         ),
@@ -118,11 +117,12 @@ class WordQuestVocabulary {
       }
       final spelling = _spelling(entry, mode)?.trim();
       if (spelling == null || spelling.isEmpty) continue;
-      if (WordQuestDefinitionQuality.usableClue(
-            answer: spelling,
-            clue: entry.displayDefinition,
-          ) ==
-          null) {
+      if (!entry.isOwnerApproved &&
+          WordQuestDefinitionQuality.usableClue(
+                answer: spelling,
+                clue: entry.displayDefinition,
+              ) ==
+              null) {
         continue;
       }
       final key = _normalize(spelling);
@@ -139,10 +139,12 @@ class WordQuestVocabulary {
                 id: entry.id,
                 language: entry.language,
                 spelling: _visibleSpelling(entry, mode),
-                definitionHint: WordQuestDefinitionQuality.usableClue(
-                  answer: _spelling(entry, mode)!,
-                  clue: entry.displayDefinition,
-                )!,
+                definitionHint: entry.isOwnerApproved
+                    ? entry.displayDefinition.trim()
+                    : WordQuestDefinitionQuality.usableClue(
+                        answer: _spelling(entry, mode)!,
+                        clue: entry.displayDefinition,
+                      )!,
                 categoryHint: _categoryFor(entry),
                 source: entry.source,
                 romanizedSpelling: mode == LanguageMode.gurmukhi
@@ -164,14 +166,10 @@ class WordQuestVocabulary {
   }
 
   static bool _supports(VocabularyEntry entry, LanguageMode mode) =>
-      switch (mode) {
-        LanguageMode.english => entry.language == VocabularyLanguage.english,
-        LanguageMode.romanizedPanjabi ||
-        LanguageMode.gurmukhi => entry.language == VocabularyLanguage.panjabi,
-      };
+      entry.supportsScript(mode.script);
 
   static String _normalize(String spelling) =>
-      normalizeGurmukhi(spelling.trim().toUpperCase());
+      normalizeGurmukhi(normalizeRomanizedInput(spelling.trim().toUpperCase()));
 
   static bool _isBetter(VocabularyEntry contender, VocabularyEntry current) {
     final contenderScore = _qualityScore(contender);
@@ -184,8 +182,6 @@ class WordQuestVocabulary {
       (entry.solutionEligible ? 10 : 0) + entry.reviewStatus.index;
 
   static String _categoryFor(VocabularyEntry entry) {
-    final source = entry.source.toLowerCase();
-    if (source.contains('mahan kosh')) return 'Sikhi vocabulary';
     return entry.language == VocabularyLanguage.english
         ? 'English word'
         : 'Punjabi word';

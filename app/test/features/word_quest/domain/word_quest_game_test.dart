@@ -3,6 +3,14 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.d
 
 void main() {
   group('WordQuestGame', () {
+    test('standalone marks are invalid and never consume a miss', () {
+      final game = WordQuestGame(solution: 'ĀSĀN');
+      for (final mark in ['\u0304', 'ਿ', '੍']) {
+        expect(game.guess(mark).result, WordQuestGuessResult.invalid);
+      }
+      expect(game.incorrectGuesses, 0);
+      expect(game.guessedGraphemes, isEmpty);
+    });
     test('rejects guesses recorded after the round would have ended', () {
       final snapshot = WordQuestGame(solution: 'SEVA').toJson();
       for (final guesses in [

@@ -69,7 +69,9 @@ class WordQuestSessionRepository {
       final budget = json['schemaVersion'] == 1
           ? WordQuestGame.recommendedMaximumTriesForSolution(game.solution) + 2
           : WordQuestGame.recommendedMaximumTriesForSolution(game.solution);
-      if (game.isComplete || game.maximumTries != budget) {
+      if (game.isComplete ||
+          game.maximumTries != budget ||
+          game.solutionGraphemes.length != json['wordSize']) {
         return null;
       }
       return WordQuestSession(

@@ -1,0 +1,2 @@
+# Verbatim upstream legal text retains its original whitespace.
+THIRD_PARTY_NOTICES.txt whitespace=-blank-at-eol,-blank-at-eof

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:characters/characters.dart';
+import '../../../core/language/word_units.dart';
 
 import '../../../core/persistence/key_value_store.dart';
 import '../../guess_the_word/domain/language_mode.dart';
@@ -194,7 +194,7 @@ class WordBridgesRepository {
         if (attempts == 4) {
           state['perfectSets'] = (state['perfectSets'] as int? ?? 0) + 1;
         }
-        if (game.wordOrder.any((p) => p.word.characters.length >= 5)) {
+        if (game.wordOrder.any((p) => wordUnitCount(p.word) >= 5)) {
           state['longWordSets'] = (state['longWordSets'] as int? ?? 0) + 1;
         }
         state['matchedWords'] = {

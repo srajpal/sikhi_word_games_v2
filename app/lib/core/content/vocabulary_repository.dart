@@ -9,6 +9,11 @@ import 'vocabulary_source.dart';
 export 'vocabulary_source.dart';
 
 class AssetVocabularyRepository implements VocabularyRepository {
+  static const assetPaths = [
+    'assets/content/release/english/words.json',
+    'assets/content/release/punjabi/romanized/words.json',
+    'assets/content/release/punjabi/gurmukhi/words.json',
+  ];
   List<VocabularyEntry>? _cache;
   Future<List<VocabularyEntry>>? _loading;
 
@@ -28,8 +33,7 @@ class AssetVocabularyRepository implements VocabularyRepository {
 
   Future<List<VocabularyEntry>> _loadAssets() async {
     final documents = await Future.wait([
-      for (final language in const ['english', 'punjabi'])
-        rootBundle.loadString('assets/content/release/${language}_v2.json'),
+      for (final path in assetPaths) rootBundle.loadString(path),
     ]);
     final entries = kIsWeb
         ? await decodeVocabularyCooperatively(documents)
@@ -42,10 +46,12 @@ class AssetVocabularyRepository implements VocabularyRepository {
 /// Native compute entry point: no bundle or widget state crosses the isolate.
 List<VocabularyEntry> decodeVocabularyDocuments(List<String> documents) =>
     _validateIds([
-      for (final document in documents)
+      for (final (shard, document) in documents.indexed)
         for (final (index, item)
-            in (jsonDecode(document) as List<Object?>).indexed)
-          _decodeRecord(item, index),
+            in ((jsonDecode(document) as Map<String, Object?>)['words']!
+                    as List<Object?>)
+                .indexed)
+          _decodeRecord(item, index, VocabularyScript.values[shard]),
     ]);
 
 /// Web has no compute worker. Yield before each shard and every 250 records.
@@ -53,22 +59,33 @@ Future<List<VocabularyEntry>> decodeVocabularyCooperatively(
   List<String> documents,
 ) async {
   final entries = <VocabularyEntry>[];
-  for (final document in documents) {
+  for (final (shard, document) in documents.indexed) {
     await Future<void>.delayed(Duration.zero);
-    final decoded = jsonDecode(document) as List<Object?>;
+    final decoded =
+        (jsonDecode(document) as Map<String, Object?>)['words']!
+            as List<Object?>;
     for (var index = 0; index < decoded.length; index++) {
-      entries.add(_decodeRecord(decoded[index], index));
+      entries.add(
+        _decodeRecord(decoded[index], index, VocabularyScript.values[shard]),
+      );
       if (index % 250 == 249) await Future<void>.delayed(Duration.zero);
     }
   }
   return _validateIds(entries);
 }
 
-VocabularyEntry _decodeRecord(Object? item, int index) {
+VocabularyEntry _decodeRecord(
+  Object? item,
+  int index,
+  VocabularyScript script,
+) {
   try {
-    return VocabularyEntry.fromJson(item! as Map<String, Object?>);
+    return VocabularyEntry.fromApprovedJson(
+      item! as Map<String, Object?>,
+      script,
+    );
   } on Object catch (error) {
-    final id = item is Map ? item['id'] : null;
+    final id = item is Map ? item['word'] : null;
     throw FormatException(
       'Invalid vocabulary record ${id ?? "at index $index"}: $error',
     );

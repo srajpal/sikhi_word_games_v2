@@ -3,7 +3,7 @@
 ## Coverage and limits
 
 - Pure Dart unit tests cover game rules, content transformations, pool selection,
-  Unicode graphemes, scoring, and persistence serialization.
+  source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
 - Twelve Windows golden image tests cover Modern, Sikhi, and Dark. They run
@@ -16,17 +16,21 @@
 ## Required cases
 
 Check exact/present/absent feedback and repeated letters; four-, five-, and
-six-grapheme games in all three language modes; invalid and guess-only words;
+six-tile games in all three language modes; valid and unavailable mode words;
 random selection/exhaustion; winning and losing; new/continue/back navigation;
 corrupt and unsupported saves; restart and settings isolation. For Khoj include
 drag direction, duplicate target detection, hints, and completion. For Word Quest
-include repeated guesses, adaptive tries/hints, simple/full keyboards, and clue
-quality. A vocabulary coverage count is not a human definition-quality review.
-For Punjabi policy changes, test normalized Gurmukhi sequences, conjuncts,
-pronunciation consonant order, exact source/headword/sense matching, protected
-exclusions, conflicting proposal targets, definition fragments, answer leakage,
-and sensitive or damaged dictionary text. Re-run the review twice after writing;
-the second pass must report no changed overrides or new entries.
+include repeated guesses, adaptive tries/hints, simple/full keyboards, preserved
+definitions and readable clues. A vocabulary coverage count is not a human definition-quality review.
+For approved-release changes, test the three separate mode memberships,
+source manifest hashes, exact master/notice/license bytes, unique spellings,
+one selected definition per word, source unit reconstruction and tile counts.
+Cover Gurmukhi marks and virama-linked conjuncts where `.characters` differs,
+Roman letters with scholarly diacritics, and absence of counterpart-only words
+from another mode. Verify imported rows remain present without old frequency,
+clue-quality or everyday-answer filters. Tampered/missing source or release
+files must fail integrity checks; repeat an unchanged rebuild/check to establish
+reproduction. These checks do not reopen the owner's content approval.
 
 Test narrow and short screens, large text, all themes, visible keyboard focus,
 screen-reader labels, contrast, motion settings, and long definitions. Real
@@ -38,31 +42,33 @@ widget tests cannot establish behavior.
 Run from `app/`:
 
 ```powershell
-dart format --output=none --set-exit-if-changed lib test integration_test tool
+dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
 flutter analyze --suppress-analytics
 flutter test --suppress-analytics
-python -m unittest discover -s tool/tests -p test_english_dictionary_v2.py
-dart run tool/dictionary_v2.dart --check
+dart run tool/build_release_content.dart --check
+dart run tool/audit_release_content.dart
 dart run tool\audit_content.dart
 flutter build web --release --no-web-resources-cdn --suppress-analytics
 ```
 
 Run the integration target on a configured supported device separately. It is
 not included in `flutter test` by default. Keep formatter changes scoped when
-preserving another contributor's work. The current content audit validates the actual v2 release; the optional
-`--legacy-archive` report concerns retired authoring data only.
+preserving another contributor's work. The current content audit checks the
+owner-approved runtime snapshot. Retired authoring audits are not current
+release gates.
 
-The v2 pipeline verifies locked offline source snapshots and reproduces both
-language banks and reports. English tests cover frequency/exclusion gates,
-source-linked exceptions, rejected cross-part-of-speech fallback, reference
-forms, source maintenance messages and unclear definitions. Punjabi tests cover
-exact sense decisions, unsafe/reference holds, transliteration and newline-stable
-checks. Runtime checks establish sourced definitions, new IDs, game-specific
-length coverage and Jodo starter decks. Game pools must remain usable, but historical size quotas never promote an
-answer. English tests distinguish the higher answer-frequency threshold from
-broader dictionary inclusion. Punjabi has a deliberately smaller everyday pool. Machine checks never advance an
-entry to human-reviewed status. Targeted semantic sampling remains separate
-from these automated gates.
+Release integrity checks reproduce three unchanged native masters from
+`app/content/approved_release/`, using the source manifest and supplied notices.
+No network, original source project or legacy review files are needed. Importer
+coverage should include a validated `--import-from` package, locally reproducible
+`--write`, exact `--check`, file tampering and mode-isolation regressions. Runtime
+checks exercise each mode's actual written units, available sizes, input,
+keyboards, restored targets and Jodo sets. Jodo tests distinguish avoiding
+conflicting clues within one board from excluding approved dictionary words;
+long selected definitions must remain globally eligible. Current source counts are in
+`docs/content_schema.md`; historical quotas and quality filters are not approval
+criteria. Existing older filter tests and source reports are historical evidence
+rather than gates for this owner-approved import.
 
 For itch.io, also verify the packaged relative base path, root `index.html`,
 archive size/file limits, local renderer assets, nested-path loading, iframe
@@ -249,7 +255,7 @@ Saving Settings must return to a playable library after persistence and route
 refresh. The widget regression and browser fixture both assert this transition
 before launching Bujho, then the browser fixture verifies interrupted restore.
 
-### Mobile navigation, feedback and dictionary v2: 1.12.0+23
+### Mobile navigation, feedback and dictionary v2: 1.12.0+23 (historical content checks)
 
 Navigation regressions exercise all four persistent destinations at phone/tablet
 sizes and 100/200% text, asserting the selected destination and visible bar.
@@ -269,3 +275,16 @@ tests cover inappropriate senses, reference/junk/context-dependent clues, unsafe
 cross-part-of-speech fallbacks and transliteration integrity. The source/semantic
 review adds regressions for observed failures; neither source matching nor a
 passing sample certifies all content as human reviewed or child suitable.
+
+### Approved dictionary import: candidate 1.13.0+24
+
+The import changes dictionary sources, schemas and written-unit behavior.
+Re-run applicable content/repository/game tests, analysis, full widget/golden
+checks and a release web build. Package inspection must establish byte-identical
+English, Romanized Punjabi and Gurmukhi masters and required attribution/licenses,
+with retired banks and authoring files absent. Actual browser checks cover all
+three modes, scholarly Roman diacritic input, Gurmukhi conjunct tiles, dictionary
+mode filtering and restored-game behavior. Audio approval remains separate.
+
+Record actual completed evidence in `TODO.md`. This section specifies required
+checks and does not claim that candidate build 24 has passed them.

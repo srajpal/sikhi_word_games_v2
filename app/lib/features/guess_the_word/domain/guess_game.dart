@@ -1,4 +1,4 @@
-import 'package:characters/characters.dart';
+import '../../../core/language/word_units.dart';
 
 import '../../../core/language/gurmukhi_normalization.dart';
 
@@ -30,9 +30,14 @@ class GuessGame {
     required Set<String> acceptedGuesses,
     this.maximumAttempts = 6,
   }) : assert(maximumAttempts > 0),
-       solution = normalizeGurmukhi(solution.toUpperCase()),
+       solution = normalizeGurmukhi(
+         normalizeRomanizedInput(solution.toUpperCase()),
+       ),
        acceptedGuesses = acceptedGuesses
-           .map((word) => normalizeGurmukhi(word.toUpperCase()))
+           .map(
+             (word) =>
+                 normalizeGurmukhi(normalizeRomanizedInput(word.toUpperCase())),
+           )
            .toSet();
 
   final String solution;
@@ -43,14 +48,16 @@ class GuessGame {
 
   List<GuessTurn> get turns => List.unmodifiable(_turns);
   GuessGameStatus get status => _status;
-  int get wordLength => solution.characters.length;
+  int get wordLength => wordUnitCount(solution);
 
   GuessSubmission submit(String value) {
     if (_status != GuessGameStatus.playing) {
       return const GuessSubmission.rejected(GuessRejection.gameOver);
     }
-    final guess = normalizeGurmukhi(value.trim().toUpperCase());
-    if (guess.characters.length != wordLength) {
+    final guess = normalizeGurmukhi(
+      normalizeRomanizedInput(value.trim().toUpperCase()),
+    );
+    if (wordUnitCount(guess) != wordLength) {
       return const GuessSubmission.rejected(GuessRejection.wrongLength);
     }
     if (!acceptedGuesses.contains(guess)) {

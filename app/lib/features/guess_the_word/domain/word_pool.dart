@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:characters/characters.dart';
+import '../../../core/language/word_units.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/language/gurmukhi_normalization.dart';
@@ -15,6 +15,19 @@ class WordPool {
   final _previousSearches =
       <LanguageMode, (String, List<(VocabularyEntry, String)>)>{};
 
+  final _charactersByMode = <LanguageMode, List<String>>{};
+
+  List<String> charactersFor(LanguageMode mode) =>
+      _charactersByMode.putIfAbsent(mode, () {
+        final units = <String>{};
+        for (final entry in _entries) {
+          if (!entry.acceptedGuess || !_supportsLanguage(entry, mode)) continue;
+          final word = spelling(entry, mode);
+          if (word != null) units.addAll(wordUnits(word));
+        }
+        return List.unmodifiable(units.toList()..sort());
+      });
+
   List<VocabularyEntry> solutions({
     required LanguageMode mode,
     required int wordLength,
@@ -23,7 +36,11 @@ class WordPool {
         .where((entry) => entry.acceptedGuess && entry.solutionEligible)
         .where((entry) => _supportsLanguage(entry, mode))
         .where(
-          (entry) => spelling(entry, mode)?.characters.length == wordLength,
+          (entry) =>
+              (spelling(entry, mode) == null
+                  ? null
+                  : wordUnitCount(spelling(entry, mode)!)) ==
+              wordLength,
         ),
     mode,
   );
@@ -35,7 +52,10 @@ class WordPool {
     for (final entry in _entries)
       if (entry.acceptedGuess &&
           _supportsLanguage(entry, mode) &&
-          spelling(entry, mode)?.characters.length == wordLength)
+          (spelling(entry, mode) == null
+                  ? null
+                  : wordUnitCount(spelling(entry, mode)!)) ==
+              wordLength)
         _normalize(spelling(entry, mode)!),
   };
 
@@ -58,8 +78,9 @@ class WordPool {
     required String query,
     int limit = 50,
   }) {
-    final normalized = normalizeGurmukhi(query.trim()).toLowerCase();
-    if (normalized.characters.length < 2 || limit <= 0) return const [];
+    final normalized = normalizeGurmukhi(normalizeRomanizedInput(query.trim()))
+        .toLowerCase();
+    if (wordUnitCount(normalized) < 2 || limit <= 0) return const [];
     final index = _searchIndexes.putIfAbsent(
       mode,
       () => [
@@ -125,17 +146,13 @@ class WordPool {
   }
 
   static String _normalize(String value) =>
-      normalizeGurmukhi(value.trim().toUpperCase());
+      normalizeGurmukhi(normalizeRomanizedInput(value.trim().toUpperCase()));
 
   static String? spelling(VocabularyEntry entry, LanguageMode mode) =>
       mode == LanguageMode.gurmukhi ? entry.gurmukhi : entry.latin;
 
   static bool _supportsLanguage(VocabularyEntry entry, LanguageMode mode) =>
-      switch (mode) {
-        LanguageMode.english => entry.language == VocabularyLanguage.english,
-        LanguageMode.romanizedPanjabi ||
-        LanguageMode.gurmukhi => entry.language == VocabularyLanguage.panjabi,
-      };
+      entry.supportsScript(mode.script);
 }
 
 class NonRepeatingWordSelector {

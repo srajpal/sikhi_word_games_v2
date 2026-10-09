@@ -1,11 +1,55 @@
 # Sikhi Word Games V2 TODO
 
-This is the current checklist, reconciled on October 8, 2026. Open boxes describe
+This is the current checklist, reconciled on October 9, 2026. Open boxes describe
 remaining work. Completed milestones are evidence, not sign-off for a newer
 package. Keep one task per outcome; update counts from fresh reports instead of
-copying old audits. Do not approve vocabulary merely to fill a pool quota.
+copying old audits. The current dictionaries are an explicitly owner-approved
+source snapshot; integrity checks do not reopen editorial approval.
 
-## October 8 mobile navigation and dictionary v2: 1.12.0+23
+## October 9 owner-approved dictionary import: candidate 1.13.0+25
+
+- [x] Record the owner's approval of every word and selected definition in
+  `C:/dev/Projects/ChatGPT/sikhi_word_games_word_lists/release`. Preserve source
+  notes as provenance without applying another app editorial/frequency gate.
+- [x] Update current source/schema/architecture/testing guidance for three native
+  JSON masters and source-defined written units; retire previous review queues
+  as release inputs while preserving their dated milestones.
+- [x] Import the approved snapshot to `app/content/approved_release/` and ship
+  unchanged `english/words.json`, `punjabi/romanized/words.json` and
+  `punjabi/gurmukhi/words.json` with attribution and licenses. Source totals are
+  12,527 English, 2,991 Romanized Punjabi and 4,428 Gurmukhi; native six-tile
+  Gurmukhi has 33 words. Counterparts must not expand another mode's membership.
+- [x] Adapt game/dictionary input, keyboards, selection and saved-target checks
+  to preserved scholarly Roman diacritics and source `letter_units`/`tile_count`,
+  including Gurmukhi conjuncts where generic grapheme segmentation differs.
+- [x] Validate exact source/release bytes, counts, units, mode isolation and
+  locally reproducible import/build/check; run applicable tests, full Flutter
+  checks, reviewed goldens, cache checks and release web/debug Android builds.
+- [x] Inspect the actual build 25 package and browser across all three modes,
+  including scholarly input, native conjuncts and mode-filtered Dictionary.
+  WordNet APPLE, Romanized ĀSĀN and Gurmukhi ਅਪ੍ਰੈਲ lookups work. Updated
+  credits display WordNet, Wiktionary/Kaikki and Shutterstock. Real browser
+  progress remains 6 rounds/16 solved words/11 badges across the update.
+  Install/launch build 25 on K70 PRO with existing app data preserved.
+- [ ] Repeat actual offline reload for build 25 and the eventual itch.io iframe.
+  Worker/cache unit checks pass. Automatic approval review rejected stopping
+  the local preview server because it would disrupt the user's open preview;
+  the server remains running and actual offline reload is not claimed.
+
+Build 25 evidence: full Flutter suite passed (351 tests, including 35 visual
+baselines and legacy conjunct-save/control-label regressions).
+Full analysis is clean, 145 Dart files are formatted, both cache/update Node
+checks pass, and source/runtime audits verify all 19,946 records without
+editorial filtering. Git-index bytes also match every supplied manifest hash.
+The release ZIP has 7 exact runtime files, all licenses and three font notices;
+no authoring inputs or retired banks are bundled. Build 25 debug APK installed
+with `adb install -r` on K70 PRO; version 1.13.0/code 25 and running PID verified.
+Browser lookups, updated sources and unchanged saved totals are verified;
+hands-on tablet gameplay,
+screen-reader and speaker verification remain separate manual checks.
+Build 23 results below are historical evidence.
+
+## October 8 mobile navigation and dictionary v2: 1.12.0+23 (historical dictionary policy)
 
 - [x] Persist the same native bottom navigation on Play, Dictionary, Progress
   and Badges, with the current destination selected.
@@ -41,12 +85,9 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
 - [x] Compile release web and debug Android, and install/launch build 23 on
   K70 PRO using `adb install -r`. Package version 1.12.0/code 23 and running
   process verified; visible gameplay and speaker audibility remain manual checks.
-- [ ] Sample child-facing definitions and Punjabi romanizations with a fluent
-  reviewer; address specific source senses or policy gaps instead of bulk approval.
-- [ ] Recheck source snapshots deliberately when upstream data changes. Preview
-  changed senses/holds and frequency changes before rebuilding the two banks.
-- [ ] Expand familiar six-grapheme Gurmukhi answers only with reliable sources;
-  the current six-word pool is disclosed in game options.
+The outstanding dictionary-v2 sampling, frequency-refresh and six-word-pool
+expansion proposals are superseded by the October 9 owner-approved source
+release. They are retired follow-ups, not unfinished approval gates for build 25.
 
 ## October 8 play consistency update: 1.11.0+22
 
@@ -202,8 +243,8 @@ human review evidence.
   distribution checks, unique-answer/clue floors and valid Jodo starter decks.
 - [x] Retire this inherited authoring chain from runtime in dictionary v2. Its
   unresolved links and archive holds remain historical evidence. Restoring
-  archive words is not a release prerequisite; use the v2 source/sense workflow
-  for any word worth adding to the current banks.
+  archive words is not a release prerequisite. The later October 9 approved
+  snapshot also supersedes v2 source/sense policies as release inputs.
 
 ## Next itch.io playtest gates
 

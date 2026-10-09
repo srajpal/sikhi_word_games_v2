@@ -31,84 +31,40 @@ class WordBridgesContent {
     ]) {
       final decks = <WordBridgesDeck>[];
       final seenWords = <String>{};
-      final seenMeanings = <String>{};
       final candidates = <BridgePair>[];
       for (final entry in byId.values) {
         if (duplicateIds.contains(entry.id) ||
             !entry.acceptedGuess ||
             !entry.solutionEligible ||
             !entry.hasDistributableDefinition ||
-            (entry.language == VocabularyLanguage.english) !=
-                (mode == LanguageMode.english)) {
+            !entry.supportsScript(mode.script)) {
           continue;
         }
         final word =
             (mode == LanguageMode.gurmukhi ? entry.gurmukhi ?? '' : entry.latin)
                 .trim();
         final meaning = entry.displayDefinition.trim();
-        if (word.isEmpty || meaning.length > 180 || meaning.length < 4) {
+        if (word.isEmpty ||
+            meaning.isEmpty ||
+            (!entry.isOwnerApproved &&
+                (meaning.length > 180 || meaning.length < 4))) {
           continue;
         }
         final spelling = word.toLowerCase();
-        final fingerprint = meaning
-            .toLowerCase()
-            .replaceAll(RegExp(r'[^a-z0-9]+'), ' ')
-            .trim();
-        if (seenWords.contains(spelling) ||
-            seenMeanings.contains(fingerprint)) {
-          continue;
-        }
-        seenWords.add(spelling);
-        seenMeanings.add(fingerprint);
+        if (!seenWords.add(spelling)) continue;
         candidates.add(BridgePair(id: entry.id, word: word, meaning: meaning));
         if (mode == LanguageMode.gurmukhi) {
           _romanizedById[entry.id] = entry.latin.trim();
         }
       }
       _pairsByMode[mode] = List.unmodifiable(candidates);
-      for (final specification in _decks.entries) {
-        final isEnglish = specification.key.startsWith('english_');
-        if (isEnglish != (mode == LanguageMode.english)) continue;
-        final pairs = <BridgePair>[];
-        for (final id in specification.value) {
-          final entry = byId[id];
-          if (entry == null ||
-              duplicateIds.contains(id) ||
-              !entry.acceptedGuess ||
-              !entry.solutionEligible ||
-              !entry.hasDistributableDefinition ||
-              entry.language !=
-                  (isEnglish
-                      ? VocabularyLanguage.english
-                      : VocabularyLanguage.panjabi)) {
-            break;
-          }
-          final word =
-              (mode == LanguageMode.gurmukhi
-                      ? entry.gurmukhi ?? ''
-                      : entry.latin)
-                  .trim();
-          if (word.isEmpty) break;
-          pairs.add(
-            BridgePair(id: id, word: word, meaning: entry.displayDefinition),
-          );
-        }
-        if (pairs.length != 4 ||
-            pairs.map((pair) => pair.word.toLowerCase()).toSet().length != 4 ||
-            pairs
-                    .map((pair) => pair.meaning.trim().toLowerCase())
-                    .toSet()
-                    .length !=
-                4) {
-          continue;
-        }
-        decks.add(WordBridgesDeck(id: specification.key, pairs: pairs));
-        if (mode == LanguageMode.gurmukhi) {
-          for (final pair in pairs) {
-            final romanized = byId[pair.id]!.latin.trim();
-            if (romanized.isNotEmpty) _romanizedById[pair.id] = romanized;
-          }
-        }
+      if (candidates.length >= 4) {
+        decks.add(
+          WordBridgesDeck(
+            id: '${mode.name}_preview',
+            pairs: candidates.take(4),
+          ),
+        );
       }
       _byMode[mode] = List.unmodifiable(decks);
     }
@@ -208,31 +164,4 @@ class WordBridgesContent {
         leaks(b, a) ||
         (overlap > 0 && overlap / min(x.length, y.length) >= .6);
   }
-
-  static const _decks = <String, List<String>>{
-    'english_everyday': [
-      'en_v2_book',
-      'en_v2_door',
-      'en_v2_chair',
-      'en_v2_milk',
-    ],
-    'english_outdoors_and_food': [
-      'en_v2_rain',
-      'en_v2_river',
-      'en_v2_bread',
-      'en_v2_apple',
-    ],
-    'punjabi_everyday': [
-      'panjabi_v2_a15_a3f_a24_a3e_a2c',
-      'panjabi_v2_a2a_a3e_a23_a40',
-      'panjabi_v2_a30_a4b_a1f_a40',
-      'panjabi_v2_a26_a41_a71_a27',
-    ],
-    'punjabi_connections': [
-      'panjabi_v2_a2b_a41_a71_a32',
-      'panjabi_v2_a26_a4b_a38_a24',
-      'panjabi_v2_a1a_a70_a26',
-      'panjabi_v2_a30_a41_a71_a16',
-    ],
-  };
 }

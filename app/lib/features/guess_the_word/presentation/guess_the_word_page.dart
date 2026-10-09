@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/language/gurmukhi_normalization.dart';
+import '../../../core/language/word_units.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/widgets/game_guide.dart';
@@ -122,15 +123,15 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       _backspace();
       return;
     }
-    if (HardwareKeyboard.instance.isControlPressed ||
-        HardwareKeyboard.instance.isMetaPressed ||
-        HardwareKeyboard.instance.isAltPressed) {
+    final hardware = HardwareKeyboard.instance;
+    // Ctrl+Alt is the printable AltGr combination on some keyboards.
+    if (hardware.isMetaPressed ||
+        (hardware.isControlPressed != hardware.isAltPressed)) {
       return;
     }
     final character = event.character;
     if (character == null || character.isEmpty) return;
-    if (_mode != LanguageMode.gurmukhi &&
-        !RegExp(r'^[A-Za-z]$').hasMatch(character)) {
+    if (!GameKeyboard.acceptsHardwareCharacter(_mode, character)) {
       return;
     }
     InteractionSounds.letter(context);
@@ -322,8 +323,11 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
 
   void _appendCharacter(String character) {
     final current = _controller.text;
-    final candidate = '$current$character';
-    if (candidate.characters.length > _wordLength) return;
+    final appended = '$current$character';
+    final candidate = _mode == LanguageMode.romanizedPanjabi
+        ? normalizeRomanizedInput(appended)
+        : normalizeGurmukhi(appended);
+    if (wordUnitCount(candidate) > _wordLength) return;
     _controller.value = TextEditingValue(
       text: candidate,
       selection: TextSelection.collapsed(offset: candidate.length),
@@ -335,7 +339,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
 
   void _backspace() {
     if (_controller.text.isEmpty) return;
-    final shortened = _controller.text.characters.skipLast(1).toString();
+    final shortened = withoutLastWordUnit(_controller.text);
     _controller.value = TextEditingValue(
       text: shortened,
       selection: TextSelection.collapsed(offset: shortened.length),
@@ -428,11 +432,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                       }
                     },
                   ),
-                  if (selectedMode == LanguageMode.gurmukhi &&
-                      selectedLength == 6) ...[
-                    const SizedBox(height: 12),
-                    const Text(gurmukhiVarietyNote),
-                  ],
                 ],
               ),
             ),
@@ -628,8 +627,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                             child: SizedBox(
                               height: math.max(
                                 constraints.maxHeight,
-                                (_mode == LanguageMode.gurmukhi
-                                        ? 650.0
+                                (_mode != LanguageMode.english
+                                        ? 700.0
                                         : scale > 1.5
                                         ? 500.0
                                         : 0.0) *
@@ -713,6 +712,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                       SizedBox(height: compact ? 4 : 8),
                                       GameKeyboard(
                                         mode: _mode,
+                                        additionalCharacters: _pool!
+                                            .charactersFor(_mode),
                                         letterResults: keyboardLetterResults(
                                           game.turns,
                                         ),

@@ -1,97 +1,107 @@
 # Sikhi Word Games V2 content schema
 
-## Dictionary v2
+## Owner-approved release snapshot
 
-The runtime dictionary consists of two compact, generated JSON banks:
+The October 9, 2026 owner-approved release is the content boundary for candidate
+1.13.0+24. Its authoring snapshot is `app/content/approved_release/`. Three native
+JSON masters are copied unchanged into `app/assets/content/release/`:
 
-- `app/assets/content/release/english_v2.json`
-- `app/assets/content/release/punjabi_v2.json`
+- `english/words.json`
+- `punjabi/romanized/words.json`
+- `punjabi/gurmukhi/words.json`
 
-They contain the same `VocabularyEntry` record shape used by the game engines:
+Each master is an object with a `words` array, metadata and length counts. Each
+word has one English `definition`, `word`, `part_of_speech`, `letter_units` and
+`tile_count`, plus source-specific provenance. For example:
 
 ```json
 {
-  "id": "en_v2_apple",
-  "language": "english",
-  "latin": "APPLE",
-  "gurmukhi": null,
-  "definitions": {"en": ["A sweet, red, yellow or green fruit."], "pa": []},
-  "lengths": {"latin": 5, "gurmukhi": null},
-  "acceptedGuess": true,
-  "solutionEligible": true,
-  "reviewStatus": "machineChecked",
-  "sources": ["Simple English Wiktionary contributors (CC BY-SA 4.0); https://simple.wiktionary.org/wiki/apple"]
+  "word": "abbā",
+  "letter_units": ["a", "b", "b", "ā"],
+  "tile_count": 4,
+  "definition": "father, dad",
+  "part_of_speech": "noun",
+  "gurmukhi_word": "ਅੱਬਾ",
+  "gurmukhi_words": ["ਅੱਬਾ"]
 }
 ```
 
-Punjabi IDs begin `panjabi_v2_` and encode the native source headword. English
-IDs begin `en_v2_`. ID-based saved targets cannot silently resolve to a new dictionary entry.
-Game restore validation rejects unavailable content and creates a fresh round;
-cumulative statistics remain in their existing storage keys. Bujho and Khoj
-snapshots store spellings, so still-eligible words can resume after current
-spelling/answer validation; changing entry IDs alone does not erase these saves.
+Complete records retain original source senses, page/history links,
+romanizations and tags. Runtime adapters construct game entries in memory; they
+do not rewrite the JSON masters or definitions into a second release schema.
+Shared display punctuation normalization preserves source wording and provenance.
 
-`acceptedGuess` and `solutionEligible` are independent. Punjabi has more
-source-backed dictionary/guess words than bounded everyday answers. Every answer
-must be an accepted guess with a distributable standalone definition. The only
-review statuses are `unreviewed`, `machineChecked`, `communityReviewed`, and
-`editorApproved`; source-checked agent decisions use `machineChecked`.
+## Separate mode membership
 
-## Generation and editorial inputs
+English, Romanized Punjabi and Gurmukhi draw exclusively from their own master.
+Counterpart spelling is lookup/presentation metadata, not permission to add a
+word to another mode. A Romanized record's native counterpart cannot expand the
+Gurmukhi pool, and a native record's Roman counterpart cannot expand Romanized
+membership. Selection deduplicates each mode's own displayed spellings.
 
-The English importer reads a hashed, attributed source snapshot plus
-`assets/content/curation/english_v2_policy.json`. The Punjabi importer reads its
-own hashed snapshot plus `assets/content/curation/punjabi_v2_answers.json`.
-English source evidence is retained on authoring records under `evidence`:
-original gloss, part of speech, sense index, Zipf score, source version/hash and
-transformation method. The compact release builder removes that authoring-only
-field while retaining per-entry source URLs. Punjabi curation binds the exact
-headword, sense ID and original gloss.
+All imported words and selected definitions are owner approved for their mode.
+The app does not apply retired frequency thresholds, everyday-answer subsets,
+definition-quality holds or old curation queues. Game rules still select an
+available size and a usable board/set; this is mechanical compatibility, not
+editorial reapproval. Owner approval is not a claim of fresh independent
+community review.
 
-The generated authoring banks are `generated/english_v2.json` and
-`generated/punjabi_v2.json`. No inherited V1 record, old editorial override,
-starter list or legacy hold can enter a v2 release. Legacy authoring files remain
-an archive. Only the two compact release banks and third-party notice are
-bundled. The builder removes the retired release `vocabulary_4/5/6.json` files.
+## Written units and coverage
 
-Use `dart run tool/dictionary_v2.dart --write`, followed by `--check`, from
-`app/`. `build_release_content.dart --write` remains the only writer of runtime
-assets; `audit_release_content.dart` checks what is actually distributed. See
-[definition sources](definition_sources.md) for the complete routine and source
-refresh policy.
+Source `letter_units` and `tile_count` are authoritative. Integrity validation
+checks that units reproduce the spelling, count matches units and the shared
+written-unit helper agrees. Do not substitute bytes, code points or generic
+`.characters.length` when it differs from source units. Each English letter
+and Roman letter with attached diacritics is one unit; Roman `kh` occupies two.
+A Gurmukhi base letter with marks and virama-linked subjoined letters occupies
+one written unit.
 
-## Validation and game lengths
+The approved source manifest contains:
 
-IDs and mode spellings are normalized/deduplicated, and both Latin and Gurmukhi
-lengths are recomputed from Unicode grapheme clusters. Runtime matching decomposes
-only the six canonically equivalent Gurmukhi nukta letters. ੜ remains distinct
-from ਡ਼ because it has no Unicode decomposition.
+| Tiles | English | Romanized Punjabi | Gurmukhi |
+| --- | ---: | ---: | ---: |
+| 2 | unavailable | unavailable | 1,515 |
+| 3 | unavailable | unavailable | 1,865 |
+| 4 | 2,263 | 658 | 787 |
+| 5 | 3,972 | 1,354 | 220 |
+| 6 | 6,292 | 979 | 33 |
+| 7 | unavailable | unavailable | 7 |
+| 8 | unavailable | unavailable | 1 |
+| Total | 12,527 | 2,991 | 4,428 |
 
-English v2 supports 3-12 letters. Bujho and Word Quest apply their existing
-4/5/6-grapheme filters. Khoj and Jodo draw from their broader eligible pools,
-with Khoj limiting words to the available grid. A source-backed longer word is
-not truncated to fit a fixed word-length bank.
+Punjabi modes overlap in meaning; their totals are not a unique Punjabi word
+count. Bujho and Word Quest retain 4/5/6-tile rounds. Khoj and Jodo use their
+broader applicable mode bank. Six-tile Gurmukhi has 33 source words; describe
+actual variety without importing other-mode words or imposing historical quotas.
 
-The shared source policy recognizes Wiktionary's **CC BY-SA 4.0** attribution,
-distinct from the retired sources' CC BY 4.0 licenses. The full offline notice
-retains contributor/source credits, modification statements and license links.
-Every current release definition has a recognized source; no blank legacy
-placeholder records are distributed. Player-facing punctuation normalization
-happens through `displayDefinition`, preserving source evidence.
+## Import, distribution and checks
 
-The current coverage is reported by the deterministic v2 reports and release
-audit. The higher English answer-frequency threshold and everyday-sense holds
-currently retain 221/191/109 answers at 4/5/6 letters (809 across all lengths),
-from 2,443 dictionary words. Punjabi
-coverage is intentionally smaller, especially six-grapheme Gurmukhi. Tests
-verify honest usable coverage and reject unavailable pools instead of treating
-old 300-answer quotas as approval criteria.
+From `app/`, import an approved release with
+`dart run tool/build_release_content.dart --import-from <path> --write`.
+Ordinary `--write` rebuilds from the local approved snapshot; `--check` verifies
+integrity and exact reproduction. Follow with
+`dart run tool/audit_release_content.dart` and applicable Flutter checks.
+See [definition sources](definition_sources.md) for maintenance details.
 
-## Runtime storage
+The manifest binds source files to exact byte sizes and SHA-256 hashes. Keep
+attribution and supplied WordNet, CC BY-SA 4.0 and filter license files with
+runtime data. Source README, TXT exports, review notes, raw imports and editorial
+queues remain authoring material. Only the three masters and required
+attribution/licenses belong in runtime assets.
 
-Read-only JSON remains appropriate for the offline dictionary across Android,
-iOS and web. Native decoding runs in a compute isolate; web decoding yields
-between language banks and every 250 records. Repository loads coalesce and
-cache immutable entries. No database, API key or runtime network is required.
-Reconsider indexing or an embedded database only with measured evidence that
-loading or lookups need it.
+Prior `english_v2.json`/`punjabi_v2.json` banks and `vocabulary_4/5/6.json` shards
+are obsolete release inputs. Dated reports are historical evidence, not current
+counts, approval gates or build inputs.
+
+## Runtime storage and saves
+
+Read-only JSON remains appropriate for the offline app. Repository loads
+coalesce and cache immutable entries; native decoding can use a compute isolate
+and web decoding yields between banks and batches. No source project, database,
+API key or network is required at runtime. Reconsider indexing with measured
+loading or lookup evidence.
+
+Saved targets validate against their current mode and written units. Unavailable
+historical content recovers through existing fresh-round behavior; replacing
+the dictionaries does not erase cumulative statistics. Counterpart lookup must
+not validate an otherwise unavailable saved target in another mode.

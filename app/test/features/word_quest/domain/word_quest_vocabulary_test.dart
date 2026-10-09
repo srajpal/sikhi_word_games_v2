@@ -36,8 +36,8 @@ void main() {
       'the Guru’s teaching',
       gurmukhi: 'ਗੁਰਮਤਿ',
       source:
-          'Mahan Kosh multilingual dataset; commit '
-          'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6; vol. 1, p. 1',
+          'English Wiktionary contributors (CC BY-SA 4.0); '
+          'https://en.wiktionary.org/wiki/ਗੁਰਮਤਿ',
     ),
     _entry(
       'panjabi_no_gurmukhi',
@@ -167,8 +167,8 @@ void main() {
     );
 
     expect(word?.definitionHint, 'the Guru’s teaching');
-    expect(word?.categoryHint, 'Sikhi vocabulary');
-    expect(word?.source, contains('Mahan Kosh'));
+    expect(word?.categoryHint, 'Punjabi word');
+    expect(word?.source, contains('Wiktionary'));
   });
 
   test('selector is injectable, non-repeating, and rejects empty input', () {
@@ -194,7 +194,8 @@ VocabularyEntry _entry(
   bool acceptedGuess = true,
   bool solutionEligible = true,
   ReviewStatus reviewStatus = ReviewStatus.unreviewed,
-  String source = 'Open English WordNet 2025 (CC BY 4.0)',
+  String source =
+      'Princeton WordNet 3.0 (WordNet license); https://wordnet.princeton.edu/',
 }) => VocabularyEntry(
   id: id,
   language: language,

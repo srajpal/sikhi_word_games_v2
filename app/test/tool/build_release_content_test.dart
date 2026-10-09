@@ -1,111 +1,128 @@
-import 'package:characters/characters.dart';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../tool/build_release_content.dart';
+import '../../tool/build_release_content.dart' as builder;
+import '../../tool/content/approved_release.dart';
+import 'approved_release_fixture.dart';
 
 void main() {
-  test('applies both spelling corrections and recomputes both lengths', () {
-    final result = buildReleaseEntry(
-      _entry(),
-      override: {
-        'latin': 'BHAROSA',
-        'gurmukhi': 'ਭਰੋਸਾ',
-        'englishDefinition': 'trust',
-        'acceptedGuess': true,
-        'solutionEligible': true,
-        'source':
-            'Project editorial definition; original text for Sikhi Word Games',
-      },
-    );
-
-    expect(result['latin'], 'BHAROSA');
-    expect(result['gurmukhi'], 'ਭਰੋਸਾ');
-    expect(result['lengths'], {
-      'latin': 'BHAROSA'.characters.length,
-      'gurmukhi': 'ਭਰੋਸਾ'.characters.length,
-    });
+  late Directory temporary;
+  late Directory app;
+  late Directory source;
+  setUp(() {
+    temporary = Directory.systemTemp.createTempSync('approved-release-build-');
+    app = Directory('${temporary.path}/app')..createSync();
+    source = Directory('${temporary.path}/source');
+    writeFixture(source, approvedFixture());
   });
+  tearDown(() => temporary.deleteSync(recursive: true));
 
-  test('an answer is always an accepted guess', () {
-    final result = buildReleaseEntry(
-      _entry(),
-      override: {
-        'acceptedGuess': false,
-        'solutionEligible': true,
-        'englishDefinition': 'trust',
-        'source':
-            'Project editorial definition; original text for Sikhi Word Games',
-      },
-    );
+  test(
+    'imports the full snapshot and copies only exact masters and notices',
+    () {
+      final expected = ApprovedRelease.load(source);
+      final runtime = Directory('${app.path}/$runtimeContentDirectory');
+      writeFixture(runtime, {
+        'english_v2.json': [1],
+        'old-bank.json': [2],
+      });
 
-    expect(result['acceptedGuess'], isFalse);
-    expect(result['solutionEligible'], isFalse);
-  });
+      builder.buildRelease(
+        appDirectory: app,
+        importDirectory: source,
+        write: true,
+      );
 
-  test('release output clears non-English definitions without field provenance', () {
-    final source = _entry();
-    source['definitions'] = {
-      'en': ['legacy text'],
-      'pa': ['legacy Punjabi definition'],
-    };
-    final result = buildReleaseEntry(
-      source,
-      override: {
-        'englishDefinition': 'trust',
-        'source':
-            'Project editorial definition; original text for Sikhi Word Games',
-      },
-    );
+      expect(
+        fileDifferences(
+          Directory('${app.path}/$approvedSourceDirectory'),
+          expected.files,
+        ),
+        isEmpty,
+      );
+      expect(fileDifferences(runtime, expected.runtimeFiles), isEmpty);
+      expect(readDirectoryFiles(runtime), hasLength(7));
+      expect(fileDifferences(source, expected.files), isEmpty);
+      expect(
+        () => builder.buildRelease(appDirectory: app, check: true),
+        returnsNormally,
+      );
+    },
+  );
 
-    expect(result['definitions'], {
-      'en': ['trust'],
-      'pa': <String>[],
-    });
-  });
+  test(
+    'rejects a corrupt import before replacing either existing destination',
+    () {
+      builder.buildRelease(
+        appDirectory: app,
+        importDirectory: source,
+        write: true,
+      );
+      final authoring = Directory('${app.path}/$approvedSourceDirectory');
+      final runtime = Directory('${app.path}/$runtimeContentDirectory');
+      final beforeAuthoring = readDirectoryFiles(authoring);
+      final beforeRuntime = readDirectoryFiles(runtime);
+      File('${source.path}/english/words.json').writeAsStringSync('{}');
 
-  test('new Punjabi review methods must pass the content quality gate', () {
-    final result = buildReleaseEntry(
-      _entry(),
-      override: {
-        'englishDefinition': 'See another entry.',
-        'acceptedGuess': true,
-        'solutionEligible': true,
-        'source':
-            'Project editorial definition; original text for Sikhi Word Games',
-        'reviewMethod': 'agent-editorial-source-checked-v1',
-      },
-    );
+      expect(
+        () => builder.buildRelease(
+          appDirectory: app,
+          importDirectory: source,
+          write: true,
+        ),
+        throwsFormatException,
+      );
+      expect(fileDifferences(authoring, beforeAuthoring), isEmpty);
+      expect(fileDifferences(runtime, beforeRuntime), isEmpty);
+    },
+  );
 
-    expect(result['solutionEligible'], isFalse);
-    expect(result['definitions'], {
-      'en': [''],
-      'pa': <String>[],
-    });
-  });
+  test(
+    'check rejects changed licenses and stale files; write restores originals',
+    () {
+      builder.buildRelease(
+        appDirectory: app,
+        importDirectory: source,
+        write: true,
+      );
+      final runtime = Directory('${app.path}/$runtimeContentDirectory');
+      File('${runtime.path}/licenses/WORDNET_LICENSE.txt')
+          .writeAsStringSync('changed');
+      File('${runtime.path}/old.json').writeAsStringSync('[]');
+      expect(
+        () => builder.buildRelease(appDirectory: app, check: true),
+        throwsStateError,
+      );
+      builder.buildRelease(appDirectory: app, write: true);
+      expect(
+        fileDifferences(runtime, ApprovedRelease.load(source).runtimeFiles),
+        isEmpty,
+      );
+    },
+  );
 
-  test('duplicate IDs are rejected across input collections', () {
-    final seen = <String>{};
-    ensureUniqueVocabularyId(seen, _entry());
+  test(
+    'managed writes reject outside paths before touching existing files',
+    () {
+      final original = readDirectoryFiles(source);
+      expect(
+        () => writeManagedFiles(source, {}, appDirectory: app),
+        throwsStateError,
+      );
+      expect(fileDifferences(source, original), isEmpty);
+    },
+  );
 
+  test('imports require explicit write and write cannot also check', () {
     expect(
-      () => ensureUniqueVocabularyId(seen, _entry()),
-      throwsFormatException,
+      () => builder.buildRelease(appDirectory: app, importDirectory: source),
+      throwsArgumentError,
     );
+    expect(
+      () => builder.buildRelease(appDirectory: app, write: true, check: true),
+      throwsArgumentError,
+    );
+    expect(() => builder.main(['--unexpected']), throwsArgumentError);
   });
 }
-
-Map<String, Object?> _entry() => {
-  'id': 'panjabi_bharosa',
-  'language': 'panjabi',
-  'latin': 'BHROSA',
-  'gurmukhi': 'ਭਰੋਸ',
-  'definitions': {
-    'en': ['legacy text'],
-    'pa': <String>[],
-  },
-  'lengths': {'latin': 99, 'gurmukhi': 99},
-  'acceptedGuess': true,
-  'solutionEligible': false,
-  'reviewStatus': 'pending',
-  'sources': ['Legacy definition source unclear; not distributed'],
-};

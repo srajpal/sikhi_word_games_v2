@@ -59,13 +59,7 @@ void main() {
       _setGoldenSurface(tester);
       tester.view.physicalSize = const Size(360, 1100);
       final decks = bridgesContent.decksFor(mode);
-      final pairs = mode == LanguageMode.english
-          ? decks
-                .firstWhere(
-                  (deck) => deck.pairs.any((pair) => pair.id == 'en_v2_bread'),
-                )
-                .pairs
-          : decks.first.pairs;
+      final pairs = decks.first.pairs;
       final repository = WordBridgesRepository(MemoryKeyValueStore());
       final game = WordBridgesGame(
         pairs: pairs,
@@ -88,7 +82,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       if (mode == LanguageMode.english) {
-        expect(find.text('BREAD'), findsOneWidget);
+        expect(find.text(pairs.first.word), findsOneWidget);
       } else {
         for (final pair in pairs) {
           expect(

@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'vocabulary_licenses.dart';
+import '../language/word_units.dart';
 
 enum VocabularyLanguage { english, panjabi }
+
+enum VocabularyScript { english, romanizedPunjabi, gurmukhi }
 
 enum ReviewStatus {
   unreviewed,
@@ -24,6 +27,7 @@ class VocabularyEntry {
     required this.solutionEligible,
     required this.reviewStatus,
     required this.source,
+    this.script,
   });
 
   final String id;
@@ -37,6 +41,16 @@ class VocabularyEntry {
   final bool solutionEligible;
   final ReviewStatus reviewStatus;
   final String source;
+  final VocabularyScript? script;
+
+  bool get isOwnerApproved =>
+      script != null && reviewStatus == ReviewStatus.editorApproved;
+
+  bool supportsScript(VocabularyScript mode) => script != null
+      ? script == mode
+      : language == VocabularyLanguage.english
+      ? mode == VocabularyScript.english
+      : mode != VocabularyScript.english;
 
   bool get hasDistributableDefinition =>
       englishDefinition.trim().isNotEmpty && isTrustedVocabularySource(source);
@@ -69,6 +83,7 @@ class VocabularyEntry {
     solutionEligible: solutionEligible ?? this.solutionEligible,
     reviewStatus: reviewStatus ?? this.reviewStatus,
     source: source ?? this.source,
+    script: script,
   );
 
   factory VocabularyEntry.fromJson(Map<String, Object?> json) {
@@ -91,6 +106,9 @@ class VocabularyEntry {
         isTrustedVocabularySource,
         orElse: () => sources.first as String,
       ),
+      script: json['script'] is String
+          ? VocabularyScript.values.byName(json['script']! as String)
+          : null,
     );
   }
 
@@ -108,7 +126,60 @@ class VocabularyEntry {
     'solutionEligible': solutionEligible,
     'reviewStatus': reviewStatus.name,
     'sources': [source],
+    if (script != null) 'script': script!.name,
   };
+
+  factory VocabularyEntry.fromApprovedJson(
+    Map<String, Object?> json,
+    VocabularyScript script,
+  ) {
+    final word = json['word']! as String;
+    final units = (json['letter_units']! as List<Object?>).cast<String>();
+    final computed = wordUnits(word);
+    if (units.join() != word ||
+        units.length != json['tile_count'] ||
+        computed.length != units.length ||
+        !List.generate(
+          units.length,
+          (i) => computed[i] == units[i],
+        ).every((v) => v)) {
+      throw FormatException('Approved word has invalid letter units: $word');
+    }
+    final definition = json['definition']! as String;
+    if (definition.trim().isEmpty) {
+      throw FormatException('Approved word has no definition: $word');
+    }
+    final romanizations = json['romanizations'] as List<Object?>?;
+    final latin = script == VocabularyScript.gurmukhi
+        ? (romanizations?.firstOrNull as String? ?? '').toUpperCase()
+        : word.toUpperCase();
+    final gurmukhi = script == VocabularyScript.gurmukhi
+        ? word
+        : json['gurmukhi_word'] as String?;
+    final prefix = switch (script) {
+      VocabularyScript.english => 'en',
+      VocabularyScript.romanizedPunjabi => 'rom',
+      VocabularyScript.gurmukhi => 'gur',
+    };
+    return VocabularyEntry(
+      id: 'approved_${prefix}_${base64Url.encode(utf8.encode(word)).replaceAll('=', '')}',
+      language: script == VocabularyScript.english
+          ? VocabularyLanguage.english
+          : VocabularyLanguage.panjabi,
+      latin: latin,
+      gurmukhi: gurmukhi,
+      englishDefinition: definition,
+      latinLength: wordUnitCount(latin),
+      gurmukhiLength: gurmukhi == null ? null : wordUnitCount(gurmukhi),
+      acceptedGuess: true,
+      solutionEligible: true,
+      reviewStatus: ReviewStatus.editorApproved,
+      source: script == VocabularyScript.english
+          ? 'Princeton WordNet 3.0 (WordNet license); https://wordnet.princeton.edu/; synset ${json['synset_id']}'
+          : 'English Wiktionary contributors (CC BY-SA 4.0); ${json['source_url']}; contributor history ${json['source_history_url']}',
+      script: script,
+    );
+  }
 
   String toJsonString() => jsonEncode(toJson());
 }
