@@ -13,25 +13,29 @@ import '../data/app_settings_repository.dart';
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
     required this.settings,
-    required this.onSave,
+    required this.onChanged,
     this.onResetAllData,
     super.key,
   });
   final AppSettings settings;
-  final Future<void> Function(AppSettings) onSave;
+  final Future<void> Function(AppSettings) onChanged;
   final Future<void> Function()? onResetAllData;
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  late AppSettings _draft = widget.settings;
-  bool _saving = false;
-  void _update(AppSettings next) => setState(() => _draft = next);
-  Future<void> _save() async {
-    setState(() => _saving = true);
+  late AppSettings _settings = widget.settings;
+  @override
+  void didUpdateWidget(SettingsPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.settings != oldWidget.settings) _settings = widget.settings;
+  }
+
+  Future<void> _update(AppSettings next) async {
+    setState(() => _settings = next);
     try {
-      await widget.onSave(_draft);
+      await widget.onChanged(next);
     } on Object {
       if (mounted) {
         showGameSnackBar(
@@ -39,8 +43,6 @@ class _SettingsPageState extends State<SettingsPage> {
           'Settings could not be saved. Please try again.',
         );
       }
-    } finally {
-      if (mounted) setState(() => _saving = false);
     }
   }
 
@@ -62,7 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
             for (final choice in AppThemeChoice.values)
               ListTile(
                 leading: Icon(
-                  choice == _draft.theme
+                  choice == _settings.theme
                       ? Icons.radio_button_checked
                       : Icons.radio_button_unchecked,
                 ),
@@ -77,13 +79,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 }),
                 onTap: InteractionSounds.buttonAction(
                   context,
-                  () => _update(_draft.copyWith(theme: choice)),
+                  () => _update(_settings.copyWith(theme: choice)),
                 ),
               ),
             const Divider(),
             DropdownButtonFormField<HapticFeedbackLevel>(
+              key: ValueKey(_settings.hapticLevel),
               isExpanded: true,
-              initialValue: _draft.hapticLevel,
+              initialValue: _settings.hapticLevel,
               decoration: const InputDecoration(labelText: 'Haptic feedback'),
               items: [
                 for (final level in HapticFeedbackLevel.values)
@@ -93,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 context,
                 (value) {
                   if (value != null) {
-                    _update(_draft.copyWith(hapticLevel: value));
+                    _update(_settings.copyWith(hapticLevel: value));
                   }
                 },
               ),
@@ -101,10 +104,10 @@ class _SettingsPageState extends State<SettingsPage> {
             SwitchListTile(
               title: const Text('Reduce motion'),
               subtitle: const Text('Minimize interface animation'),
-              value: _draft.reducedMotion,
+              value: _settings.reducedMotion,
               onChanged: InteractionSounds.buttonChange(
                 context,
-                (value) => _update(_draft.copyWith(reducedMotion: value)),
+                (value) => _update(_settings.copyWith(reducedMotion: value)),
               ),
             ),
             const Text(
@@ -128,10 +131,10 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: const Text(
                 'Gentle ticks when choosing or typing letters',
               ),
-              value: _draft.letterClicks,
+              value: _settings.letterClicks,
               onChanged: InteractionSounds.buttonChange(
                 context,
-                (value) => _update(_draft.copyWith(letterClicks: value)),
+                (value) => _update(_settings.copyWith(letterClicks: value)),
               ),
             ),
             SwitchListTile(
@@ -140,10 +143,10 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: const Text(
                 'Soft clicks for buttons and other controls',
               ),
-              value: _draft.buttonClicks,
+              value: _settings.buttonClicks,
               onChanged: InteractionSounds.buttonChange(
                 context,
-                (value) => _update(_draft.copyWith(buttonClicks: value)),
+                (value) => _update(_settings.copyWith(buttonClicks: value)),
               ),
             ),
           ],
@@ -160,19 +163,19 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             SwitchListTile(
               title: const Text('Victory sound'),
-              value: _draft.victorySound,
+              value: _settings.victorySound,
               onChanged: InteractionSounds.buttonChange(
                 context,
-                (value) => _update(_draft.copyWith(victorySound: value)),
+                (value) => _update(_settings.copyWith(victorySound: value)),
               ),
             ),
             SwitchListTile(
               title: const Text('Victory particles'),
               subtitle: const Text('Reduce motion turns these off'),
-              value: _draft.victoryParticles,
+              value: _settings.victoryParticles,
               onChanged: InteractionSounds.buttonChange(
                 context,
-                (value) => _update(_draft.copyWith(victoryParticles: value)),
+                (value) => _update(_settings.copyWith(victoryParticles: value)),
               ),
             ),
             ExpansionTile(
@@ -193,21 +196,22 @@ class _SettingsPageState extends State<SettingsPage> {
                   SwitchListTile(
                     key: ValueKey('victory-sound-${game.name}'),
                     title: const Text('Sound'),
-                    value: !_draft.mutedVictoryGames.contains(game.name),
+                    value: !_settings.mutedVictoryGames.contains(game.name),
                     onChanged: InteractionSounds.buttonChange(
                       context,
-                      (value) =>
-                          _update(_draft.withGameVictory(game, sound: value)),
+                      (value) => _update(
+                        _settings.withGameVictory(game, sound: value),
+                      ),
                     ),
                   ),
                   SwitchListTile(
                     key: ValueKey('victory-particles-${game.name}'),
                     title: const Text('Particles'),
-                    value: !_draft.quietVictoryGames.contains(game.name),
+                    value: !_settings.quietVictoryGames.contains(game.name),
                     onChanged: InteractionSounds.buttonChange(
                       context,
                       (value) => _update(
-                        _draft.withGameVictory(game, particles: value),
+                        _settings.withGameVictory(game, particles: value),
                       ),
                     ),
                   ),
@@ -239,44 +243,19 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             if (widget.onResetAllData != null)
               TextButton.icon(
-                onPressed: InteractionSounds.buttonAction(
-                  context,
-                  _saving
-                      ? null
-                      : () async {
-                          await showResetAppDataDialog(
-                            context,
-                            onReset: () async {
-                              await widget.onResetAllData!();
-                              if (mounted) _update(const AppSettings());
-                            },
-                          );
-                        },
-                ),
+                onPressed: InteractionSounds.buttonAction(context, () async {
+                  await showResetAppDataDialog(
+                    context,
+                    onReset: () async {
+                      await widget.onResetAllData!();
+                    },
+                  );
+                }),
                 icon: const Icon(Icons.restart_alt),
                 label: const Text('Reset all app data'),
               ),
           ],
         ),
-      ),
-      const SizedBox(height: 20),
-      Wrap(
-        alignment: WrapAlignment.end,
-        spacing: 12,
-        runSpacing: 12,
-        children: [
-          TextButton(
-            onPressed: InteractionSounds.buttonAction(
-              context,
-              _saving ? null : () => Navigator.pop(context),
-            ),
-            child: const Text('Cancel'),
-          ),
-          GameGradientButton(
-            label: _saving ? 'Saving...' : 'Save',
-            onPressed: _saving ? null : _save,
-          ),
-        ],
       ),
     ],
   );

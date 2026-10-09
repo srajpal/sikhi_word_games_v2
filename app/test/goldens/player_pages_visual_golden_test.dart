@@ -67,7 +67,7 @@ void main() {
         theme: AppThemes.forChoice(AppThemeChoice.modern),
         home: SettingsPage(
           settings: const AppSettings(theme: AppThemeChoice.modern),
-          onSave: (_) async {},
+          onChanged: (_) async {},
         ),
       ),
     );

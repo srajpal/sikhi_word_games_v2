@@ -40,8 +40,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Off').last);
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Save'));
-    await tester.tap(find.text('Save'));
+    expect(find.text('Save'), findsNothing);
+    expect(find.text('App settings'), findsOneWidget);
+    await tester.pageBack();
     await tester.pumpAndSettle();
     expect(settings.load().hapticLevel, HapticFeedbackLevel.off);
     expect(find.byTooltip('App settings'), findsOneWidget);

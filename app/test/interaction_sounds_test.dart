@@ -133,7 +133,7 @@ void main() {
     },
   );
 
-  testWidgets('settings keep draft click choices independent until saved', (
+  testWidgets('settings apply click choices immediately and independently', (
     tester,
   ) async {
     tester.view.devicePixelRatio = 1;
@@ -151,7 +151,7 @@ void main() {
         ),
         home: SettingsPage(
           settings: const AppSettings(),
-          onSave: (value) async {
+          onChanged: (value) async {
             saved = value;
           },
         ),
@@ -160,7 +160,7 @@ void main() {
     await tester.ensureVisible(find.byKey(const ValueKey('letter-clicks')));
     await tester.tap(find.byKey(const ValueKey('letter-clicks')));
     await tester.pump();
-    expect(saved, isNull);
+    expect(saved!.letterClicks, isFalse);
     final letter = tester.widget<SwitchListTile>(
       find.byKey(const ValueKey('letter-clicks')),
     );
@@ -169,9 +169,8 @@ void main() {
     );
     expect(letter.value, isFalse);
     expect(button.value, isTrue);
-    await tester.ensureVisible(find.text('Save'));
-    await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
+    expect(find.text('Save'), findsNothing);
+    expect(find.text('Cancel'), findsNothing);
     expect(saved!.letterClicks, isFalse);
     expect(saved!.buttonClicks, isTrue);
     expect(saved!.victorySound, isTrue);

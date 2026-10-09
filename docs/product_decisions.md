@@ -494,3 +494,11 @@ validate hashes, written units and runtime membership.
 
 Candidate validation, packaging and device evidence must be recorded when
 completed; prior build 23 evidence does not establish build 24 readiness.
+
+### Immediate settings: October 9, 2026
+
+App settings and per-game celebration switches apply and persist immediately as
+controls change. Settings stays open, with Back to leave; celebration controls
+use Done to dismiss. Neither flow has Save or Cancel. Game language/size dialogs
+that start a replacement round retain their explicit start/apply action. Reset
+all app data remains a separately confirmed destructive action.

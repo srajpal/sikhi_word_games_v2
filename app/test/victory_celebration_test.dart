@@ -128,24 +128,30 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('game settings cancel discards and save preserves other games', (
-    tester,
-  ) async {
-    AppSettings? saved;
-    await tester.pumpWidget(harness(onSave: (value) => saved = value));
-    await tester.tap(find.text('Settings'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Victory sound'));
-    await tester.tap(find.text('Cancel'));
-    await tester.pumpAndSettle();
-    expect(saved, isNull);
-    await tester.tap(find.text('Settings'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Victory sound'));
-    await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
-    expect(saved!.victorySoundFor(GameKind.wordBridges), isFalse);
-    expect(saved!.victorySoundFor(GameKind.guessTheWord), isTrue);
-    expect(saved!.victoryParticlesFor(GameKind.wordBridges), isTrue);
-  });
+  testWidgets(
+    'celebration settings apply immediately and preserve other games',
+    (tester) async {
+      AppSettings? saved;
+      await tester.pumpWidget(harness(onSave: (value) => saved = value));
+      await tester.tap(find.text('Settings'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Victory sound'));
+      await tester.pump();
+      expect(saved!.victorySoundFor(GameKind.wordBridges), isFalse);
+      expect(saved!.victorySoundFor(GameKind.guessTheWord), isTrue);
+      expect(saved!.victoryParticlesFor(GameKind.wordBridges), isTrue);
+      await tester.tap(find.text('Victory particles'));
+      await tester.pump();
+      expect(saved!.victorySoundFor(GameKind.wordBridges), isFalse);
+      expect(saved!.victoryParticlesFor(GameKind.wordBridges), isFalse);
+      expect(saved!.victoryParticlesFor(GameKind.guessTheWord), isTrue);
+      expect(find.text('Save'), findsNothing);
+      expect(find.text('Cancel'), findsNothing);
+      // Dismissing the sheet does not undo either change.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(saved!.victorySoundFor(GameKind.wordBridges), isFalse);
+      expect(saved!.victoryParticlesFor(GameKind.wordBridges), isFalse);
+    },
+  );
 }
