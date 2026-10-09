@@ -5,6 +5,17 @@ import 'package:sikhi_word_games_v2/features/guess_the_word/domain/guess_game.da
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 
 void main() {
+  test('rejects legacy conjunct saves outside supported sizes without deleting progress', () async {
+    final store = MemoryKeyValueStore()..values['player.progress'] = 'retained';
+    final repository = GuessGameRepository(store);
+    await repository.save(
+      mode: LanguageMode.gurmukhi,
+      game: GuessGame(solution: 'ਅਪ੍ਰੈਲ', acceptedGuesses: {'ਅਪ੍ਰੈਲ'}),
+    );
+    expect(repository.restore((mode, length) => {'ਅਪ੍ਰੈਲ'}), isNull);
+    expect(repository.hasActiveGame, isFalse);
+    expect(store.values['player.progress'], 'retained');
+  });
   test('saves, restores, and clears an interrupted game', () async {
     final store = MemoryKeyValueStore();
     final repository = GuessGameRepository(store);

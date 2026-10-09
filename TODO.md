@@ -6,7 +6,7 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
-## October 9 owner-approved dictionary import: candidate 1.13.0+24
+## October 9 owner-approved dictionary import: candidate 1.13.0+25
 
 - [x] Record the owner's approval of every word and selected definition in
   `C:/dev/Projects/ChatGPT/sikhi_word_games_word_lists/release`. Preserve source
@@ -25,25 +25,25 @@ source snapshot; integrity checks do not reopen editorial approval.
 - [x] Validate exact source/release bytes, counts, units, mode isolation and
   locally reproducible import/build/check; run applicable tests, full Flutter
   checks, reviewed goldens, cache checks and release web/debug Android builds.
-- [x] Inspect the actual build 24 package and browser across all three modes,
+- [x] Inspect the actual build 25 package and browser across all three modes,
   including scholarly input, native conjuncts and mode-filtered Dictionary.
   WordNet APPLE, Romanized ĀSĀN and Gurmukhi ਅਪ੍ਰੈਲ lookups work. Updated
   credits display WordNet, Wiktionary/Kaikki and Shutterstock. Real browser
   progress remains 6 rounds/16 solved words/11 badges across the update.
-  Install/launch build 24 on K70 PRO with existing app data preserved.
-- [ ] Repeat actual offline reload for build 24 and the eventual itch.io iframe.
+  Install/launch build 25 on K70 PRO with existing app data preserved.
+- [ ] Repeat actual offline reload for build 25 and the eventual itch.io iframe.
   Worker/cache unit checks pass. Automatic approval review rejected stopping
   the local preview server because it would disrupt the user's open preview;
   the server remains running and actual offline reload is not claimed.
 
-Build 24 evidence: full Flutter suite passed (348 tests, including 35 visual
-baselines); the subsequently added Gurmukhi control-label check also passed.
+Build 25 evidence: full Flutter suite passed (351 tests, including 35 visual
+baselines and legacy conjunct-save/control-label regressions).
 Full analysis is clean, 145 Dart files are formatted, both cache/update Node
 checks pass, and source/runtime audits verify all 19,946 records without
 editorial filtering. Git-index bytes also match every supplied manifest hash.
 The release ZIP has 7 exact runtime files, all licenses and three font notices;
-no authoring inputs or retired banks are bundled. Build 24 debug APK installed
-with `adb install -r` on K70 PRO; version 1.13.0/code 24 and running PID verified.
+no authoring inputs or retired banks are bundled. Build 25 debug APK installed
+with `adb install -r` on K70 PRO; version 1.13.0/code 25 and running PID verified.
 Browser lookups, updated sources and unchanged saved totals are verified;
 hands-on tablet gameplay,
 screen-reader and speaker verification remain separate manual checks.
@@ -87,7 +87,7 @@ Build 23 results below are historical evidence.
   process verified; visible gameplay and speaker audibility remain manual checks.
 The outstanding dictionary-v2 sampling, frequency-refresh and six-word-pool
 expansion proposals are superseded by the October 9 owner-approved source
-release. They are retired follow-ups, not unfinished approval gates for build 24.
+release. They are retired follow-ups, not unfinished approval gates for build 25.
 
 ## October 8 play consistency update: 1.11.0+22
 

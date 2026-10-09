@@ -38,8 +38,9 @@ class GuessGameRepository {
         if (guess is! String) return false;
         accepted.add(guess);
       }
-      return GuessGame.restore(json: game, acceptedGuesses: accepted).status ==
-          GuessGameStatus.playing;
+      final restored = GuessGame.restore(json: game, acceptedGuesses: accepted);
+      return const [4, 5, 6].contains(restored.wordLength) &&
+          restored.status == GuessGameStatus.playing;
     } on Object catch (_) {
       return false;
     }
@@ -80,6 +81,7 @@ class GuessGameRepository {
         solution: solution,
         acceptedGuesses: const {},
       );
+      if (!const [4, 5, 6].contains(provisional.wordLength)) return null;
       final game = GuessGame.restore(
         json: gameJson,
         acceptedGuesses: acceptedGuesses(mode, provisional.wordLength),
