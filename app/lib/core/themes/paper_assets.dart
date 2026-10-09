@@ -1,4 +1,4 @@
-enum GameArtworkKind { deduction, search, garden, bridges, letters }
+enum GameArtworkKind { deduction, search, garden, bridges, letters, scramble }
 
 /// Bundled artwork keeps the same tactile setting available offline.
 abstract final class PaperAssets {
@@ -10,5 +10,6 @@ abstract final class PaperAssets {
         GameArtworkKind.garden => 'quest',
         GameArtworkKind.bridges => 'jodo',
         GameArtworkKind.letters => 'letters',
+        GameArtworkKind.scramble => 'scramble',
       }}.webp';
 }

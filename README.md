@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.15.1` (build `28`). The uploaded web draft remains
+The current testing build is `1.16.0` (build `29`). The uploaded web draft remains
 `1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
@@ -90,7 +90,7 @@ itch.io is a new host.
    The helper builds with local renderer resources, changes the compiled base
    path to `./`, and packages the web files with `index.html` at the archive root.
    Flutter 3.47.2 rejects `--base-href ./`, so the helper patches build output.
-3. Serve the package through HTTP under a nested directory and verify all five
+3. Serve the package through HTTP under a nested directory and verify all six
    games, Dictionary, Gurmukhi rendering, refresh, and real browser persistence.
    Do not test by opening `index.html` through a file URL.
 4. Use the existing unpublished itch.io project 5023423 at

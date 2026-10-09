@@ -1,6 +1,6 @@
 # Flutter application
 
-This directory contains Sikhi Word Games V2, with five playable games and an
+This directory contains Sikhi Word Games V2, with six playable games and an
 offline vocabulary browser. Start with the repository [README](../README.md)
 for setup, validation, versioning, and itch.io release steps.
 
@@ -18,18 +18,19 @@ imported through `tool/build_release_content.dart`, never edited by hand.
 
 **Publisher:** Khalsa Game Studio ([khalsagamestudio.com](https://khalsagamestudio.com/))
 
-**Short description:** Five relaxed word and letter games with English, Punjabi and Gurmukhi.
+**Short description:** Six relaxed word and letter games with English, Punjabi and Gurmukhi.
 
-Take your time with five ways to play:
+Take your time with six ways to play:
 
 - **Bujho: Guess the Word:** Find the hidden word using letter clues.
 - **Khoj: Word Search:** Find six words running across, down, or diagonally.
 - **Chardi Kala: Word Quest:** Read a clue and choose letters to complete a paper lantern.
 - **Jodo: Word Bridges (ਜੋੜੋ):** Match four words with their English meanings, without a timer. Randomized sets support English, Romanized Punjabi and Gurmukhi.
 - **Akhar Pachhaan: Learn Letters:** Practice the names of 35 Gurmukhi letters in five-question rounds, with gentle retries and saved practice progress.
+- **Shabad Banao: Word Scramble (ਸ਼ਬਦ ਬਣਾਓ):** Read a meaning and arrange shuffled tiles into a word. Tap to place or return tiles, with one optional hint and no timer.
 
 The word games offer language choices; Bujho and Word Quest support four
-to six written letters. Khoj and Jodo use all approved sizes in their language. Choose Modern, Sikhi or Dark theme. Use the
+to six written letters. Khoj, Jodo and Shabad Banao use mixed approved sizes in their language. Choose Modern, Sikhi or Dark theme. Use the
 Dictionary to look up words and meanings. No account, ads, or payment is needed
 to play. Unfinished games are saved in this browser.
 
@@ -84,7 +85,7 @@ Leave Mobile Friendly off until actual mobile-browser testing passes.
 Use the cover below; refresh gameplay screenshots from the current package
 before uploading them because the existing screenshot set predates Learn Letters.
 
-Before changing visibility to Public, test all five games and Dictionary in the
+Before changing visibility to Public, test all six games and Dictionary in the
 actual draft iframe, keyboard/focus, Hear audio, saved progress after reload,
 Gurmukhi fonts and offline restart. Resolve the content/audio review gates in
 `../TODO.md`. Preserve the previous ZIP for rollback. Draft preparation is not

@@ -10,9 +10,11 @@ class GameLanguageHeader extends StatelessWidget {
   const GameLanguageHeader({required this.mode, this.wordLength, super.key});
   final LanguageMode mode;
   final int? wordLength;
+  String get label =>
+      '${mode.label}${wordLength == null ? '' : ' · $wordLength letters'}';
   @override
   Widget build(BuildContext context) => Text(
-    '${mode.label}${wordLength == null ? '' : ' · $wordLength letters'}',
+    label,
     key: const ValueKey('game-language-status'),
     textAlign: TextAlign.center,
     style: Theme.of(context).textTheme.labelMedium,

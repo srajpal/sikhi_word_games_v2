@@ -15,10 +15,10 @@ import 'package:sikhi_word_games_v2/features/word_bridges/domain/word_bridges_ga
 
 void main() {
   test(
-    '50 distinct goals, ten per game, clamp progress and unlock at threshold',
+    '60 distinct goals, ten per game, clamp progress and unlock at threshold',
     () {
-      expect(achievements.length, 50);
-      expect(achievements.map((badge) => badge.id).toSet().length, 50);
+      expect(achievements.length, 60);
+      expect(achievements.map((badge) => badge.id).toSet().length, 60);
       for (final game in GameKind.values) {
         expect(achievements.where((badge) => badge.game == game).length, 10);
       }

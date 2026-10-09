@@ -23,6 +23,7 @@ import 'package:sikhi_word_games_v2/features/settings/data/app_settings_reposito
 import 'package:sikhi_word_games_v2/features/word_bridges/data/word_bridges_repository.dart';
 import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_repository.dart';
 import 'package:sikhi_word_games_v2/features/word_search/data/word_search_session_repository.dart';
+import 'package:sikhi_word_games_v2/features/word_scramble/data/word_scramble_repository.dart';
 
 void main() {
   testWidgets('reset dialog blocks duplicate actions and Back while saving', (
@@ -144,6 +145,8 @@ void main() {
     expect(WordSearchSessionRepository(store).statistics.total.played, 0);
     expect(WordQuestSessionRepository(store).statistics.total.played, 0);
     expect(WordBridgesRepository(store).total.finishedSets, 0);
+    expect(WordScrambleRepository(store).total.solved, 0);
+    expect(WordScrambleRepository(store).hasActiveGame, isFalse);
     for (final game in GameKind.values) {
       expect(GameGuideRepository(store).hasSeen(game), isFalse);
       final preferences = GameLaunchPreferencesRepository(store).load(game);
@@ -251,6 +254,7 @@ Future<void> _seed(MemoryKeyValueStore store) async {
     WordQuestSessionRepository.storageKey,
     WordBridgesRepository.storageKey,
     LearnLettersRepository.storageKey,
+    WordScrambleRepository.storageKey,
     WordSearchSessionRepository(store).statistics.storageKey,
     WordQuestSessionRepository(store).statistics.storageKey,
   ]) {
@@ -269,6 +273,7 @@ SikhiWordGamesApp _app(MemoryKeyValueStore store) => SikhiWordGamesApp(
   wordQuestSessionRepository: WordQuestSessionRepository(store),
   wordBridgesRepository: WordBridgesRepository(store),
   learnLettersRepository: LearnLettersRepository(store),
+  wordScrambleRepository: WordScrambleRepository(store),
   launchPreferencesRepository: GameLaunchPreferencesRepository(store),
 );
 

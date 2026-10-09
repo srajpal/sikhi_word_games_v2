@@ -51,6 +51,20 @@ typedef _GuideStep = ({String title, String body});
 String _gameName(GameKind game) => GameIdentity.forGame(game).fullName;
 
 List<_GuideStep> _steps(GameKind game) => switch (game) {
+  GameKind.wordScramble => const [
+    (
+      title: 'Make a word',
+      body: 'Read the English meaning clue. Tap the shuffled tiles to put the word in order. Word lengths vary. There is no timer and no limited lives.',
+    ),
+    (
+      title: 'Move the pieces',
+      body: 'Tap a placed tile to return it to the tray. Repeated letters each have their own tile. Shuffle mixes the remaining tiles. In Gurmukhi, vowel marks and subjoined letters stay attached to their base.',
+    ),
+    (
+      title: 'Check and discover',
+      body: 'Choose Check word when every space is filled. A wrong order lets you keep trying. One optional hint places and locks a correct tile. Use Next word after solving. Touch, Tab and Enter or Space, and screen-reader activation all work. Game settings chooses a language for a new word.',
+    ),
+  ],
   GameKind.learnLetters => const [
     (
       title: 'Learn letter names',

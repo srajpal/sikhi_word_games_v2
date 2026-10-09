@@ -47,7 +47,14 @@ class GameIdentity {
     GameKind.wordQuest => quest,
     GameKind.wordBridges => jodo,
     GameKind.learnLetters => letters,
+    GameKind.wordScramble => scramble,
   };
+
+  static const scramble = GameIdentity(
+    'Word Scramble',
+    'Shabad Banao',
+    GameArtworkKind.scramble,
+  );
 }
 
 class GameHeading extends StatelessWidget {
@@ -119,9 +126,48 @@ class GameHeading extends StatelessWidget {
 }
 
 /// Let titles grow with accessibility text instead of shrinking them to fit.
-double gameToolbarHeight(BuildContext context, {bool subtitle = true}) {
+double gameToolbarHeight(
+  BuildContext context, {
+  bool subtitle = true,
+  int titleLines = 1,
+  GameIdentity? identity,
+  String? subtitleText,
+}) {
   final scale = MediaQuery.textScalerOf(context);
-  return scale.scale(20) * 1.25 + scale.scale(12) * (subtitle ? 3 : 1.5) + 24;
+  if (identity != null) {
+    final theme = Theme.of(context);
+    final width = (MediaQuery.sizeOf(context).width - 172).clamp(64.0, 1000.0);
+    double height(String text, TextStyle? style) {
+      final painter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        textDirection: Directionality.of(context),
+        textScaler: scale,
+      )..layout(maxWidth: width);
+      final value = painter.height;
+      painter.dispose();
+      return value;
+    }
+
+    return height(
+          identity.englishTitle,
+          theme.textTheme.labelMedium?.copyWith(letterSpacing: .5),
+        ) +
+        height(
+          identity.punjabiName,
+          theme.textTheme.displaySmall?.copyWith(
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
+            height: 1.25,
+          ),
+        ) +
+        (subtitle
+            ? height(subtitleText ?? '', theme.textTheme.labelMedium) + 2
+            : 0) +
+        26;
+  }
+  return scale.scale(20) * 1.25 * titleLines +
+      scale.scale(12) * (subtitle ? 3 : 1.5) +
+      24;
 }
 
 /// A small paper illustration and instruction, without a duplicate game title.
