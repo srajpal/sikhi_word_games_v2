@@ -6,6 +6,31 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 9 automatic settings: candidate 1.14.0+26
+
+- [x] Apply and persist App settings on every control change; keep the page open
+  and remove Save/Cancel. Use the same behavior for per-game celebrations.
+- [x] Preserve ordered background writes, Back navigation, storage error notices,
+  and separately confirmed data reset.
+- [x] Verify focused/full Flutter checks and actual release-browser persistence;
+  rebuild the web preview and install/launch the new tablet test build.
+
+Build 26 evidence: 354 Flutter tests (including 35 visual baselines) passed;
+analysis is clean and 146 Dart files are formatted. The actual packaged release
+browser retains Dark theme and Reduce motion after reload without Save. Both
+original preferences were restored and Settings remains open without Save/Cancel.
+Web package integrity passes and the 1.14.0+26 ZIP is built. Android installed
+with `adb install -r` on K70 PRO; version 1.14.0/code 26 and running PID 26791
+were verified. Hands-on tablet behavior remains a separate manual check.
+
+## English accepted-guess coverage
+
+- [ ] Expand approved English accepted guesses to cover common inflections such
+  as MICE. The current supplied master contains MOUSE but no MICE; Bujho accepts
+  exact master entries only. Keep accepted guesses distinct from puzzle answers,
+  and coordinate additions with the approved source release rather than editing
+  the imported snapshot or runtime masters by hand.
+
 ## October 9 owner-approved dictionary import: candidate 1.13.0+25
 
 - [x] Record the owner's approval of every word and selected definition in
@@ -127,7 +152,7 @@ release. They are retired follow-ups, not unfinished approval gates for build 25
   GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
   from that review. The focused save/restore and keyboard fixes are in
   `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.12.0+23, Paper & Play. The September 18 ZIP and uploaded
+- Current Android testing version: 1.14.0+26, Paper & Play. The September 18 ZIP and uploaded
   itch.io draft remain 1.9.0+17 and
   predate the subsequent audit fixes and October vocabulary recheck. They are
   historical artifacts, not packages of current source. Increment both version

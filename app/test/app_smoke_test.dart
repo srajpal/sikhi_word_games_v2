@@ -22,34 +22,36 @@ import 'package:sikhi_word_games_v2/features/word_search/data/word_search_sessio
 import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
-  testWidgets('saving full-page settings returns to a playable library', (
-    tester,
-  ) async {
-    final store = MemoryKeyValueStore();
-    final settings = AppSettingsRepository(store);
-    await tester.pumpWidget(
-      SikhiWordGamesApp(
-        settingsRepository: settings,
-        vocabularyRepository: _vocabulary,
-      ),
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('App settings'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Medium').last);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Off').last);
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Save'));
-    await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
-    expect(settings.load().hapticLevel, HapticFeedbackLevel.off);
-    expect(find.byType(GameLibraryPage), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('new-game-guessTheWord')));
-    await tester.pumpAndSettle();
-    expect(find.byType(GuessTheWordPage), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'settings save automatically and Back returns to a playable library',
+    (tester) async {
+      final store = MemoryKeyValueStore();
+      final settings = AppSettingsRepository(store);
+      await tester.pumpWidget(
+        SikhiWordGamesApp(
+          settingsRepository: settings,
+          vocabularyRepository: _vocabulary,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('App settings'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Medium').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Off').last);
+      await tester.pumpAndSettle();
+      expect(find.text('Save'), findsNothing);
+      expect(find.text('App settings'), findsOneWidget);
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(settings.load().hapticLevel, HapticFeedbackLevel.off);
+      expect(find.byType(GameLibraryPage), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('new-game-guessTheWord')));
+      await tester.pumpAndSettle();
+      expect(find.byType(GuessTheWordPage), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'library Dictionary shortcut opens offline content and returns to Play',

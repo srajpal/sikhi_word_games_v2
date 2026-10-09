@@ -176,7 +176,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
               path: 'settings',
               builder: (context, state) => SettingsPage(
                 settings: _settings,
-                onSave: _saveSettingsAndReturn,
+                onChanged: _changeFeedbackSettings,
                 onResetAllData: _resetAllData,
               ),
             ),
@@ -308,20 +308,6 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
     setState(() => _settings = settings);
     _router.refresh();
     await _saveSettings();
-  }
-
-  Future<void> _saveSettingsAndReturn(AppSettings settings) async {
-    setState(() => _settings = settings);
-    await _saveSettings();
-    // Close before refreshing so an in-flight route refresh cannot recreate
-    // the pushed settings page after it has been popped.
-    if (mounted &&
-        _router.routerDelegate.currentConfiguration.last.matchedLocation ==
-            '/settings' &&
-        _router.canPop()) {
-      _router.pop();
-    }
-    if (mounted) _router.refresh();
   }
 
   Future<void> _saveSettings() async {

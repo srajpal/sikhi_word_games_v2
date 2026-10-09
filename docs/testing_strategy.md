@@ -214,7 +214,7 @@ Android packaging is separate from physical-device or store-listing validation.
 Reset coverage includes cancel preservation, exact owned-key deletion, defaults and first-launch guide restoration, pending-write ordering across repository instances, storage failure recovery, and retry. Real user-device data must not be cleared merely to exercise this feature.
 
 
-Victory checks cover global/per-game opt-outs, migration and reset, reduced-motion suppression, silent audio failure, nonblocking/finite particles, settings cancel/save, Jodo final-match-only accounting and reopen behavior, and Quest guess/hint wins. Victory visual baselines include all three themes and a narrow 200% text case. Automated audio spies establish playback requests, not audibility on a physical speaker; real web/Android playback remains separate evidence.
+Victory checks cover global/per-game opt-outs, migration and reset, reduced-motion suppression, silent audio failure, nonblocking/finite particles, immediate settings changes and dismissal, Jodo final-match-only accounting and reopen behavior, and Quest guess/hint wins. Victory visual baselines include all three themes and a narrow 200% text case. Automated audio spies establish playback requests, not audibility on a physical speaker; real web/Android playback remains separate evidence.
 
 
 Learn Letters coverage includes35uniquecontentitems, nonduplicatechoices, wrongretrylimits, manualadvance, priorityselection, roundJSONvalidation, partialrestore, completiondeduplication, savequeue/reset/errorbehavior,21-round practice progression, homeguide/Continue/global totals, and narrow/large-text layouts. Visual baselines cover all3themes and postanswer pronunciation controls. All35 generatedWAVs must be non-silent/unclipped and present in the packaged offline cache. Listening approval remains a separate human check.
@@ -251,9 +251,11 @@ old-stat projections, no fabricated historical facts, atomic once-only new
 completion facts, reset and all-theme 320px/200% text. New page goldens include
 three achievement galleries and a Settings phone. Review rendered captures before
 accepting changed baselines. Page navigation/reset tests exercise the real routes.
-Saving Settings must return to a playable library after persistence and route
-refresh. The widget regression and browser fixture both assert this transition
-before launching Bujho, then the browser fixture verifies interrupted restore.
+Settings applies and persists each change without leaving its route. Regression
+coverage checks immediate theme changes, independent sound switches, app
+recreation, queued rapid edits finishing after Back, and storage failure/recovery.
+Back must return to a playable library; the browser fixture also verifies
+interrupted game restore. Celebration switches apply before sheet dismissal.
 
 ### Mobile navigation, feedback and dictionary v2: 1.12.0+23 (historical content checks)
 

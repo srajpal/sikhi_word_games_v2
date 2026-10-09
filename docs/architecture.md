@@ -295,3 +295,10 @@ players avoid stopping pronunciation or victory audio; lifecycle disposal and
 backgrounding stop clicks and playback errors remain nonfatal. Independent
 `letterClicks`/`buttonClicks` preferences migrate older settings with enabled
 defaults and are included in reset. Original WAV generation is reproducible.
+
+App-wide preference changes update shared theme, sound and feedback state before
+awaiting persistence. The Settings route stays open and refreshes from that state,
+including after reset. Immutable snapshots enter the existing per-key write queue,
+so rapid edits persist in order even when Settings is closed before writes finish.
+Write failure leaves preferences active for the session and reports unavailable
+storage; later changes can persist the current full snapshot.

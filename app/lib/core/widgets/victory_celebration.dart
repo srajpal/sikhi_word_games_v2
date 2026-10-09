@@ -116,11 +116,10 @@ class _VictoryCelebrationState extends State<VictoryCelebration>
 
   Future<void> _showSettings() async {
     _stop();
-    var sound = !widget.settings.mutedVictoryGames.contains(widget.game.name);
-    var particles = !widget.settings.quietVictoryGames.contains(
-      widget.game.name,
-    );
-    final saved = await showDialog<bool>(
+    var settings = widget.settings;
+    var sound = !settings.mutedVictoryGames.contains(widget.game.name);
+    var particles = !settings.quietVictoryGames.contains(widget.game.name);
+    await showDialog<void>(
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, update) => AlertDialog(
@@ -135,10 +134,14 @@ class _VictoryCelebrationState extends State<VictoryCelebration>
               SwitchListTile(
                 title: const Text('Victory sound'),
                 value: sound,
-                onChanged: InteractionSounds.buttonChange(
-                  context,
-                  (value) => update(() => sound = value),
-                ),
+                onChanged: InteractionSounds.buttonChange(context, (value) {
+                  update(() => sound = value);
+                  settings = settings.withGameVictory(
+                    widget.game,
+                    sound: value,
+                  );
+                  widget.onSettingsChanged(settings);
+                }),
               ),
               SwitchListTile(
                 title: const Text('Victory particles'),
@@ -146,10 +149,14 @@ class _VictoryCelebrationState extends State<VictoryCelebration>
                   'Respects Reduce motion and your device settings',
                 ),
                 value: particles,
-                onChanged: InteractionSounds.buttonChange(
-                  context,
-                  (value) => update(() => particles = value),
-                ),
+                onChanged: InteractionSounds.buttonChange(context, (value) {
+                  update(() => particles = value);
+                  settings = settings.withGameVictory(
+                    widget.game,
+                    particles: value,
+                  );
+                  widget.onSettingsChanged(settings);
+                }),
               ),
             ],
           ),
@@ -159,28 +166,12 @@ class _VictoryCelebrationState extends State<VictoryCelebration>
                 context,
                 () => Navigator.pop(context),
               ),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: InteractionSounds.buttonAction(
-                context,
-                () => Navigator.pop(context, true),
-              ),
-              child: const Text('Save'),
+              child: const Text('Done'),
             ),
           ],
         ),
       ),
     );
-    if (saved == true && mounted) {
-      widget.onSettingsChanged(
-        widget.settings.withGameVictory(
-          widget.game,
-          sound: sound,
-          particles: particles,
-        ),
-      );
-    }
   }
 
   @override
