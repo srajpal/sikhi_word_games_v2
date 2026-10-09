@@ -45,7 +45,7 @@ void main() {
       final repository = AssetVocabularyRepository();
       final entries = await repository.load();
       expect(await repository.load(), same(entries));
-      expect(entries, hasLength(19946));
+      expect(entries, hasLength(20601));
       expect(
         entries.every(
           (e) =>
@@ -60,7 +60,7 @@ void main() {
       final quest = WordQuestVocabulary(entries);
       final bridges = WordBridgesContent(entries);
       const counts = {
-        LanguageMode.english: {4: 2263, 5: 3972, 6: 6292},
+        LanguageMode.english: {4: 2346, 5: 4144, 6: 6692},
         LanguageMode.romanizedPanjabi: {4: 658, 5: 1354, 6: 979},
         LanguageMode.gurmukhi: {
           2: 1515,

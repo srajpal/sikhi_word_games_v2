@@ -62,12 +62,12 @@ The approved source manifest contains:
 | --- | ---: | ---: | ---: |
 | 2 | unavailable | unavailable | 1,515 |
 | 3 | unavailable | unavailable | 1,865 |
-| 4 | 2,263 | 658 | 787 |
-| 5 | 3,972 | 1,354 | 220 |
-| 6 | 6,292 | 979 | 33 |
+| 4 | 2,346 | 658 | 787 |
+| 5 | 4,144 | 1,354 | 220 |
+| 6 | 6,692 | 979 | 33 |
 | 7 | unavailable | unavailable | 7 |
 | 8 | unavailable | unavailable | 1 |
-| Total | 12,527 | 2,991 | 4,428 |
+| Total | 13,182 | 2,991 | 4,428 |
 
 Punjabi modes overlap in meaning; their totals are not a unique Punjabi word
 count. Bujho and Word Quest retain 4/5/6-tile rounds. Khoj and Jodo use their
@@ -105,3 +105,15 @@ Saved targets validate against their current mode and written units. Unavailable
 historical content recovers through existing fresh-round behavior; replacing
 the dictionaries does not erase cumulative statistics. Counterpart lookup must
 not validate an otherwise unavailable saved target in another mode.
+
+The October 9 21:07 UTC release adds 655 English WordNet exception and
+inflected forms, including MICE. It contains 20,601 records across all masters;
+Punjabi files and licenses are unchanged. Source attribution and manifests are
+imported with the release.
+
+Simple Romanized Punjabi is an optional in-memory spelling view. Accented Latin
+letters map to their plain base, with one output letter per source written unit
+(for example ĀSĀN becomes ASAN). It preserves IDs, definitions, native metadata
+and source bytes. Game pools deduplicate resulting spellings to avoid repeated
+answers and ambiguous Jodo pairs. It adds no cross-mode words. New round saves
+record the spelling view; absent markers mean the original view for legacy saves.

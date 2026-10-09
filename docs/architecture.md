@@ -302,3 +302,12 @@ including after reset. Immutable snapshots enter the existing per-key write queu
 so rapid edits persist in order even when Settings is closed before writes finish.
 Write failure leaves preferences active for the session and reports unavailable
 storage; later changes can persist the current full snapshot.
+
+`RomanizedVocabularyViews` derives and caches original/simple in-memory banks.
+Both preserve source identity and mode membership; game indexes deduplicate
+accent-free collisions. `simpleRomanizedPunjabi` is an app preference;
+`simpleRomanized` is per-round persisted metadata. An absent round marker means
+the original bank, so changing the app preference never invalidates a valid
+unfinished round. New game/set/puzzle selects the current preference; Quest Retry
+retains the current round view. Statistics/history remain shared. Dictionary
+uses the current preference and a matching keyboard/input normalization.

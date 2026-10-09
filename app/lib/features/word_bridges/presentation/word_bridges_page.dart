@@ -24,6 +24,7 @@ class WordBridgesPage extends StatefulWidget {
     this.contentFuture,
     this.initialMode,
     this.startFresh = false,
+    this.simpleRomanized = false,
     super.key,
   });
 
@@ -32,6 +33,7 @@ class WordBridgesPage extends StatefulWidget {
   final Future<WordBridgesContent>? contentFuture;
   final LanguageMode? initialMode;
   final bool startFresh;
+  final bool simpleRomanized;
 
   @override
   State<WordBridgesPage> createState() => _WordBridgesPageState();
@@ -40,7 +42,9 @@ class WordBridgesPage extends StatefulWidget {
 class _WordBridgesPageState extends State<WordBridgesPage> {
   final _random = Random();
   WordBridgesContent? _content;
+  WordBridgesContent? _originalContent;
   WordBridgesGame? _game;
+  bool _simpleRomanized = false;
   LanguageMode _mode = LanguageMode.english;
   String _message = 'Choose a word and its meaning, in either order.';
   String? _error;
@@ -60,6 +64,7 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
           await (widget.contentFuture ??
               WordBridgesContent.load(widget.vocabularyRepository));
       if (!mounted) return;
+      _originalContent = content;
       _content = content;
       if (content.availableModes.isEmpty) {
         setState(
@@ -69,6 +74,10 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
         return;
       }
       final restored = widget.startFresh ? null : widget.repository.restore();
+      if (restored != null) {
+        _simpleRomanized = restored.simpleRomanized;
+        _content = _simpleRomanized ? content.simpleRomanized : content;
+      }
       if (restored != null && _canRestore(restored)) {
         setState(() {
           _mode = restored.mode;
@@ -112,8 +121,12 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
   Future<void> _newSet({LanguageMode? mode}) async {
     if (_busy || !mounted) return;
     VictoryCelebration.stop(context);
+    final simpleRomanized = widget.simpleRomanized;
+    final content = simpleRomanized
+        ? _originalContent?.simpleRomanized
+        : _originalContent;
     final nextMode = mode ?? _mode;
-    final pairs = _content!.chooseSet(
+    final pairs = content!.chooseSet(
       nextMode,
       random: _random,
       usedIds: widget.repository.usedWords(nextMode),
@@ -133,6 +146,8 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
       return;
     }
     setState(() {
+      _simpleRomanized = simpleRomanized;
+      _content = content;
       _mode = nextMode;
       _game = WordBridgesGame(pairs: pairs);
       _error = null;
@@ -145,7 +160,11 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
     final game = _game!;
     setState(() => _pendingSaves++);
     try {
-      await widget.repository.save(mode: _mode, game: game);
+      await widget.repository.save(
+        mode: _mode,
+        game: game,
+        simpleRomanized: _simpleRomanized,
+      );
       if (mounted) setState(() => _saveError = null);
     } on Object {
       if (mounted) {

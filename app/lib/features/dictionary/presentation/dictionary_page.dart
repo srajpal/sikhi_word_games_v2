@@ -1,3 +1,5 @@
+import '../../../core/content/romanized_vocabulary_views.dart';
+
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -18,9 +20,14 @@ import '../../guess_the_word/domain/word_pool.dart';
 import '../../guess_the_word/presentation/game_keyboard.dart';
 
 class DictionaryPage extends StatefulWidget {
-  const DictionaryPage({required this.vocabularyRepository, super.key});
+  const DictionaryPage({
+    required this.vocabularyRepository,
+    this.simpleRomanized = false,
+    super.key,
+  });
 
   final VocabularyRepository vocabularyRepository;
+  final bool simpleRomanized;
 
   @override
   State<DictionaryPage> createState() => _DictionaryPageState();
@@ -59,7 +66,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
     try {
       final entries = await widget.vocabularyRepository.load();
       if (!mounted) return;
-      setState(() => _pool = WordPool(entries));
+      setState(
+        () => _pool = WordPool(
+          RomanizedVocabularyViews(entries)
+              .entries(simple: widget.simpleRomanized),
+        ),
+      );
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _focusNode.requestFocus();
       });
@@ -71,6 +83,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   void _runSearch() {
     _searchTimer?.cancel();
+    if (_mode == LanguageMode.romanizedPanjabi && widget.simpleRomanized) {
+      final plain = simplifyRomanizedPunjabi(_controller.text);
+      if (plain != _controller.text) {
+        _controller.value = TextEditingValue(
+          text: plain,
+          selection: TextSelection.collapsed(offset: plain.length),
+        );
+      }
+    }
     setState(() => _results = const []);
     if (wordUnitCount(_controller.text) < 2) return;
     _searchTimer = Timer(const Duration(milliseconds: 150), () {
@@ -85,7 +106,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
   void _appendCharacter(String character) {
     final appended = '${_controller.text}$character';
     final candidate = _mode == LanguageMode.romanizedPanjabi
-        ? normalizeRomanizedInput(appended)
+        ? (widget.simpleRomanized
+              ? simplifyRomanizedPunjabi(appended)
+              : normalizeRomanizedInput(appended))
         : normalizeGurmukhi(appended);
     if (wordUnitCount(candidate) > 32) return;
     _controller.value = TextEditingValue(
@@ -295,6 +318,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                                   Expanded(child: _buildResults(context)),
                                   const SizedBox(height: 6),
                                   GameKeyboard(
+                                    simpleRomanized: widget.simpleRomanized,
                                     mode: _mode,
                                     additionalCharacters: _pool!.charactersFor(
                                       _mode,

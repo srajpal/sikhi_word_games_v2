@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.14.0` (build `26`). The uploaded web draft remains
+The current testing build is `1.15.0` (build `27`). The uploaded web draft remains
 `1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
@@ -60,7 +60,7 @@ dart run tool/audit_content.dart
 
 Routine rebuilds use `dart run tool/build_release_content.dart --write`. The
 runtime contains three byte-identical native word masters plus attribution and
-full licenses. English has 12,527 words, Romanized Punjabi 2,991 and Gurmukhi
+full licenses. English has 13,182 words, Romanized Punjabi 2,991 and Gurmukhi
 4,428. See [content schema](docs/content_schema.md) for mode membership and
 [definition sources](docs/definition_sources.md) for provenance.
 

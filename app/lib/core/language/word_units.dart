@@ -41,6 +41,20 @@ String normalizeRomanizedInput(String value) {
   return result;
 }
 
+/// A beginner spelling view, not a replacement for the approved source text.
+/// Each marked Roman letter becomes its plain base, preserving tile positions.
+String simplifyRomanizedPunjabi(String value) {
+  var result = normalizeRomanizedInput(value);
+  for (final composition in _romanizedCompositions.entries) {
+    result = result.replaceAll(composition.value, composition.key[0]);
+    result = result.replaceAll(
+      composition.value.toUpperCase(),
+      composition.key[0].toUpperCase(),
+    );
+  }
+  return result.replaceAll(RegExp(r'[\u0300-\u036F]'), '');
+}
+
 /// Written tiles: a Latin letter with marks, or a Gurmukhi base with marks
 /// and virama-linked subjoined letters. This matches the approved dictionaries.
 List<String> wordUnits(String value) {

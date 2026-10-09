@@ -21,6 +21,7 @@ class AppSettings {
     this.theme = AppThemeChoice.sikhi,
     this.hapticLevel = HapticFeedbackLevel.medium,
     this.reducedMotion = false,
+    this.simpleRomanizedPunjabi = true,
     this.letterClicks = true,
     this.buttonClicks = true,
     this.victorySound = true,
@@ -34,6 +35,7 @@ class AppSettings {
   final AppThemeChoice theme;
   final HapticFeedbackLevel hapticLevel;
   final bool reducedMotion;
+  final bool simpleRomanizedPunjabi;
   final bool letterClicks;
   final bool buttonClicks;
   final bool victorySound;
@@ -68,6 +70,7 @@ class AppSettings {
     AppThemeChoice? theme,
     HapticFeedbackLevel? hapticLevel,
     bool? reducedMotion,
+    bool? simpleRomanizedPunjabi,
     bool? letterClicks,
     bool? buttonClicks,
     bool? victorySound,
@@ -78,6 +81,8 @@ class AppSettings {
     theme: theme ?? this.theme,
     hapticLevel: hapticLevel ?? this.hapticLevel,
     reducedMotion: reducedMotion ?? this.reducedMotion,
+    simpleRomanizedPunjabi:
+        simpleRomanizedPunjabi ?? this.simpleRomanizedPunjabi,
     letterClicks: letterClicks ?? this.letterClicks,
     buttonClicks: buttonClicks ?? this.buttonClicks,
     victorySound: victorySound ?? this.victorySound,
@@ -91,6 +96,7 @@ class AppSettings {
     'theme': theme.name,
     'hapticLevel': hapticLevel.name,
     'reducedMotion': reducedMotion,
+    'simpleRomanizedPunjabi': simpleRomanizedPunjabi,
     'letterClicks': letterClicks,
     'buttonClicks': buttonClicks,
     'victorySound': victorySound,
@@ -115,6 +121,7 @@ class AppSettings {
           : matchingThemes.first,
       hapticLevel: _hapticLevelFromJson(json),
       reducedMotion: json['reducedMotion'] == true,
+      simpleRomanizedPunjabi: json['simpleRomanizedPunjabi'] != false,
       letterClicks: json['letterClicks'] != false,
       buttonClicks: json['buttonClicks'] != false,
       victorySound: json['victorySound'] != false,

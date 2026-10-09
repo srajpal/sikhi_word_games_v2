@@ -1,3 +1,4 @@
+import '../../../core/content/romanized_vocabulary_views.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/statistics/game_statistics_dialog.dart';
@@ -40,6 +41,7 @@ class WordSearchPage extends StatefulWidget {
     this.initialMode,
     this.initialWordSize,
     this.startFresh = false,
+    this.simpleRomanized = false,
     super.key,
   });
 
@@ -48,6 +50,7 @@ class WordSearchPage extends StatefulWidget {
   final LanguageMode? initialMode;
   final int? initialWordSize;
   final bool startFresh;
+  final bool simpleRomanized;
 
   @override
   State<WordSearchPage> createState() => _WordSearchPageState();
@@ -58,7 +61,9 @@ class _WordSearchPageState extends State<WordSearchPage> {
   final _random = math.Random.secure();
   final _gridFocusNode = FocusNode(debugLabel: 'Word search grid');
   List<VocabularyEntry>? _entries;
+  RomanizedVocabularyViews? _views;
   WordSearchPuzzle? _puzzle;
+  bool _simpleRomanized = false;
   LanguageMode _mode = LanguageMode.english;
   int? _wordSize;
   final Set<String> _foundWords = {};
@@ -83,11 +88,16 @@ class _WordSearchPageState extends State<WordSearchPage> {
 
   Future<void> _load() async {
     try {
-      _entries = await widget.vocabularyRepository.load();
+      _views = RomanizedVocabularyViews(
+        await widget.vocabularyRepository.load(),
+      );
+      _entries = _views!.original;
       if (!mounted) return;
       if (!widget.startFresh) {
         final restored = widget.sessionRepository.restore();
         if (restored != null) {
+          _simpleRomanized = restored.simpleRomanized;
+          _entries = _views!.entries(simple: _simpleRomanized);
           if (!_canRestore(restored)) {
             _mode = restored.mode;
             _wordSize = restored.wordSize;
@@ -141,6 +151,8 @@ class _WordSearchPageState extends State<WordSearchPage> {
   );
 
   void _newPuzzle() {
+    _simpleRomanized = widget.simpleRomanized;
+    _entries = _views?.entries(simple: _simpleRomanized);
     if (!mounted) return;
     VictoryCelebration.stop(context);
     final entries = _entries;
@@ -196,6 +208,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
       });
       _persist(
         widget.sessionRepository.save(
+          simpleRomanized: _simpleRomanized,
           mode: _mode,
           wordSize: _wordSize,
           puzzle: puzzle,
@@ -366,6 +379,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
     } else {
       _persist(
         widget.sessionRepository.save(
+          simpleRomanized: _simpleRomanized,
           mode: _mode,
           wordSize: _wordSize,
           puzzle: puzzle,

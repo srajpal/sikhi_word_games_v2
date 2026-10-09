@@ -25,8 +25,9 @@ software licensing does not relicense the dictionary text. See
 
 ## Separate scripts and authoritative units
 
-Romanized Punjabi retains the approved scholarly diacritics. Do not convert it
-to the earlier ASCII gameplay transliteration or drop letters/marks. A Roman
+The source master and original Romanized Punjabi view retain the approved
+scholarly diacritics. The optional Simple view removes Roman accents in memory
+without rewriting the master; Gurmukhi spellings and marks remain intact. A Roman
 letter with attached diacritics is one written unit; `kh` is two units. Gurmukhi
 uses a base letter with its marks and virama-linked subjoined letters as one
 written unit. Source `letter_units` and `tile_count` are authoritative and checked

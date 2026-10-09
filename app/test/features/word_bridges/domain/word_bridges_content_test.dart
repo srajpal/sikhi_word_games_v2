@@ -30,7 +30,7 @@ void main() {
       );
       expect(loaded.availableModes, LanguageMode.values);
       const counts = {
-        LanguageMode.english: 12527,
+        LanguageMode.english: 13182,
         LanguageMode.romanizedPanjabi: 2991,
         LanguageMode.gurmukhi: 4428,
       };
@@ -171,7 +171,7 @@ void main() {
     ]);
     expect(changed.pairsFor(LanguageMode.gurmukhi), hasLength(4427));
     expect(changed.pairsFor(LanguageMode.romanizedPanjabi), hasLength(2991));
-    expect(changed.pairsFor(LanguageMode.english), hasLength(12527));
+    expect(changed.pairsFor(LanguageMode.english), hasLength(13182));
     expect(changed.romanizedFor(native.id), isNull);
   });
 

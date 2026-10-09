@@ -298,7 +298,8 @@ WordNet 3.0 Copyright 2006 by Princeton University. All rights reserved.
 https://wordnet.princeton.edu/
 Source: https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz
 Full terms: licenses/WORDNET_LICENSE.txt
-Modifications: lowercase headword selection, family-content screening,
+Modifications: lowercase headword selection, source-recorded exception-form
+expansion with screened base meanings and provenance, family-content screening,
 grouping by 4/5/6 letters, removal of examples, and selection of one
 original definition per word. Preserve the copyright, license, and disclaimer.
 
@@ -328,6 +329,10 @@ Preserve Punjabi source/history links when adapting or redistributing entries.
 Source code and dictionary data have distinct licensing; this package does
 not place all data under an application-code license.
 
+
+App spelling adaptation: Khalsa Game Studio supplies an optional accent-free
+Simple Romanized Punjabi view. Approved masters retain their original spellings
+and source/history links. This Punjabi spelling adaptation follows CC BY-SA 4.0.
 
 WORDNET_LICENSE.txt
 WordNet Release 3.0
@@ -1188,5 +1193,4 @@ the avoidance of doubt, this paragraph does not form part of the public
 licenses.
 
 Creative Commons may be contacted at creativecommons.org.
-
 

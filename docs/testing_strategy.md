@@ -290,3 +290,11 @@ mode filtering and restored-game behavior. Audio approval remains separate.
 
 Record actual completed evidence in `TODO.md`. This section specifies required
 checks and does not claim that candidate build 24 has passed them.
+
+Simple Punjabi checks cover every approved Roman spelling mapping to A-Z while
+retaining its tile count, source ID, definition and membership, deduplicated
+spelling collisions, plain Bujho input, legacy accented resume then new simple
+round, and round-style isolation across all four word games. Updated English
+checks require the exact 13,182/2,991/4,428 master totals and accept MICE as a
+four-letter guess. Phone/tablet gallery checks assert equal Bujho/Khoj widths
+and aligned action rows; updated visual baselines require rendered review.

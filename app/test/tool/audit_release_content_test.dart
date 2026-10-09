@@ -122,7 +122,7 @@ void main() {
   test('checked-in approved release and runtime have exact supplied counts and bytes', () {
     final snapshot = ApprovedRelease.load(Directory(approvedSourceDirectory));
     expect(snapshot.counts, {
-      'english': {'4': 2263, '5': 3972, '6': 6292},
+      'english': {'4': 2346, '5': 4144, '6': 6692},
       'punjabi/romanized': {'4': 658, '5': 1354, '6': 979},
       'punjabi/gurmukhi': {
         '2': 1515,

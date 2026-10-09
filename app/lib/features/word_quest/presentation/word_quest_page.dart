@@ -88,6 +88,7 @@ class WordQuestPage extends StatefulWidget {
     this.initialMode,
     this.initialWordSize,
     this.startFresh = false,
+    this.simpleRomanized = false,
     super.key,
   });
 
@@ -99,6 +100,7 @@ class WordQuestPage extends StatefulWidget {
   final LanguageMode? initialMode;
   final int? initialWordSize;
   final bool startFresh;
+  final bool simpleRomanized;
 
   @override
   State<WordQuestPage> createState() => _WordQuestPageState();
@@ -109,8 +111,10 @@ class _WordQuestPageState extends State<WordQuestPage> {
   final _selector = WordQuestWordSelector();
   final _random = Random();
   WordQuestVocabulary? _vocabulary;
+  WordQuestVocabulary? _originalVocabulary;
   WordQuestWord? _word;
   WordQuestGame? _game;
+  bool _simpleRomanized = false;
   LanguageMode _mode = LanguageMode.english;
   int _wordSize = 4;
   List<String> _letterBank = const [];
@@ -177,11 +181,16 @@ class _WordQuestPageState extends State<WordQuestPage> {
         await (widget.vocabularyFuture ??
             WordQuestVocabulary.load(widget.vocabularyRepository));
     if (!mounted) return;
+    _originalVocabulary = vocabulary;
     _vocabulary = vocabulary;
     if (!widget.startFresh) {
       final restored = widget.sessionRepository.restore();
       if (restored != null) {
-        final word = vocabulary.wordForSpelling(
+        _simpleRomanized = restored.simpleRomanized;
+        _vocabulary = _simpleRomanized
+            ? vocabulary.simpleRomanized
+            : vocabulary;
+        final word = _vocabulary!.wordForSpelling(
           mode: restored.mode,
           spelling: restored.game.solution,
         );
@@ -225,6 +234,10 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   Future<void> _startNewWord() async {
+    _simpleRomanized = widget.simpleRomanized;
+    _vocabulary = _simpleRomanized
+        ? _originalVocabulary?.simpleRomanized
+        : _originalVocabulary;
     if (!mounted) return;
     VictoryCelebration.stop(context);
     final vocabulary = _vocabulary;
@@ -265,6 +278,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     });
     await _persist(
       widget.sessionRepository.save(
+        simpleRomanized: _simpleRomanized,
         mode: _mode,
         wordSize: _wordSize,
         game: game,
@@ -284,6 +298,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     });
     _persist(
       widget.sessionRepository.save(
+        simpleRomanized: _simpleRomanized,
         mode: _mode,
         wordSize: _wordSize,
         game: game,
@@ -356,6 +371,9 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   void _guess(String letter) {
+    if (_mode == LanguageMode.romanizedPanjabi && _simpleRomanized) {
+      letter = simplifyRomanizedPunjabi(letter);
+    }
     final game = _game;
     if (game == null || game.isComplete) return;
     final result = game.guess(letter);
@@ -389,6 +407,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     } else {
       _persist(
         widget.sessionRepository.save(
+          simpleRomanized: _simpleRomanized,
           mode: _mode,
           wordSize: _wordSize,
           game: game,
@@ -422,6 +441,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     } else {
       _persist(
         widget.sessionRepository.save(
+          simpleRomanized: _simpleRomanized,
           mode: _mode,
           wordSize: _wordSize,
           game: game,

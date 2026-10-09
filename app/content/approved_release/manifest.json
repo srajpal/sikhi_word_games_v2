@@ -1,12 +1,12 @@
 {
   "format_version": 2,
-  "packaged_at_utc": "2026-10-09T19:34:31+00:00",
+  "packaged_at_utc": "2026-10-09T21:07:00+00:00",
   "definition_policy": "One selected original definition per word; no wording changes during packaging.",
   "counts": {
     "english": {
-      "4": 2263,
-      "5": 3972,
-      "6": 6292
+      "4": 2346,
+      "5": 4144,
+      "6": 6692
     },
     "punjabi/romanized": {
       "4": 658,
@@ -24,7 +24,7 @@
     }
   },
   "totals_by_dataset": {
-    "english": 12527,
+    "english": 13182,
     "punjabi/romanized": 2991,
     "punjabi/gurmukhi": 4428
   },
@@ -36,18 +36,18 @@
   "files": [
     {
       "path": "english/words.json",
-      "sha256": "11a55061751b586e65e67d14cc4c33479213831752dc7f0711fda15090fb80c9",
-      "bytes": 4449852
+      "sha256": "efa894d6a9134a5675f42846a67f4d4fe2e52ba60d9cee13c8bfbd857546fe86",
+      "bytes": 4788765
     },
     {
       "path": "english/words.txt",
-      "sha256": "7ac4727d360388fc97391e97494ece6a6b0c83aee0edaa90d70a93c736d104a3",
-      "bytes": 79191
+      "sha256": "c9213cbe2bd707e6c57db516ff9468e9d482a8c70ffd03a34ce6e592a2665d70",
+      "bytes": 83438
     },
     {
       "path": "english/definitions.txt",
-      "sha256": "f0689cae1880a1890e3748162381892c9fcadf14a5e5e670ceb644d36f8add05",
-      "bytes": 784782
+      "sha256": "8a784a9c186231e3456462bbd90413c1953b4487f3e311d6b1b9e52a03b63be4",
+      "bytes": 823546
     },
     {
       "path": "punjabi/romanized/words.json",
@@ -104,13 +104,13 @@
     },
     {
       "path": "ATTRIBUTION.txt",
-      "sha256": "ae88c9af426ccf1dce71c08699fcd8cb6cbe56782ef417139f5b190736b8c9a1",
-      "bytes": 2042
+      "sha256": "c068befb360a3d78eb6a213f2a429a736f6686df72defb9123f3de36965896a0",
+      "bytes": 2127
     },
     {
       "path": "README.txt",
-      "sha256": "5cd7dada8ff1d3370d98735229386acb31a584f7d221908e4cd30a82b1e1a1b4",
-      "bytes": 4504
+      "sha256": "5e2283305348f8365e5f5afb33368822a1efa4a9e5ec7fcfe195a0846abe4c18",
+      "bytes": 4884
     }
   ],
   "wording_review_count": 7,

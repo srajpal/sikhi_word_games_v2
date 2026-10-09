@@ -1,3 +1,5 @@
+import '../../../core/content/romanized_vocabulary_views.dart';
+
 import 'dart:math';
 
 import '../../../core/language/word_units.dart';
@@ -43,6 +45,11 @@ class WordQuestWord {
 class WordQuestVocabulary {
   WordQuestVocabulary(Iterable<VocabularyEntry> entries)
     : _entries = List.unmodifiable(entries);
+
+  WordQuestVocabulary? _simple;
+  WordQuestVocabulary get simpleRomanized => _simple ??= WordQuestVocabulary(
+    RomanizedVocabularyViews(_entries).entries(simple: true),
+  );
 
   final List<VocabularyEntry> _entries;
   final Map<LanguageMode, List<WordQuestWord>> _allWordsByMode = {};
