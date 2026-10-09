@@ -28,9 +28,10 @@ keyboard after switching Simple off. That choice survives reload; Simple was
 restored on afterward. Existing saved rounds were retained. Updated credits and
 licenses match the package, and the 1.15.0+27 web ZIP and debug APK are built.
 K70 PRO was updated with `adb install -r`; version 1.15.0/code 27 and PID 28321
-were verified. The Pixel was disconnected during this update and remains on
-build 26. Hands-on device checks and the existing offline/iframe release checks
-remain separate open work below.
+were verified. Pixel 6 was subsequently updated with `adb install -r`; version
+1.15.0/code 27, successful foreground launch and PID 29614 were verified, with
+app data retained. Hands-on device checks and the existing offline/iframe release
+checks remain separate open work below.
 
 ## October 9 automatic settings: candidate 1.14.0+26
 
