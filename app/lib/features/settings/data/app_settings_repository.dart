@@ -21,6 +21,8 @@ class AppSettings {
     this.theme = AppThemeChoice.sikhi,
     this.hapticLevel = HapticFeedbackLevel.medium,
     this.reducedMotion = false,
+    this.letterClicks = true,
+    this.buttonClicks = true,
     this.victorySound = true,
     this.victoryParticles = true,
     this.mutedVictoryGames = const {},
@@ -32,6 +34,8 @@ class AppSettings {
   final AppThemeChoice theme;
   final HapticFeedbackLevel hapticLevel;
   final bool reducedMotion;
+  final bool letterClicks;
+  final bool buttonClicks;
   final bool victorySound;
   final bool victoryParticles;
   final Set<String> mutedVictoryGames;
@@ -64,6 +68,8 @@ class AppSettings {
     AppThemeChoice? theme,
     HapticFeedbackLevel? hapticLevel,
     bool? reducedMotion,
+    bool? letterClicks,
+    bool? buttonClicks,
     bool? victorySound,
     bool? victoryParticles,
     Set<String>? mutedVictoryGames,
@@ -72,6 +78,8 @@ class AppSettings {
     theme: theme ?? this.theme,
     hapticLevel: hapticLevel ?? this.hapticLevel,
     reducedMotion: reducedMotion ?? this.reducedMotion,
+    letterClicks: letterClicks ?? this.letterClicks,
+    buttonClicks: buttonClicks ?? this.buttonClicks,
     victorySound: victorySound ?? this.victorySound,
     victoryParticles: victoryParticles ?? this.victoryParticles,
     mutedVictoryGames: mutedVictoryGames ?? this.mutedVictoryGames,
@@ -83,6 +91,8 @@ class AppSettings {
     'theme': theme.name,
     'hapticLevel': hapticLevel.name,
     'reducedMotion': reducedMotion,
+    'letterClicks': letterClicks,
+    'buttonClicks': buttonClicks,
     'victorySound': victorySound,
     'victoryParticles': victoryParticles,
     'mutedVictoryGames': mutedVictoryGames.toList(),
@@ -105,6 +115,8 @@ class AppSettings {
           : matchingThemes.first,
       hapticLevel: _hapticLevelFromJson(json),
       reducedMotion: json['reducedMotion'] == true,
+      letterClicks: json['letterClicks'] != false,
+      buttonClicks: json['buttonClicks'] != false,
       victorySound: json['victorySound'] != false,
       victoryParticles: json['victoryParticles'] != false,
       mutedVictoryGames: _gameSet(json['mutedVictoryGames']),

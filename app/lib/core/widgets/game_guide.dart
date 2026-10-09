@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/game_library/domain/game_launch_options.dart';
 import '../persistence/game_guide_repository.dart';
+import '../audio/interaction_sounds.dart';
 
 class GameGuide extends StatefulWidget {
   const GameGuide({
@@ -177,11 +178,17 @@ Future<void> showGameHelp(BuildContext context, GameKind game) async {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: InteractionSounds.buttonAction(
+            context,
+            () => Navigator.pop(context, true),
+          ),
           child: const Text('Replay walkthrough'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: InteractionSounds.buttonAction(
+            context,
+            () => Navigator.pop(context, false),
+          ),
           child: const Text('Got it'),
         ),
       ],
@@ -242,22 +249,28 @@ class _WalkthroughState extends State<_Walkthrough> {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: InteractionSounds.buttonAction(
+            context,
+            () => Navigator.pop(context),
+          ),
           child: const Text('Skip'),
         ),
         if (_index > 0)
           TextButton(
-            onPressed: () => setState(() => _index--),
+            onPressed: InteractionSounds.buttonAction(
+              context,
+              () => setState(() => _index--),
+            ),
             child: const Text('Back'),
           ),
         FilledButton(
-          onPressed: () {
+          onPressed: InteractionSounds.buttonAction(context, () {
             if (_index == steps.length - 1) {
               Navigator.pop(context);
             } else {
               setState(() => _index++);
             }
-          },
+          }),
           child: Text(_index == steps.length - 1 ? 'Start playing' : 'Next'),
         ),
       ],

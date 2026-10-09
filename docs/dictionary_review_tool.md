@@ -1,3 +1,7 @@
+> Historical authoring tool: this page describes the retired V1/WordNet/Mahan
+> Kosh workflow. It does not write Dictionary v2 release inputs. For current
+> changes, use [Dictionary v2 sources and maintenance](definition_sources.md).
+
 # Dictionary Review Tool
 
 The dictionary review tool is a local editorial interface. It is not included

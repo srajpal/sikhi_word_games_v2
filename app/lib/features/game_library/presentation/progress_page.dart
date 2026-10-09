@@ -5,6 +5,7 @@ import '../../../core/themes/game_artwork.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/themes/paper_page.dart';
+import '../../../core/themes/studio_navigation.dart';
 import '../../achievements/domain/achievement.dart';
 import '../../achievements/domain/player_progress.dart';
 import '../../guess_the_word/domain/language_mode.dart';
@@ -27,6 +28,7 @@ class ProgressPage extends StatelessWidget {
         (facts['wordBridges:words'] ?? 0);
     final earned = achievements.where((badge) => badge.earned(facts)).length;
     return PaperPage(
+      destination: StudioDestination.progress,
       title: 'Progress',
       icon: Icons.insights,
       introduction: 'Your discoveries, one word at a time.',

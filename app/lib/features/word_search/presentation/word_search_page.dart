@@ -1,4 +1,5 @@
 import '../../../core/themes/game_heading.dart';
+import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/statistics/game_statistics_dialog.dart';
 import '../../../core/widgets/game_guide.dart';
 import '../../../core/widgets/victory_celebration.dart';
@@ -169,7 +170,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
         if (!mounted) return;
       }
       _mode = widget.initialMode ?? _randomMode();
-      _wordSize = widget.initialWordSize ?? _randomWordSize(_mode);
+      _wordSize = null;
       _newPuzzle();
     } on Object catch (error) {
       if (!mounted) return;
@@ -194,6 +195,8 @@ class _WordSearchPageState extends State<WordSearchPage> {
     VictoryCelebration.stop(context);
     final entries = _entries;
     if (entries == null) return;
+    // New puzzles mix word lengths. Existing saved boards can still be resumed.
+    _wordSize = null;
     try {
       final candidates = <String>[];
       final seen = <String>{};
@@ -205,18 +208,25 @@ class _WordSearchPageState extends State<WordSearchPage> {
           continue;
         }
         final spelling = WordPool.spelling(entry, _mode);
-        if (spelling == null || !seen.add(spelling.toUpperCase())) continue;
+        if (spelling == null ||
+            spelling.characters.length < 2 ||
+            spelling.characters.length > 12 ||
+            !seen.add(spelling.toUpperCase())) {
+          continue;
+        }
         candidates.add(spelling);
       }
-      final selectedCandidates = _wordSize == null
-          ? candidates
-          : candidates
-                .where((word) => word.characters.length == _wordSize)
-                .toList(growable: false);
-      final available = selectedCandidates.isEmpty
-          ? candidates
-          : selectedCandidates;
+      candidates.shuffle(_random);
+      final available = candidates
+          .take(math.min(6, candidates.length))
+          .toList(growable: false);
+      // Ten cells fit most everyday words. Grow only when this pool has longer words.
+      final gridSize = available.fold<int>(
+        10,
+        (size, word) => math.max(size, word.characters.length),
+      );
       final puzzle = _generator.generate(
+        size: gridSize,
         candidates: available,
         targetWordCount: math.min(6, available.length),
         fillerCharacters: _mode == LanguageMode.gurmukhi
@@ -255,27 +265,6 @@ class _WordSearchPageState extends State<WordSearchPage> {
 
   LanguageMode _randomMode() {
     final values = LanguageMode.values;
-    return values[_random.nextInt(values.length)];
-  }
-
-  int _randomWordSize(LanguageMode mode) {
-    final entries = _entries ?? const <VocabularyEntry>[];
-    final sizes = <int>{};
-    for (final entry in entries) {
-      if (!entry.acceptedGuess ||
-          !entry.solutionEligible ||
-          !entry.hasDistributableDefinition ||
-          !_supportsMode(entry, mode)) {
-        continue;
-      }
-      final spelling = WordPool.spelling(entry, mode);
-      if (spelling != null &&
-          const [4, 5, 6].contains(spelling.characters.length)) {
-        sizes.add(spelling.characters.length);
-      }
-    }
-    if (sizes.isEmpty) return 5;
-    final values = sizes.toList()..sort();
     return values[_random.nextInt(values.length)];
   }
 
@@ -342,6 +331,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
   };
 
   void _startSelection(GridPoint point) {
+    InteractionSounds.letter(context);
     setState(() {
       _keyboardSelecting = false;
       _keyboardPoint = point;
@@ -364,6 +354,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
   void _activateAccessibleCell(GridPoint point) {
     final puzzle = _puzzle;
     if (puzzle == null || _foundWords.length == puzzle.words.length) return;
+    InteractionSounds.letter(context);
     if (!_keyboardSelecting || _dragStart == null) {
       setState(() {
         _keyboardSelecting = true;
@@ -540,37 +531,47 @@ class _WordSearchPageState extends State<WordSearchPage> {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: const PaperTexture(),
-        bottom: GameLanguageHeader(
-          textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
-          mode: _mode,
-          wordLength: _wordSize,
-        ),
         leading: IconButton(
           tooltip: 'Back',
-          onPressed: () => context.pop(),
+          onPressed: InteractionSounds.buttonAction(
+            context,
+            () => context.pop(),
+          ),
           icon: const Icon(Icons.arrow_back),
         ),
         toolbarHeight: gameToolbarHeight(context),
-        title: const GameHeading(identity: GameIdentity.khoj, compact: true),
+        title: GameHeading(
+          identity: GameIdentity.khoj,
+          compact: true,
+          subtitle: GameLanguageHeader(mode: _mode),
+        ),
         actions: [
           PopupMenuButton<_WordSearchAction>(
+            onOpened: () => InteractionSounds.button(context),
             tooltip: 'Khoj: Word Search menu',
-            onSelected: (action) => switch (action) {
-              _WordSearchAction.newPuzzle => _newPuzzle(),
-              _WordSearchAction.language => _chooseLanguage(),
-              _WordSearchAction.help => _showHelp(),
-              _WordSearchAction.celebrations => VictoryCelebration.showSettings(
-                context,
-              ),
-              _WordSearchAction.statistics => showGameStatistics(
-                context,
-                title: 'Khoj',
-                repository: widget.sessionRepository.statistics,
-                mode: _mode.name,
-                size: _wordSize,
-                modeLabel: _mode.label,
-              ),
-              _WordSearchAction.dictionary => context.push('/dictionary'),
+            onSelected: (action) {
+              InteractionSounds.button(context);
+              switch (action) {
+                case _WordSearchAction.newPuzzle:
+                  _newPuzzle();
+                case _WordSearchAction.language:
+                  _chooseLanguage();
+                case _WordSearchAction.help:
+                  _showHelp();
+                case _WordSearchAction.celebrations:
+                  VictoryCelebration.showSettings(context);
+                case _WordSearchAction.statistics:
+                  showGameStatistics(
+                    context,
+                    title: 'Khoj',
+                    repository: widget.sessionRepository.statistics,
+                    mode: _mode.name,
+                    size: _wordSize,
+                    modeLabel: _mode.label,
+                  );
+                case _WordSearchAction.dictionary:
+                  context.push('/dictionary');
+              }
             },
             itemBuilder: (context) => const [
               PopupMenuItem(

@@ -3,7 +3,19 @@ import 'dart:io';
 
 import 'package:characters/characters.dart';
 
-void main() {
+import 'audit_release_content.dart' as release_audit;
+import 'build_release_content.dart' as release_build;
+
+void main(List<String> arguments) {
+  if (arguments.contains('--legacy-archive')) {
+    auditLegacyArchive();
+    return;
+  }
+  release_build.main(['--check']);
+  release_audit.main();
+}
+
+void auditLegacyArchive() {
   final appDirectory = Directory.current;
   final generated = Directory(
     '${appDirectory.path}${Platform.pathSeparator}assets'

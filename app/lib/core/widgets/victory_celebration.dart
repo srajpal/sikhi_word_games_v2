@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/game_library/domain/game_launch_options.dart';
 import '../../features/settings/data/app_settings_repository.dart';
+import '../audio/interaction_sounds.dart';
 
 /// A route-owned celebration. Games call this only for a newly earned win.
 class VictoryCelebration extends StatefulWidget {
@@ -134,7 +135,10 @@ class _VictoryCelebrationState extends State<VictoryCelebration>
               SwitchListTile(
                 title: const Text('Victory sound'),
                 value: sound,
-                onChanged: (value) => update(() => sound = value),
+                onChanged: InteractionSounds.buttonChange(
+                  context,
+                  (value) => update(() => sound = value),
+                ),
               ),
               SwitchListTile(
                 title: const Text('Victory particles'),
@@ -142,17 +146,26 @@ class _VictoryCelebrationState extends State<VictoryCelebration>
                   'Respects Reduce motion and your device settings',
                 ),
                 value: particles,
-                onChanged: (value) => update(() => particles = value),
+                onChanged: InteractionSounds.buttonChange(
+                  context,
+                  (value) => update(() => particles = value),
+                ),
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: InteractionSounds.buttonAction(
+                context,
+                () => Navigator.pop(context),
+              ),
               child: const Text('Cancel'),
             ),
             FilledButton(
-              onPressed: () => Navigator.pop(context, true),
+              onPressed: InteractionSounds.buttonAction(
+                context,
+                () => Navigator.pop(context, true),
+              ),
               child: const Text('Save'),
             ),
           ],

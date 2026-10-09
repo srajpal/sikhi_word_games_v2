@@ -28,8 +28,8 @@ class AssetVocabularyRepository implements VocabularyRepository {
 
   Future<List<VocabularyEntry>> _loadAssets() async {
     final documents = await Future.wait([
-      for (final length in const [4, 5, 6])
-        rootBundle.loadString('assets/content/release/vocabulary_$length.json'),
+      for (final language in const ['english', 'punjabi'])
+        rootBundle.loadString('assets/content/release/${language}_v2.json'),
     ]);
     final entries = kIsWeb
         ? await decodeVocabularyCooperatively(documents)

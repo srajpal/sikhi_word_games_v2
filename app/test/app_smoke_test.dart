@@ -307,7 +307,7 @@ void main() {
     expect(find.text('Dictionary'), findsOneWidget);
     await tester.tap(find.text('Dictionary'));
     await tester.pumpAndSettle();
-    expect(find.text('Dictionary'), findsOneWidget);
+    expect(find.byType(DictionaryPage), findsOneWidget);
     await tester.pageBack();
     await tester.pumpAndSettle();
     expect(find.text('Khoj'), findsOneWidget);
@@ -408,7 +408,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Dictionary').last);
     await tester.pumpAndSettle();
-    expect(find.text('Dictionary'), findsOneWidget);
+    expect(find.byType(DictionaryPage), findsOneWidget);
     await tester.pageBack();
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
@@ -654,7 +654,7 @@ void main() {
     expect(find.text('How to play Bujho: Guess the Word'), findsNothing);
 
     await _chooseGameMenu(tester, 'Dictionary');
-    expect(find.text('Dictionary'), findsOneWidget);
+    expect(find.byType(DictionaryPage), findsOneWidget);
     for (final letter in 'APPLE'.characters) {
       await tester.tap(find.byKey(ValueKey('key-$letter')));
       await tester.pump();

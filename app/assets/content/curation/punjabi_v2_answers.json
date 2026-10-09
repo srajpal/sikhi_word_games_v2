@@ -1,0 +1,2255 @@
+{
+  "schemaVersion": 1,
+  "policy": "Bounded source-checked AI selections, not community or independent human review. No frequency-based promotion. Adapted meanings retain CC BY-SA 4.0 attribution.",
+  "entries": [
+    {
+      "word": "ਕਿਤਾਬ",
+      "senseId": "en-ਕਿਤਾਬ-pa-noun-knGf4M-M",
+      "sourceGloss": "book",
+      "definition": "Book",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਾਣੀ",
+      "senseId": "en-ਪਾਣੀ-pa-noun-Z5-FEVNT",
+      "sourceGloss": "water, aqua",
+      "definition": "Water",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰੋਟੀ",
+      "senseId": "en-ਰੋਟੀ-pa-noun-lCPIGGKp",
+      "sourceGloss": "bread, loaf",
+      "definition": "Bread",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦੁੱਧ",
+      "senseId": "en-ਦੁੱਧ-pa-noun-iCXnZTD4",
+      "sourceGloss": "milk",
+      "definition": "Milk",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "DUDH"
+    },
+    {
+      "word": "ਘਰ",
+      "senseId": "en-ਘਰ-pa-noun-5XyCHOg5",
+      "sourceGloss": "house, home",
+      "definition": "House or home",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "GHAR"
+    },
+    {
+      "word": "ਸੂਰਜ",
+      "senseId": "en-ਸੂਰਜ-pa-noun-J3VvBQ4U",
+      "sourceGloss": "sun",
+      "definition": "Sun",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "SURAJ"
+    },
+    {
+      "word": "ਚੰਦ",
+      "senseId": "en-ਚੰਦ-pa-noun-nni0PqAO",
+      "sourceGloss": "moon",
+      "definition": "Moon",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੱਚਾ",
+      "senseId": "en-ਬੱਚਾ-pa-noun-5vLt9nGs",
+      "sourceGloss": "child, kid",
+      "definition": "Child",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦੋਸਤ",
+      "senseId": "en-ਦੋਸਤ-pa-noun-5CUQV2y5",
+      "sourceGloss": "a friend, companion",
+      "definition": "Friend",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕੱਪੜਾ",
+      "senseId": "en-ਕੱਪੜਾ-pa-noun-nUGwIVX1",
+      "sourceGloss": "fabric, cloth",
+      "definition": "Fabric or cloth",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖਾਣਾ",
+      "senseId": "en-ਖਾਣਾ-pa-verb-Unr3wQmn",
+      "sourceGloss": "to eat",
+      "definition": "To eat",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੋਲਣਾ",
+      "senseId": "en-ਬੋਲਣਾ-pa-verb-QChU~uzn",
+      "sourceGloss": "to speak, say",
+      "definition": "To speak",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੜ੍ਹਨਾ",
+      "senseId": "en-ਪੜ੍ਹਨਾ-pa-verb-OQnC8LFq",
+      "sourceGloss": "to read",
+      "definition": "To read",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਲਿਖਣਾ",
+      "senseId": "en-ਲਿਖਣਾ-pa-verb-GyIdbR6y",
+      "sourceGloss": "to write",
+      "definition": "To write",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਫੁੱਲ",
+      "senseId": "en-ਫੁੱਲ-pa-noun-wGsM~gzF",
+      "sourceGloss": "flower",
+      "definition": "Flower",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "PHULL"
+    },
+    {
+      "word": "ਸਕੂਲ",
+      "senseId": "en-ਸਕੂਲ-pa-noun-1k3r2ULX",
+      "sourceGloss": "school",
+      "definition": "School",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਅਖਬਾਰ",
+      "senseId": "en-ਅਖਬਾਰ-pa-noun-zo0KbL2P",
+      "sourceGloss": "newspaper, newsletter, bulletin",
+      "definition": "Newspaper",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰੰਗ",
+      "senseId": "en-ਰੰਗ-pa-noun-lIMuM-8E",
+      "sourceGloss": "color, hue",
+      "definition": "Color",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਿੱਠਾ",
+      "senseId": "en-ਮਿੱਠਾ-pa-adj-iZ-216Yu",
+      "sourceGloss": "sweet (ie. of food)",
+      "definition": "Sweet tasting",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹੱਥ",
+      "senseId": "en-ਹੱਥ-pa-noun-lyInRenA",
+      "sourceGloss": "hand; forearm",
+      "definition": "Hand",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "HATH"
+    },
+    {
+      "word": "ਸਵੇਰ",
+      "senseId": "en-ਸਵੇਰ-pa-noun-wjsxoBeb",
+      "sourceGloss": "morning",
+      "definition": "Morning",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਤਸਵੀਰ",
+      "senseId": "en-ਤਸਵੀਰ-pa-noun-LOonTQvt",
+      "sourceGloss": "picture",
+      "definition": "Picture",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦਰਵਾਜ਼ਾ",
+      "senseId": "en-ਦਰਵਾਜ਼ਾ-pa-noun-ZhsJTzqj",
+      "sourceGloss": "door, entrance",
+      "definition": "Door",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕੰਪਿਊਟਰ",
+      "senseId": "en-ਕੰਪਿਊਟਰ-pa-noun-qpcwIVD8",
+      "sourceGloss": "computer",
+      "definition": "Computer",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਿਸਾਨ",
+      "senseId": "en-ਕਿਸਾਨ-pa-noun-Ub9VAqcQ",
+      "sourceGloss": "farmer",
+      "definition": "Farmer",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਿਹਨਤ",
+      "senseId": "en-ਮਿਹਨਤ-pa-noun-CxKcbTH~",
+      "sourceGloss": "labour, toil",
+      "definition": "Hard work",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਅਧਿਆਪਕ",
+      "senseId": "en-ਅਧਿਆਪਕ-pa-noun-EFepYE4E",
+      "sourceGloss": "teacher",
+      "definition": "Teacher",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਵਿਦਿਆਰਥੀ",
+      "senseId": "en-ਵਿਦਿਆਰਥੀ-pa-noun-JkyMOBvx",
+      "sourceGloss": "student",
+      "definition": "Student",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਬਜ਼ੀ",
+      "senseId": "en-ਸਬਜ਼ੀ-pa-noun-RxW3NAhd",
+      "sourceGloss": "vegetable",
+      "definition": "Vegetable",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰਸੋਈ",
+      "senseId": "en-ਰਸੋਈ-pa-noun-MXHYmtAF",
+      "sourceGloss": "kitchen",
+      "definition": "Kitchen",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਮਚਾ",
+      "senseId": "en-ਚਮਚਾ-pa-noun-f0gOdEp5",
+      "sourceGloss": "spoon",
+      "definition": "Spoon",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕੁਰਸੀ",
+      "senseId": "en-ਕੁਰਸੀ-pa-noun-usoW9Qtq",
+      "sourceGloss": "chair, seat",
+      "definition": "Chair",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਅਲਮਾਰੀ",
+      "senseId": "en-ਅਲਮਾਰੀ-pa-noun-sHlNkVaI",
+      "sourceGloss": "cupboard, shelf; almirah",
+      "definition": "Cupboard",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖਿੜਕੀ",
+      "senseId": "en-ਖਿੜਕੀ-pa-noun-RP97AsgN",
+      "sourceGloss": "window",
+      "definition": "Window",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦੁਕਾਨ",
+      "senseId": "en-ਦੁਕਾਨ-pa-noun-TfS~Xape",
+      "sourceGloss": "shop, store",
+      "definition": "Shop",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਆਲੂ",
+      "senseId": "en-ਆਲੂ-pa-noun-6RwlStWI",
+      "sourceGloss": "potato",
+      "definition": "Potato",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਗਾਜਰ",
+      "senseId": "en-ਗਾਜਰ-pa-noun-uWSCKQqH",
+      "sourceGloss": "carrot",
+      "definition": "Carrot",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਰਸਾਤ",
+      "senseId": "en-ਬਰਸਾਤ-pa-noun-U4XoRthL",
+      "sourceGloss": "rainy season",
+      "definition": "Rainy season",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਰਫ਼",
+      "senseId": "en-ਬਰਫ਼-pa-noun-p0YiLwnY",
+      "sourceGloss": "snow",
+      "definition": "Snow",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਤਿਤਲੀ",
+      "senseId": "en-ਤਿਤਲੀ-pa-noun-~P0HXL42",
+      "sourceGloss": "butterfly",
+      "definition": "Butterfly",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਬੂਤਰ",
+      "senseId": "en-ਕਬੂਤਰ-pa-noun-n3n9bNyI",
+      "sourceGloss": "pigeon",
+      "definition": "Pigeon",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਿੜੀ",
+      "senseId": "en-ਚਿੜੀ-pa-noun-VXBuUZtn",
+      "sourceGloss": "sparrow; any small bird",
+      "definition": "Sparrow or another small bird",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੰਛੀ",
+      "senseId": "en-ਪੰਛੀ-pa-noun-elF57swP",
+      "sourceGloss": "bird",
+      "definition": "Bird",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖਿਡੌਣਾ",
+      "senseId": "en-ਖਿਡੌਣਾ-pa-noun-D1MTPOV8",
+      "sourceGloss": "toy",
+      "definition": "Toy",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹਸਪਤਾਲ",
+      "senseId": "en-ਹਸਪਤਾਲ-pa-noun-iv48g97P",
+      "sourceGloss": "hospital",
+      "definition": "Hospital",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਵਾਲ",
+      "senseId": "en-ਸਵਾਲ-pa-noun-xtpR9QiO",
+      "sourceGloss": "question (query)",
+      "definition": "Question",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਜਵਾਬ",
+      "senseId": "en-ਜਵਾਬ-pa-noun-4DmSPGdk",
+      "sourceGloss": "answer, response",
+      "definition": "Answer",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਮੁੰਦਰ",
+      "senseId": "en-ਸਮੁੰਦਰ-pa-noun-6~fB0-xc",
+      "sourceGloss": "ocean, sea",
+      "definition": "Ocean or sea",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੱਛੀ",
+      "senseId": "en-ਮੱਛੀ-pa-noun-tHSpmicF",
+      "sourceGloss": "fish",
+      "definition": "Fish",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਹਾੜ",
+      "senseId": "en-ਪਹਾੜ-pa-noun-Ny6dLUqp",
+      "sourceGloss": "mountain, large hill",
+      "definition": "Mountain",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਫ਼ਰ",
+      "senseId": "en-ਸਫ਼ਰ-pa-noun-TXgOXuYD",
+      "sourceGloss": "journey, travel",
+      "definition": "Journey",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦੁਪਹਿਰ",
+      "senseId": "en-ਦੁਪਹਿਰ-pa-noun-yOB8GsJo",
+      "sourceGloss": "afternoon",
+      "definition": "Afternoon",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ਾਮ",
+      "senseId": "en-ਸ਼ਾਮ-pa-noun-rfib7E4U",
+      "sourceGloss": "dusk, evening, eventide, nightfall",
+      "definition": "Evening",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦਿਲ",
+      "senseId": "en-ਦਿਲ-pa-noun-PLloqYII",
+      "sourceGloss": "heart",
+      "definition": "Heart",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨੀਂਦ",
+      "senseId": "en-ਨੀਂਦ-pa-noun-CvpbtdXx",
+      "sourceGloss": "sleep",
+      "definition": "Sleep",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਿਆਰ",
+      "senseId": "en-ਪਿਆਰ-pa-noun-aG90apW2",
+      "sourceGloss": "love",
+      "definition": "Love",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਅੰਗੂਰ",
+      "senseId": "en-ਅੰਗੂਰ-pa-noun-D3j8xIb1",
+      "sourceGloss": "grape",
+      "definition": "Grape",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਅੰਬ",
+      "senseId": "en-ਅੰਬ-pa-noun-aBXzwwA4",
+      "sourceGloss": "mango",
+      "definition": "Mango",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "AMB"
+    },
+    {
+      "word": "ਆਂਡਾ",
+      "senseId": "en-ਆਂਡਾ-pa-noun-NHB8P0Df",
+      "sourceGloss": "egg",
+      "definition": "Egg",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "ANDA"
+    },
+    {
+      "word": "ਆਈਨਾ",
+      "senseId": "en-ਆਈਨਾ-pa-noun-ABVHYWN8",
+      "sourceGloss": "mirror",
+      "definition": "Mirror",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਆਉਣਾ",
+      "senseId": "en-ਆਉਣਾ-pa-verb--cqD3vp0",
+      "sourceGloss": "to come, arrive, reach",
+      "definition": "To come, arrive, reach",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਆਕਾਸ਼",
+      "senseId": "en-ਆਕਾਸ਼-pa-noun-BfUU-ufK",
+      "sourceGloss": "sky",
+      "definition": "Sky",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਆਟਾ",
+      "senseId": "en-ਆਟਾ-pa-noun-9V-Xz6Dd",
+      "sourceGloss": "flour",
+      "definition": "Flour",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਆਸਮਾਨ",
+      "senseId": "en-ਆਸਮਾਨ-pa-noun-BfUU-ufK",
+      "sourceGloss": "sky",
+      "definition": "Sky",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਉਸਤਾਦ",
+      "senseId": "en-ਉਸਤਾਦ-pa-noun-yRiaKQMA",
+      "sourceGloss": "teacher, master",
+      "definition": "Teacher, master",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਔਰਤ",
+      "senseId": "en-ਔਰਤ-pa-noun-CWvMCml9",
+      "sourceGloss": "woman, lady",
+      "definition": "Woman, lady",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਣਕ",
+      "senseId": "en-ਕਣਕ-pa-noun-3mwzQzms",
+      "sourceGloss": "wheat",
+      "definition": "Wheat",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਮਜ਼ੋਰ",
+      "senseId": "en-ਕਮਜ਼ੋਰ-pa-adj-nBQrXwgE",
+      "sourceGloss": "weak, feeble, infirm, decrepit",
+      "definition": "Weak, feeble, infirm, decrepit",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਮਰਾ",
+      "senseId": "en-ਕਮਰਾ-pa-noun-PZE~0hRw",
+      "sourceGloss": "room, small hall chamber",
+      "definition": "Room, small hall chamber",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਮੀਜ਼",
+      "senseId": "en-ਕਮੀਜ਼-pa-noun-VliF3jlI",
+      "sourceGloss": "shirt; kamees",
+      "definition": "Shirt; kamees",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਲਮ",
+      "senseId": "en-ਕਲਮ-pa-noun-4hprDLGT",
+      "sourceGloss": "pen",
+      "definition": "Pen",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਸ਼ਤੀ",
+      "senseId": "en-ਕਸ਼ਤੀ-pa-noun-qzLlRSKS",
+      "sourceGloss": "boat; ark, canoe",
+      "definition": "Boat; ark, canoe",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਾਗ਼ਜ਼",
+      "senseId": "en-ਕਾਗ਼ਜ਼-pa-noun-OCY1yTJb",
+      "sourceGloss": "paper",
+      "definition": "Paper",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਾਲ਼ਾ",
+      "senseId": "en-ਕਾਲ਼ਾ-pa-adj-wAbH46sU",
+      "sourceGloss": "black",
+      "definition": "Black",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਿਰਤ",
+      "senseId": "en-ਕਿਰਤ-pa-noun-6HXzu5Nf",
+      "sourceGloss": "work, toil, labour",
+      "definition": "Work, toil, labour",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕੁੜੀ",
+      "senseId": "en-ਕੁੜੀ-pa-noun-QxuhxpNn",
+      "sourceGloss": "girl",
+      "definition": "Girl",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕੁੱਤਾ",
+      "senseId": "en-ਕੁੱਤਾ-pa-noun-zWNX792W",
+      "sourceGloss": "dog",
+      "definition": "Dog",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕੇਲਾ",
+      "senseId": "en-ਕੇਲਾ-pa-noun-tJPUg2Sv",
+      "sourceGloss": "banana",
+      "definition": "Banana",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "KELA"
+    },
+    {
+      "word": "ਕੋਠੜੀ",
+      "senseId": "en-ਕੋਠੜੀ-pa-noun-HxxbL613",
+      "sourceGloss": "room",
+      "definition": "Room",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕੰਧ",
+      "senseId": "en-ਕੰਧ-pa-noun-TYqqZPaF",
+      "sourceGloss": "wall",
+      "definition": "Wall",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖ਼ਰਗੋਸ਼",
+      "senseId": "en-ਖ਼ਰਗੋਸ਼-pa-noun-032WtCrU",
+      "sourceGloss": "rabbit",
+      "definition": "Rabbit",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖ਼ਰਾਬ",
+      "senseId": "en-ਖ਼ਰਾਬ-pa-adj-LwXUtonS",
+      "sourceGloss": "bad",
+      "definition": "Bad",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖ਼ੁਸ਼",
+      "senseId": "en-ਖ਼ੁਸ਼-pa-adj-SC34-2Aj",
+      "sourceGloss": "happy, glad, delighted, pleased",
+      "definition": "Happy",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖੁਲ੍ਹਣਾ",
+      "senseId": "en-ਖੁਲ੍ਹਣਾ-pa-verb-e-8bMhQu",
+      "sourceGloss": "to open, to be open",
+      "definition": "To open, to be open",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖੇਡਣਾ",
+      "senseId": "en-ਖੇਡਣਾ-pa-verb-5Iq01l42",
+      "sourceGloss": "To play",
+      "definition": "To play",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖੇਤ",
+      "senseId": "en-ਖੇਤ-pa-noun-wNKFa3TQ",
+      "sourceGloss": "field",
+      "definition": "Field",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖੋਤਾ",
+      "senseId": "en-ਖੋਤਾ-pa-noun-0i8RWr1r",
+      "sourceGloss": "donkey",
+      "definition": "Donkey",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖੜ੍ਹਨਾ",
+      "senseId": "en-ਖੜ੍ਹਨਾ-pa-verb-M5TgKh6g",
+      "sourceGloss": "to stand",
+      "definition": "To stand",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਗਰਮ",
+      "senseId": "en-ਗਰਮ-pa-adj-e79M5Rv3",
+      "sourceGloss": "warm, hot",
+      "definition": "Warm, hot",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਗਾਂ",
+      "senseId": "en-ਗਾਂ-pa-noun-vrE0dUkQ",
+      "sourceGloss": "cow",
+      "definition": "Cow",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਗੀਤ",
+      "senseId": "en-ਗੀਤ-pa-noun-py-u9uy1",
+      "sourceGloss": "song, hymn",
+      "definition": "Song, hymn",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਗੰਢਾ",
+      "senseId": "en-ਗੰਢਾ-pa-noun-KIlxZxaF",
+      "sourceGloss": "onion",
+      "definition": "Onion",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਘਾਹ",
+      "senseId": "en-ਘਾਹ-pa-noun-rlF~QJ2b",
+      "sourceGloss": "grass, turf, herbage",
+      "definition": "Grass, turf, herbage",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਘੋੜਾ",
+      "senseId": "en-ਘੋੜਾ-pa-noun-NEdNGhMf",
+      "sourceGloss": "horse, stallion",
+      "definition": "Horse, stallion",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਘੰਟਾ",
+      "senseId": "en-ਘੰਟਾ-pa-noun-msCt1HXd",
+      "sourceGloss": "hour",
+      "definition": "Hour",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਾਨਣ",
+      "senseId": "en-ਚਾਨਣ-pa-noun-iPQymBGW",
+      "sourceGloss": "light, radiance",
+      "definition": "Light, radiance",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਾਹ",
+      "senseId": "en-ਚਾਹ-pa-noun-qfdNHsNu",
+      "sourceGloss": "tea",
+      "definition": "Tea",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਿੱਟਾ",
+      "senseId": "en-ਚਿੱਟਾ-pa-adj-AY-pakRx",
+      "sourceGloss": "white",
+      "definition": "White",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਿੱਤਰ",
+      "senseId": "en-ਚਿੱਤਰ-pa-noun-2HCHJ-e4",
+      "sourceGloss": "picture, painting, portrait",
+      "definition": "Picture, painting, portrait",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚੁੰਨੀ",
+      "senseId": "en-ਚੁੰਨੀ-pa-noun-L0JSZtY2",
+      "sourceGloss": "scarf, dupatta",
+      "definition": "Scarf, dupatta",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚੰਗਾ",
+      "senseId": "en-ਚੰਗਾ-pa-adj-3msbpDQl",
+      "sourceGloss": "good, fine",
+      "definition": "Good, fine",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚੰਨ",
+      "senseId": "en-ਚੰਨ-pa-noun-nni0PqAO",
+      "sourceGloss": "moon",
+      "definition": "Moon",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚੱਕਾ",
+      "senseId": "en-ਚੱਕਾ-pa-noun-IQALSwwR",
+      "sourceGloss": "wheel, disc, rim",
+      "definition": "Wheel, disc, rim",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚੱਲਣਾ",
+      "senseId": "en-ਚੱਲਣਾ-pa-verb-icLBTR14",
+      "sourceGloss": "to walk",
+      "definition": "To walk",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "CHALNA"
+    },
+    {
+      "word": "ਛੋਟਾ",
+      "senseId": "en-ਛੋਟਾ-pa-adj-~OPJa5AZ",
+      "sourceGloss": "small, little",
+      "definition": "Small, little",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਜਗਤ",
+      "senseId": "en-ਜਗਤ-pa-noun-SG6kYiTR",
+      "sourceGloss": "world",
+      "definition": "World",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਜ਼ਮੀਨ",
+      "senseId": "en-ਜ਼ਮੀਨ-pa-noun-Cjzhpyx1",
+      "sourceGloss": "earth, land, ground, soil",
+      "definition": "Earth, land, ground, soil",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਜਾਣਾ",
+      "senseId": "en-ਜਾਣਾ-pa-verb-ynDVZDT4",
+      "sourceGloss": "to go, to leave",
+      "definition": "To go, to leave",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਜੁੱਤੀ",
+      "senseId": "en-ਜੁੱਤੀ-pa-noun-79ocklKR",
+      "sourceGloss": "shoe",
+      "definition": "Shoe",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਝੀਲ",
+      "senseId": "en-ਝੀਲ-pa-noun-bwIfAmjV",
+      "sourceGloss": "lake",
+      "definition": "Lake",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਟਾਪੂ",
+      "senseId": "en-ਟਾਪੂ-pa-noun-KM0sXBXR",
+      "sourceGloss": "island",
+      "definition": "Island",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਟਾਹਣੀ",
+      "senseId": "en-ਟਾਹਣੀ-pa-noun-fD4g93hC",
+      "sourceGloss": "small branch of tree, twig",
+      "definition": "Small branch of tree, twig",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਟੋਪੀ",
+      "senseId": "en-ਟੋਪੀ-pa-noun-GOHdOSFo",
+      "sourceGloss": "hat",
+      "definition": "Hat",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "TOPI"
+    },
+    {
+      "word": "ਡੱਡੂ",
+      "senseId": "en-ਡੱਡੂ-pa-noun-CLIZ6WaZ",
+      "sourceGloss": "frog, toad",
+      "definition": "Frog, toad",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਤਾਜ਼ਾ",
+      "senseId": "en-ਤਾਜ਼ਾ-pa-adj-TI8dLsWZ",
+      "sourceGloss": "fresh, recent, new",
+      "definition": "Fresh, recent, new",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਤਾਰਾ",
+      "senseId": "en-ਤਾਰਾ-pa-noun-Ul7KHVCJ",
+      "sourceGloss": "star",
+      "definition": "Star",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਤੁਰਨਾ",
+      "senseId": "en-ਤੁਰਨਾ-pa-verb-icLBTR14",
+      "sourceGloss": "to walk",
+      "definition": "To walk",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਤੌਲੀਆ",
+      "senseId": "en-ਤੌਲੀਆ-pa-noun-EMpQqKcU",
+      "sourceGloss": "towel",
+      "definition": "Towel",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਤੱਤਾ",
+      "senseId": "en-ਤੱਤਾ-pa-adj-NTwicwW5",
+      "sourceGloss": "hot; warm",
+      "definition": "Hot; warm",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਥੈਲਾ",
+      "senseId": "en-ਥੈਲਾ-pa-noun-hfzJhIR0",
+      "sourceGloss": "bag, sack, tote",
+      "definition": "Bag, sack, tote",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਥੋਮ",
+      "senseId": "en-ਥੋਮ-pa-noun-QQJAhNLi",
+      "sourceGloss": "garlic",
+      "definition": "Garlic",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦਰਖ਼ਤ",
+      "senseId": "en-ਦਰਖ਼ਤ-pa-noun-3Jxe24st",
+      "sourceGloss": "tree",
+      "definition": "Tree",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦਰਪਣ",
+      "senseId": "en-ਦਰਪਣ-pa-noun-ABVHYWN8",
+      "sourceGloss": "mirror",
+      "definition": "Mirror",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦਰਿਆ",
+      "senseId": "en-ਦਰਿਆ-pa-noun-X1qO2PE5",
+      "sourceGloss": "river",
+      "definition": "River",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦਿਨ",
+      "senseId": "en-ਦਿਨ-pa-noun-lEwn5bl6",
+      "sourceGloss": "day",
+      "definition": "Day",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "DIN"
+    },
+    {
+      "word": "ਦੀਵਾ",
+      "senseId": "en-ਦੀਵਾ-pa-noun-JOx3pFSg",
+      "sourceGloss": "lamp, light; (religion) oil lamp, diya",
+      "definition": "Lamp, light; (religion) oil lamp, diya",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦੀਵਾਰ",
+      "senseId": "en-ਦੀਵਾਰ-pa-noun-TYqqZPaF",
+      "sourceGloss": "wall",
+      "definition": "Wall",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦੁਨੀਆ",
+      "senseId": "en-ਦੁਨੀਆ-pa-noun-SG6kYiTR",
+      "sourceGloss": "world",
+      "definition": "World",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦੌੜਣਾ",
+      "senseId": "en-ਦੌੜਣਾ-pa-verb-n98XS-Nx",
+      "sourceGloss": "to run, sprint",
+      "definition": "To run, sprint",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨਦੀ",
+      "senseId": "en-ਨਦੀ-pa-noun-X1qO2PE5",
+      "sourceGloss": "river",
+      "definition": "River",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨਮਕ",
+      "senseId": "en-ਨਮਕ-pa-noun-rU5hqrsN",
+      "sourceGloss": "table salt",
+      "definition": "Table salt",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨਰੋਆ",
+      "senseId": "en-ਨਰੋਆ-pa-adj-hChMNR3n",
+      "sourceGloss": "healthy, well, disease-free, sound",
+      "definition": "Healthy, well, disease-free, sound",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨਵਾਂ",
+      "senseId": "en-ਨਵਾਂ-pa-adj-EVB6Di9e",
+      "sourceGloss": "new",
+      "definition": "New",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨਾਰੰਗੀ",
+      "senseId": "en-ਨਾਰੰਗੀ-pa-noun-G0yRM9pz",
+      "sourceGloss": "orange",
+      "definition": "Orange",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨਿੱਕਾ",
+      "senseId": "en-ਨਿੱਕਾ-pa-adj-~OPJa5AZ",
+      "sourceGloss": "small, little",
+      "definition": "Small, little",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨਿੱਘਾ",
+      "senseId": "en-ਨਿੱਘਾ-pa-adj--BCsctCr",
+      "sourceGloss": "warm, comfortably warm, cosy",
+      "definition": "Warm, comfortably warm, cosy",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨੀਲਾ",
+      "senseId": "en-ਨੀਲਾ-pa-adj-Fkd2iMDg",
+      "sourceGloss": "blue",
+      "definition": "Blue",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨੱਚਣਾ",
+      "senseId": "en-ਨੱਚਣਾ-pa-verb-YInOfrwL",
+      "sourceGloss": "to dance",
+      "definition": "To dance",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਤਝੜ",
+      "senseId": "en-ਪਤਝੜ-pa-noun-Q2szbZdc",
+      "sourceGloss": "autumn, fall",
+      "definition": "Autumn, fall",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਰਬਤ",
+      "senseId": "en-ਪਰਬਤ-pa-noun-8Hwg35Cw",
+      "sourceGloss": "mountain, hill; mount",
+      "definition": "Mountain, hill; mount",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਹਿਰਾਵਾ",
+      "senseId": "en-ਪਹਿਰਾਵਾ-pa-noun-y2Qn-CGL",
+      "sourceGloss": "clothing, clothes, apparel, attire",
+      "definition": "Clothing, clothes, apparel, attire",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਾਲ਼ਾ",
+      "senseId": "en-ਪਾਲ਼ਾ-pa-noun-AlSgYIF8",
+      "sourceGloss": "cold, coldness, chill, frost",
+      "definition": "Cold, coldness, chill, frost",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਿਆਲਾ",
+      "senseId": "en-ਪਿਆਲਾ-pa-noun-fCq36Uy-",
+      "sourceGloss": "cup, mug",
+      "definition": "Cup, mug",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਿਤਾ",
+      "senseId": "en-ਪਿਤਾ-pa-noun-iKGIHwAl",
+      "sourceGloss": "father",
+      "definition": "Father",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਿੰਡ",
+      "senseId": "en-ਪਿੰਡ-pa-noun-zT2mAKuY",
+      "sourceGloss": "village, rural town",
+      "definition": "Village, rural town",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੀਣਾ",
+      "senseId": "en-ਪੀਣਾ-pa-verb-5i9kA2DY",
+      "sourceGloss": "to drink",
+      "definition": "To drink",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੀਲ਼ਾ",
+      "senseId": "en-ਪੀਲ਼ਾ-pa-adj-xoWiybqy",
+      "sourceGloss": "yellow",
+      "definition": "Yellow",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੁਰਾਣਾ",
+      "senseId": "en-ਪੁਰਾਣਾ-pa-adj-KWyfOc1B",
+      "sourceGloss": "old, aged, ancient",
+      "definition": "Old, aged, ancient",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੁਲ",
+      "senseId": "en-ਪੁਲ-pa-noun-F~KbBzFD",
+      "sourceGloss": "bridge",
+      "definition": "Bridge",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੁਸਤਕ",
+      "senseId": "en-ਪੁਸਤਕ-pa-noun-knGf4M-M",
+      "sourceGloss": "book",
+      "definition": "Book",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੈਨਸਿਲ",
+      "senseId": "en-ਪੈਨਸਿਲ-pa-noun-E4CWaPtD",
+      "sourceGloss": "pencil",
+      "definition": "Pencil",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੌਣ",
+      "senseId": "en-ਪੌਣ-pa-noun-tQJP57h6",
+      "sourceGloss": "wind, air, breeze",
+      "definition": "Wind, air, breeze",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੜ੍ਹਾਈ",
+      "senseId": "en-ਪੜ੍ਹਾਈ-pa-noun-TG4A7fpO",
+      "sourceGloss": "study, education",
+      "definition": "Study, education",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੱਤਾ",
+      "senseId": "en-ਪੱਤਾ-pa-noun-n5EWH0ND",
+      "sourceGloss": "leaf",
+      "definition": "Leaf",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੱਥਰ",
+      "senseId": "en-ਪੱਥਰ-pa-noun-McMaRgtK",
+      "sourceGloss": "stone, rock",
+      "definition": "Stone, rock",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਫਲ",
+      "senseId": "en-ਫਲ-pa-noun-kglSaqph",
+      "sourceGloss": "fruit",
+      "definition": "Fruit",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "PHAL"
+    },
+    {
+      "word": "ਬਸੰਤ",
+      "senseId": "en-ਬਸੰਤ-pa-noun-jjBq2MvO",
+      "sourceGloss": "spring (season)",
+      "definition": "Spring (season)",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਹਿਣਾ",
+      "senseId": "en-ਬਹਿਣਾ-pa-verb-XSeCVgAL",
+      "sourceGloss": "to sit",
+      "definition": "To sit",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਾਂਦਰ",
+      "senseId": "en-ਬਾਂਦਰ-pa-noun-3ulTH2oV",
+      "sourceGloss": "monkey, ape",
+      "definition": "Monkey, ape",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਾਗ਼",
+      "senseId": "en-ਬਾਗ਼-pa-noun-VjWAOgNH",
+      "sourceGloss": "garden, orchard",
+      "definition": "Garden, orchard",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਾਘ",
+      "senseId": "en-ਬਾਘ-pa-noun-8VwWuZ-C",
+      "sourceGloss": "tiger",
+      "definition": "Tiger",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਾਜ਼ੀ",
+      "senseId": "en-ਬਾਜ਼ੀ-pa-noun-FJpNJZzh",
+      "sourceGloss": "game, play",
+      "definition": "Game, play",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਾਜਾਰ",
+      "senseId": "en-ਬਾਜਾਰ-pa-noun-t0KHfLuu",
+      "sourceGloss": "market, bazar, bazaar",
+      "definition": "Market, bazar, bazaar",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਾਰਿਸ਼",
+      "senseId": "en-ਬਾਰਿਸ਼-pa-noun-L1evVbGU",
+      "sourceGloss": "rain, rainfall, downpour",
+      "definition": "Rain, rainfall, downpour",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬਿੱਲੀ",
+      "senseId": "en-ਬਿੱਲੀ-pa-noun-d693i1Gr",
+      "sourceGloss": "cat",
+      "definition": "Cat",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੂਹਾ",
+      "senseId": "en-ਬੂਹਾ-pa-noun-ZhsJTzqj",
+      "sourceGloss": "door, entrance",
+      "definition": "Door, entrance",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੇਲੀ",
+      "senseId": "en-ਬੇਲੀ-pa-noun-~RSOwZzF",
+      "sourceGloss": "friend, chum",
+      "definition": "Friend, chum",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੇੜੀ",
+      "senseId": "en-ਬੇੜੀ-pa-noun-ULx-zkXT",
+      "sourceGloss": "boat, vessel",
+      "definition": "Boat, vessel",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੋਤਲ",
+      "senseId": "en-ਬੋਤਲ-pa-noun-fe-ceeW-",
+      "sourceGloss": "bottle",
+      "definition": "Bottle",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੰਦਾ",
+      "senseId": "en-ਬੰਦਾ-pa-noun-pa:man",
+      "sourceGloss": "man, male",
+      "definition": "Man, male",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੱਕਰਾ",
+      "senseId": "en-ਬੱਕਰਾ-pa-noun-Fran19Z5",
+      "sourceGloss": "goat; he-goat",
+      "definition": "Male goat",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੱਕਰੀ",
+      "senseId": "en-ਬੱਕਰੀ-pa-noun-D2n4WYUN",
+      "sourceGloss": "goat; she-goat",
+      "definition": "Female goat",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੱਦਲ਼",
+      "senseId": "en-ਬੱਦਲ਼-pa-noun-VmgQELdT",
+      "sourceGloss": "cloud",
+      "definition": "Cloud",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਬੱਸ",
+      "senseId": "en-ਬੱਸ-pa-noun-BOAn5JkK",
+      "sourceGloss": "bus",
+      "definition": "A road vehicle that carries passengers",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "BUS"
+    },
+    {
+      "word": "ਭਰਾ",
+      "senseId": "en-ਭਰਾ-pa-noun-C0vXfOxw",
+      "sourceGloss": "brother",
+      "definition": "Brother",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "BHRA"
+    },
+    {
+      "word": "ਭਾਈ",
+      "senseId": "en-ਭਾਈ-pa-noun-C0vXfOxw",
+      "sourceGloss": "brother",
+      "definition": "Brother",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਭੇਡ",
+      "senseId": "en-ਭੇਡ-pa-noun-XFmWFqxQ",
+      "sourceGloss": "sheep",
+      "definition": "Sheep",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਭੈਣ",
+      "senseId": "en-ਭੈਣ-pa-noun-GYDTkn8H",
+      "sourceGloss": "sister",
+      "definition": "Sister",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਭੱਜਣਾ",
+      "senseId": "en-ਭੱਜਣਾ-pa-verb-o9eMoC-L",
+      "sourceGloss": "to run",
+      "definition": "To run",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਕਾਨ",
+      "senseId": "en-ਮਕਾਨ-pa-noun-fsJxut-0",
+      "sourceGloss": "house, home, residence, dwelling",
+      "definition": "House, home, residence, dwelling",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਗਰਮੱਛ",
+      "senseId": "en-ਮਗਰਮੱਛ-pa-noun-3q417x~U",
+      "sourceGloss": "crocodile (especially the mugger crocodile)",
+      "definition": "Crocodile",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਜ਼ਬੂਤ",
+      "senseId": "en-ਮਜ਼ਬੂਤ-pa-adj-RydEiPIj",
+      "sourceGloss": "strong, stout, solid",
+      "definition": "Strong, stout, solid",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਹੀਨਾ",
+      "senseId": "en-ਮਹੀਨਾ-pa-noun-pcfRcZ4o",
+      "sourceGloss": "month",
+      "definition": "Month",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਾਂ",
+      "senseId": "en-ਮਾਂ-pa-noun-SlO7ppnL",
+      "sourceGloss": "mother, mom",
+      "definition": "Mother",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਾਤਾ",
+      "senseId": "en-ਮਾਤਾ-pa-noun-zwYi7ypm",
+      "sourceGloss": "mother",
+      "definition": "Mother",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਿਠਿਆਈ",
+      "senseId": "en-ਮਿਠਿਆਈ-pa-noun-hnYXoaBf",
+      "sourceGloss": "sweet, confection",
+      "definition": "Sweet, confection",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਿਨਟ",
+      "senseId": "en-ਮਿਨਟ-pa-noun-KM3SDq8T",
+      "sourceGloss": "minute",
+      "definition": "Minute",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਿੱਟੀ",
+      "senseId": "en-ਮਿੱਟੀ-pa-noun-BjY1VQVN",
+      "sourceGloss": "clay",
+      "definition": "Clay",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਿੱਤਰ",
+      "senseId": "en-ਮਿੱਤਰ-pa-noun-SvDc9NXQ",
+      "sourceGloss": "friend, pal",
+      "definition": "Friend, pal",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੀਂਹ",
+      "senseId": "en-ਮੀਂਹ-pa-noun-MZtExXCk",
+      "sourceGloss": "rain",
+      "definition": "Rain",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੁਰਗੀ",
+      "senseId": "en-ਮੁਰਗੀ-pa-noun-jk23s9qj",
+      "sourceGloss": "hen (female chicken)",
+      "definition": "Hen (female chicken)",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੁੰਡਾ",
+      "senseId": "en-ਮੁੰਡਾ-pa-noun-zGp3hATq",
+      "sourceGloss": "boy",
+      "definition": "Boy",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੂਲੀ",
+      "senseId": "en-ਮੂਲੀ-pa-noun-uTdRaJ1I",
+      "sourceGloss": "radish",
+      "definition": "Radish",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੇਜ਼",
+      "senseId": "en-ਮੇਜ਼-pa-noun-DU~Ep403",
+      "sourceGloss": "table",
+      "definition": "Table",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੋਰ",
+      "senseId": "en-ਮੋਰ-pa-noun-oJXHcT4z",
+      "sourceGloss": "peacock",
+      "definition": "Peacock",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੱਖਣ",
+      "senseId": "en-ਮੱਖਣ-pa-noun-ybgrkK5X",
+      "sourceGloss": "butter",
+      "definition": "Butter",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੱਛਰ",
+      "senseId": "en-ਮੱਛਰ-pa-noun-0ZlJw9Qi",
+      "sourceGloss": "mosquito",
+      "definition": "Mosquito",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੱਛਰਦਾਨੀ",
+      "senseId": "en-ਮੱਛਰਦਾਨੀ-pa-noun-nsfgs-j~",
+      "sourceGloss": "mosquito net",
+      "definition": "Mosquito net",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੱਝ",
+      "senseId": "en-ਮੱਝ-pa-noun-hAZpil0W",
+      "sourceGloss": "water buffalo (adult female)",
+      "definition": "Female water buffalo",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "MAJJH"
+    },
+    {
+      "word": "ਰਸਤਾ",
+      "senseId": "en-ਰਸਤਾ-pa-noun-NiooSVLT",
+      "sourceGloss": "road",
+      "definition": "Road",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰਾਤ",
+      "senseId": "en-ਰਾਤ-pa-noun-F2Rz1zEz",
+      "sourceGloss": "night",
+      "definition": "Night",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰੁੱਖ",
+      "senseId": "en-ਰੁੱਖ-pa-noun-3Jxe24st",
+      "sourceGloss": "tree",
+      "definition": "Tree",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "RUKH"
+    },
+    {
+      "word": "ਰੇਤ",
+      "senseId": "en-ਰੇਤ-pa-noun-9519JFWD",
+      "sourceGloss": "sand",
+      "definition": "Sand",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰੋਣਾ",
+      "senseId": "en-ਰੋਣਾ-pa-verb-jLnMg7cr",
+      "sourceGloss": "to cry, weep",
+      "definition": "To cry, weep",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰੋਸ਼ਨੀ",
+      "senseId": "en-ਰੋਸ਼ਨੀ-pa-noun-fCn5kti~",
+      "sourceGloss": "light, illumination, radiance",
+      "definition": "Light, illumination, radiance",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਲਸਣ",
+      "senseId": "en-ਲਸਣ-pa-noun-QQJAhNLi",
+      "sourceGloss": "garlic",
+      "definition": "Garlic",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਲਾਲ",
+      "senseId": "en-ਲਾਲ-pa-adj-sfUaUR8d",
+      "sourceGloss": "red",
+      "definition": "Red",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਲਿਬਾਸ",
+      "senseId": "en-ਲਿਬਾਸ-pa-noun-DJ4khN37",
+      "sourceGloss": "dress, apparel, raiment, clothing, garb, attire",
+      "definition": "Dress, apparel, raiment, clothing, garb, attire",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਲੂਣ",
+      "senseId": "en-ਲੂਣ-pa-noun-rU5hqrsN",
+      "sourceGloss": "table salt",
+      "definition": "Table salt",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਲੋਕ",
+      "senseId": "en-ਲੋਕ-pa-noun-sF2qzpnx",
+      "sourceGloss": "people (any collective group of persons)",
+      "definition": "People (any collective group of persons)",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਵਣ",
+      "senseId": "en-ਵਣ-pa-noun-YZoszxJs",
+      "sourceGloss": "forest",
+      "definition": "Forest",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਵਰਖਾ",
+      "senseId": "en-ਵਰਖਾ-pa-noun-MZtExXCk",
+      "sourceGloss": "rain",
+      "definition": "Rain",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਵਰ੍ਹਾ",
+      "senseId": "en-ਵਰ੍ਹਾ-pa-noun-TLTqJVg8",
+      "sourceGloss": "year",
+      "definition": "Year",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਵੱਡਾ",
+      "senseId": "en-ਵੱਡਾ-pa-adj-zS7rhlBR",
+      "sourceGloss": "big, large",
+      "definition": "Big, large",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਵਿਦਿਆਰਥਣ",
+      "senseId": "en-ਵਿਦਿਆਰਥਣ-pa-noun-JkyMOBvx",
+      "sourceGloss": "student",
+      "definition": "Female student",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਨਿੱਚਰਵਾਰ",
+      "senseId": "en-ਸਨਿੱਚਰਵਾਰ-pa-noun-2-Ncc2PC",
+      "sourceGloss": "Saturday",
+      "definition": "Saturday",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਫ਼ੈਦ",
+      "senseId": "en-ਸਫ਼ੈਦ-pa-adj-AY-pakRx",
+      "sourceGloss": "white",
+      "definition": "White",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਰਦੀ",
+      "senseId": "en-ਸਰਦੀ-pa-noun-Kp93b3qM",
+      "sourceGloss": "cold, coldness",
+      "definition": "Cold, coldness",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਵੇਰਾ",
+      "senseId": "en-ਸਵੇਰਾ-pa-noun-AEAPay10",
+      "sourceGloss": "morning, dawn",
+      "definition": "Morning, dawn",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ਕਰਕੰਦੀ",
+      "senseId": "en-ਸ਼ਕਰਕੰਦੀ-pa-noun-EaM2Blat",
+      "sourceGloss": "sweet potato",
+      "definition": "Sweet potato",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ਨੀਵਾਰ",
+      "senseId": "en-ਸ਼ਨੀਵਾਰ-pa-noun-2-Ncc2PC",
+      "sourceGloss": "Saturday",
+      "definition": "Saturday",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ਹਿਰ",
+      "senseId": "en-ਸ਼ਹਿਰ-pa-noun-qq2pK-VG",
+      "sourceGloss": "city, town, urban area",
+      "definition": "City, town, urban area",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ੀਸ਼ਾ",
+      "senseId": "en-ਸ਼ੀਸ਼ਾ-pa-noun-EyoaORzO",
+      "sourceGloss": "glass",
+      "definition": "Glass",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ੀਸ਼ੀ",
+      "senseId": "en-ਸ਼ੀਸ਼ੀ-pa-noun-tpYbwLH~",
+      "sourceGloss": "small bottle, phial, vial",
+      "definition": "Small bottle, phial, vial",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ੇਰ",
+      "senseId": "en-ਸ਼ੇਰ-pa-noun-7ViSqQ9b",
+      "sourceGloss": "lion; tiger.",
+      "definition": "Lion; tiger.",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ੱਕਰ",
+      "senseId": "en-ਸ਼ੱਕਰ-pa-noun-zHZ~scbv",
+      "sourceGloss": "sugar",
+      "definition": "Sugar",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਾਈਕਲ",
+      "senseId": "en-ਸਾਈਕਲ-pa-noun-0pr4ouFg",
+      "sourceGloss": "bicycle",
+      "definition": "Bicycle",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਾਗ",
+      "senseId": "en-ਸਾਗ-pa-noun-iaDWeHyv",
+      "sourceGloss": "Green leaves that are boiled and eaten as a vegetable; green vegetable",
+      "definition": "Leafy greens cooked as a vegetable",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਾਫ਼",
+      "senseId": "en-ਸਾਫ਼-pa-adj-OwZoBPbR",
+      "sourceGloss": "clean",
+      "definition": "Clean",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਾਲ",
+      "senseId": "en-ਸਾਲ-pa-noun-TLTqJVg8",
+      "sourceGloss": "year",
+      "definition": "Year",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਿਆਲ਼",
+      "senseId": "en-ਸਿਆਲ਼-pa-noun-MMVGH8J7",
+      "sourceGloss": "winter",
+      "definition": "Winter",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਿੱਖਣਾ",
+      "senseId": "en-ਸਿੱਖਣਾ-pa-verb-q-dX09mQ",
+      "sourceGloss": "to learn",
+      "definition": "To learn",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸੇਬ",
+      "senseId": "en-ਸੇਬ-pa-noun-goQPea4J",
+      "sourceGloss": "apple (fruit)",
+      "definition": "Apple (fruit)",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending",
+      "latin": "SEB"
+    },
+    {
+      "word": "ਸੌਣਾ",
+      "senseId": "en-ਸੌਣਾ-pa-verb-w~6onUrj",
+      "sourceGloss": "to sleep",
+      "definition": "To sleep",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸੜਕ",
+      "senseId": "en-ਸੜਕ-pa-noun-7bq0wvR5",
+      "sourceGloss": "road, street",
+      "definition": "Road, street",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸੰਤਰਾ",
+      "senseId": "en-ਸੰਤਰਾ-pa-noun-KQKIIIZb",
+      "sourceGloss": "orange (fruit)",
+      "definition": "Orange (fruit)",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸੱਪ",
+      "senseId": "en-ਸੱਪ-pa-noun-qotPEiWf",
+      "sourceGloss": "snake, serpent",
+      "definition": "Snake, serpent",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹਫ਼ਤਾ",
+      "senseId": "en-ਹਫ਼ਤਾ-pa-noun-bfN9qqRs",
+      "sourceGloss": "week",
+      "definition": "Week",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹਰਾ",
+      "senseId": "en-ਹਰਾ-pa-adj-ukeIsiaq",
+      "sourceGloss": "green",
+      "definition": "Green",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹਵਾ",
+      "senseId": "en-ਹਵਾ-pa-noun-n-Qw5SdG",
+      "sourceGloss": "air",
+      "definition": "Air",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹਾਥੀ",
+      "senseId": "en-ਹਾਥੀ-pa-noun-zQjExDFt",
+      "sourceGloss": "elephant",
+      "definition": "Elephant",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹੱਸਣਾ",
+      "senseId": "en-ਹੱਸਣਾ-pa-verb-hAh7OITr",
+      "sourceGloss": "to laugh",
+      "definition": "To laugh",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਅਗਰਬੱਤੀ",
+      "senseId": "en-ਅਗਰਬੱਤੀ-pa-noun-xIpENpGO",
+      "sourceGloss": "incense stick",
+      "definition": "Incense stick",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਅਚਨਚੇਤ",
+      "senseId": "en-ਅਚਨਚੇਤ-pa-adv-AeFtyaoq",
+      "sourceGloss": "suddenly, all of a sudden",
+      "definition": "Suddenly, all of a sudden",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਇਮਤਿਹਾਨ",
+      "senseId": "en-ਇਮਤਿਹਾਨ-pa-noun-XCA~SQFK",
+      "sourceGloss": "an examination",
+      "definition": "An examination",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਉਦਾਹਰਨ",
+      "senseId": "en-ਉਦਾਹਰਨ-pa-noun-jBpxrkHf",
+      "sourceGloss": "example, instance",
+      "definition": "Example, instance",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਕਠਪੁਤਲੀ",
+      "senseId": "en-ਕਠਪੁਤਲੀ-pa-noun-SwLgxhNa",
+      "sourceGloss": "puppet",
+      "definition": "Puppet",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਖੂਬਸੂਰਤ",
+      "senseId": "en-ਖੂਬਸੂਰਤ-pa-adj-sTzkml4V",
+      "sourceGloss": "good-looking, shapely, beautiful, handsome",
+      "definition": "Good-looking, shapely, beautiful, handsome",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਗਲ਼ਵੱਕੜੀ",
+      "senseId": "en-ਗਲ਼ਵੱਕੜੀ-pa-noun-FYU5ZVh2",
+      "sourceGloss": "An embrace; a hug",
+      "definition": "An embrace; a hug",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਗੁਰਦੁਆਰਾ",
+      "senseId": "en-ਗੁਰਦੁਆਰਾ-pa-noun-ay8sm9hK",
+      "sourceGloss": "gurdwara",
+      "definition": "Sikh place of worship",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਗੁਰਪੁਰਬ",
+      "senseId": "en-ਗੁਰਪੁਰਬ-pa-noun-zZ6qhXK~",
+      "sourceGloss": "Gurpurb (festival in honour of a Sikh Guru)",
+      "definition": "Festival honoring a Sikh Guru",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਮਕਦਾਰ",
+      "senseId": "en-ਚਮਕਦਾਰ-pa-adj-AwYDrhkf",
+      "sourceGloss": "shining, glittering, sparkling",
+      "definition": "Shining, glittering, sparkling",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਮਗਿੱਦੜ",
+      "senseId": "en-ਚਮਗਿੱਦੜ-pa-noun-ylvOwS9x",
+      "sourceGloss": "bat",
+      "definition": "Bat",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਚਲਚਿੱਤਰ",
+      "senseId": "en-ਚਲਚਿੱਤਰ-pa-noun-uK0uZHWl",
+      "sourceGloss": "movie, film",
+      "definition": "Movie or film",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਟੈਲੀਵਿਜ਼ਨ",
+      "senseId": "en-ਟੈਲੀਵਿਜ਼ਨ-pa-noun-oDHtonOs",
+      "sourceGloss": "television",
+      "definition": "Television",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦਰਅਸਲ",
+      "senseId": "en-ਦਰਅਸਲ-pa-adv-8zHkeIqB",
+      "sourceGloss": "in fact, as a matter of fact, really, actually",
+      "definition": "In fact, as a matter of fact, really, actually",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਦਿਲਚਸਪ",
+      "senseId": "en-ਦਿਲਚਸਪ-pa-adj-Y3qygIcE",
+      "sourceGloss": "interesting",
+      "definition": "Interesting",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਨਾਗਰਿਕਤਾ",
+      "senseId": "en-ਨਾਗਰਿਕਤਾ-pa-noun-F1fS-5Yo",
+      "sourceGloss": "citizenship",
+      "definition": "Citizenship",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪਾਰਦਰਸ਼ੀ",
+      "senseId": "en-ਪਾਰਦਰਸ਼ੀ-pa-adj-zu-CcfDW",
+      "sourceGloss": "transparent, see-through",
+      "definition": "Transparent, see-through",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪੁਸਤਕਾਲਾ",
+      "senseId": "en-ਪੁਸਤਕਾਲਾ-pa-noun-txjxNU9y",
+      "sourceGloss": "library",
+      "definition": "Library",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪ੍ਰਬੰਧਕ",
+      "senseId": "en-ਪ੍ਰਬੰਧਕ-pa-noun-y0U~GMar",
+      "sourceGloss": "manager, administrator, administratrix, organiser, executive, superintendent, provisioner",
+      "definition": "Manager or organizer",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਹੀਨੇਵਾਰ",
+      "senseId": "en-ਮਹੀਨੇਵਾਰ-pa-adj-kWnjynPu",
+      "sourceGloss": "monthly",
+      "definition": "Monthly",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮਿਹਰਬਾਨੀ",
+      "senseId": "en-ਮਿਹਰਬਾਨੀ-pa-noun-4xScQFk9",
+      "sourceGloss": "an act of kindness; benevolence, beneficence, benefaction",
+      "definition": "An act of kindness",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਮੰਗਲਵਾਰ",
+      "senseId": "en-ਮੰਗਲਵਾਰ-pa-noun-fYrx3hJi",
+      "sourceGloss": "Tuesday",
+      "definition": "Tuesday",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰਿਸ਼ਤੇਦਾਰ",
+      "senseId": "en-ਰਿਸ਼ਤੇਦਾਰ-pa-noun-MHgWeKGe",
+      "sourceGloss": "relative, relation, kinsman",
+      "definition": "Relative, relation, kinsman",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰੇਗਿਸਤਾਨ",
+      "senseId": "en-ਰੇਗਿਸਤਾਨ-pa-noun-I3qzNlhC",
+      "sourceGloss": "desert",
+      "definition": "Desert",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਲਾਇਬ੍ਰੇਰੀ",
+      "senseId": "en-ਲਾਇਬ੍ਰੇਰੀ-pa-noun-txjxNU9y",
+      "sourceGloss": "library",
+      "definition": "Library",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਲਾਹਕਾਰ",
+      "senseId": "en-ਸਲਾਹਕਾਰ-pa-noun-f5mVcNhL",
+      "sourceGloss": "adviser, counselor",
+      "definition": "Adviser, counselor",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ਬਦਕੋਸ਼",
+      "senseId": "en-ਸ਼ਬਦਕੋਸ਼-pa-noun-InXEz3qA",
+      "sourceGloss": "dictionary, lexicon",
+      "definition": "Dictionary, lexicon",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸ਼ੁੱਕਰਵਾਰ",
+      "senseId": "en-ਸ਼ੁੱਕਰਵਾਰ-pa-noun-4h8~NypG",
+      "sourceGloss": "Friday",
+      "definition": "Friday",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਾਬਣਦਾਨੀ",
+      "senseId": "en-ਸਾਬਣਦਾਨੀ-pa-noun-kmzwlgSK",
+      "sourceGloss": "soap dish",
+      "definition": "Soap dish",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸੂਰਜਮੁਖੀ",
+      "senseId": "en-ਸੂਰਜਮੁਖੀ-pa-noun-jzmIhsMm",
+      "sourceGloss": "sunflower",
+      "definition": "Sunflower",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸੱਭਿਆਚਾਰ",
+      "senseId": "en-ਸੱਭਿਆਚਾਰ-pa-noun-Tjr4uypu",
+      "sourceGloss": "culture, civilisation",
+      "definition": "Culture",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹਫ਼ਤਾਵਾਰ",
+      "senseId": "en-ਹਫ਼ਤਾਵਾਰ-pa-adj-iFDs7Zhu",
+      "sourceGloss": "weekly",
+      "definition": "Weekly",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਹਮਸਾਇਆ",
+      "senseId": "en-ਹਮਸਾਇਆ-pa-noun-lozPZUw1",
+      "sourceGloss": "neighbour",
+      "definition": "Neighbour",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਇਨਸਾਨੀਅਤ",
+      "senseId": "en-ਇਨਸਾਨੀਅਤ-pa-noun-SoywRwQF",
+      "sourceGloss": "humanity, mankind",
+      "definition": "Humanity, mankind",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਪ੍ਰਾਕ੍ਰਿਤਿਕ",
+      "senseId": "en-ਪ੍ਰਾਕ੍ਰਿਤਿਕ-pa-adj-EnZSldtP",
+      "sourceGloss": "natural",
+      "definition": "Natural",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਰਾਸ਼ਟਰਪਤੀ",
+      "senseId": "en-ਰਾਸ਼ਟਰਪਤੀ-pa-noun-ekfUbjCl",
+      "sourceGloss": "president",
+      "definition": "President",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    },
+    {
+      "word": "ਸਰਟੀਫਿਕੇਟ",
+      "senseId": "en-ਸਰਟੀਫਿਕੇਟ-pa-noun-A9Zt0Ig1",
+      "sourceGloss": "certificate",
+      "definition": "Certificate",
+      "reviewStatus": "machineChecked",
+      "reviewMethod": "Source-checked AI editorial selection of an ordinary everyday sense; independent human Punjabi review pending"
+    }
+  ]
+}

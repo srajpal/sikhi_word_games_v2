@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/language/gurmukhi_romanization.dart';
 import '../../../core/themes/app_theme.dart';
+import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/widgets/gurmukhi_key_label.dart';
 import '../domain/language_mode.dart';
 import '../domain/guess_evaluator.dart';
@@ -100,7 +101,10 @@ class GameKeyboard extends StatelessWidget {
                               : character,
                           onPressed:
                               enabled && !disabledCharacters.contains(character)
-                              ? () => onCharacter(character)
+                              ? InteractionSounds.letterAction(
+                                  context,
+                                  () => onCharacter(character),
+                                )
                               : null,
                           height: compact ? 31 : 43,
                           child: mode == LanguageMode.gurmukhi
@@ -126,7 +130,10 @@ class GameKeyboard extends StatelessWidget {
                       child: _KeyboardButton(
                         key: const ValueKey('key-backspace'),
                         semanticLabel: 'Delete last letter',
-                        onPressed: enabled ? onBackspace : null,
+                        onPressed: InteractionSounds.buttonAction(
+                          context,
+                          enabled ? onBackspace : null,
+                        ),
                         height: compact ? 31 : 43,
                         child: const Icon(Icons.backspace_outlined, size: 20),
                       ),
@@ -145,7 +152,10 @@ class GameKeyboard extends StatelessWidget {
               semanticLabel: enterLabel == 'ENTER'
                   ? 'Submit guess'
                   : enterLabel.toLowerCase(),
-              onPressed: enabled ? onEnter : null,
+              onPressed: InteractionSounds.buttonAction(
+                context,
+                enabled ? onEnter : null,
+              ),
               height: compact ? 31 : 43,
             ),
           ),

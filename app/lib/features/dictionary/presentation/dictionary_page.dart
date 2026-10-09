@@ -6,6 +6,10 @@ import 'package:flutter/services.dart';
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/themes/game_ui.dart';
+import '../../../core/audio/interaction_sounds.dart';
+import '../../../core/themes/studio_navigation.dart';
+import '../../../core/themes/paper_page.dart';
+import '../../../core/content/vocabulary_licenses.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../guess_the_word/domain/word_pool.dart';
 import '../../guess_the_word/presentation/game_keyboard.dart';
@@ -130,6 +134,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         !RegExp(r'^[A-Za-z]$').hasMatch(character)) {
       return;
     }
+    InteractionSounds.letter(context);
     _appendCharacter(
       _mode == LanguageMode.gurmukhi ? character : character.toUpperCase(),
     );
@@ -141,11 +146,32 @@ class _DictionaryPageState extends State<DictionaryPage> {
     LanguageMode.gurmukhi => 'Gurmukhi · Punjabi',
   };
 
+  Future<void> _showSources() async {
+    final notices = await rootBundle.loadString('THIRD_PARTY_NOTICES.txt');
+    if (!mounted) return;
+    await showPaperDetails(
+      context,
+      title: 'Dictionary sources',
+      introduction: dictionaryAttribution,
+      child: SelectableText(notices),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
+    bottomNavigationBar: const StudioNavigation(
+      destination: StudioDestination.dictionary,
+    ),
     appBar: AppBar(
+      leading: gameBackButton(context),
       flexibleSpace: const PaperTexture(),
       title: const Text('Dictionary'),
+      actions: [
+        TextButton(
+          onPressed: InteractionSounds.buttonAction(context, _showSources),
+          child: const Text('Sources'),
+        ),
+      ],
     ),
     body: GameBackdrop(
       child: SafeArea(
@@ -221,7 +247,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
                                           ? null
                                           : IconButton(
                                               tooltip: 'Clear search',
-                                              onPressed: _clear,
+                                              onPressed:
+                                                  InteractionSounds.buttonAction(
+                                                    context,
+                                                    _clear,
+                                                  ),
                                               icon: const Icon(Icons.clear),
                                             ),
                                       border: const OutlineInputBorder(),
@@ -283,6 +313,19 @@ class _DictionaryPageState extends State<DictionaryPage> {
         final spelling = WordPool.spelling(entry, _mode)!;
         return ListTile(
           title: Text(spelling),
+          trailing: IconButton(
+            tooltip: 'Word source for $spelling',
+            icon: const Icon(Icons.info_outline),
+            onPressed: InteractionSounds.buttonAction(
+              context,
+              () => showPaperDetails(
+                context,
+                title: spelling,
+                introduction: entry.displayDefinition,
+                child: SelectableText(entry.source),
+              ),
+            ),
+          ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

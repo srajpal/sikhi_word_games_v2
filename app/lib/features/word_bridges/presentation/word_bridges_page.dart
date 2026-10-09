@@ -1,5 +1,6 @@
 import '../../../core/themes/paper_page.dart';
 import '../../../core/themes/game_heading.dart';
+import '../../../core/audio/interaction_sounds.dart';
 
 import 'dart:math';
 
@@ -275,10 +276,16 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
         button: true,
         selected: selected,
         enabled: !matched,
-        onTap: matched ? null : () => _select(pair, word),
+        onTap: InteractionSounds.buttonAction(
+          context,
+          matched ? null : () => _select(pair, word),
+        ),
         excludeSemantics: true,
         child: OutlinedButton(
-          onPressed: matched ? null : () => _select(pair, word),
+          onPressed: InteractionSounds.buttonAction(
+            context,
+            matched ? null : () => _select(pair, word),
+          ),
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(double.infinity, 88),
             padding: const EdgeInsets.all(12),
@@ -481,18 +488,20 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      leading: gameBackButton(context),
       flexibleSpace: const PaperTexture(),
-      bottom: GameLanguageHeader(
-        textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
-        mode: _mode,
-        wordLength: null,
-      ),
       toolbarHeight: gameToolbarHeight(context),
-      title: const GameHeading(identity: GameIdentity.jodo, compact: true),
+      title: GameHeading(
+        identity: GameIdentity.jodo,
+        compact: true,
+        subtitle: GameLanguageHeader(mode: _mode),
+      ),
       actions: [
         PopupMenuButton<String>(
+          onOpened: () => InteractionSounds.button(context),
           tooltip: 'Jodo menu',
           onSelected: (action) {
+            InteractionSounds.button(context);
             if (action == 'new') _newSet();
             if (action == 'settings') _gameSettings();
             if (action == 'help') showGameHelp(context, GameKind.wordBridges);
@@ -550,23 +559,6 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const GameSectionIntro(
-                          identity: GameIdentity.jodo,
-                          instruction: 'Four words. Four meanings. Make the connections.',
-                        ),
-                        const SizedBox(height: 16),
-                        Wrap(
-                          spacing: 12,
-                          runSpacing: 12,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            GameGradientButton(
-                              label: 'New set',
-                              onPressed: _busy ? null : _newSet,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
                         GamePanel(
                           padding: const EdgeInsets.all(12),
                           child: Column(

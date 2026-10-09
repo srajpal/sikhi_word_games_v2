@@ -62,8 +62,7 @@ void main() {
       final pairs = mode == LanguageMode.english
           ? decks
                 .firstWhere(
-                  (deck) =>
-                      deck.pairs.any((pair) => pair.id == 'english_bread'),
+                  (deck) => deck.pairs.any((pair) => pair.id == 'en_v2_bread'),
                 )
                 .pairs
           : decks.first.pairs;

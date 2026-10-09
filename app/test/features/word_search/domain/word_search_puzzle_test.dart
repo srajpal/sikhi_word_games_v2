@@ -4,6 +4,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzzle.dart';
 
 void main() {
+  test(
+    'short everyday Gurmukhi words remain selectable in both directions',
+    () {
+      final puzzle = WordSearchGenerator(random: Random(5)).generate(
+        candidates: const ['ਆਮ', 'ਫੁੱਲ'],
+        fillerCharacters: const ['ਕ', 'ਸ'],
+        targetWordCount: 2,
+      );
+      expect(puzzle.words.map((word) => word.word).toSet(), {'ਆਮ', 'ਫੁੱਲ'});
+      for (final word in puzzle.words) {
+        expect(word.cells(), hasLength(2));
+        expect(puzzle.wordForSelection(word.cells()), same(word));
+        expect(
+          puzzle.wordForSelection(word.cells().reversed.toList()),
+          same(word),
+        );
+      }
+    },
+  );
   test('does not silently lower an impossible target count', () {
     expect(
       () => WordSearchGenerator(random: Random(1)).generate(

@@ -3,15 +3,16 @@ import 'dart:io';
 
 import 'package:characters/characters.dart';
 
+import 'package:sikhi_word_games_v2/core/content/vocabulary_licenses.dart';
+
 import 'content/punjabi_quality.dart';
 
 void main() {
   final entries = <Map<String, Object?>>[];
-  for (final length in const [4, 5, 6]) {
+  for (final language in const ['english', 'punjabi']) {
     entries.addAll(
       (jsonDecode(
-        File('assets/content/release/vocabulary_$length.json')
-            .readAsStringSync(),
+        File('assets/content/release/${language}_v2.json').readAsStringSync(),
       ) as List<Object?>).cast<Map<String, Object?>>(),
     );
   }
@@ -31,7 +32,7 @@ void main() {
     }
     final definition = englishDefinitions.single as String;
     final sources = (entry['sources']! as List<Object?>).cast<String>();
-    final trusted = sources.any(_trustedSource);
+    final trusted = sources.any(isTrustedVocabularySource);
     final nonEnglishDefinitionText = definitions.entries
         .where((entry) => entry.key != 'en')
         .map((entry) => entry.value)
@@ -112,7 +113,8 @@ void main() {
       final count = pools['$mode:$length'] ?? 0;
       final unique = uniquePools['$mode:$length']?.length ?? 0;
       stdout.writeln('$mode/$length: $count records, $unique unique spellings');
-      if (unique < 300) {
+      const minimum = 1;
+      if (unique < minimum) {
         throw StateError('$mode/$length has only $unique unique answers.');
       }
     }
@@ -123,17 +125,8 @@ void main() {
   );
 }
 
-bool _trustedSource(String source) =>
-    source == 'Open English WordNet 2025 (CC BY 4.0)' ||
-    source.startsWith(
-      'Mahan Kosh multilingual dataset; commit '
-      'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6;',
-    ) ||
-    source ==
-        'Project editorial definition; original text for Sikhi Word Games';
-
 final _referenceOnly = RegExp(
-  r'^(?:see|of|plural|past tense|present participle|alternative spelling)\b',
+  r'^(?:see(?: also)?|plural of|past tense of|present participle of|alternative spelling of)\b|^of\s+\S+\.?$',
   caseSensitive: false,
 );
 

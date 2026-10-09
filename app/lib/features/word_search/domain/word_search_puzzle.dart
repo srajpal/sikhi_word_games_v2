@@ -233,7 +233,7 @@ class WordSearchGenerator {
     for (final candidate in candidates) {
       final word = candidate.trim().toUpperCase();
       final length = word.characters.length;
-      if (length < 3 || length > size || !unique.add(word)) continue;
+      if (length < 2 || length > size || !unique.add(word)) continue;
       words.add(word);
     }
     if (words.isEmpty) throw StateError('No words fit this word-search grid.');

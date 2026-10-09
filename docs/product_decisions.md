@@ -107,7 +107,10 @@ Dictionary saved words remain separate product follow-ups.
 - Maintain a smaller curated solution collection.
 - A word may be accepted as a guess without being eligible as a solution.
 - Imported or researched content must retain its source and review status.
-- Unreviewed vocabulary must not silently enter the curated solution pool.
+- Imported words must pass the explicit dictionary-v2 source, suitability and
+  definition checks before entering play. English frequency is a familiarity
+  signal, not approval; Punjabi answers use bounded exact-sense decisions.
+  Automatic results remain `machineChecked`, with uncertain entries held.
 - All playable games select only accepted, answer-eligible records with a
   distributable definition. Selection deduplicates the actual displayed
   spelling, including aliases that have different stable IDs.
@@ -154,7 +157,7 @@ Dictionary saved words remain separate product follow-ups.
   unfinished games as losses. Repeated words and finished retries count.
 - Show a short, skippable introduction on the first launch of each game, with
   replay available from How to play. Keep instructions direct and consistent.
-- Use a short Play / Learn / Grow tagline above the library navigation. The
+- Use a short Play / Learn / Grow tagline above the library cards. The
   individual cards explain each game, and help describes offline operation.
 - Preserve system text scaling, non-color feedback and all three themes.
   Accessible activation and readable controls take priority over fitting every
@@ -407,8 +410,8 @@ with spoken status values alongside visual colors.
 
 ## October 8 play consistency and achievements: 1.11.0+22
 
-- Every game has the shared, text-only language line below its English/Punjabi
-  heading. Word length is also shown where it describes the round. Learn Letters
+- Every game has shared language details inside its English/Punjabi paper
+  heading. Word length is also shown for Bujho and Quest. Learn Letters
   is intrinsically Gurmukhi. Game language changes belong in Game settings.
 - Word Quest uses a secular paper lantern with one lit fold per remaining missed
   letter allowance. New words allow length minus one misses: 3/4/5 for 4/5/6
@@ -435,3 +438,38 @@ with spoken status values alongside visual colors.
   unrecorded Jodo variety/perfect/long-word and listening/perfect-letter facts
   start at this update. All new facts share the existing atomic game keys and
   reset with those repositories. No unlock timestamps are invented.
+
+## October 8 mobile navigation and dictionary v2: 1.12.0+23
+
+- Play, Dictionary, Progress and Badges share a persistent Material navigation
+  bar with the current destination selected. Selecting a destination replaces
+  the primary route instead of stacking duplicate pages. Settings and games
+  use their own routes and Back controls.
+- All five game paper labels contain the smaller English title, Punjabi name
+  and language. Only Bujho and Quest show word length. Khoj and Jodo use mixed
+  lengths; Khoj has no size option. Jodo's New set action belongs in its menu,
+  and Jodo/Learn Letters omit the redundant illustration/instruction row.
+- Click feedback uses two gentle, original offline sounds: letter selections
+  and other controls. Independent persisted Settings switches default to on.
+  Click audio does not replace letter-name pronunciation or victory audio.
+- Dictionary v2 completely replaces legacy runtime English/Punjabi content.
+  Simple English Wiktionary supplies English definitions; wordfreq supplies a
+  pinned usage-frequency signal. English Wiktionary supplies Punjabi senses
+  and Romanization. Frequency does not establish a child's familiarity.
+- Keep neutral business, bureaucracy and advanced abstract terms available
+  for lookup/guesses where their sourced definitions pass checks, but hold them
+  from random game answers. Group exact answer-only holds by reason in the
+  English policy. Misleading common homographs and weak clues also need holds;
+  vandalized or inappropriate source senses are excluded from lookup as well.
+- Use source-backed first ordinary senses, conservative suitability checks,
+  clear standalone clues and bounded wording exceptions. Keep source glosses,
+  decisions, locks and holds reproducible. Ship only two filtered offline banks.
+  All automatic/source-checked AI decisions remain `machineChecked`.
+- Punjabi answers use bounded everyday sense selections. Six-grapheme native
+  Gurmukhi has a much smaller familiar pool; acknowledge limited variety rather
+  than adding obscure answers to meet historical quotas. Longer words remain
+  available to Jodo and Khoj. Seek focused linguistic checks on uncertain
+  spelling or meanings, rather than requiring manual review of every import.
+- Preserve page-level source attribution and CC BY-SA 4.0 adaptation notices.
+  Dictionary exposes Sources and each word's source, including full offline
+  notices. The licensed data remain distinct from application code.

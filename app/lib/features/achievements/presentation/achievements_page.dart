@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/themes/paper_page.dart';
+import '../../../core/themes/studio_navigation.dart';
 import '../../game_library/domain/game_launch_options.dart';
 import '../domain/achievement.dart';
 import '../domain/player_progress.dart';
@@ -21,6 +22,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
     final facts = widget.progress.facts;
     final earned = achievements.where((badge) => badge.earned(facts)).length;
     return PaperPage(
+      destination: StudioDestination.badges,
       title: 'Achievements',
       icon: Icons.workspace_premium,
       introduction:

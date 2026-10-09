@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.10.1` (build `20`). The uploaded web draft remains
+The current testing build is `1.12.0` (build `23`). The uploaded web draft remains
 `1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
@@ -38,8 +38,7 @@ Run from `app/`:
 dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
 flutter analyze --suppress-analytics
 flutter test --suppress-analytics
-python tool/fetch_vocabulary_sources.py
-dart run tool/vocabulary_pipeline.dart --check
+dart run tool/dictionary_v2.dart --check
 dart run tool\audit_content.dart
 flutter build web --release --no-web-resources-cdn --suppress-analytics
 ```
@@ -53,10 +52,11 @@ content from the local V1 source. It is not a normal validation step. Generated
 assets are tracked; the V1 source folder is excluded from publication. Editorial
 changes belong in the curation layer described in the content documentation.
 
-For vocabulary maintenance, run `dart run tool/vocabulary_pipeline.dart` to
-preview the effective-content exception queue. Use `--write` to apply reversible
-holds and rebuild/audit release content, then `--check` to verify freshness.
-The pinned source cache is ignored and never bundled. See
+For vocabulary maintenance, run `dart run tool/dictionary_v2.dart` to preview
+the locked English and Punjabi imports. Use `--write` to rebuild the two compact
+runtime banks, then `--check` to reproduce and audit them. No download is needed
+for routine maintenance. Source snapshots and editorial decisions stay outside
+runtime assets. The retired V1/WordNet/Mahan Kosh chain is archival. See
 [definition workflow](docs/definition_sources.md) for source verification,
 focused improvements and the remaining linguistic checks.
 
