@@ -215,6 +215,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   : LayoutBuilder(
                       builder: (context, constraints) {
                         final compact = constraints.maxHeight < 650;
+                        final extendedKeyboard =
+                            _mode == LanguageMode.gurmukhi ||
+                            (_mode == LanguageMode.romanizedPanjabi &&
+                                !widget.simpleRomanized);
                         final scale =
                             MediaQuery.textScalerOf(context).scale(14) / 14;
                         return KeyboardListener(
@@ -225,35 +229,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             child: SizedBox(
                               height: math.max(
                                 constraints.maxHeight,
-                                (_mode == LanguageMode.english
-                                        ? 500.0
-                                        : 700.0) *
+                                (extendedKeyboard ? 700.0 : 500.0) *
                                     math.max(1, scale),
                               ),
                               child: Column(
                                 children: [
-                                  GamePanel(
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.auto_stories_rounded,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Text(
-                                            'Find a word and its meaning',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
                                   DropdownButton<LanguageMode>(
                                     value: _mode,
                                     isExpanded: true,

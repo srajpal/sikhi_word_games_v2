@@ -648,13 +648,17 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                           final tokens = Theme.of(context)
                               .extension<GameThemeTokens>()!;
                           final compact = constraints.maxHeight < 650;
+                          final extendedKeyboard =
+                              _mode == LanguageMode.gurmukhi ||
+                              (_mode == LanguageMode.romanizedPanjabi &&
+                                  !_simpleRomanized);
                           final scale =
                               MediaQuery.textScalerOf(context).scale(14) / 14;
                           return SingleChildScrollView(
                             child: SizedBox(
                               height: math.max(
                                 constraints.maxHeight,
-                                (_mode != LanguageMode.english
+                                (extendedKeyboard
                                         ? 700.0
                                         : scale > 1.5
                                         ? 500.0

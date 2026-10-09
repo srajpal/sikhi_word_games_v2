@@ -58,6 +58,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      expect(find.text('Find a word and its meaning'), findsNothing);
       await tester.tap(find.byType(DropdownButton<LanguageMode>));
       await tester.pumpAndSettle();
       await tester.tap(find.text(mode.label).last);
@@ -128,6 +129,71 @@ void main() {
         ).submit('MICE').isAccepted,
         isTrue,
       );
+    },
+  );
+
+  testWidgets(
+    'English and simple Punjabi fit the same phone screen at every size',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 780);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      for (final mode in [
+        LanguageMode.english,
+        LanguageMode.romanizedPanjabi,
+      ]) {
+        for (final size in [4, 5, 6]) {
+          final store = MemoryKeyValueStore();
+          final entry = VocabularyEntry(
+            id: 'phone-${mode.name}-$size',
+            language: mode == LanguageMode.english
+                ? VocabularyLanguage.english
+                : VocabularyLanguage.panjabi,
+            script: mode.script,
+            latin: mode == LanguageMode.english ? 'A' * size : 'Ā' * size,
+            gurmukhi: null,
+            englishDefinition: 'A layout test word',
+            latinLength: size,
+            gurmukhiLength: null,
+            acceptedGuess: true,
+            solutionEligible: true,
+            reviewStatus: ReviewStatus.editorApproved,
+            source: 'Project editorial definition; original text for Sikhi Word Games',
+          );
+          await tester.pumpWidget(const SizedBox());
+          await tester.pumpWidget(
+            _app(
+              GuessTheWordPage(
+                vocabularyRepository: MemoryVocabularyRepository([entry]),
+                statisticsRepository: GuessStatisticsRepository(store),
+                gameRepository: GuessGameRepository(store),
+                solutionHistoryRepository: SolutionHistoryRepository(store),
+                initialMode: mode,
+                initialWordLength: size,
+                startFresh: true,
+                simpleRomanized: true,
+                reducedMotion: true,
+                hapticLevel: HapticFeedbackLevel.off,
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .state<ScrollableState>(find.byType(Scrollable))
+                .position
+                .maxScrollExtent,
+            0,
+            reason: '${mode.label}, $size letters should fit without scrolling',
+          );
+          expect(
+            tester.getRect(find.byKey(const ValueKey('key-enter'))).bottom,
+            lessThanOrEqualTo(780),
+          );
+          expect(tester.takeException(), isNull);
+        }
+      }
     },
   );
 
