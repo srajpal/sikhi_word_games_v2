@@ -117,12 +117,26 @@ void main() {
     final start = find.byKey(const ValueKey('word-search-cell-0-0'));
     final end = find.byKey(const ValueKey('word-search-cell-3-0'));
     await tester.ensureVisible(start);
+    // Repeated missed drags stay quiet and do not change saved progress.
+    for (var i = 0; i < 3; i++) {
+      final miss = await tester.startGesture(
+        tester.getCenter(find.byKey(const ValueKey('word-search-cell-0-1'))),
+      );
+      await miss.moveTo(
+        tester.getCenter(find.byKey(const ValueKey('word-search-cell-0-3'))),
+      );
+      await miss.up();
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsNothing);
+      expect(repository.restore()!.foundWords, isEmpty);
+    }
     final before = tester.getTopLeft(start);
     final drag = await tester.startGesture(tester.getCenter(start));
     await drag.moveTo(tester.getCenter(end));
     await drag.up();
     await tester.pumpAndSettle();
     expect(repository.restore()!.foundWords, contains('TEST'));
+    expect(find.text('Found TEST'), findsOneWidget);
     expect(tester.getTopLeft(start), before);
     expect(tester.takeException(), isNull);
   });

@@ -521,3 +521,9 @@ layout and accessible controls.
 
 The updated owner-approved English release contains 13,182 words at 4/5/6
 letters: 2,346/4,144/6,692. WordNet exception forms now include MICE.
+
+Phone playtesting: missed Khoj selections clear quietly. Successful finds and
+completion retain feedback; accessible start/end selection instructions remain.
+Dictionary starts with its language selector and search field, without an
+introductory banner. Bujho and Dictionary use the compact Latin layout for
+Simple Romanized Punjabi. Extra keyboard rows and large text retain scrolling.

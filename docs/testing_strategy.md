@@ -6,7 +6,7 @@
   source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
-- Twelve Windows golden image tests cover Modern, Sikhi, and Dark. They run
+- Thirty-five Windows golden image tests cover Modern, Sikhi, and Dark. They run
   separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.
@@ -298,3 +298,10 @@ round, and round-style isolation across all four word games. Updated English
 checks require the exact 13,182/2,991/4,428 master totals and accept MICE as a
 four-letter guess. Phone/tablet gallery checks assert equal Bujho/Khoj widths
 and aligned action rows; updated visual baselines require rendered review.
+
+Phone regressions verify that English and Simple Punjabi Bujho expose the board
+and Enter key without scrolling at 4/5/6 letters. Retain the separate accented
+and Gurmukhi keyboard and large-text reachability checks. Repeated unsuccessful
+Khoj drags must leave progress intact without a SnackBar, followed by a valid
+find with normal feedback. Dictionary must omit its introductory banner while
+retaining search results and both Punjabi keyboard views.

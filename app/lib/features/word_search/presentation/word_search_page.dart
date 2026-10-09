@@ -359,10 +359,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
         _activeHintWord = null;
       }
     });
-    if (word == null) {
-      showGameSnackBar(context, 'No target found. Try another selection.');
-      return;
-    }
+    if (word == null) return;
     final complete = _foundWords.length == puzzle.words.length;
     if (complete) {
       VictoryCelebration.celebrate(context);

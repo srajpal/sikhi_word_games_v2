@@ -6,6 +6,31 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 9 phone playtest fixes: candidate 1.15.1+28
+
+- [x] Keep unsuccessful Khoj selections silent; clear the selection and retain
+  success/completion feedback and accessible selection instructions.
+- [x] Remove the Dictionary's redundant introductory banner and use the compact
+  Latin layout for Simple Romanized Punjabi.
+- [x] Make Simple Romanized Punjabi Bujho fit the same phone screen as English;
+  retain extended layouts for Gurmukhi, original accented keyboards and large text.
+- [x] Complete phone regression/full checks, rebuild the web preview and Android
+  test APK, and update the connected tablet with app data retained.
+- [ ] Install build 28 on Pixel when it reconnects; only the tablet was connected
+  during this validation pass.
+
+Build 28 evidence: the targeted checks failed before the fixes for all three
+reports, then passed afterward. All 364 Flutter tests, including 35 unchanged
+visual baselines, passed; analysis is clean and 148 Dart files are formatted.
+The packaged release browser at 390x780 shows the full Simple Punjabi Bujho
+board and Enter key without scrolling, Dictionary results without the banner,
+and quiet repeated missed Khoj selections. Browser checks used an isolated
+localhost origin for new games; the existing preview's saved rounds were kept.
+Web/package content integrity checks pass. The 1.15.1+28 web ZIP and debug APK
+are built. K70 PRO was updated with `adb install -r`; version 1.15.1/code 28,
+successful launch and PID 31646 were verified. Pixel remains on build 27 until
+reconnected. Native hands-on checks remain separate from browser/widget evidence.
+
 ## October 9 simple Punjabi and equal cards: candidate 1.15.0+27
 
 - [x] Add an immediately saved Simple Romanized Punjabi setting, retaining the
@@ -177,7 +202,7 @@ release. They are retired follow-ups, not unfinished approval gates for build 25
   GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
   from that review. The focused save/restore and keyboard fixes are in
   `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.15.0+27, Paper & Play. The September 18 ZIP and uploaded
+- Current Android testing version: 1.15.1+28, Paper & Play. The September 18 ZIP and uploaded
   itch.io draft remain 1.9.0+17 and
   predate the subsequent audit fixes and October vocabulary recheck. They are
   historical artifacts, not packages of current source. Increment both version
