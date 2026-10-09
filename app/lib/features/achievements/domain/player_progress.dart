@@ -4,6 +4,7 @@ import '../../guess_the_word/domain/language_mode.dart';
 import '../../game_library/domain/game_launch_options.dart';
 import '../../word_bridges/data/word_bridges_repository.dart';
 import '../../learn_letters/data/learn_letters_repository.dart';
+import '../../word_scramble/data/word_scramble_repository.dart';
 
 /// A read-only projection of durable game statistics, never a second total.
 class PlayerProgress {
@@ -13,12 +14,14 @@ class PlayerProgress {
     required this.quest,
     this.bridges,
     this.letters,
+    this.scramble,
   });
   final GuessStatisticsBook bujho;
   final Map<String, GameStatistics> khoj;
   final Map<String, GameStatistics> quest;
   final WordBridgesRepository? bridges;
   final LearnLettersRepository? letters;
+  final WordScrambleRepository? scramble;
 
   Map<String, int> get facts {
     final facts = <String, int>{};
@@ -150,6 +153,21 @@ class PlayerProgress {
     );
     put(GameKind.learnLetters, 'listening', letters?.listeningRounds ?? 0);
     put(GameKind.learnLetters, 'perfect', letters?.perfectRounds ?? 0);
+    final scrambleTotal = scramble?.total ?? const ScrambleStatistics();
+    put(GameKind.wordScramble, 'won', scrambleTotal.solved);
+    put(GameKind.wordScramble, 'played', scrambleTotal.solved);
+    put(GameKind.wordScramble, 'words', scrambleTotal.solved);
+    put(GameKind.wordScramble, 'unhinted', scrambleTotal.unhinted);
+    put(GameKind.wordScramble, 'firstCheck', scrambleTotal.firstCheck);
+    put(GameKind.wordScramble, 'long', scrambleTotal.long);
+    put(GameKind.wordScramble, 'repeated', scrambleTotal.repeated);
+    for (final mode in LanguageMode.values) {
+      put(
+        GameKind.wordScramble,
+        mode.name,
+        scramble?.forMode(mode).solved ?? 0,
+      );
+    }
     return Map.unmodifiable(facts);
   }
 }

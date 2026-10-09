@@ -3,6 +3,7 @@ import '../../../core/themes/studio_navigation.dart';
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../learn_letters/data/learn_letters_repository.dart';
+import '../../word_scramble/data/word_scramble_repository.dart';
 import '../../../core/widgets/game_guide.dart';
 import '../../../core/themes/game_artwork.dart';
 
@@ -38,6 +39,7 @@ class GameLibraryPage extends StatelessWidget {
     this.guessStatisticsRepository,
     this.wordBridgesRepository,
     this.learnLettersRepository,
+    this.wordScrambleRepository,
     this.loadWordBridgesContent,
     this.onResetAllData,
     super.key,
@@ -53,6 +55,7 @@ class GameLibraryPage extends StatelessWidget {
   final GuessStatisticsRepository? guessStatisticsRepository;
   final WordBridgesRepository? wordBridgesRepository;
   final LearnLettersRepository? learnLettersRepository;
+  final WordScrambleRepository? wordScrambleRepository;
   final Future<WordBridgesContent> Function()? loadWordBridgesContent;
   final Future<void> Function()? onResetAllData;
 
@@ -62,6 +65,7 @@ class GameLibraryPage extends StatelessWidget {
     GameKind.wordQuest => wordQuestSessionRepository.hasActiveGame,
     GameKind.wordBridges => wordBridgesRepository?.hasActiveGame ?? false,
     GameKind.learnLetters => learnLettersRepository?.hasActiveGame ?? false,
+    GameKind.wordScramble => wordScrambleRepository?.hasActiveGame ?? false,
   };
 
   String _pathFor(GameKind kind) => switch (kind) {
@@ -70,6 +74,7 @@ class GameLibraryPage extends StatelessWidget {
     GameKind.wordQuest => '/word-quest',
     GameKind.wordBridges => '/word-bridges',
     GameKind.learnLetters => '/learn-letters',
+    GameKind.wordScramble => '/word-scramble',
   };
 
   Future<void> _showNewGameOptions(BuildContext context, GameKind kind) async {
@@ -99,7 +104,7 @@ class GameLibraryPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    kind == GameKind.wordSearch
+                    kind == GameKind.wordSearch || kind == GameKind.wordScramble
                         ? 'Choose a language, or let the game pick for you.'
                         : 'Choose a language and word size, or let the game pick for you.',
                   ),
@@ -125,7 +130,8 @@ class GameLibraryPage extends StatelessWidget {
                       }
                     },
                   ),
-                  if (kind != GameKind.wordSearch) ...[
+                  if (kind != GameKind.wordSearch &&
+                      kind != GameKind.wordScramble) ...[
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
                       initialValue: selectedWordSize,
@@ -159,6 +165,7 @@ class GameLibraryPage extends StatelessWidget {
                             : LanguageMode.values.byName(selectedLanguage),
                         wordSize:
                             kind == GameKind.wordSearch ||
+                                kind == GameKind.wordScramble ||
                                 selectedWordSize == 'random'
                             ? null
                             : int.parse(selectedWordSize),
@@ -449,6 +456,20 @@ class GameLibraryPage extends StatelessWidget {
                               _startNewGame(context, GameKind.learnLetters),
                           onNewGameOptions: () =>
                               showGameHelp(context, GameKind.learnLetters),
+                        ),
+                        _GameCard(
+                          grid: twoColumns,
+                          description: 'Mix the tiles. Make a word.',
+                          gameKind: GameKind.wordScramble,
+                          hasActiveGame: _hasActiveGame(GameKind.wordScramble),
+                          onContinue: () =>
+                              _continueGame(context, GameKind.wordScramble),
+                          onNewGame: () =>
+                              _startNewGame(context, GameKind.wordScramble),
+                          onNewGameOptions: () => _showNewGameOptions(
+                            context,
+                            GameKind.wordScramble,
+                          ),
                         ),
                       ];
                       return Wrap(

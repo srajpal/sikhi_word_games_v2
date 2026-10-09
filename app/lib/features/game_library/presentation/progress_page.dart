@@ -25,7 +25,8 @@ class ProgressPage extends StatelessWidget {
         (facts['guessTheWord:won'] ?? 0) +
         (facts['wordQuest:won'] ?? 0) +
         (facts['wordSearch:words'] ?? 0) +
-        (facts['wordBridges:words'] ?? 0);
+        (facts['wordBridges:words'] ?? 0) +
+        (facts['wordScramble:words'] ?? 0);
     final earned = achievements.where((badge) => badge.earned(facts)).length;
     return PaperPage(
       destination: StudioDestination.progress,
@@ -70,6 +71,7 @@ class ProgressPage extends StatelessWidget {
                         GameKind.wordQuest => GameArtworkKind.garden,
                         GameKind.wordBridges => GameArtworkKind.bridges,
                         GameKind.learnLetters => GameArtworkKind.letters,
+                        GameKind.wordScramble => GameArtworkKind.scramble,
                       },
                     ),
                     const SizedBox(width: 16),
@@ -90,6 +92,8 @@ class ProgressPage extends StatelessWidget {
                     '${facts['wordBridges:won'] ?? 0} sets finished, ${facts['wordBridges:words'] ?? 0} pairs matched',
                   GameKind.learnLetters =>
                     '${facts['learnLetters:won'] ?? 0} rounds finished, ${facts['learnLetters:firstTry'] ?? 0} first-try answers',
+                  GameKind.wordScramble =>
+                    '${facts['wordScramble:won'] ?? 0} words solved, ${facts['wordScramble:unhinted'] ?? 0} without a hint',
                 }, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 12),
                 if (game == GameKind.learnLetters)

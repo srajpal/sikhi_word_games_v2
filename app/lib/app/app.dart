@@ -7,6 +7,8 @@ import '../core/audio/interaction_sounds.dart';
 import '../core/persistence/reset_sections.dart';
 import '../features/learn_letters/data/learn_letters_repository.dart';
 import '../features/learn_letters/presentation/learn_letters_page.dart';
+import '../features/word_scramble/data/word_scramble_repository.dart';
+import '../features/word_scramble/presentation/word_scramble_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -47,6 +49,7 @@ class SikhiWordGamesApp extends StatefulWidget {
     WordQuestSessionRepository? wordQuestSessionRepository,
     WordBridgesRepository? wordBridgesRepository,
     LearnLettersRepository? learnLettersRepository,
+    WordScrambleRepository? wordScrambleRepository,
     this.wordBridgesContentFuture,
     GameLaunchPreferencesRepository? launchPreferencesRepository,
     super.key,
@@ -72,12 +75,16 @@ class SikhiWordGamesApp extends StatefulWidget {
        learnLettersRepository =
            learnLettersRepository ??
            LearnLettersRepository(MemoryKeyValueStore()),
+       wordScrambleRepository =
+           wordScrambleRepository ??
+           WordScrambleRepository(MemoryKeyValueStore()),
        launchPreferencesRepository =
            launchPreferencesRepository ??
            GameLaunchPreferencesRepository(MemoryKeyValueStore());
 
   final WordBridgesRepository wordBridgesRepository;
   final LearnLettersRepository learnLettersRepository;
+  final WordScrambleRepository wordScrambleRepository;
   final Future<WordBridgesContent>? wordBridgesContentFuture;
   final AppSettingsRepository settingsRepository;
   final GameGuideRepository? guideRepository;
@@ -118,10 +125,26 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             launchPreferencesRepository: widget.launchPreferencesRepository,
             wordBridgesRepository: widget.wordBridgesRepository,
             learnLettersRepository: widget.learnLettersRepository,
+            wordScrambleRepository: widget.wordScrambleRepository,
             loadWordBridgesContent: _wordBridgesContent,
             onResetAllData: _resetAllData,
           ),
           routes: [
+            GoRoute(
+              path: 'word-scramble',
+              builder: (context, state) => _gameShell(
+                game: GameKind.wordScramble,
+                child: WordScramblePage(
+                  vocabularyRepository: widget.vocabularyRepository,
+                  repository: widget.wordScrambleRepository,
+                  simpleRomanized: _settings.simpleRomanizedPunjabi,
+                  initialMode: _launchOptions(state).language,
+                  startFresh:
+                      !_launchOptions(state).continueGame &&
+                      state.extra is GameLaunchOptions,
+                ),
+              ),
+            ),
             GoRoute(
               path: 'learn-letters',
               builder: (context, state) => _gameShell(
@@ -250,6 +273,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
     quest: widget.wordQuestSessionRepository.statistics.load(),
     bridges: widget.wordBridgesRepository,
     letters: widget.learnLettersRepository,
+    scramble: widget.wordScrambleRepository,
   );
 
   Widget _gameShell({required GameKind game, required Widget child}) =>
@@ -291,6 +315,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
         'Word Quest': widget.wordQuestSessionRepository.resetAll,
         'Jodo': widget.wordBridgesRepository.resetAll,
         'Learn Letters': widget.learnLettersRepository.resetAll,
+        'Shabad Banao': widget.wordScrambleRepository.resetAll,
         'Game preferences': widget.launchPreferencesRepository.resetAll,
         if (widget.guideRepository case final guide?)
           'Tutorials': guide.resetAll,

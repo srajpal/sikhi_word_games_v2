@@ -10,7 +10,7 @@
   separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.
-- Release browser checks must cover all five games and Dictionary with real
+- Release browser checks must cover all six games and Dictionary with real
   assets, local storage, mouse/touch, physical keyboard, and Gurmukhi rendering.
 
 ## Required cases
@@ -305,3 +305,21 @@ and Gurmukhi keyboard and large-text reachability checks. Repeated unsuccessful
 Khoj drags must leave progress intact without a SnackBar, followed by a valid
 find with normal feedback. Dictionary must omit its introductory banner while
 retaining search results and both Punjabi keyboard views.
+
+### Shabad Banao: 1.16.0+29
+
+Engine checks exercise duplicate tile IDs, incomplete/incorrect/correct checks,
+hint relocation/locking, 150 seeded move sequences, restore corruption and
+intact Gurmukhi conjuncts. Repository checks cover frozen queued snapshots,
+once-only scoring across instances, a late completion preserving a newer round,
+malformed-history recovery and reset. Vocabulary checks use the actual three
+approved masters, including MICE, native ਅਪ੍ਰੈਲ and Simple/full ĀSĀN; pools
+remain isolated and rotate before repeating. Route tests verify the sixth card,
+help, Back/Continue, completion totals and app-wide reset ownership.
+
+Widget checks cover all themes at phone size, tap/undo/shuffle/hint, quiet inline
+retry feedback, original accented resume after changing Simple, and 320px/200%
+Gurmukhi layout. Five new font-loaded visual baselines cover three themes,
+Gurmukhi groups and enlarged text; review the updated library and badge gallery
+captures too. Actual packaged-browser persistence, font rendering and device
+installation are separate evidence recorded in TODO.md.

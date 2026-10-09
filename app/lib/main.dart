@@ -1,4 +1,5 @@
 import 'features/learn_letters/data/learn_letters_repository.dart';
+import 'features/word_scramble/data/word_scramble_repository.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
@@ -36,6 +37,7 @@ Future<void> main() async {
         settingsRepository: settings,
         wordBridgesRepository: WordBridgesRepository(store),
         learnLettersRepository: LearnLettersRepository(store),
+        wordScrambleRepository: WordScrambleRepository(store),
         guideRepository: GameGuideRepository(store),
         statisticsRepository: statistics,
         gameRepository: gameRepository,

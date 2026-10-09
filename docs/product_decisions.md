@@ -527,3 +527,44 @@ completion retain feedback; accessible start/end selection instructions remain.
 Dictionary starts with its language selector and search field, without an
 introductory banner. Bujho and Dictionary use the compact Latin layout for
 Simple Romanized Punjabi. Extra keyboard rows and large text retain scrolling.
+
+### Shabad Banao: October 9, 2026
+
+Word Scramble is the sixth game, named Shabad Banao (ਸ਼ਬਦ ਬਣਾਓ, "Make a word").
+Its English title appears above the Punjabi name and language/length inside the
+shared paper heading. It uses equal library cards, shared paper tiles/buttons,
+three themes, click sounds, help, celebrations and dedicated statistics.
+
+An English definition clues a shuffled word. Tap tiles into the first empty
+space; tap a placed tile to return it. Shuffle rearranges remaining tiles. Each
+word offers one optional hint that places and locks one correct tile. Check word
+accepts the target spelling; incorrect checks give gentle inline feedback with
+unlimited retries. Next word starts a fresh word. There is no timer, life budget
+or penalty for leaving. Lengths vary across the approved mode's pool, and native
+Gurmukhi written groups remain intact. Only words with fewer than two units or
+all-identical units are unplayable; this is not another editorial filter.
+
+New words rotate through unseen source IDs before a new cycle and avoid an
+immediate repeat when possible. Simple Punjabi applies to new words; Continue
+retains the saved spelling view. Ten additional stable badge goals cover solved
+counts, unhinted/first-check words, repeated/long tiles and all three languages.
+There are now 60 badges. Existing player progress is preserved.
+
+The new bundled `scramble.webp` illustration was generated with the built-in
+image tool using `letters.webp` as a style reference, then converted to WebP.
+Final prompt: "Use case: illustration-story. Asset type: a landscape 1536x1024
+scenic game-library card for Word Scramble in Sikhi Word Games Paper & Play.
+The attached image is STYLE REFERENCE ONLY. Generate a new scene in the same
+tactile handmade paper and small sculptural wood/paper object style, warm ivory
+paper fibers, cream wooden letter tiles with contact shadows, deep teal botanical
+cut-paper leaves, ochre and burnt orange accents, soft editorial lighting.
+Subject: a shallow ochre wooden letter tray on the RIGHT HALF, with five separate
+cream letter tiles casually shuffled nearby and three blank tile spaces in the
+tray. The five tiles show exactly P, L, A, Y, S, one crisp dark teal letter per
+tile, visibly out of order. Include layered torn teal paper beneath the tray and
+a few botanical leaves at lower/right edges. Composition: wide landscape, quiet
+ivory paper on left45% for live title and description overlay, main objects on
+right half; key letters and tray stay readable in a square center-right crop for
+phone thumbnail. No game titles, UI, buttons, devices, banners, sacred imagery,
+Gurmukhi glyphs or watermark. Match reference materials, palette and lighting
+rather than copying its alphabet blocks."

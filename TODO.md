@@ -6,6 +6,32 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 9 Shabad Banao: candidate 1.16.0+29
+
+- [x] Add Word Scramble / Shabad Banao as the sixth equal library card with
+  shared Paper & Play tiles, buttons, titles and all three themes.
+- [x] Support three approved language pools, mixed lengths, Simple/original
+  Punjabi, intact Gurmukhi units, one optional hint and quiet unlimited retries.
+- [x] Save unfinished words, rotate before repeating, record once-only completed
+  statistics, add ten badges and include the new owned key in app-wide reset.
+- [x] Complete full analysis/tests, reviewed visual baselines and release builds.
+- [x] Verify the actual packaged web preview and install on the connected tablet.
+- [ ] Install build 29 on Pixel when it reconnects; it remains on build 27.
+
+Build 29 evidence: 391 Flutter tests, including 40 visual baselines, passed.
+Analysis is clean and 159 Dart files are formatted. Reviewed phone captures
+cover all three themes, intact Gurmukhi groups and 200% text; the actual browser
+shows six equal cards at 800x1100. At 390x780, reload/Continue restored the exact
+partial SAFARI word, an incorrect check produced inline feedback, and English
+and Gurmukhi completions counted once in Progress (2 words, 1 without a hint).
+Gurmukhi hint tiles retain vowel marks; Simple Punjabi uses plain Roman tiles.
+These checks used an isolated localhost origin to retain existing preview data.
+Both 1.16.0+29 packages include the new artwork and exact seven runtime content
+files, with no authoring banks; all 20,601 source records and licenses match.
+K70 PRO was updated with `adb install -r`; version 1.16.0/code 29 and launch PID
+4108 were verified, retaining app data. Native hands-on/audio and hosted
+offline/iframe checks remain separate open work. Pixel was not connected.
+
 ## October 9 phone playtest fixes: candidate 1.15.1+28
 
 - [x] Keep unsuccessful Khoj selections silent; clear the selection and retain
@@ -16,8 +42,8 @@ source snapshot; integrity checks do not reopen editorial approval.
   retain extended layouts for Gurmukhi, original accented keyboards and large text.
 - [x] Complete phone regression/full checks, rebuild the web preview and Android
   test APK, and update the connected tablet with app data retained.
-- [ ] Install build 28 on Pixel when it reconnects; only the tablet was connected
-  during this validation pass.
+- [x] Supersede the pending Pixel build 28 install with build 29 above; only the
+  tablet was connected during this validation pass.
 
 Build 28 evidence: the targeted checks failed before the fixes for all three
 reports, then passed afterward. All 364 Flutter tests, including 35 unchanged
