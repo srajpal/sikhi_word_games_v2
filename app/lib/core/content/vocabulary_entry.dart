@@ -65,6 +65,7 @@ class VocabularyEntry {
       : 'Definition unavailable for this word.';
 
   VocabularyEntry copyWith({
+    String? latin,
     String? englishDefinition,
     String? gurmukhi,
     bool? acceptedGuess,
@@ -74,10 +75,10 @@ class VocabularyEntry {
   }) => VocabularyEntry(
     id: id,
     language: language,
-    latin: latin,
+    latin: latin ?? this.latin,
     gurmukhi: gurmukhi ?? this.gurmukhi,
     englishDefinition: englishDefinition ?? this.englishDefinition,
-    latinLength: latinLength,
+    latinLength: latin == null ? latinLength : wordUnitCount(latin),
     gurmukhiLength: gurmukhiLength,
     acceptedGuess: acceptedGuess ?? this.acceptedGuess,
     solutionEligible: solutionEligible ?? this.solutionEligible,

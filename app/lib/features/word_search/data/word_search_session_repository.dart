@@ -10,12 +10,14 @@ import '../domain/word_search_puzzle.dart';
 class WordSearchSession {
   const WordSearchSession({
     required this.mode,
+    this.simpleRomanized = false,
     required this.wordSize,
     required this.puzzle,
     required this.foundWords,
   });
 
   final LanguageMode mode;
+  final bool simpleRomanized;
   final int? wordSize;
   final WordSearchPuzzle puzzle;
   final Set<String> foundWords;
@@ -34,6 +36,7 @@ class WordSearchSessionRepository {
 
   Future<void> save({
     required LanguageMode mode,
+    bool simpleRomanized = false,
     required int? wordSize,
     required WordSearchPuzzle puzzle,
     required Set<String> foundWords,
@@ -43,6 +46,7 @@ class WordSearchSessionRepository {
     jsonEncode({
       'schemaVersion': 1,
       'mode': mode.name,
+      'simpleRomanized': simpleRomanized,
       'wordSize': wordSize,
       'puzzle': puzzle.toJson(),
       'foundWords': foundWords.toList(growable: false),
@@ -79,6 +83,7 @@ class WordSearchSessionRepository {
       if (foundWords.length == puzzle.words.length) return null;
       return WordSearchSession(
         mode: mode,
+        simpleRomanized: json['simpleRomanized'] == true,
         wordSize: wordSize as int?,
         puzzle: puzzle,
         foundWords: foundWords,

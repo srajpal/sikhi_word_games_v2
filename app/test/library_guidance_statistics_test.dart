@@ -109,9 +109,24 @@ void main() {
       expect(khojTree, contains('New game'));
       expect(khojTree, isNot(contains('Bujho')));
       expect(
+        tester
+            .getCenter(find.byKey(const ValueKey('new-game-guessTheWord')))
+            .dy,
         tester.getCenter(find.byKey(const ValueKey('new-game-wordSearch'))).dy,
-        tester.getCenter(find.byKey(const ValueKey('new-game-wordQuest'))).dy,
         reason: 'Tablet game-card actions should align across each row',
+      );
+      expect(
+        tester
+            .getSize(
+              find.byKey(const ValueKey('game-card-semantics-guessTheWord')),
+            )
+            .width,
+        tester
+            .getSize(
+              find.byKey(const ValueKey('game-card-semantics-wordSearch')),
+            )
+            .width,
+        reason: 'Bujho shares the same tablet card width as every other game',
       );
     } finally {
       semantics.dispose();

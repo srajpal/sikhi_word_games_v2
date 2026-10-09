@@ -17,6 +17,16 @@ class GuessGameRepository {
   static const storageKey = 'guessTheWord.activeGame';
   final KeyValueStore _store;
 
+  /// Older snapshots retain the original accented spelling and keyboard.
+  bool get usesSimpleRomanized {
+    try {
+      final raw = jsonDecode(_store.getString(storageKey) ?? '{}') as Map;
+      return raw['simpleRomanized'] == true;
+    } on Object {
+      return false;
+    }
+  }
+
   bool get hasActiveGame {
     final encoded = _store.getString(storageKey);
     if (encoded == null) return false;
@@ -46,16 +56,20 @@ class GuessGameRepository {
     }
   }
 
-  Future<void> save({required GuessGame game, required LanguageMode mode}) =>
-      KeyValueStoreWrites.setString(
-        _store,
-        storageKey,
-        jsonEncode({
-          'schemaVersion': 1,
-          'mode': mode.name,
-          'game': game.toJson(),
-        }),
-      );
+  Future<void> save({
+    required GuessGame game,
+    required LanguageMode mode,
+    bool simpleRomanized = false,
+  }) => KeyValueStoreWrites.setString(
+    _store,
+    storageKey,
+    jsonEncode({
+      'schemaVersion': 1,
+      'mode': mode.name,
+      'simpleRomanized': simpleRomanized,
+      'game': game.toJson(),
+    }),
+  );
 
   RestoredGuessSession? restore(
     Set<String> Function(LanguageMode mode, int wordLength) acceptedGuesses,

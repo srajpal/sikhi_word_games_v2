@@ -46,7 +46,9 @@ repository or vocabulary corpus without a concrete need.
   old generated banks and editorial queues out of runtime assets.
 - Source `letter_units` and `tile_count` govern game spelling and length;
   validate with the shared written-unit helper, including Gurmukhi conjuncts
-  where generic grapheme counts differ. Preserve scholarly Roman diacritics.
+  where generic grapheme counts differ. Preserve scholarly Roman diacritics in
+  source masters and the original view. The optional Simple Romanized Punjabi
+  view folds marks in memory; never rewrite approved assets for that view.
 - Older V1, WordNet, Mahan Kosh and Dictionary v2 review tools are retired release
   inputs. Do not use their bulk decisions to modify this approved snapshot.
   Owner approval must not be relabelled as fresh independent community review.

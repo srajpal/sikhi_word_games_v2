@@ -7,8 +7,13 @@ import '../../guess_the_word/domain/language_mode.dart';
 import '../domain/word_bridges_game.dart';
 
 class WordBridgesSession {
-  const WordBridgesSession({required this.mode, required this.game});
+  const WordBridgesSession({
+    required this.mode,
+    required this.game,
+    this.simpleRomanized = false,
+  });
   final LanguageMode mode;
+  final bool simpleRomanized;
   final WordBridgesGame game;
 }
 
@@ -130,7 +135,11 @@ class WordBridgesRepository {
         raw['game'] as Map<String, Object?>,
       );
       if (game.isComplete) return null;
-      return WordBridgesSession(mode: mode, game: game);
+      return WordBridgesSession(
+        mode: mode,
+        game: game,
+        simpleRomanized: raw['simpleRomanized'] == true,
+      );
     } on Object {
       return null;
     }
@@ -147,6 +156,7 @@ class WordBridgesRepository {
 
   Future<void> save({
     required LanguageMode mode,
+    bool simpleRomanized = false,
     required WordBridgesGame game,
   }) {
     if (game.isComplete) return recordCompletion(mode: mode, game: game);
@@ -154,7 +164,11 @@ class WordBridgesRepository {
     return _update((state) {
       final completed = state['completedRoundIds'];
       if (completed is List && completed.contains(game.roundId)) return;
-      state['session'] = {'mode': mode.name, 'game': snapshot};
+      state['session'] = {
+        'mode': mode.name,
+        'game': snapshot,
+        'simpleRomanized': simpleRomanized,
+      };
       final history = Map<String, Object?>.from(
         state['usedWords'] as Map? ?? {},
       );

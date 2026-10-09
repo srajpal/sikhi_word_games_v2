@@ -10,11 +10,13 @@ import '../domain/word_quest_game.dart';
 class WordQuestSession {
   const WordQuestSession({
     required this.mode,
+    this.simpleRomanized = false,
     required this.wordSize,
     required this.game,
   });
 
   final LanguageMode mode;
+  final bool simpleRomanized;
   final int wordSize;
   final WordQuestGame game;
 }
@@ -32,6 +34,7 @@ class WordQuestSessionRepository {
 
   Future<void> save({
     required LanguageMode mode,
+    bool simpleRomanized = false,
     required int wordSize,
     required WordQuestGame game,
   }) => KeyValueStoreWrites.setString(
@@ -45,6 +48,7 @@ class WordQuestSessionRepository {
           ? 1
           : 2,
       'mode': mode.name,
+      'simpleRomanized': simpleRomanized,
       'wordSize': wordSize,
       'game': game.toJson(),
     }),
@@ -76,6 +80,7 @@ class WordQuestSessionRepository {
       }
       return WordQuestSession(
         mode: mode,
+        simpleRomanized: json['simpleRomanized'] == true,
         wordSize: json['wordSize']! as int,
         game: game,
       );

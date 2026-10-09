@@ -502,3 +502,22 @@ controls change. Settings stays open, with Back to leave; celebration controls
 use Done to dismiss. Neither flow has Save or Cancel. Game language/size dialogs
 that start a replacement round retain their explicit start/apply action. Reset
 all app data remains a separately confirmed destructive action.
+
+### Simple Punjabi and equal game cards: October 9, 2026
+
+App settings has an immediately saved Simple Romanized Punjabi switch, enabled
+by default. Exactly three language modes remain. The Simple view uses plain
+Roman letters and the A-Z keyboard; disabling it restores the accented view and
+keyboard. New rounds and Dictionary use the preference. Continue and retry keep
+the spelling recorded for that round, including original legacy rounds. Gurmukhi
+marks and Learn Letters pronunciation names are unchanged. This is a spelling
+accessibility view, not a claim that distinct Punjabi sounds are interchangeable.
+
+All library games have equal card treatment: compact cards with a separate
+illustration and action row on phones, larger scenic cards in a two-column grid
+on tablets/wide web. Bujho is no longer featured; its label does not cover the
+BOOK illustration on a phone. Large text keeps the responsive single-column
+layout and accessible controls.
+
+The updated owner-approved English release contains 13,182 words at 4/5/6
+letters: 2,346/4,144/6,692. WordNet exception forms now include MICE.

@@ -6,6 +6,32 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 9 simple Punjabi and equal cards: candidate 1.15.0+27
+
+- [x] Add an immediately saved Simple Romanized Punjabi setting, retaining the
+  original accented keyboard/view and exactly three language choices.
+- [x] Derive simple spelling in memory for the four word games and Dictionary;
+  preserve native Gurmukhi and approved source bytes. Keep each saved round's
+  spelling view independent of later preference changes.
+- [x] Import the 21:07 UTC English release, including MICE, updated notices and
+  exact 13,182/2,991/4,428 master totals. Punjabi source files are unchanged.
+- [x] Give all games equal phone cards and equal larger tablet/wide-web cards;
+  remove Bujho's featured treatment and keep phone illustrations separate.
+- [x] Complete focused/full checks, review updated phone/tablet visual captures,
+  verify the release browser and build/install the Android test update.
+
+Build 27 evidence: 363 Flutter tests (including 35 visual baselines) passed;
+analysis is clean and 148 Dart files are formatted. Source/runtime checks verify
+20,601 records and unchanged Punjabi masters. The packaged browser shows equal
+cards at 390x844 and 800x1100, ASAN with an A-Z keyboard, and the original accented
+keyboard after switching Simple off. That choice survives reload; Simple was
+restored on afterward. Existing saved rounds were retained. Updated credits and
+licenses match the package, and the 1.15.0+27 web ZIP and debug APK are built.
+K70 PRO was updated with `adb install -r`; version 1.15.0/code 27 and PID 28321
+were verified. The Pixel was disconnected during this update and remains on
+build 26. Hands-on device checks and the existing offline/iframe release checks
+remain separate open work below.
+
 ## October 9 automatic settings: candidate 1.14.0+26
 
 - [x] Apply and persist App settings on every control change; keep the page open
@@ -25,11 +51,9 @@ were verified. Hands-on tablet behavior remains a separate manual check.
 
 ## English accepted-guess coverage
 
-- [ ] Expand approved English accepted guesses to cover common inflections such
-  as MICE. The current supplied master contains MOUSE but no MICE; Bujho accepts
-  exact master entries only. Keep accepted guesses distinct from puzzle answers,
-  and coordinate additions with the approved source release rather than editing
-  the imported snapshot or runtime masters by hand.
+- [x] Import the updated approved English release with 655 additional inflections
+  and WordNet exception forms, including MICE. English now has 13,182 words.
+  The approved source resolves this gap without hand-editing runtime assets.
 
 ## October 9 owner-approved dictionary import: candidate 1.13.0+25
 
@@ -152,7 +176,7 @@ release. They are retired follow-ups, not unfinished approval gates for build 25
   GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
   from that review. The focused save/restore and keyboard fixes are in
   `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.14.0+26, Paper & Play. The September 18 ZIP and uploaded
+- Current Android testing version: 1.15.0+27, Paper & Play. The September 18 ZIP and uploaded
   itch.io draft remain 1.9.0+17 and
   predate the subsequent audit fixes and October vocabulary recheck. They are
   historical artifacts, not packages of current source. Increment both version

@@ -5,7 +5,8 @@ WordNet 3.0 Copyright 2006 by Princeton University. All rights reserved.
 https://wordnet.princeton.edu/
 Source: https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz
 Full terms: licenses/WORDNET_LICENSE.txt
-Modifications: lowercase headword selection, family-content screening,
+Modifications: lowercase headword selection, source-recorded exception-form
+expansion with screened base meanings and provenance, family-content screening,
 grouping by 4/5/6 letters, removal of examples, and selection of one
 original definition per word. Preserve the copyright, license, and disclaimer.
 

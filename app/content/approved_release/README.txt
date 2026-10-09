@@ -17,7 +17,13 @@ The top-level length_counts reports membership by length. Punjabi entries
 also retain counterpart spellings. Definitions
 are in English. Do not count bytes or code points to determine Punjabi lengths.
 
-English uses lowercase ASCII letters. Roman Punjabi retains scholarly diacritics;
+English uses lowercase ASCII letters.
+English also includes screened forms explicitly recorded in WordNet exception
+tables, such as mice. Their original definitions belong to the recorded base;
+base_word and inflection_source identify it, and tag_count_basis marks inherited
+base-word usage counts. Existing lexical headwords keep their own senses.
+Regular forms absent from those tables are not generated or guessed.
+Roman Punjabi retains scholarly diacritics;
 a Latin letter with attached diacritics is one unit, while kh counts as two.
 Gurmukhi uses a base letter with its marks and virama-linked subjoined letters
 as one written unit. All lists are sorted by Unicode code-point order.
@@ -26,13 +32,13 @@ COUNTS
 Letters | English | Romanized Punjabi | Gurmukhi
 2       | not included | not included | 1,515
 3       | not included | not included | 1,865
-4       | 2,263 | 658 | 787
-5       | 3,972 | 1,354 | 220
-6       | 6,292 | 979 | 33
+4       | 2,346 | 658 | 787
+5       | 4,144 | 1,354 | 220
+6       | 6,692 | 979 | 33
 7       | not included | not included | 7
 8       | not included | not included | 1
 
-Totals: English 12,527;
+Totals: English 13,182;
 Romanized Punjabi 2,991;
 Gurmukhi 4,428.
 Punjabi script totals represent overlapping vocabulary and must not be summed

@@ -4,7 +4,8 @@
 
 On October 9, 2026, the owner approved all words and selected definitions in
 `C:/dev/Projects/ChatGPT/sikhi_word_games_word_lists/release` for the app.
-Candidate 1.13.0+24 imports that snapshot instead of rebuilding the earlier
+The latest 1.15.0+27 candidate imports the 21:07 UTC update, including 655
+additional English inflections such as MICE, instead of rebuilding the earlier
 Dictionary v2 selection. Source README screening limitations and seven wording
 notes remain preserved provenance; they do not create an app review queue or
 override the owner's approval. Do not reapply previous frequency thresholds,
@@ -77,3 +78,8 @@ at the time.
 Owner approval is explicit for this imported snapshot. It is not a claim of
 independent community review, nor approval of letter-pronunciation audio or
 other content outside these dictionaries.
+
+The optional Simple Romanized Punjabi view is an accent-free app adaptation by
+Khalsa Game Studio. Original spellings, definitions, source IDs and links remain
+in the approved masters; the app's shared dictionary attribution identifies this
+adaptation and retains the supplied CC BY-SA 4.0 license and credits.

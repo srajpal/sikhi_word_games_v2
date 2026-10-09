@@ -21,6 +21,7 @@ class GameKeyboard extends StatelessWidget {
     this.enterLabel = 'ENTER',
     this.letterResults = const {},
     this.additionalCharacters = const [],
+    this.simpleRomanized = false,
     super.key,
   });
 
@@ -34,6 +35,7 @@ class GameKeyboard extends StatelessWidget {
   final String enterLabel;
   final Map<String, LetterResult> letterResults;
   final Iterable<String> additionalCharacters;
+  final bool simpleRomanized;
 
   Color? _keyFill(BuildContext context, String character) {
     // Whole-tile clues cannot classify a constituent of another Gurmukhi tile.
@@ -129,7 +131,7 @@ class GameKeyboard extends StatelessWidget {
     final disabled = mode == LanguageMode.gurmukhi
         ? const <String>{}
         : disabledCharacters;
-    if (mode == LanguageMode.romanizedPanjabi) {
+    if (mode == LanguageMode.romanizedPanjabi && !simpleRomanized) {
       final existing = rows.expand((row) => row).toSet();
       final extra = <String>{
         ...romanizedLetters.map((letter) => letter.toUpperCase()),

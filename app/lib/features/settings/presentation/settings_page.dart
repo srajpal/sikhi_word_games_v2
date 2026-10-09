@@ -118,6 +118,22 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       const SizedBox(height: 16),
       GamePanel(
+        child: SwitchListTile(
+          key: const ValueKey('simple-romanized-punjabi'),
+          title: const Text('Simple Romanized Punjabi'),
+          subtitle: const Text(
+            'Plain letters and an A–Z keyboard. Turn off for accents. Applies to new rounds and Dictionary; saved rounds keep their spelling.',
+          ),
+          value: _settings.simpleRomanizedPunjabi,
+          onChanged: InteractionSounds.buttonChange(
+            context,
+            (value) =>
+                _update(_settings.copyWith(simpleRomanizedPunjabi: value)),
+          ),
+        ),
+      ),
+      const SizedBox(height: 16),
+      GamePanel(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

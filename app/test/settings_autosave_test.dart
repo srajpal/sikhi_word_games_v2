@@ -44,10 +44,12 @@ void main() {
     );
     await toggle(tester, 'letter-clicks');
     await toggle(tester, 'button-clicks');
+    await toggle(tester, 'simple-romanized-punjabi');
     final saved = AppSettingsRepository(store).load();
     expect(saved.theme, AppThemeChoice.dark);
     expect(saved.letterClicks, isFalse);
     expect(saved.buttonClicks, isFalse);
+    expect(saved.simpleRomanizedPunjabi, isFalse);
     expect(saved.victorySound, isTrue);
     expect(find.text('Save'), findsNothing);
     expect(find.text('Cancel'), findsNothing);
@@ -58,7 +60,11 @@ void main() {
       Theme.of(tester.element(find.byType(SettingsPage))).brightness,
       Brightness.dark,
     );
-    for (final key in ['letter-clicks', 'button-clicks']) {
+    for (final key in [
+      'letter-clicks',
+      'button-clicks',
+      'simple-romanized-punjabi',
+    ]) {
       expect(
         tester.widget<SwitchListTile>(find.byKey(ValueKey(key))).value,
         isFalse,

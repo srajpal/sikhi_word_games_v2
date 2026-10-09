@@ -1,3 +1,5 @@
+import '../../../core/content/romanized_vocabulary_views.dart';
+
 import 'dart:math';
 
 import '../../../core/content/vocabulary_entry.dart';
@@ -17,7 +19,8 @@ class WordBridgesDeck {
 /// Selection does not grant editorial approval. Definitions and spellings
 /// remain owned by the release vocabulary and its curation workflow.
 class WordBridgesContent {
-  WordBridgesContent(Iterable<VocabularyEntry> entries) {
+  WordBridgesContent(Iterable<VocabularyEntry> entries)
+    : _entries = List.unmodifiable(entries) {
     final byId = <String, VocabularyEntry>{};
     final duplicateIds = <String>{};
     for (final entry in entries) {
@@ -69,6 +72,12 @@ class WordBridgesContent {
       _byMode[mode] = List.unmodifiable(decks);
     }
   }
+
+  final List<VocabularyEntry> _entries;
+  WordBridgesContent? _simple;
+  WordBridgesContent get simpleRomanized => _simple ??= WordBridgesContent(
+    RomanizedVocabularyViews(_entries).entries(simple: true),
+  );
 
   final Map<LanguageMode, List<WordBridgesDeck>> _byMode = {};
   final Map<LanguageMode, List<BridgePair>> _pairsByMode = {};

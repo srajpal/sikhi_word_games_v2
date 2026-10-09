@@ -1,3 +1,4 @@
+import '../../../core/content/romanized_vocabulary_views.dart';
 import '../../../core/themes/paper_page.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/audio/interaction_sounds.dart';
@@ -51,6 +52,7 @@ class GuessTheWordPage extends StatefulWidget {
     this.initialMode,
     this.initialWordLength,
     this.startFresh = false,
+    this.simpleRomanized = false,
     super.key,
   });
 
@@ -63,6 +65,7 @@ class GuessTheWordPage extends StatefulWidget {
   final LanguageMode? initialMode;
   final int? initialWordLength;
   final bool startFresh;
+  final bool simpleRomanized;
 
   @override
   State<GuessTheWordPage> createState() => _GuessTheWordPageState();
@@ -74,8 +77,10 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   final _random = math.Random.secure();
   late final NonRepeatingWordSelector _selector;
   WordPool? _pool;
+  RomanizedVocabularyViews? _views;
   GuessGame? _game;
   VocabularyEntry? _solutionEntry;
+  bool _simpleRomanized = false;
   LanguageMode _mode = LanguageMode.english;
   int _wordLength = 5;
   String? _message;
@@ -144,7 +149,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     try {
       final entries = await widget.vocabularyRepository.load();
       if (!mounted) return;
-      _pool = WordPool(entries);
+      _views = RomanizedVocabularyViews(entries);
+      _useSpelling(widget.gameRepository.usesSimpleRomanized);
       if (widget.startFresh) {
         _mode = widget.initialMode ?? _randomMode();
         _wordLength = widget.initialWordLength ?? _randomWordLength(_mode);
@@ -235,7 +241,14 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     return null;
   }
 
+  void _useSpelling(bool simple) {
+    _simpleRomanized = simple;
+    _pool = WordPool(_views!.entries(simple: simple));
+  }
+
   void _startGame({int? length}) {
+    if (_views == null) return;
+    _useSpelling(widget.simpleRomanized);
     VictoryCelebration.stop(context);
     final pool = _pool;
     if (pool == null) return;
@@ -260,7 +273,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
       _message = null;
       _loading = false;
     });
-    _persist(widget.gameRepository.save(game: _game!, mode: _mode));
+    _persist(
+      widget.gameRepository.save(
+        game: _game!,
+        mode: _mode,
+        simpleRomanized: _simpleRomanized,
+      ),
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) => _focusInput());
   }
 
@@ -306,7 +325,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           ),
         );
       } else {
-        _persist(widget.gameRepository.save(game: game, mode: _mode));
+        _persist(
+          widget.gameRepository.save(
+            game: game,
+            mode: _mode,
+            simpleRomanized: _simpleRomanized,
+          ),
+        );
       }
       _controller.clear();
       _message = null;
@@ -325,7 +350,9 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     final current = _controller.text;
     final appended = '$current$character';
     final candidate = _mode == LanguageMode.romanizedPanjabi
-        ? normalizeRomanizedInput(appended)
+        ? (_simpleRomanized
+              ? simplifyRomanizedPunjabi(appended)
+              : normalizeRomanizedInput(appended))
         : normalizeGurmukhi(appended);
     if (wordUnitCount(candidate) > _wordLength) return;
     _controller.value = TextEditingValue(
@@ -711,6 +738,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                     if (!isComplete) ...[
                                       SizedBox(height: compact ? 4 : 8),
                                       GameKeyboard(
+                                        simpleRomanized: _simpleRomanized,
                                         mode: _mode,
                                         additionalCharacters: _pool!
                                             .charactersFor(_mode),

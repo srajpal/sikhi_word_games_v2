@@ -14,4 +14,6 @@ const dictionaryAttribution =
     'Kaikki/Wiktextract, under CC BY-SA 4.0. Each Punjabi entry retains its source '
     'page and contributor history. Upstream screening used Shutterstock’s '
     'LDNOOBW list under CC BY 4.0. The supplied release is approved by the project '
-    'owner. Full source credits and license texts are included below.';
+    'owner. Simple Romanized Punjabi is an optional accent-free spelling '
+    'adaptation by Khalsa Game Studio; original spellings remain in the supplied '
+    'masters. Full source credits and license texts are included below.';

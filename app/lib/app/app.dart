@@ -140,6 +140,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 game: GameKind.wordBridges,
 
                 child: WordBridgesPage(
+                  simpleRomanized: _settings.simpleRomanizedPunjabi,
                   vocabularyRepository: widget.vocabularyRepository,
                   repository: widget.wordBridgesRepository,
                   contentFuture: _wordBridgesContent(),
@@ -156,6 +157,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 game: GameKind.guessTheWord,
 
                 child: GuessTheWordPage(
+                  simpleRomanized: _settings.simpleRomanizedPunjabi,
                   vocabularyRepository: widget.vocabularyRepository,
                   statisticsRepository: widget.statisticsRepository,
                   gameRepository: widget.gameRepository,
@@ -192,6 +194,8 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             GoRoute(
               path: 'dictionary',
               builder: (context, state) => DictionaryPage(
+                key: ValueKey(_settings.simpleRomanizedPunjabi),
+                simpleRomanized: _settings.simpleRomanizedPunjabi,
                 vocabularyRepository: widget.vocabularyRepository,
               ),
             ),
@@ -201,6 +205,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 game: GameKind.wordSearch,
 
                 child: WordSearchPage(
+                  simpleRomanized: _settings.simpleRomanizedPunjabi,
                   vocabularyRepository: widget.vocabularyRepository,
                   sessionRepository: widget.wordSearchSessionRepository,
                   initialMode: _launchOptions(state).language,
@@ -217,6 +222,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
                 game: GameKind.wordQuest,
 
                 child: WordQuestPage(
+                  simpleRomanized: _settings.simpleRomanizedPunjabi,
                   vocabularyRepository: widget.vocabularyRepository,
                   sessionRepository: widget.wordQuestSessionRepository,
                   vocabularyFuture: _wordQuestVocabulary(),

@@ -390,7 +390,6 @@ class GameLibraryPage extends StatelessWidget {
                       final cards = <Widget>[
                         _GameCard(
                           grid: twoColumns,
-                          featured: true,
                           description:
                               'Figure out the word, one guess at a time.',
                           gameKind: GameKind.guessTheWord,
@@ -456,11 +455,7 @@ class GameLibraryPage extends StatelessWidget {
                         spacing: 16,
                         runSpacing: 16,
                         children: [
-                          SizedBox(
-                            width: constraints.maxWidth,
-                            child: cards.first,
-                          ),
-                          for (final card in cards.skip(1))
+                          for (final card in cards)
                             SizedBox(width: cardWidth, child: card),
                         ],
                       );
@@ -506,7 +501,6 @@ class GameLibraryPage extends StatelessWidget {
 
 class _GameCard extends StatelessWidget {
   const _GameCard({
-    this.featured = false,
     this.grid = false,
     required this.description,
     required this.gameKind,
@@ -516,7 +510,6 @@ class _GameCard extends StatelessWidget {
     this.onNewGameOptions,
   });
 
-  final bool featured;
   final bool grid;
   final String description;
   final GameKind gameKind;
@@ -531,20 +524,19 @@ class _GameCard extends StatelessWidget {
     final identity = GameIdentity.forGame(gameKind);
     final hasContinue = hasActiveGame && onContinue != null;
     final largeText = MediaQuery.textScalerOf(context).scale(14) > 21;
-    final scenic = (featured || grid) && !largeText;
+    final scenic = grid && !largeText;
     final copy = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GameHeading(
           identity: identity,
-          prominent: featured,
-          titleSize: !grid && !featured && !largeText ? 22 : null,
+          titleSize: !grid && !largeText ? 22 : null,
         ),
         const SizedBox(height: 6),
         Text(
           description,
-          style: !grid && !featured && !largeText
+          style: !grid && !largeText
               ? theme.textTheme.bodySmall
               : theme.textTheme.bodyMedium,
         ),
@@ -637,16 +629,12 @@ class _GameCard extends StatelessWidget {
                               builder: (context, constraints) => Align(
                                 alignment: Alignment.topLeft,
                                 child: SizedBox(
-                                  width: featured
-                                      ? (constraints.maxWidth >= 550
-                                            ? 230
-                                            : 174)
-                                      : constraints.maxWidth * .59,
+                                  width: constraints.maxWidth * .59,
                                   child: PaperLabel(
                                     padding: const EdgeInsets.all(14),
                                     child: ConstrainedBox(
                                       constraints: BoxConstraints(
-                                        minHeight: grid && !featured ? 138 : 0,
+                                        minHeight: 138,
                                       ),
                                       child: copy,
                                     ),
@@ -654,13 +642,11 @@ class _GameCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(height: featured ? (grid ? 74 : 62) : 26),
+                            const SizedBox(height: 26),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxWidth: featured && grid ? 350 : 500,
-                                ),
+                                constraints: BoxConstraints(maxWidth: 500),
                                 child: actions,
                               ),
                             ),
@@ -671,63 +657,24 @@ class _GameCard extends StatelessWidget {
                   )
                 : Padding(
                     padding: const EdgeInsets.all(12),
-                    child: !largeText && !featured && !hasContinue
-                        ? Row(
-                            children: [
-                              GameArtwork(kind: identity.artwork, size: 80),
-                              const SizedBox(width: 12),
-                              Expanded(child: copy),
-                              const SizedBox(width: 4),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    key: ValueKey('new-game-${gameKind.name}'),
-                                    tooltip:
-                                        'New game, Play ${identity.punjabiName}',
-                                    onPressed: onNewGame,
-                                    style: IconButton.styleFrom(
-                                      minimumSize: const Size(48, 48),
-                                    ),
-                                    icon: const Icon(Icons.chevron_right),
-                                  ),
-                                  IconButton(
-                                    tooltip: gameKind == GameKind.learnLetters
-                                        ? 'How to play'
-                                        : 'New game options',
-                                    onPressed: onNewGameOptions,
-                                    style: IconButton.styleFrom(
-                                      minimumSize: const Size(48, 48),
-                                    ),
-                                    icon: Icon(
-                                      gameKind == GameKind.learnLetters
-                                          ? Icons.help_outline
-                                          : Icons.tune_rounded,
-                                      size: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  GameArtwork(
-                                    kind: identity.artwork,
-                                    size: largeText ? 64 : 92,
-                                  ),
-                                  const SizedBox(width: 14),
-                                  Expanded(child: copy),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              actions,
-                            ],
-                          ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GameArtwork(
+                              kind: identity.artwork,
+                              size: largeText ? 64 : 92,
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(child: copy),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        actions,
+                      ],
+                    ),
                   ),
           ),
         ),
