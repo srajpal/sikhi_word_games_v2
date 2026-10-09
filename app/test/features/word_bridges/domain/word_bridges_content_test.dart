@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -6,161 +5,313 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
-import 'package:sikhi_word_games_v2/features/word_bridges/data/word_bridges_repository.dart';
-import 'package:sikhi_word_games_v2/features/word_bridges/domain/word_bridges_game.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
+import 'package:sikhi_word_games_v2/features/word_bridges/data/word_bridges_repository.dart';
 import 'package:sikhi_word_games_v2/features/word_bridges/domain/word_bridges_content.dart';
+import 'package:sikhi_word_games_v2/features/word_bridges/domain/word_bridges_game.dart';
 
 void main() {
   late List<VocabularyEntry> release;
+  late WordBridgesContent content;
 
   setUpAll(() {
-    release = [
-      for (final language in ['english', 'punjabi'])
-        for (final record in jsonDecode(
-          File('assets/content/release/${language}_v2.json').readAsStringSync(),
-        ) as List)
-          VocabularyEntry.fromJson(Map<String, Object?>.from(record as Map)),
-    ];
+    release = decodeVocabularyDocuments([
+      for (final path in AssetVocabularyRepository.assetPaths)
+        File(path).readAsStringSync(),
+    ]);
+    content = WordBridgesContent(release);
   });
 
   test(
-    'all starter decks resolve to distinct eligible release records',
+    'every approved mode word remains in its independent matching pool',
     () async {
-      final content = await WordBridgesContent.load(
+      final loaded = await WordBridgesContent.load(
         MemoryVocabularyRepository(release),
       );
+      expect(loaded.availableModes, LanguageMode.values);
+      const counts = {
+        LanguageMode.english: 12527,
+        LanguageMode.romanizedPanjabi: 2991,
+        LanguageMode.gurmukhi: 4428,
+      };
       final byId = {for (final entry in release) entry.id: entry};
-      expect(content.availableModes, [
-        LanguageMode.english,
-        LanguageMode.romanizedPanjabi,
-        LanguageMode.gurmukhi,
-      ]);
-      for (final mode in content.availableModes) {
-        final decks = content.decksFor(mode);
-        expect(decks, hasLength(2));
-        for (final deck in decks) {
-          expect(deck.pairs, hasLength(4));
-          expect(deck.pairs.map((p) => p.id).toSet(), hasLength(4));
-          expect(deck.pairs.map((p) => p.word).toSet(), hasLength(4));
-          expect(deck.pairs.map((p) => p.meaning).toSet(), hasLength(4));
-          for (final pair in deck.pairs) {
-            final entry = byId[pair.id]!;
-            expect(entry.acceptedGuess, isTrue);
-            expect(entry.solutionEligible, isTrue);
-            expect(entry.hasDistributableDefinition, isTrue);
-            expect(pair.meaning, entry.displayDefinition);
-            expect(
-              pair.word,
-              mode == LanguageMode.gurmukhi ? entry.gurmukhi : entry.latin,
-            );
-          }
-        }
-      }
-    },
-  );
-
-  test(
-    'missing, held, and duplicate records omit the entire affected deck',
-    () {
-      final original = release.firstWhere((e) => e.id == 'en_v2_book');
-      for (final entries in [
-        release.where((e) => e.id != original.id).toList(),
-        [
-          for (final e in release)
-            e.id == original.id ? e.copyWith(solutionEligible: false) : e,
-        ],
-        [
-          for (final e in release)
-            e.id == original.id ? e.copyWith(acceptedGuess: false) : e,
-        ],
-        [
-          for (final e in release)
-            e.id == original.id ? e.copyWith(source: 'Unclear source') : e,
-        ],
-        [...release, original],
-      ]) {
-        final decks = WordBridgesContent(entries)
-            .decksFor(LanguageMode.english);
-        expect(decks, hasLength(1));
-        expect(decks.single.id, 'english_outdoors_and_food');
-      }
-    },
-  );
-
-  test('missing script disables only that deck in Gurmukhi', () {
-    final changed = [
-      for (final e in release)
-        e.id == 'panjabi_v2_a15_a3f_a24_a3e_a2c' ? e.copyWith(gurmukhi: '') : e,
-    ];
-    final content = WordBridgesContent(changed);
-    expect(content.decksFor(LanguageMode.gurmukhi), hasLength(1));
-    expect(content.decksFor(LanguageMode.romanizedPanjabi), hasLength(2));
-    expect(WordBridgesContent([]).availableModes, isEmpty);
-  });
-
-  test(
-    'Gurmukhi pairs resolve source romanization after session restore',
-    () async {
-      final content = WordBridgesContent(release);
-      final byId = {for (final entry in release) entry.id: entry};
-      final repository = WordBridgesRepository(MemoryKeyValueStore());
-      for (final deck in content.decksFor(LanguageMode.gurmukhi)) {
-        await repository.save(
-          mode: LanguageMode.gurmukhi,
-          game: WordBridgesGame(pairs: deck.pairs),
+      for (final mode in LanguageMode.values) {
+        final expected = release.where((entry) => entry.script == mode.script);
+        final pairs = loaded.pairsFor(mode);
+        expect(pairs, hasLength(counts[mode]!));
+        expect(
+          pairs.map((pair) => pair.id).toSet(),
+          expected.map((e) => e.id).toSet(),
         );
-        final restored = repository.restore()!;
-        for (final pair in restored.game.wordOrder) {
-          final sourceSpelling = byId[pair.id]!.latin.trim();
-          expect(sourceSpelling, isNotEmpty);
-          expect(content.romanizedFor(pair.id), sourceSpelling);
-          expect(pair.toJson().containsKey('romanized'), isFalse);
+        expect(
+          pairs.map((pair) => pair.word).toSet(),
+          hasLength(counts[mode]!),
+        );
+        for (final pair in pairs) {
+          final entry = byId[pair.id]!;
+          expect(entry.isOwnerApproved, isTrue);
+          expect(entry.acceptedGuess && entry.solutionEligible, isTrue);
+          expect(entry.hasDistributableDefinition, isTrue);
+          expect(pair.meaning, entry.displayDefinition);
+          expect(
+            pair.word,
+            mode == LanguageMode.gurmukhi ? entry.gurmukhi : entry.latin,
+          );
         }
       }
-      expect(content.romanizedFor('unknown'), isNull);
-      expect(content.romanizedFor('en_v2_book'), isNull);
     },
   );
 
-  test('romanization excludes missing words and trims source text', () {
-    final trimmed = WordBridgesContent([
-      for (final entry in release)
-        entry.id == 'panjabi_v2_a15_a3f_a24_a3e_a2c'
-            ? VocabularyEntry(
-                id: entry.id,
-                language: entry.language,
-                latin: '  GHAR  ',
-                gurmukhi: entry.gurmukhi,
-                englishDefinition: entry.englishDefinition,
-                latinLength: entry.latinLength,
-                gurmukhiLength: entry.gurmukhiLength,
-                acceptedGuess: entry.acceptedGuess,
-                solutionEligible: entry.solutionEligible,
-                reviewStatus: entry.reviewStatus,
-                source: entry.source,
-              )
-            : entry,
-    ]);
-    expect(trimmed.romanizedFor('panjabi_v2_a15_a3f_a24_a3e_a2c'), 'GHAR');
-    final missing = WordBridgesContent(
-      release.where((entry) => entry.id != 'panjabi_v2_a15_a3f_a24_a3e_a2c'),
+  test(
+    'preview decks expose four pairs without a fixed legacy starter list',
+    () {
+      for (final mode in LanguageMode.values) {
+        final decks = content.decksFor(mode);
+        expect(decks, hasLength(1));
+        expect(decks.single.id, '${mode.name}_preview');
+        expect(decks.single.pairs, content.pairsFor(mode).take(4));
+      }
+      expect(WordBridgesContent([]).availableModes, isEmpty);
+      expect(
+        WordBridgesContent([])
+            .chooseSet(LanguageMode.english, random: Random(1)),
+        isNull,
+      );
+    },
+  );
+
+  test(
+    'counterpart metadata never introduces membership in another script',
+    () {
+      final native = release.firstWhere(
+        (entry) => entry.script == VocabularyScript.gurmukhi,
+      );
+      final roman = release.firstWhere(
+        (entry) => entry.script == VocabularyScript.romanizedPunjabi,
+      );
+      expect(native.latin, isNotEmpty);
+      expect(roman.gurmukhi, isNotEmpty);
+      final nativeOnly = WordBridgesContent([native]);
+      final romanOnly = WordBridgesContent([roman]);
+      expect(nativeOnly.pairsFor(LanguageMode.gurmukhi).single.id, native.id);
+      expect(nativeOnly.pairsFor(LanguageMode.romanizedPanjabi), isEmpty);
+      expect(
+        romanOnly.pairsFor(LanguageMode.romanizedPanjabi).single.id,
+        roman.id,
+      );
+      expect(romanOnly.pairsFor(LanguageMode.gurmukhi), isEmpty);
+      expect(nativeOnly.pairsFor(LanguageMode.english), isEmpty);
+      expect(romanOnly.pairsFor(LanguageMode.english), isEmpty);
+      expect(romanOnly.romanizedFor(roman.id), isNull);
+    },
+  );
+
+  test(
+    'missing, ineligible, unlicensed and duplicate IDs cannot restore a pair',
+    () {
+      final entries = release
+          .where((entry) => entry.script == VocabularyScript.english)
+          .take(5)
+          .toList();
+      final original = entries.first;
+      final saved = WordBridgesContent(entries)
+          .pairsFor(LanguageMode.english)
+          .first;
+      for (final changed in [
+        entries.skip(1).toList(),
+        [original.copyWith(solutionEligible: false), ...entries.skip(1)],
+        [original.copyWith(acceptedGuess: false), ...entries.skip(1)],
+        [original.copyWith(source: 'Unclear source'), ...entries.skip(1)],
+        [...entries, original],
+      ]) {
+        final changedContent = WordBridgesContent(changed);
+        expect(
+          changedContent.containsPair(LanguageMode.english, saved),
+          isFalse,
+        );
+        expect(changedContent.pairsFor(LanguageMode.english), hasLength(4));
+        expect(changedContent.availableModes, [LanguageMode.english]);
+        expect(
+          changedContent
+              .pairsFor(LanguageMode.english)
+              .any((pair) => pair.id == original.id),
+          isFalse,
+        );
+      }
+      expect(content.containsPair(LanguageMode.english, saved), isTrue);
+      expect(content.containsPair(LanguageMode.gurmukhi, saved), isFalse);
+      expect(
+        content.containsPair(
+          LanguageMode.english,
+          BridgePair(
+            id: saved.id,
+            word: saved.word,
+            meaning: 'Changed meaning',
+          ),
+        ),
+        isFalse,
+      );
+      expect(
+        content.containsPair(
+          LanguageMode.english,
+          BridgePair(id: saved.id, word: 'OTHER', meaning: saved.meaning),
+        ),
+        isFalse,
+      );
+    },
+  );
+
+  test('an absent native spelling removes only its own script pair', () {
+    final native = release.firstWhere(
+      (entry) => entry.script == VocabularyScript.gurmukhi,
     );
-    expect(missing.romanizedFor('panjabi_v2_a15_a3f_a24_a3e_a2c'), isNull);
-    expect(missing.romanizedFor('panjabi_v2_a2a_a3e_a23_a40'), 'PANI');
-    expect(missing.romanizedFor('panjabi_v2_a2b_a41_a71_a32'), isNotNull);
+    final changed = WordBridgesContent([
+      for (final entry in release)
+        entry.id == native.id ? entry.copyWith(gurmukhi: '') : entry,
+    ]);
+    expect(changed.pairsFor(LanguageMode.gurmukhi), hasLength(4427));
+    expect(changed.pairsFor(LanguageMode.romanizedPanjabi), hasLength(2991));
+    expect(changed.pairsFor(LanguageMode.english), hasLength(12527));
+    expect(changed.romanizedFor(native.id), isNull);
   });
 
-  test('decks and pairs cannot be changed by callers', () {
-    final content = WordBridgesContent(release);
+  test(
+    'restored native pairs resolve unchanged scholarly Romanization',
+    () async {
+      final byId = {for (final entry in release) entry.id: entry};
+      final pairs = content.chooseSet(
+        LanguageMode.gurmukhi,
+        random: Random(17),
+      )!;
+      final repository = WordBridgesRepository(MemoryKeyValueStore());
+      await repository.save(
+        mode: LanguageMode.gurmukhi,
+        game: WordBridgesGame(pairs: pairs),
+      );
+      final restored = repository.restore()!;
+      expect(restored.mode, LanguageMode.gurmukhi);
+      for (final pair in restored.game.wordOrder) {
+        expect(content.containsPair(restored.mode, pair), isTrue);
+        expect(content.romanizedFor(pair.id), byId[pair.id]!.latin.trim());
+        expect(pair.toJson().containsKey('romanized'), isFalse);
+      }
+      final scholarly = release.firstWhere(
+        (entry) =>
+            entry.script == VocabularyScript.gurmukhi &&
+            RegExp(r'[^A-Z]').hasMatch(entry.latin),
+      );
+      expect(content.romanizedFor(scholarly.id), scholarly.latin);
+      expect(content.romanizedFor('unknown'), isNull);
+      expect(
+        content.romanizedFor(
+          release.firstWhere((e) => e.script == VocabularyScript.english).id,
+        ),
+        isNull,
+      );
+    },
+  );
+
+  test('native Romanization is trimmed without deriving another spelling', () {
+    final native = release.firstWhere(
+      (entry) => entry.script == VocabularyScript.gurmukhi,
+    );
+    final modified = VocabularyEntry(
+      id: native.id,
+      language: native.language,
+      latin: '  ${native.latin}  ',
+      gurmukhi: native.gurmukhi,
+      englishDefinition: native.englishDefinition,
+      latinLength: native.latinLength,
+      gurmukhiLength: native.gurmukhiLength,
+      acceptedGuess: native.acceptedGuess,
+      solutionEligible: native.solutionEligible,
+      reviewStatus: native.reviewStatus,
+      source: native.source,
+      script: native.script,
+    );
+    final trimmed = WordBridgesContent([modified]);
+    expect(trimmed.romanizedFor(native.id), native.latin);
+    expect(trimmed.pairsFor(LanguageMode.romanizedPanjabi), isEmpty);
+    expect(WordBridgesContent([]).romanizedFor(native.id), isNull);
+  });
+
+  test('short and long approved definitions remain globally eligible', () {
+    final short = release.firstWhere(
+      (entry) =>
+          entry.script == VocabularyScript.english &&
+          entry.englishDefinition.trim().length < 4,
+    );
+    final long = release.firstWhere(
+      (entry) =>
+          entry.script == VocabularyScript.english &&
+          entry.englishDefinition.length > 180,
+    );
+    final pairs = content.pairsFor(LanguageMode.english);
+    expect(
+      pairs.firstWhere((pair) => pair.id == short.id).meaning,
+      short.displayDefinition,
+    );
+    expect(
+      pairs.firstWhere((pair) => pair.id == long.id).meaning,
+      long.displayDefinition,
+    );
+  });
+
+  test('conflicting clues are avoided only within a board', () {
+    final entries = release
+        .where((entry) => entry.script == VocabularyScript.english)
+        .take(5)
+        .toList();
+    final clues = [
+      'A striped animal.',
+      'A striped animal.',
+      'A glass vessel for keeping flowers.',
+      'An instrument that points north.',
+      'A spinning device for making yarn.',
+    ];
+    final matching = WordBridgesContent([
+      for (var i = 0; i < entries.length; i++)
+        entries[i].copyWith(englishDefinition: clues[i]),
+    ]);
+    expect(matching.pairsFor(LanguageMode.english), hasLength(5));
+    expect(
+      WordBridgesContent.ambiguous(
+        matching.pairsFor(LanguageMode.english)[0],
+        matching.pairsFor(LanguageMode.english)[1],
+      ),
+      isTrue,
+    );
+    for (var seed = 0; seed < 10; seed++) {
+      final pairs = matching.chooseSet(
+        LanguageMode.english,
+        random: Random(seed),
+      )!;
+      expect(pairs, hasLength(4));
+      for (final pair in pairs) {
+        for (final other in pairs.where((other) => pair.id != other.id)) {
+          expect(WordBridgesContent.ambiguous(pair, other), isFalse);
+        }
+      }
+    }
+  });
+
+  test('preview, pool and selected pairs cannot be changed by callers', () {
     final decks = content.decksFor(LanguageMode.english);
+    final selected = content.chooseSet(
+      LanguageMode.english,
+      random: Random(1),
+    )!;
     expect(() => decks.clear(), throwsUnsupportedError);
     expect(() => decks.first.pairs.clear(), throwsUnsupportedError);
+    expect(
+      () => content.pairsFor(LanguageMode.english).clear(),
+      throwsUnsupportedError,
+    );
+    expect(() => selected.clear(), throwsUnsupportedError);
     expect(() => content.availableModes.clear(), throwsUnsupportedError);
   });
 
-  test('new sets use a broad eligible pool, varying lengths and avoiding recent words', () {
-    final content = WordBridgesContent(release);
+  test('random sets vary lengths and avoid used and previous mode words', () {
     final eligible = {for (final entry in release) entry.id: entry};
     for (final mode in LanguageMode.values) {
       final used = <String>{};
@@ -174,27 +325,28 @@ void main() {
           usedIds: used,
           previousIds: previous,
         )!;
-        final ids = pairs.map((p) => p.id).toSet();
+        final ids = pairs.map((pair) => pair.id).toSet();
+        expect(pairs, hasLength(4));
+        expect(ids, hasLength(4));
         expect(ids.intersection(previous), isEmpty);
+        expect(ids.intersection(used), isEmpty);
         for (final pair in pairs) {
           final entry = eligible[pair.id]!;
-          expect(
-            entry.solutionEligible && entry.hasDistributableDefinition,
-            isTrue,
-          );
+          expect(entry.script, mode.script);
+          expect(content.containsPair(mode, pair), isTrue);
           lengths.add(
             mode == LanguageMode.gurmukhi
                 ? entry.gurmukhiLength!
                 : entry.latinLength,
           );
-          for (final other in pairs.where((p) => p.id != pair.id)) {
+          for (final other in pairs.where((other) => pair.id != other.id)) {
             expect(WordBridgesContent.ambiguous(pair, other), isFalse);
           }
         }
         used.addAll(ids);
         previous = ids;
       }
-      expect(used.length, greaterThan(60));
+      expect(used, hasLength(80));
       expect(lengths.length, greaterThan(1));
     }
   });

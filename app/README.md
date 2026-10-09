@@ -9,8 +9,8 @@ for setup, validation, versioning, and itch.io release steps.
 - [Current work and release gaps](../TODO.md)
 - [Dictionary review workflow](../docs/dictionary_review_tool.md)
 
-Run Flutter and Dart commands from this directory. Generated content must be
-rebuilt through the documented import tools, never edited by hand.
+Run Flutter and Dart commands from this directory. Approved content must be
+imported through `tool/build_release_content.dart`, never edited by hand.
 
 ## Public playtest page copy
 
@@ -24,12 +24,12 @@ Take your time with five ways to play:
 
 - **Bujho: Guess the Word:** Find the hidden word using letter clues.
 - **Khoj: Word Search:** Find six words running across, down, or diagonally.
-- **Chardi Kala: Word Quest:** Read a clue and choose letters to grow a word garden.
-- **Jodo: Word Bridges (ਜੋੜੋ):** Match four words with their English meanings, without a timer. Starter sets support English, Romanized Punjabi and Gurmukhi.
+- **Chardi Kala: Word Quest:** Read a clue and choose letters to complete a paper lantern.
+- **Jodo: Word Bridges (ਜੋੜੋ):** Match four words with their English meanings, without a timer. Randomized sets support English, Romanized Punjabi and Gurmukhi.
 - **Akhar Pachhaan: Learn Letters:** Practice the names of 35 Gurmukhi letters in five-question rounds, with gentle retries and saved practice progress.
 
-The word games offer language choices; Bujho, Khoj and Word Quest support four
-to six letters. Choose Modern, Sikhi or Dark theme. Use the
+The word games offer language choices; Bujho and Word Quest support four
+to six written letters. Khoj and Jodo use all approved sizes in their language. Choose Modern, Sikhi or Dark theme. Use the
 Dictionary to look up words and meanings. No account, ads, or payment is needed
 to play. Unfinished games are saved in this browser.
 
@@ -56,7 +56,7 @@ meanings are not yet comprehensively reviewed for children.
 - Gurmukhi: use the on-screen keys. Pronunciation labels appear below the letters.
 - Jodo: select a word and its matching meaning, in either order.
 - Learn Letters: select a letter name, retry if needed, then choose Next.
-  Use Hear after answering or in Letter progress to play the audio preview.
+  Use Hear below each prompt or in Letter progress to play the audio preview.
 - Theme and feedback settings are in the game library. Each game's menu contains
   its help and settings.
 
@@ -66,8 +66,8 @@ Browser storage can be cleared or restricted, and saved games are not shared
 between devices. The first load needs a connection. Offline reload depends on
 successful browser caching and the host's storage policy; do not advertise it
 as guaranteed in the itch.io frame until the uploaded draft is verified.
-Mobile browser and real screen-reader testing are still pending. Jodo currently
-has two starter sets per language. Sound and celebration particles can be
+Mobile browser and real screen-reader testing are still pending. Jodo uses
+randomized sets from the full approved language bank. Sound and celebration particles can be
 disabled in App settings or the game menu.
 
 ### Khalsa Game Studio draft setup
@@ -101,7 +101,8 @@ The original editable artwork is in `branding/`. Rebuild it with
 `sharp` installed. The small web icons are generated from the same mark.
 Artwork uses letter tiles and a plant; sacred marks are not gameplay objects.
 
-Keep the Wiktionary CC BY-SA 4.0, wordfreq and bundled-font notices in the game and ZIP.
+Keep the Princeton WordNet license, Wiktionary CC BY-SA 4.0 attribution,
+Shutterstock screening-list CC BY 4.0 credits and bundled-font notices in the game and ZIP.
 Their source links and licenses are listed in `THIRD_PARTY_NOTICES.txt`.
 Add actual gameplay screenshots from the final package, not mockups.
 

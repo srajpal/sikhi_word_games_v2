@@ -31,9 +31,9 @@ First playable scope:
   starter pool has been checked for unambiguous mappings and spelling aliases.
 - Keep successful pairs visible. A mismatch gives clear feedback and allows
   another attempt without taking away progress or imposing a timer.
-- Use a small explicitly checked starter pool. Shared definitions, near-synonyms and
-  duplicate spellings must not create multiple reasonable answers in one set.
-  Existing answer eligibility alone does not prove a pair is unambiguous.
+- Draw from the owner-approved mode bank. Within one set, avoid identical or
+  conflicting clues and duplicate spellings so its pairs remain solvable.
+  Board-specific ambiguity checks do not exclude words from the dictionary.
 - Reuse the three shared themes, offline vocabulary boundaries, saved-game
   pattern, first-launch guide, Help replay and per-game statistics. Record
   finished sets and matching attempts without inventing a cross-game win rate.
@@ -46,13 +46,13 @@ Used/previous IDs persist per language in the existing Jodo state. A completed s
 also records distinct matched IDs, perfect four-attempt sets and sets with longer
 words, atomically with its existing statistics and completion-ID deduplication.
 
-Entries must remain accepted, solution eligible and sourced; words and meanings
-are deduplicated. Definitions longer than 180 characters are omitted. A set
-rejects overlapping clue tokens or a word named by another clue. These mechanical
-checks reduce ambiguity; they do not establish human approval, familiarity or age
-suitability. Source definitions and provenance are unchanged. A restored pair is
-checked against its current eligible spelling and meaning. Vocabulary corrections
-still use curation and the release builder.
+All owner-approved mode words remain eligible, with unchanged selected meanings
+and provenance. No global definition-length or quality filter narrows that bank.
+Each four-pair board avoids identical/conflicting clues and duplicate words;
+this local compatibility check keeps a set solvable without reopening content
+approval. Restore checks saved pairs against the current mode's spelling and
+meaning. Vocabulary corrections use a newly owner-approved source release and
+the release builder.
 
 ### Journey Through Punjab: experimental prototype
 
@@ -98,24 +98,25 @@ Dictionary saved words remain separate product follow-ups.
 - Gurmukhi is a separate mode with a purpose-built on-screen keyboard.
 - Every Gurmukhi on-screen keyboard shows a short romanized pronunciation under
   each key and uses the shared pronunciation/label components.
-- Gurmukhi word length is measured in user-visible Unicode grapheme clusters.
+- Game word length follows source `tile_count` and `letter_units`, validated by the shared written-unit helper, including Gurmukhi conjuncts.
 - Do not combine Latin and Gurmukhi guesses in one game because their keyboards and length rules differ.
 
 ## Vocabulary policy
 
-- Maintain a broad accepted-guess collection.
-- Maintain a smaller curated solution collection.
-- A word may be accepted as a guess without being eligible as a solution.
-- Imported or researched content must retain its source and review status.
-- Imported words must pass the explicit dictionary-v2 source, suitability and
-  definition checks before entering play. English frequency is a familiarity
-  signal, not approval; Punjabi answers use bounded exact-sense decisions.
-  Automatic results remain `machineChecked`, with uncertain entries held.
-- All playable games select only accepted, answer-eligible records with a
-  distributable definition. Selection deduplicates the actual displayed
-  spelling, including aliases that have different stable IDs.
-- Source-matched automatic decisions and owner-authorized editorial decisions
-  are recorded as `machineChecked`, not as community or independent human review.
+- Use the October 9 owner-approved source release with separate English,
+  Romanized Punjabi and Gurmukhi masters. All included words and selected
+  definitions are approved for their own mode, for lookup, guesses and play.
+- Preserve native JSON bytes, scholarly Roman diacritics, Gurmukhi spellings,
+  one selected definition, provenance, attribution and supplied licenses.
+- Counterpart spelling is presentation metadata, never additional membership
+  in another mode. Selection deduplicates the active mode's displayed spelling.
+- Source written units and tile counts govern game length and input. Mechanical
+  integrity and available-size checks must not reintroduce old frequency gates,
+  familiarity subsets or definition-quality filtering.
+- Record owner approval as owner approval. Do not claim that importing the
+  snapshot performs fresh independent community review or approves audio.
+- Future vocabulary edits require a newly owner-approved source release and an
+  explicit import. Old curation queues are historical, not current gates.
 
 ## Design policy
 
@@ -439,7 +440,7 @@ with spoken status values alongside visual colors.
   start at this update. All new facts share the existing atomic game keys and
   reset with those repositories. No unlock timestamps are invented.
 
-## October 8 mobile navigation and dictionary v2: 1.12.0+23
+## October 8 mobile navigation and dictionary v2: 1.12.0+23 (historical content policy)
 
 - Play, Dictionary, Progress and Badges share a persistent Material navigation
   bar with the current destination selected. Selecting a destination replaces
@@ -473,3 +474,23 @@ with spoken status values alongside visual colors.
 - Preserve page-level source attribution and CC BY-SA 4.0 adaptation notices.
   Dictionary exposes Sources and each word's source, including full offline
   notices. The licensed data remain distinct from application code.
+
+## October 9 approved dictionary import: candidate 1.13.0+24
+
+The owner approved all words and selected definitions in the independent
+`sikhi_word_games_word_lists/release` package. The app ships three unchanged
+masters: English 12,527 words at 4-6 tiles, Romanized Punjabi 2,991 at 4-6 tiles,
+and Gurmukhi 4,428 at 2-8 tiles, including 33 six-tile words. Counterpart fields
+do not add words to another mode. Source letter units and tile counts remain
+authoritative; preserve written conjuncts and scholarly Roman diacritics.
+
+This decision supersedes earlier app frequency/sense-quality filtering and
+restricted everyday-answer lists. Source README limitations and retained wording
+notes describe upstream provenance and do not override the owner's approval.
+No new app editorial gate or old review queue is part of importing or checking
+this snapshot. Copy the source definitions and metadata unchanged, retain
+Princeton WordNet and Punjabi CC BY-SA licenses and package attribution, and
+validate hashes, written units and runtime membership.
+
+Candidate validation, packaging and device evidence must be recorded when
+completed; prior build 23 evidence does not establish build 24 readiness.

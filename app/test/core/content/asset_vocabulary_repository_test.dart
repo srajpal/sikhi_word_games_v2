@@ -1,13 +1,21 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
+import 'package:sikhi_word_games_v2/core/language/word_units.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/word_pool.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/domain/guess_game.dart';
 import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_vocabulary.dart';
+import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.dart';
+import 'package:sikhi_word_games_v2/features/word_bridges/domain/word_bridges_content.dart';
+import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzzle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  test('both decoding paths identify a malformed record', () async {
-    const documents = ['[{"id":"broken_record"}]'];
+  test('both decoding paths identify a malformed native record', () async {
+    const documents = ['{"words":[{"word":"broken_record"}]}'];
     final failure = isA<FormatException>().having(
       (e) => e.message,
       'record identity',
@@ -21,127 +29,168 @@ void main() {
   });
   test('web decoding yields before work and matches native decoding', () async {
     var completed = false;
-    final result = decodeVocabularyCooperatively(['[]', '[]']).then((entries) {
+    const documents = ['{"words":[]}', '{"words":[]}', '{"words":[]}'];
+    final result = decodeVocabularyCooperatively(documents).then((entries) {
       completed = true;
       return entries;
     });
     await Future<void>.value();
     expect(completed, isFalse);
-    expect(await result, decodeVocabularyDocuments(['[]', '[]']));
-  });
-
-  test('loads the replacement offline dictionary and varied game pools', () async {
-    final entries = await AssetVocabularyRepository().load();
-    final pool = WordPool(entries);
-    final quest = WordQuestVocabulary(entries);
-    expect(entries.length, inInclusiveRange(6000, 10000));
-    expect(
-      entries.every(
-        (e) => e.id.startsWith('en_v2_') || e.id.startsWith('panjabi_v2_'),
-      ),
-      isTrue,
-    );
-    expect(entries.every((e) => e.hasDistributableDefinition), isTrue);
-    expect(
-      entries.every((e) => e.reviewStatus.name == 'machineChecked'),
-      isTrue,
-    );
-    for (final mode in LanguageMode.values) {
-      for (final length in [4, 5, 6]) {
-        final answers = pool.solutions(mode: mode, wordLength: length);
-        final clues = quest
-            .words(mode: mode)
-            .where((w) => w.graphemeLength == length);
-        expect(
-          answers.length,
-          greaterThanOrEqualTo(5),
-          reason: '${mode.name}/$length',
-        );
-        expect(
-          clues.length,
-          greaterThanOrEqualTo(5),
-          reason: 'Quest ${mode.name}/$length',
-        );
-      }
-    }
-    for (final word in ['VOTARY', 'BATHOS', 'ECLAT', 'LUST', 'STUD', 'TWAT']) {
-      expect(
-        pool.entryForGuess(mode: LanguageMode.english, guess: word),
-        isNull,
-      );
-    }
-    for (final word in ['BUTTERFLY', 'ELEPHANT', 'MOUNTAIN']) {
-      final entry = entries.singleWhere(
-        (e) => e.latin == word && e.id.startsWith('en_v2_'),
-      );
-      expect(entry.solutionEligible, isTrue);
-      expect(entry.latinLength, greaterThan(6));
-    }
-    expect(
-      pool
-          .entryForGuess(mode: LanguageMode.english, guess: 'HOME')
-          ?.englishDefinition,
-      'Where a person lives.',
-    );
-    expect(
-      pool
-          .entryForGuess(mode: LanguageMode.english, guess: 'APPLE')
-          ?.englishDefinition,
-      'A sweet, red, yellow or green fruit.',
-    );
-    expect(
-      entries.any((e) => e.id == 'english_home'),
-      isFalse,
-      reason:
-          'Old English target IDs must not silently restore with a new meaning',
-    );
+    expect(await result, decodeVocabularyDocuments(documents));
   });
 
   test(
-    'random answers favor everyday child vocabulary while lookup stays broader',
+    'every approved word belongs to its own script and stays eligible',
+    () async {
+      final repository = AssetVocabularyRepository();
+      final entries = await repository.load();
+      expect(await repository.load(), same(entries));
+      expect(entries, hasLength(19946));
+      expect(
+        entries.every(
+          (e) =>
+              e.isOwnerApproved &&
+              e.acceptedGuess &&
+              e.solutionEligible &&
+              e.hasDistributableDefinition,
+        ),
+        isTrue,
+      );
+      final pool = WordPool(entries);
+      final quest = WordQuestVocabulary(entries);
+      final bridges = WordBridgesContent(entries);
+      const counts = {
+        LanguageMode.english: {4: 2263, 5: 3972, 6: 6292},
+        LanguageMode.romanizedPanjabi: {4: 658, 5: 1354, 6: 979},
+        LanguageMode.gurmukhi: {
+          2: 1515,
+          3: 1865,
+          4: 787,
+          5: 220,
+          6: 33,
+          7: 7,
+          8: 1,
+        },
+      };
+      for (final mode in LanguageMode.values) {
+        final total = counts[mode]!.values.reduce((a, b) => a + b);
+        expect(
+          entries.where((e) => e.supportsScript(mode.script)),
+          hasLength(total),
+        );
+        expect(bridges.pairsFor(mode), hasLength(total));
+        expect(
+          quest.words(mode: mode, preferKidManageable: false),
+          hasLength(total),
+        );
+        for (final bucket in counts[mode]!.entries) {
+          final solutions = pool.solutions(mode: mode, wordLength: bucket.key);
+          expect(
+            solutions,
+            hasLength(bucket.value),
+            reason: '${mode.name}/${bucket.key}',
+          );
+          expect(
+            pool.acceptedGuesses(mode: mode, wordLength: bucket.key),
+            hasLength(bucket.value),
+          );
+          expect(
+            quest
+                .words(mode: mode, preferKidManageable: false)
+                .where((w) => w.graphemeLength == bucket.key),
+            hasLength(bucket.value),
+          );
+        }
+      }
+      expect(pool.charactersFor(LanguageMode.romanizedPanjabi), hasLength(53));
+      expect(
+        pool.entryForGuess(mode: LanguageMode.english, guess: 'HOME'),
+        isNotNull,
+      );
+      expect(entries.any((e) => e.id.startsWith('en_v2_')), isFalse);
+      expect(() => entries.clear(), throwsUnsupportedError);
+    },
+  );
+
+  test(
+    'joined Gurmukhi letters survive Bujho, Quest, Khoj and restoration',
     () async {
       final entries = await AssetVocabularyRepository().load();
-      final english = {
-        for (final entry in entries.where((e) => e.id.startsWith('en_v2_')))
-          entry.latin: entry,
-      };
-      for (final word in [
-        'CORPORATION',
-        'FINANCE',
-        'RESEARCH',
-        'SECONDARY',
-        'SOCIETY',
-        'COMMENT',
-        'CURRENT',
-        'DON',
-        'FRANK',
-      ]) {
-        final entry = english[word]!;
-        expect(entry.acceptedGuess, isTrue, reason: word);
-        expect(entry.hasDistributableDefinition, isTrue, reason: word);
-        expect(entry.solutionEligible, isFalse, reason: word);
-        expect(entry.reviewStatus.name, 'machineChecked', reason: word);
-      }
-      for (final word in [
-        'HAPPY',
-        'SHARE',
-        'LEARN',
-        'PRACTICE',
-        'USEFUL',
-        'TREE',
-        'LAKE',
-        'BUTTERFLY',
-      ]) {
-        expect(english[word]!.solutionEligible, isTrue, reason: word);
-      }
-      // The pinned RULE source was vandalized, so it must not enter lookup either.
-      expect(english.containsKey('RULE'), isFalse);
-      expect(
-        entries.any(
-          (e) => e.englishDefinition.toLowerCase().contains('master bait'),
+      final pool = WordPool(entries);
+      final entry = pool.entryForGuess(
+        mode: LanguageMode.gurmukhi,
+        guess: 'ਉਪਗ੍ਰਹਿ',
+      )!;
+      expect(entry.gurmukhiLength, 4);
+      final guess = GuessGame(
+        solution: entry.gurmukhi!,
+        acceptedGuesses: pool.acceptedGuesses(
+          mode: LanguageMode.gurmukhi,
+          wordLength: 4,
         ),
-        isFalse,
       );
+      expect(guess.submit(entry.gurmukhi!).isAccepted, isTrue);
+      expect(guess.turns.single.evaluation, hasLength(4));
+      expect(
+        GuessGame.restore(
+          json: guess.toJson(),
+          acceptedGuesses: guess.acceptedGuesses,
+        ).status,
+        GuessGameStatus.won,
+      );
+      final quest = WordQuestGame(solution: entry.gurmukhi!);
+      expect(quest.maximumTries, 3);
+      for (final unit in wordUnits(entry.gurmukhi!)) {
+        quest.guess(unit);
+      }
+      expect(quest.status, WordQuestStatus.won);
+      final puzzle = WordSearchGenerator(random: Random(41)).generate(
+        candidates: [entry.gurmukhi!, 'ਅਪ੍ਰੈਲ', 'ਅੰਨ੍ਹਾ'],
+        fillerCharacters: ['ਕ', 'ਪ੍ਰੈ', 'ਗ੍ਰ'],
+        size: 6,
+        targetWordCount: 3,
+      );
+      expect(puzzle.words, hasLength(3));
+      expect(
+        WordSearchPuzzle.fromJson(
+          jsonDecode(jsonEncode(puzzle.toJson())) as Map<String, Object?>,
+        ).toJson(),
+        puzzle.toJson(),
+      );
+      expect(
+        puzzle.cells
+            .expand((row) => row)
+            .every((cell) => wordUnitCount(cell) == 1),
+        isTrue,
+      );
+    },
+  );
+
+  test(
+    'Romanized accents distinguish approved words and equivalent input matches',
+    () async {
+      final pool = WordPool(await AssetVocabularyRepository().load());
+      final a = pool.entryForGuess(
+        mode: LanguageMode.romanizedPanjabi,
+        guess: 'āsān',
+      )!;
+      final b = pool.entryForGuess(
+        mode: LanguageMode.romanizedPanjabi,
+        guess: 'asān',
+      )!;
+      expect(a.id, isNot(b.id));
+      expect(
+        pool
+            .entryForGuess(
+              mode: LanguageMode.romanizedPanjabi,
+              guess: 'a\u0304sa\u0304n',
+            )
+            ?.id,
+        a.id,
+      );
+      final game = GuessGame(solution: a.latin, acceptedGuesses: {a.latin});
+      expect(game.submit('a\u0304sa\u0304n').isAccepted, isTrue);
+      expect(game.status, GuessGameStatus.won);
     },
   );
 }

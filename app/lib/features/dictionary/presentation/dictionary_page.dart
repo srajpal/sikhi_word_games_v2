@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/language/gurmukhi_normalization.dart';
+import '../../../core/language/word_units.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/themes/studio_navigation.dart';
@@ -69,7 +72,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   void _runSearch() {
     _searchTimer?.cancel();
     setState(() => _results = const []);
-    if (_controller.text.characters.length < 2) return;
+    if (wordUnitCount(_controller.text) < 2) return;
     _searchTimer = Timer(const Duration(milliseconds: 150), () {
       if (!mounted) return;
       setState(
@@ -80,8 +83,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
   }
 
   void _appendCharacter(String character) {
-    if (_controller.text.characters.length >= 32) return;
-    final candidate = '${_controller.text}$character';
+    final appended = '${_controller.text}$character';
+    final candidate = _mode == LanguageMode.romanizedPanjabi
+        ? normalizeRomanizedInput(appended)
+        : normalizeGurmukhi(appended);
+    if (wordUnitCount(candidate) > 32) return;
     _controller.value = TextEditingValue(
       text: candidate,
       selection: TextSelection.collapsed(offset: candidate.length),
@@ -92,7 +98,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   void _backspace() {
     if (_controller.text.isEmpty) return;
-    final shortened = _controller.text.characters.skipLast(1).toString();
+    final shortened = withoutLastWordUnit(_controller.text);
     _controller.value = TextEditingValue(
       text: shortened,
       selection: TextSelection.collapsed(offset: shortened.length),
@@ -123,15 +129,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
       _backspace();
       return;
     }
-    if (HardwareKeyboard.instance.isControlPressed ||
-        HardwareKeyboard.instance.isMetaPressed ||
-        HardwareKeyboard.instance.isAltPressed) {
+    final hardware = HardwareKeyboard.instance;
+    if (hardware.isMetaPressed ||
+        (hardware.isControlPressed != hardware.isAltPressed)) {
       return;
     }
     final character = event.character;
     if (character == null || character.isEmpty) return;
-    if (_mode != LanguageMode.gurmukhi &&
-        !RegExp(r'^[A-Za-z]$').hasMatch(character)) {
+    if (!GameKeyboard.acceptsHardwareCharacter(_mode, character)) {
       return;
     }
     InteractionSounds.letter(context);
@@ -187,106 +192,124 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   : LayoutBuilder(
                       builder: (context, constraints) {
                         final compact = constraints.maxHeight < 650;
+                        final scale =
+                            MediaQuery.textScalerOf(context).scale(14) / 14;
                         return KeyboardListener(
                           focusNode: _focusNode,
                           autofocus: true,
                           onKeyEvent: _handleHardwareKey,
-                          child: Column(
-                            children: [
-                              GamePanel(
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.auto_stories_rounded,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Text(
-                                        'Find a word and its meaning',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          child: SingleChildScrollView(
+                            child: SizedBox(
+                              height: math.max(
+                                constraints.maxHeight,
+                                (_mode == LanguageMode.english
+                                        ? 500.0
+                                        : 700.0) *
+                                    math.max(1, scale),
                               ),
-                              const SizedBox(height: 12),
-                              DropdownButton<LanguageMode>(
-                                value: _mode,
-                                isExpanded: true,
-                                onChanged: (value) {
-                                  if (value != null) _changeMode(value);
-                                },
-                                items: [
-                                  for (final mode in _modes)
-                                    DropdownMenuItem(
-                                      value: mode,
-                                      child: Text(mode.label),
-                                    ),
-                                ],
-                              ),
-                              const SizedBox(height: 6),
-                              Semantics(
-                                textField: true,
-                                label: 'Dictionary search word',
-                                value: _controller.text,
-                                onTap: _focusNode.requestFocus,
-                                child: GestureDetector(
-                                  key: const ValueKey('dictionary-search'),
-                                  onTap: _focusNode.requestFocus,
-                                  child: InputDecorator(
-                                    isFocused: _focusNode.hasFocus,
-                                    decoration: InputDecoration(
-                                      labelText: 'Search word',
-                                      prefixIcon: const Icon(Icons.search),
-                                      suffixIcon: _controller.text.isEmpty
-                                          ? null
-                                          : IconButton(
-                                              tooltip: 'Clear search',
-                                              onPressed:
-                                                  InteractionSounds.buttonAction(
-                                                    context,
-                                                    _clear,
-                                                  ),
-                                              icon: const Icon(Icons.clear),
-                                            ),
-                                      border: const OutlineInputBorder(),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 8,
+                              child: Column(
+                                children: [
+                                  GamePanel(
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.auto_stories_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Text(
+                                            'Find a word and its meaning',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
                                           ),
-                                    ),
-                                    child: Text(
-                                      _controller.text.isEmpty
-                                          ? ' '
-                                          : _controller.text,
-                                      key: const ValueKey('dictionary-query'),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
+                                  const SizedBox(height: 12),
+                                  DropdownButton<LanguageMode>(
+                                    value: _mode,
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      if (value != null) _changeMode(value);
+                                    },
+                                    items: [
+                                      for (final mode in _modes)
+                                        DropdownMenuItem(
+                                          value: mode,
+                                          child: Text(mode.label),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Semantics(
+                                    textField: true,
+                                    label: 'Dictionary search word',
+                                    value: _controller.text,
+                                    onTap: _focusNode.requestFocus,
+                                    child: GestureDetector(
+                                      key: const ValueKey('dictionary-search'),
+                                      onTap: _focusNode.requestFocus,
+                                      child: InputDecorator(
+                                        isFocused: _focusNode.hasFocus,
+                                        decoration: InputDecoration(
+                                          labelText: 'Search word',
+                                          prefixIcon: const Icon(Icons.search),
+                                          suffixIcon: _controller.text.isEmpty
+                                              ? null
+                                              : IconButton(
+                                                  tooltip: 'Clear search',
+                                                  onPressed:
+                                                      InteractionSounds.buttonAction(
+                                                        context,
+                                                        _clear,
+                                                      ),
+                                                  icon: const Icon(Icons.clear),
+                                                ),
+                                          border: const OutlineInputBorder(),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 12,
+                                                vertical: 8,
+                                              ),
+                                        ),
+                                        child: Text(
+                                          _controller.text.isEmpty
+                                              ? ' '
+                                              : _controller.text,
+                                          key: const ValueKey(
+                                            'dictionary-query',
+                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Expanded(child: _buildResults(context)),
+                                  const SizedBox(height: 6),
+                                  GameKeyboard(
+                                    mode: _mode,
+                                    additionalCharacters: _pool!.charactersFor(
+                                      _mode,
+                                    ),
+                                    enabled: true,
+                                    disabledCharacters: const {},
+                                    compact: compact,
+                                    enterLabel: 'SEARCH',
+                                    onCharacter: _appendCharacter,
+                                    onBackspace: _backspace,
+                                    onEnter: _runSearch,
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 6),
-                              Expanded(child: _buildResults(context)),
-                              const SizedBox(height: 6),
-                              GameKeyboard(
-                                mode: _mode,
-                                enabled: true,
-                                disabledCharacters: const {},
-                                compact: compact,
-                                enterLabel: 'SEARCH',
-                                onCharacter: _appendCharacter,
-                                onBackspace: _backspace,
-                                onEnter: _runSearch,
-                              ),
-                            ],
+                            ),
                           ),
                         );
                       },
@@ -299,7 +322,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   );
 
   Widget _buildResults(BuildContext context) {
-    if (_controller.text.characters.length < 2) {
+    if (wordUnitCount(_controller.text) < 2) {
       return const Center(child: Text('Enter at least two characters.'));
     }
     if (_results.isEmpty) {

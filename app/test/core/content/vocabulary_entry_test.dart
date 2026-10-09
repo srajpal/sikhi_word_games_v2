@@ -16,7 +16,9 @@ void main() {
       'acceptedGuess': true,
       'solutionEligible': true,
       'reviewStatus': 'machineChecked',
-      'sources': ['Open English WordNet 2025 (CC BY 4.0)'],
+      'sources': [
+        'Princeton WordNet 3.0 (WordNet license); https://wordnet.princeton.edu/',
+      ],
     });
 
     expect(entry.englishDefinition, 'A trial—or check…');

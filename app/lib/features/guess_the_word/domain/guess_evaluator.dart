@@ -1,4 +1,4 @@
-import 'package:characters/characters.dart';
+import '../../../core/language/word_units.dart';
 
 import '../../../core/language/gurmukhi_normalization.dart';
 
@@ -12,18 +12,20 @@ class EvaluatedLetter {
 }
 
 abstract final class GuessEvaluator {
-  static int visibleLength(String value) => value.characters.length;
+  static int visibleLength(String value) => wordUnitCount(value);
 
-  static List<String> graphemes(String value) => value.characters.toList();
+  static List<String> graphemes(String value) => wordUnits(value);
 
   static List<EvaluatedLetter> evaluate({
     required String solution,
     required String guess,
   }) {
     final solutionLetters = graphemes(
-      normalizeGurmukhi(solution.toUpperCase()),
+      normalizeGurmukhi(normalizeRomanizedInput(solution.toUpperCase())),
     );
-    final guessLetters = graphemes(normalizeGurmukhi(guess.toUpperCase()));
+    final guessLetters = graphemes(
+      normalizeGurmukhi(normalizeRomanizedInput(guess.toUpperCase())),
+    );
     if (solutionLetters.length != guessLetters.length) {
       throw ArgumentError.value(guess, 'guess', 'Grapheme lengths must match.');
     }

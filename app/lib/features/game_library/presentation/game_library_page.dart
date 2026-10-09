@@ -147,12 +147,6 @@ class GameLibraryPage extends StatelessWidget {
                       },
                     ),
                   ],
-                  if (kind != GameKind.wordSearch &&
-                      selectedLanguage == LanguageMode.gurmukhi.name &&
-                      selectedWordSize == '6') ...[
-                    const SizedBox(height: 12),
-                    const Text(gurmukhiVarietyNote),
-                  ],
                   const SizedBox(height: 20),
                   GameGradientButton(
                     label: 'Start new game',
@@ -476,14 +470,14 @@ class GameLibraryPage extends StatelessWidget {
                   const StudioWebsiteLink(),
                   const SizedBox(height: 20),
                   Text(
-                    'Offline dictionary: Wiktionary contributors and wordfreq, '
-                    'CC BY-SA 4.0. Full credits in Dictionary, under Sources.',
+                    'Offline dictionary: Princeton WordNet and Wiktionary contributors. '
+                    'Full credits and licenses in Dictionary, under Sources.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Public playtest. Words and meanings are still being reviewed.',
+                    'Public playtest with owner-approved vocabulary.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),

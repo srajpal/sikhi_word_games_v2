@@ -1,4 +1,4 @@
-import 'package:characters/characters.dart';
+import '../../../core/language/word_units.dart';
 
 import '../../../core/language/gurmukhi_normalization.dart';
 
@@ -46,8 +46,7 @@ class WordQuestGame {
       maximumTries =
           maximumTries ?? recommendedMaximumTriesForSolution(solution),
       maximumHints = recommendedMaximumHintsForSolution(solution),
-      _solutionGraphemes = _normaliseWord(solution).characters
-          .toList(growable: false) {
+      _solutionGraphemes = wordUnits(_normaliseWord(solution)) {
     if (_solutionGraphemes.isEmpty) {
       throw ArgumentError.value(solution, 'solution', 'Cannot be empty.');
     }
@@ -66,12 +65,12 @@ class WordQuestGame {
   ///
   /// The supported 4-, 5-, and 6-grapheme rounds receive 3, 4, and 5 misses.
   static int recommendedMaximumTriesForSolution(String solution) =>
-      (_normaliseWord(solution).characters.length - 1).clamp(3, 5);
+      (wordUnitCount(_normaliseWord(solution)) - 1).clamp(3, 5);
 
   /// Scales hints with word length: none for four letters, one for five, and
   /// two for six or more letters.
   static int recommendedMaximumHintsForSolution(String solution) =>
-      (_normaliseWord(solution).characters.length - 4).clamp(0, 2).toInt();
+      (wordUnitCount(_normaliseWord(solution)) - 4).clamp(0, 2).toInt();
 
   final String solution;
   final int maximumTries;
@@ -254,11 +253,16 @@ class WordQuestGame {
   }
 
   static String _normaliseWord(String value) =>
-      normalizeGurmukhi(value.trim().toUpperCase());
+      normalizeGurmukhi(normalizeRomanizedInput(value.trim().toUpperCase()));
 
   static String? _normaliseGuess(String value) {
     final normalised = _normaliseWord(value);
-    return normalised.characters.length == 1 ? normalised : null;
+    final startsWithLetter = RegExp(
+      r'^[A-Za-z\u00C0-\u024F\u1E00-\u1EFF\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73]',
+    ).hasMatch(normalised);
+    return wordUnitCount(normalised) == 1 && startsWithLetter
+        ? normalised
+        : null;
   }
 
   static Set<String> _readGraphemeList(List<Object?> values) {

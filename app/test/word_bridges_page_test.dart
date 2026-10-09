@@ -116,12 +116,17 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       final repository = WordBridgesRepository(MemoryKeyValueStore());
-      final deck = shippedContent
-          .decksFor(LanguageMode.english)
-          .firstWhere((deck) => deck.pairs.any((pair) => pair.word == 'BREAD'));
+      final pool = shippedContent.pairsFor(LanguageMode.english);
+      final pairs = [
+        'PLANET',
+        'BREAD',
+        'APPLE',
+        'BOOK',
+      ].map((word) => pool.singleWhere((pair) => pair.word == word)).toList();
+      expect(pairs.first.meaning.length, greaterThan(180));
       await repository.save(
         mode: LanguageMode.english,
-        game: WordBridgesGame(pairs: deck.pairs),
+        game: WordBridgesGame(pairs: pairs),
       );
       await tester.pumpWidget(page(repository));
       await tester.pumpAndSettle();

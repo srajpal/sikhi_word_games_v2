@@ -14,8 +14,8 @@ be included in commits.
 - `docs/testing_strategy.md` — coverage expectations and quality gates.
 - `docs/content_schema.md` and `docs/definition_sources.md` — vocabulary model,
   generation, curation, and sourcing policy.
-- `docs/dictionary_review_tool.md` and `docs/gurmukhi_sources.md` — content-review
-  workflows.
+- `docs/gurmukhi_sources.md` — Punjabi mode membership and written units.
+- `docs/dictionary_review_tool.md` — retired editorial workflows, for history only.
 - `docs/word_quest_design.md` — Word Quest rules, UX, accessibility, and respectful
   visual constraints.
 
@@ -29,15 +29,27 @@ repository or vocabulary corpus without a concrete need.
   duplicate palettes or common visual elements per screen.
 - Preserve accessibility, responsive behavior, offline operation, and Unicode
   grapheme-safe handling (especially for Gurmukhi).
-- Do not edit `app/assets/content/generated/` by hand. Put editorial decisions and
-  supplemental entries in `app/assets/content/curation/`, following the content docs.
-- Do not edit `app/assets/content/release/` by hand. Rebuild it with
-  `dart run tool/build_release_content.dart --write` from `app/`; check it with
-  `--check` and `dart run tool/audit_release_content.dart`. Only these compact
-  vocabulary files belong in the distributed app.
-- For Punjabi content, use `dart run tool/review_punjabi_content.dart` to preview
-  source-backed changes, then `--write` to apply checked decisions. Never restore
-  the retired blanket-approval behavior or mark machine decisions as human review.
+- Current vocabulary is the October 9 owner-approved release snapshot in
+  `app/content/approved_release/`. Every included word and selected definition is
+  owner approved. Preserve its native JSON masters unchanged; do not reapply old
+  frequency, familiarity, quality holds or editorial queues.
+- Do not edit the approved snapshot or `app/assets/content/release/` by hand.
+  Import a newly approved source release with
+  `dart run tool/build_release_content.dart --import-from <path> --write` from
+  `app/`; ordinary `--write` rebuilds locally. Verify with `--check` and
+  `dart run tool/audit_release_content.dart`. These are integrity checks, not
+  editorial reapproval.
+- Ship three distinct masters: `english/words.json`,
+  `punjabi/romanized/words.json` and `punjabi/gurmukhi/words.json`, with source
+  attribution and licenses. Counterpart spellings are metadata and must never
+  add membership to another mode. Keep raw imports, TXT exports, review notes,
+  old generated banks and editorial queues out of runtime assets.
+- Source `letter_units` and `tile_count` govern game spelling and length;
+  validate with the shared written-unit helper, including Gurmukhi conjuncts
+  where generic grapheme counts differ. Preserve scholarly Roman diacritics.
+- Older V1, WordNet, Mahan Kosh and Dictionary v2 review tools are retired release
+  inputs. Do not use their bulk decisions to modify this approved snapshot.
+  Owner approval must not be relabelled as fresh independent community review.
 - Preserve unrelated user changes and avoid unrelated refactoring.
 
 ## Validation
@@ -68,8 +80,9 @@ use `TODO.md`, an existing relevant document, or the conversation.
 - Run `node tool/test_web_app_cache_service_worker.mjs` from `app/` when changing
   the offline web cache. Verify the actual packaged build after changing it.
 - Keep editorial queues, backups, and V1 reference files out of runtime assets.
-- A successful content-audit exit does not mean its flagged definitions are safe
-  or editorially approved. Do not label bulk machine decisions as human review.
+- Content audits verify the owner-approved imported snapshot and runtime integrity.
+  Do not claim fresh human review from passing automated checks or apply old
+  editorial flags as new approval gates.
 - Record browser/iframe, real-storage, Gurmukhi font, and offline-reload evidence
   separately from widget tests. Keep release blockers in `TODO.md`.
 - Use simple player-facing text without em dashes. Preserve quoted source data

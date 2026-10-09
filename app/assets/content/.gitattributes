@@ -1,0 +1,2 @@
+# Runtime masters and original license notices must match the approved bytes.
+release/** -text whitespace=-blank-at-eol,-blank-at-eof

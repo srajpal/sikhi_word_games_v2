@@ -1,0 +1,118 @@
+{
+  "format_version": 2,
+  "packaged_at_utc": "2026-10-09T19:34:31+00:00",
+  "definition_policy": "One selected original definition per word; no wording changes during packaging.",
+  "counts": {
+    "english": {
+      "4": 2263,
+      "5": 3972,
+      "6": 6292
+    },
+    "punjabi/romanized": {
+      "4": 658,
+      "5": 1354,
+      "6": 979
+    },
+    "punjabi/gurmukhi": {
+      "2": 1515,
+      "3": 1865,
+      "4": 787,
+      "5": 220,
+      "6": 33,
+      "7": 7,
+      "8": 1
+    }
+  },
+  "totals_by_dataset": {
+    "english": 12527,
+    "punjabi/romanized": 2991,
+    "punjabi/gurmukhi": 4428
+  },
+  "master_files": {
+    "english": "english/words.json",
+    "punjabi/romanized": "punjabi/romanized/words.json",
+    "punjabi/gurmukhi": "punjabi/gurmukhi/words.json"
+  },
+  "files": [
+    {
+      "path": "english/words.json",
+      "sha256": "11a55061751b586e65e67d14cc4c33479213831752dc7f0711fda15090fb80c9",
+      "bytes": 4449852
+    },
+    {
+      "path": "english/words.txt",
+      "sha256": "7ac4727d360388fc97391e97494ece6a6b0c83aee0edaa90d70a93c736d104a3",
+      "bytes": 79191
+    },
+    {
+      "path": "english/definitions.txt",
+      "sha256": "f0689cae1880a1890e3748162381892c9fcadf14a5e5e670ceb644d36f8add05",
+      "bytes": 784782
+    },
+    {
+      "path": "punjabi/romanized/words.json",
+      "sha256": "aef9c75379beeecb19d25f7d4497e27be11390e359486591cb15b0d7ff009d18",
+      "bytes": 2578540
+    },
+    {
+      "path": "punjabi/romanized/words.txt",
+      "sha256": "f612d08b434b5191b74331b5aaad390b18928540d61c55b733f585437b976322",
+      "bytes": 23469
+    },
+    {
+      "path": "punjabi/romanized/definitions.txt",
+      "sha256": "34102c2310e150730f2ef4f90837853f7a1fce7a7d335fda0b5fdbcb09482410",
+      "bytes": 92075
+    },
+    {
+      "path": "punjabi/gurmukhi/words.json",
+      "sha256": "274a0d7e88c3777dc9e0214a9a1ddf8ca03e452b2f8705a124064cf9f4edb67b",
+      "bytes": 3542460
+    },
+    {
+      "path": "punjabi/gurmukhi/words.txt",
+      "sha256": "1f8c5b4222444438f56aa4a6dad0e1c59b89de626487280ffe9d57e65bfdb744",
+      "bytes": 68667
+    },
+    {
+      "path": "punjabi/gurmukhi/definitions.txt",
+      "sha256": "6508301426e1ac990341ace25009fd097f486017d8282fdc85462a944594284a",
+      "bytes": 170578
+    },
+    {
+      "path": "licenses/WORDNET_LICENSE.txt",
+      "sha256": "820f4dbb30e77e9bdad3f5b9dee3c9f81a1ce99963bb1c4b75de794fc762b6e2",
+      "bytes": 1654,
+      "source_path": "dictionary/WORDNET_LICENSE.txt"
+    },
+    {
+      "path": "licenses/CC_BY_SA_4_0_LICENSE.txt",
+      "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5",
+      "bytes": 20138,
+      "source_path": "dictionary/punjabi/source/CC_BY_SA_4_0_LICENSE.txt"
+    },
+    {
+      "path": "licenses/FILTER_CC_BY_4_0_LICENSE.txt",
+      "sha256": "55bfbc1759943f7d19acfc68e35644b7fbe10cd8d39ab3551ce5ecff5dda9979",
+      "bytes": 18523,
+      "source_path": "dictionary/source/FILTER_LICENSE.txt"
+    },
+    {
+      "path": "review_notes.json",
+      "sha256": "84d08981641c6101a55a5f9f94940089fc385a455d7f9cab46836f4b3352f033",
+      "bytes": 3495
+    },
+    {
+      "path": "ATTRIBUTION.txt",
+      "sha256": "ae88c9af426ccf1dce71c08699fcd8cb6cbe56782ef417139f5b190736b8c9a1",
+      "bytes": 2042
+    },
+    {
+      "path": "README.txt",
+      "sha256": "5cd7dada8ff1d3370d98735229386acb31a584f7d221908e4cd30a82b1e1a1b4",
+      "bytes": 4504
+    }
+  ],
+  "wording_review_count": 7,
+  "validation": "passed"
+}

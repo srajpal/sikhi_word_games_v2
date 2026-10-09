@@ -21,13 +21,17 @@ $archivePath = Join-Path $resolvedOutputDirectory "sikhi-word-games-web-$version
 
 Push-Location $appDirectory
 try {
-    dart run tool\dictionary_v2.dart --check
+    dart run tool\audit_content.dart
     if ($LASTEXITCODE -ne 0) {
-        throw "Dictionary v2 reproduction or release audit failed. Preview with dart run tool/dictionary_v2.dart and rebuild checked changes with --write."
+        throw "Approved vocabulary integrity check failed. Rebuild the checked snapshot with dart run tool/build_release_content.dart --write."
     }
     flutter build web --release --no-web-resources-cdn --pwa-strategy=none --suppress-analytics
     if ($LASTEXITCODE -ne 0) {
         throw "The Flutter web release build failed."
+    }
+    dart run tool\audit_release_content.dart --directory build\web\assets\assets\content\release
+    if ($LASTEXITCODE -ne 0) {
+        throw "The web build does not contain the exact approved masters, attribution and licenses."
     }
     $indexPath = Join-Path $appDirectory "build\web\index.html"
     $indexHtml = Get-Content -LiteralPath $indexPath -Raw
@@ -38,6 +42,7 @@ try {
         throw "The release index did not contain a supported base path."
     }
     Copy-Item -LiteralPath (Join-Path $appDirectory "THIRD_PARTY_NOTICES.txt") -Destination (Join-Path $appDirectory "build\web\THIRD_PARTY_NOTICES.txt")
+    Copy-Item -LiteralPath (Join-Path $appDirectory "assets\fonts\noto_serif\OFL.txt") -Destination (Join-Path $appDirectory "build\web\Noto-Serif-OFL.txt")
     Copy-Item -LiteralPath (Join-Path $appDirectory "assets\fonts\noto_sans\OFL.txt") -Destination (Join-Path $appDirectory "build\web\Noto-Sans-OFL.txt")
     Copy-Item -LiteralPath (Join-Path $appDirectory "assets\fonts\noto_sans_gurmukhi\OFL.txt") -Destination (Join-Path $appDirectory "build\web\Noto-Sans-Gurmukhi-OFL.txt")
     dart run tool\generate_web_app_cache.dart --build-dir=build\web --version=$version
@@ -45,7 +50,7 @@ try {
         throw "The offline app cache manifest could not be generated."
     }
     $privateContent = Get-ChildItem -LiteralPath (Join-Path $appDirectory "build\web") -File -Recurse | Where-Object {
-        $_.FullName -match '[\\/]content[\\/](generated|curation)([\\/]|$)'
+        $_.FullName -match '[\\/]content[\\/](generated|curation|approved_release)([\\/]|$)'
     }
     if ($null -ne $privateContent) {
         $paths = ($privateContent | Select-Object -ExpandProperty FullName) -join [Environment]::NewLine

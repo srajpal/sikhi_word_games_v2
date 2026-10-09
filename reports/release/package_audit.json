@@ -1,43 +1,12 @@
 {
-  "version": "1.12.0+23",
-  "verifiedOn": "2026-10-08",
-  "web": {
-    "archive": "app/dist/sikhi-word-games-web-1.12.0+23.zip",
-    "bytes": 20426162,
-    "sha256": "e83c37df3f09986b85115b6a2891369e9c5571597c5a46e3e048874827b58a54",
-    "files": 106,
-    "uncompressedBytes": 54184336,
-    "releaseBanks": [
-      "assets/assets/content/release/english_v2.json",
-      "assets/assets/content/release/punjabi_v2.json"
-    ],
-    "sourceAssetsExcluded": true,
-    "learnLettersClips": 35,
-    "clickSounds": 2,
-    "sourceBytesMatch": true,
-    "relativeBase": true,
-    "packagedBootstrapMatchesBuild": true,
-    "cacheBuildId": "15cdd6041a7e6e1d",
-    "cacheFiles": 89,
-    "cacheBytes": 45593536,
-    "cacheManifestMatchesPackage": true,
-    "updateNoticeBehaviorPassed": true
-  },
-  "android": {
-    "archive": "app/dist/sikhi-word-games-android-1.12.0+23-debug.apk",
-    "bytes": 177185053,
-    "sha256": "0331ccb6e3a6d19fa1da5c792572ab22b76ede846765beded1fda29759092993",
-    "files": 600,
-    "uncompressedBytes": 260543766,
-    "releaseBanks": [
-      "assets/flutter_assets/assets/content/release/english_v2.json",
-      "assets/flutter_assets/assets/content/release/punjabi_v2.json"
-    ],
-    "sourceAssetsExcluded": true,
-    "learnLettersClips": 35,
-    "clickSounds": 2,
-    "sourceBytesMatch": true
-  },
-  "browserIframeVerification": "Localhost verification recorded separately in TODO.md; uploaded iframe not tested.",
-  "distribution": "Local testing packages; not uploaded or published."
+  "version": "1.13.0+24",
+  "archive": "app\\dist\\sikhi-word-games-web-1.13.0+24.zip",
+  "bytes": 21316140,
+  "sha256": "bd48c5d0a454377a797799f0ed0cacc18dd3e1b36a63e4b2ab6390cb3094d8f5",
+  "runtime_files": 7,
+  "entry_count": 113,
+  "verified_byte_identical_runtime": true,
+  "root_index_relative_base": true,
+  "authoring_assets_absent": true,
+  "credits_and_font_licenses_present": true
 }

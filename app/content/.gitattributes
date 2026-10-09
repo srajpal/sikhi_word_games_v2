@@ -1,0 +1,2 @@
+# Preserve the supplied manifest hashes across Windows and Unix checkouts.
+approved_release/** -text whitespace=-blank-at-eol,-blank-at-eof

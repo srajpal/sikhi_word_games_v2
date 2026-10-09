@@ -20,8 +20,6 @@ class GameLanguageHeader extends StatelessWidget {
 }
 
 const gameSnackBarDuration = Duration(seconds: 5);
-const gurmukhiVarietyNote =
-    'For more variety in Gurmukhi, choose 4 or 5 letters.';
 
 Widget? gameBackButton(BuildContext context) => Navigator.canPop(context)
     ? BackButton(

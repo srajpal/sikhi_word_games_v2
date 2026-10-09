@@ -15,6 +15,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/language/gurmukhi_romanization.dart';
+import '../../../core/language/word_units.dart';
+import '../../guess_the_word/presentation/game_keyboard.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/widgets/gurmukhi_key_label.dart';
@@ -28,6 +30,15 @@ const _gurmukhiAlphabet = <String>[
   'ੳ',
   'ਅ',
   'ੲ',
+  'ਆ',
+  'ਇ',
+  'ਈ',
+  'ਉ',
+  'ਊ',
+  'ਏ',
+  'ਐ',
+  'ਓ',
+  'ਔ',
   'ਸ',
   'ਹ',
   'ਕ',
@@ -124,20 +135,28 @@ class _WordQuestPageState extends State<WordQuestPage> {
     if (event is! KeyDownEvent || _game?.isComplete != false) {
       return KeyEventResult.ignored;
     }
-    if (HardwareKeyboard.instance.isControlPressed ||
-        HardwareKeyboard.instance.isMetaPressed ||
-        HardwareKeyboard.instance.isAltPressed) {
+    final hardware = HardwareKeyboard.instance;
+    if (hardware.isMetaPressed ||
+        (hardware.isControlPressed != hardware.isAltPressed)) {
       return KeyEventResult.ignored;
     }
     final character = event.character;
     if (character == null || character.isEmpty) return KeyEventResult.ignored;
-    final isLetter = _mode == LanguageMode.gurmukhi
-        ? RegExp(r'^[\u0A00-\u0A7F]+$').hasMatch(character)
-        : RegExp(r'^[A-Za-z]$').hasMatch(character);
+    final normalized = _mode == LanguageMode.romanizedPanjabi
+        ? normalizeRomanizedInput(character)
+        : character;
+    // Quest selects complete written units; isolated input-method marks do not
+    // form guesses and must never consume a miss.
+    final isLetter =
+        GameKeyboard.acceptsHardwareCharacter(_mode, normalized) &&
+        wordUnitCount(normalized) == 1 &&
+        RegExp(
+          r'^[A-Za-z\u00C0-\u024F\u1E00-\u1EFF\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73]',
+        ).hasMatch(normalized);
     if (!isLetter) {
       return KeyEventResult.ignored;
     }
-    _guess(character);
+    _guess(normalized);
     return KeyEventResult.handled;
   }
 
@@ -275,7 +294,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
   List<String> _buildLetterBank(WordQuestGame game) {
     final answer = game.letterBankGraphemes.toSet();
     final choices = <String>{...answer};
-    if (_mode == LanguageMode.gurmukhi) {
+    if (_mode != LanguageMode.english) {
       final distractors =
           _vocabulary!
               .graphemes(mode: _mode)
@@ -297,8 +316,15 @@ class _WordQuestPageState extends State<WordQuestPage> {
   }
 
   List<String> _fullLetterBank(WordQuestGame game) {
-    if (_mode != LanguageMode.gurmukhi) {
+    if (_mode == LanguageMode.english) {
       return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.characters.toList(growable: false);
+    }
+    if (_mode == LanguageMode.romanizedPanjabi) {
+      return <String>{
+        ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.characters,
+        ...game.letterBankGraphemes,
+        ..._vocabulary!.graphemes(mode: _mode),
+      }.toList(growable: false);
     }
     return <String>{
       ...game.letterBankGraphemes,
@@ -454,10 +480,6 @@ class _WordQuestPageState extends State<WordQuestPage> {
                     setSheetState(() => size = values.first);
                   },
                 ),
-                if (mode == LanguageMode.gurmukhi && size == 6) ...[
-                  const SizedBox(height: 12),
-                  const Text(gurmukhiVarietyNote),
-                ],
                 const SizedBox(height: 20),
                 FilledButton(
                   onPressed: InteractionSounds.buttonAction(

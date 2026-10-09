@@ -1,0 +1,36 @@
+DICTIONARY ATTRIBUTION AND LICENSES
+
+English data: Princeton University, WordNet 3.0.
+WordNet 3.0 Copyright 2006 by Princeton University. All rights reserved.
+https://wordnet.princeton.edu/
+Source: https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz
+Full terms: licenses/WORDNET_LICENSE.txt
+Modifications: lowercase headword selection, family-content screening,
+grouping by 4/5/6 letters, removal of examples, and selection of one
+original definition per word. Preserve the copyright, license, and disclaimer.
+
+Punjabi data (both scripts): Wiktionary contributors, CC BY-SA 4.0.
+https://en.wiktionary.org/wiki/Wiktionary:Copyrights
+https://creativecommons.org/licenses/by-sa/4.0/
+Extraction by Tatu Ylonen / Wiktextract; distributed by Kaikki.org.
+https://kaikki.org/dictionary/Punjabi/index.html
+Full terms: licenses/CC_BY_SA_4_0_LICENSE.txt
+Individual source pages and contributor-history URLs are preserved in JSON.
+Modifications: selection of Gurmukhi headwords and paired scholarly Roman
+spellings; Unicode NFC normalization and lowercase Roman indexing;
+screening of names, nonwords, grammatical references, and sensitive content;
+grouping by script-specific letter units; merging Roman homographs; selection
+of one original English gloss per word. Shared adaptations of these data
+must follow the license's attribution and share-alike terms.
+
+Screening filter: Shutterstock, Inc., Copyright 2012-2020, CC BY 4.0.
+https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words
+https://creativecommons.org/licenses/by/4.0/
+Full terms: licenses/FILTER_CC_BY_4_0_LICENSE.txt
+Used with local supplemental screening rules. The filter list is not packaged.
+
+Keep this attribution and the applicable licenses with redistributed data,
+including TXT exports. JSON carries additional source and modification notes.
+Preserve Punjabi source/history links when adapting or redistributing entries.
+Source code and dictionary data have distinct licensing; this package does
+not place all data under an application-code license.

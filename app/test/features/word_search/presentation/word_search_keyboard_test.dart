@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
+import 'package:sikhi_word_games_v2/core/language/word_units.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/domain/word_pool.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/word_search/data/word_search_session_repository.dart';
@@ -11,6 +13,64 @@ import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzz
 import 'package:sikhi_word_games_v2/features/word_search/presentation/word_search_page.dart';
 
 void main() {
+  testWidgets(
+    'marked and conjunct tiles also fill and restore the Khoj board',
+    (tester) async {
+      for (final mode in [
+        LanguageMode.romanizedPanjabi,
+        LanguageMode.gurmukhi,
+      ]) {
+        final spellings = mode == LanguageMode.gurmukhi
+            ? ['ਪ੍ਰਾਕ੍ਰਾ', 'ਗ੍ਰਾਪ੍ਰਿ', 'ਕ੍ਰਾਪ੍ਰਾ']
+            : ['ĀḌĀṆ', 'ĪṬĪṄ', 'ŪḶŪṚ'];
+        final entries = [
+          for (final (i, word) in spellings.indexed)
+            VocabularyEntry(
+              id: '${mode.name}_$i',
+              language: VocabularyLanguage.panjabi,
+              latin: mode == LanguageMode.gurmukhi ? 'LINK$i' : word,
+              gurmukhi: mode == LanguageMode.gurmukhi ? word : null,
+              englishDefinition: 'A source-backed test word',
+              latinLength: wordUnitCount(word),
+              gurmukhiLength: mode == LanguageMode.gurmukhi
+                  ? wordUnitCount(word)
+                  : null,
+              acceptedGuess: true,
+              solutionEligible: true,
+              reviewStatus: ReviewStatus.editorApproved,
+              source: 'Project editorial definition; original text for Sikhi Word Games',
+              script: mode.script,
+            ),
+        ];
+        final repertoire = WordPool(entries).charactersFor(mode).toSet();
+        final repository = WordSearchSessionRepository(MemoryKeyValueStore());
+        await tester.pumpWidget(
+          MaterialApp(
+            key: ValueKey(mode),
+            theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+            home: WordSearchPage(
+              vocabularyRepository: MemoryVocabularyRepository(entries),
+              sessionRepository: repository,
+              initialMode: mode,
+              startFresh: true,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final restored = repository.restore()!;
+        expect(restored.puzzle.words, hasLength(3));
+        expect(
+          restored.puzzle.cells
+              .expand((row) => row)
+              .every(
+                (unit) => repertoire.contains(unit) && wordUnitCount(unit) == 1,
+              ),
+          isTrue,
+        );
+        expect(tester.takeException(), isNull);
+      }
+    },
+  );
   testWidgets('vertical grid drag wins over scrolling on a short screen', (
     tester,
   ) async {

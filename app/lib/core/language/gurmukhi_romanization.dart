@@ -4,6 +4,9 @@
 /// replacement for curated whole-word romanization in the vocabulary.
 String romanizeGurmukhiGrapheme(String grapheme) {
   if (grapheme.isEmpty) return '';
+  // Composition controls need readable names when displayed on their own.
+  if (grapheme == '਼') return 'Nukta';
+  if (grapheme == '੍') return 'Join';
   const independentVowels = {
     'ੳ': 'u',
     'ਅ': 'a',

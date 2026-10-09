@@ -6,7 +6,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 - `app/` — the new Flutter V2 application for Android, iOS/iPadOS, and web.
 - `docs/` — product decisions, architecture, content schema, and testing strategy.
-- `reports/` — reproducible vocabulary-import review reports.
+- `app/content/approved_release/` — owner-approved vocabulary and supplied provenance.
 - `sikhi_word_games-main/` — optional local V1 reference source; deliberately excluded from Git.
 - `TODO.md` — the persistent implementation checklist.
 
@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.12.0` (build `23`). The uploaded web draft remains
+The current testing build is `1.13.0` (build `24`). The uploaded web draft remains
 `1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
@@ -38,27 +38,31 @@ Run from `app/`:
 dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
 flutter analyze --suppress-analytics
 flutter test --suppress-analytics
-dart run tool/dictionary_v2.dart --check
+dart run tool/build_release_content.dart --check
 dart run tool\audit_content.dart
 flutter build web --release --no-web-resources-cdn --suppress-analytics
 ```
 
-The content audit reports editorial flags even when it exits successfully. Review
-its results. See [testing strategy](docs/testing_strategy.md) for device,
-accessibility, browser, and integration checks beyond the unit/widget suite.
+The content checks validate the supplied manifest, exact release bytes, counts,
+script membership and written letter units. All supplied words are approved by
+the project owner; the retired dictionary's quality and frequency filters do not
+remove words from this release. See [testing strategy](docs/testing_strategy.md)
+for device, accessibility, browser and integration checks.
 
-Run `dart run tool\import_v1_content.dart` only when intentionally rebuilding
-content from the local V1 source. It is not a normal validation step. Generated
-assets are tracked; the V1 source folder is excluded from publication. Editorial
-changes belong in the curation layer described in the content documentation.
+The approved release is under `app/content/approved_release/`, outside runtime
+assets. To replace it with a future approved set, run:
 
-For vocabulary maintenance, run `dart run tool/dictionary_v2.dart` to preview
-the locked English and Punjabi imports. Use `--write` to rebuild the two compact
-runtime banks, then `--check` to reproduce and audit them. No download is needed
-for routine maintenance. Source snapshots and editorial decisions stay outside
-runtime assets. The retired V1/WordNet/Mahan Kosh chain is archival. See
-[definition workflow](docs/definition_sources.md) for source verification,
-focused improvements and the remaining linguistic checks.
+```powershell
+dart run tool/build_release_content.dart --import-from "C:/path/to/release" --write
+dart run tool/build_release_content.dart --check
+dart run tool/audit_content.dart
+```
+
+Routine rebuilds use `dart run tool/build_release_content.dart --write`. The
+runtime contains three byte-identical native word masters plus attribution and
+full licenses. English has 12,527 words, Romanized Punjabi 2,991 and Gurmukhi
+4,428. See [content schema](docs/content_schema.md) for mode membership and
+[definition sources](docs/definition_sources.md) for provenance.
 
 ## Android release signing
 
@@ -130,4 +134,4 @@ The historical `app/dist/sikhi-word-games-web-1.9.0+17.zip` is not a package of
 current source. Use the newly validated, versioned ZIP for the next draft upload.
 The directory is ignored by Git. Artwork sources
 live in `branding/`; cover and real gameplay screenshots live in `reports/release/`.
-Keep `THIRD_PARTY_NOTICES.txt` and both bundled-font license files in the package.
+Keep `THIRD_PARTY_NOTICES.txt`, all supplied dictionary licenses and bundled-font licenses in the package.

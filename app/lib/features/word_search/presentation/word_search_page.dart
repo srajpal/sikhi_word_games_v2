@@ -15,6 +15,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/language/gurmukhi_romanization.dart';
+import '../../../core/language/word_units.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/widgets/gurmukhi_key_label.dart';
@@ -67,57 +68,6 @@ class _WordSearchPageState extends State<WordSearchPage> {
   String? _error;
   GridPoint _keyboardPoint = const GridPoint(0, 0);
   bool _keyboardSelecting = false;
-
-  static const _latinFiller = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z',
-  ];
-  static const _gurmukhiFiller = [
-    'ਕ',
-    'ਖ',
-    'ਗ',
-    'ਘ',
-    'ਚ',
-    'ਜ',
-    'ਟ',
-    'ਡ',
-    'ਤ',
-    'ਦ',
-    'ਨ',
-    'ਪ',
-    'ਬ',
-    'ਮ',
-    'ਯ',
-    'ਰ',
-    'ਲ',
-    'ਵ',
-    'ਸ',
-    'ਹ',
-  ];
 
   @override
   void initState() {
@@ -209,8 +159,8 @@ class _WordSearchPageState extends State<WordSearchPage> {
         }
         final spelling = WordPool.spelling(entry, _mode);
         if (spelling == null ||
-            spelling.characters.length < 2 ||
-            spelling.characters.length > 12 ||
+            wordUnitCount(spelling) < 2 ||
+            wordUnitCount(spelling) > 12 ||
             !seen.add(spelling.toUpperCase())) {
           continue;
         }
@@ -223,15 +173,15 @@ class _WordSearchPageState extends State<WordSearchPage> {
       // Ten cells fit most everyday words. Grow only when this pool has longer words.
       final gridSize = available.fold<int>(
         10,
-        (size, word) => math.max(size, word.characters.length),
+        (size, word) => math.max(size, wordUnitCount(word)),
       );
       final puzzle = _generator.generate(
         size: gridSize,
         candidates: available,
         targetWordCount: math.min(6, available.length),
-        fillerCharacters: _mode == LanguageMode.gurmukhi
-            ? _gurmukhiFiller
-            : _latinFiller,
+        // Marked and joined tiles occur in filler too, so target paths are
+        // not exposed merely by their script or scholarly accents.
+        fillerCharacters: WordPool(_entries!).charactersFor(_mode),
       );
       if (!mounted) return;
       setState(() {
@@ -269,11 +219,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
   }
 
   bool _supportsMode(VocabularyEntry entry, LanguageMode mode) =>
-      switch (mode) {
-        LanguageMode.english => entry.language == VocabularyLanguage.english,
-        LanguageMode.romanizedPanjabi ||
-        LanguageMode.gurmukhi => entry.language == VocabularyLanguage.panjabi,
-      };
+      entry.supportsScript(mode.script);
 
   VocabularyEntry? _entryForWord(String word) {
     final entries = _entries;
@@ -723,7 +669,7 @@ class _WordSearchBoard extends StatelessWidget {
     final activeCells = selection.toSet();
     final hintedCells = activeHintWord == null
         ? const <GridPoint>{}
-        : puzzle.cellsWithGrapheme(activeHintWord!.characters.first);
+        : puzzle.cellsWithGrapheme(wordUnits(activeHintWord!).first);
     final complete = foundWords.length == puzzle.words.length;
     final textScale = MediaQuery.textScalerOf(context).scale(14) / 14;
     final targetCardHeight =

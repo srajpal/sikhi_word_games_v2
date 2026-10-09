@@ -1,43 +1,45 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sikhi_word_games_v2/core/content/vocabulary_licenses.dart';
+import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 
 void main() {
-  test('bundles sanitized release vocabulary only', () {
+  test('ships exactly three native masters and the supplied full licenses', () {
     final pubspec = File('pubspec.yaml').readAsStringSync();
-    expect(pubspec, contains('assets/content/release/english_v2.json'));
+    for (final path in AssetVocabularyRepository.assetPaths) {
+      expect(pubspec, contains(path));
+      expect(
+        File(path).readAsBytesSync(),
+        File(
+          path.replaceFirst(
+            'assets/content/release',
+            'content/approved_release',
+          ),
+        ).readAsBytesSync(),
+      );
+    }
     expect(pubspec, isNot(contains('assets/content/generated/')));
     expect(pubspec, isNot(contains('assets/content/curation/')));
-
-    var count = 0;
-    for (final language in const ['english', 'punjabi']) {
-      final entries = (jsonDecode(
-        File('assets/content/release/${language}_v2.json').readAsStringSync(),
-      ) as List<Object?>).cast<Map<String, Object?>>();
-      count += entries.length;
-      for (final entry in entries) {
-        final definitions = entry['definitions']! as Map<String, Object?>;
-        final english = (definitions['en']! as List<Object?>).single as String;
-        final sources = (entry['sources']! as List<Object?>).cast<String>();
-        if (english.isEmpty) {
-          expect(definitions['pa'], isEmpty, reason: entry['id'] as String);
-          expect(
-            entry['solutionEligible'],
-            isFalse,
-            reason: entry['id'] as String,
-          );
-        } else {
-          expect(
-            sources.any(isTrustedVocabularySource),
-            isTrue,
-            reason: entry['id'] as String,
-          );
-        }
-      }
+    expect(pubspec, isNot(contains('content/approved_release/')));
+    final attribution = File('assets/content/release/ATTRIBUTION.txt')
+        .readAsStringSync();
+    final notices = File('THIRD_PARTY_NOTICES.txt')
+        .readAsStringSync()
+        .replaceAll('\r\n', '\n');
+    expect(notices, contains(attribution.replaceAll('\r\n', '\n')));
+    for (final license in [
+      'WORDNET_LICENSE.txt',
+      'CC_BY_SA_4_0_LICENSE.txt',
+      'FILTER_CC_BY_4_0_LICENSE.txt',
+    ]) {
+      final path = 'assets/content/release/licenses/$license';
+      expect(pubspec, contains(path));
+      expect(
+        notices,
+        contains(File(path).readAsStringSync().replaceAll('\r\n', '\n')),
+      );
     }
-    expect(count, inInclusiveRange(6000, 10000));
-    expect(pubspec, contains('THIRD_PARTY_NOTICES.txt'));
+    expect(notices, isNot(contains('wordfreq')));
+    expect(notices, isNot(contains('Simple English Wiktionary')));
   });
 }

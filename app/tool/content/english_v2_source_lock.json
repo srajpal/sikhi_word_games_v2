@@ -1,8 +1,0 @@
-{
-  "path": "tool/content/sources/english_v2_source.json.gz",
-  "sha256": "c896411a19317a5902187dda238c96ea8b937ec1b87fbb1e79655cb1dcc1e7bb",
-  "rawSha256": "ea4342525a35eb32e70f5d9945398f06d4f6160af25b0c340fc84662d27efcdf",
-  "sourceUrl": "https://kaikki.org/simplewiktionary/raw-wiktextract-data.jsonl.gz",
-  "license": "CC BY-SA 4.0",
-  "frequencyVersion": "3.1.1"
-}

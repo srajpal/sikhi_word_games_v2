@@ -19,10 +19,8 @@ jobs:
           flutter-version: 3.47.2
           cache: true
       - run: flutter pub get
-      - name: Reproduce the locked offline dictionary v2
-        run: dart run tool/dictionary_v2.dart --check
-      - name: Test English import policy
-        run: python -m unittest discover -s tool/tests -p "test_english_dictionary_v2.py"
+      - name: Verify approved vocabulary snapshot and release bytes
+        run: dart run tool/audit_content.dart
       - name: Audit hosted dependency vulnerabilities
         run: python tool/audit_dependencies.py
       - run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
@@ -36,8 +34,9 @@ jobs:
         run: node tool/test_web_app_cache_service_worker.mjs
       - name: Verify update notices
         run: node tool/test_web_update_notice.mjs
-      - run: dart run tool/audit_content.dart
       - run: flutter build web --release --no-web-resources-cdn --suppress-analytics
+      - name: Verify packaged vocabulary and original license files
+        run: dart run tool/audit_release_content.dart --directory build/web/assets/assets/content/release
       - uses: browser-actions/setup-chrome@v2
         id: chrome
         with:

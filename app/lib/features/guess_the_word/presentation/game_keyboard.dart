@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/language/gurmukhi_romanization.dart';
+import '../../../core/language/gurmukhi_normalization.dart';
+import '../../../core/language/word_units.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/widgets/gurmukhi_key_label.dart';
@@ -18,6 +20,7 @@ class GameKeyboard extends StatelessWidget {
     this.compact = false,
     this.enterLabel = 'ENTER',
     this.letterResults = const {},
+    this.additionalCharacters = const [],
     super.key,
   });
 
@@ -30,8 +33,11 @@ class GameKeyboard extends StatelessWidget {
   final bool compact;
   final String enterLabel;
   final Map<String, LetterResult> letterResults;
+  final Iterable<String> additionalCharacters;
 
   Color? _keyFill(BuildContext context, String character) {
+    // Whole-tile clues cannot classify a constituent of another Gurmukhi tile.
+    if (mode == LanguageMode.gurmukhi) return null;
     final tokens = Theme.of(context).extension<GameThemeTokens>()!;
     return switch (letterResults[character]) {
       LetterResult.correct => tokens.correct,
@@ -47,17 +53,94 @@ class GameKeyboard extends StatelessWidget {
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M'],
   ];
 
+  // The approved Roman alphabet preserves scholarly marks as whole keys.
+  static const romanizedLetters = [
+    'á',
+    'ã',
+    'ñ',
+    'õ',
+    'ā',
+    'ā́',
+    'ā̃',
+    'ă',
+    'ē',
+    'ē̃',
+    'ġ',
+    'ĩ',
+    'ī',
+    'ī̃',
+    'ĭ',
+    'ś',
+    'ũ',
+    'ū',
+    'ū̃',
+    'ḍ',
+    'ḷ',
+    'ṃ',
+    'ṅ',
+    'ṇ',
+    'ṛ',
+    'ṭ',
+    'ẽ',
+  ];
+
+  static bool acceptsHardwareCharacter(LanguageMode mode, String character) {
+    if (character.isEmpty) return false;
+    if (mode == LanguageMode.english) {
+      return RegExp(r'^[A-Za-z]+$').hasMatch(character);
+    }
+    if (mode == LanguageMode.romanizedPanjabi) {
+      final normalized = normalizeRomanizedInput(character).toUpperCase();
+      final allowed = {
+        ..._latinRows.expand((row) => row),
+        ...romanizedLetters.map((letter) => letter.toUpperCase()),
+      };
+      return wordUnits(normalized).every(
+        (unit) =>
+            allowed.contains(unit) ||
+            RegExp(r'^[\u0300-\u036F]+$').hasMatch(unit),
+      );
+    }
+    final allowed = _gurmukhiRows.expand((row) => row).join().runes.toSet();
+    return normalizeGurmukhi(character).runes.every(allowed.contains);
+  }
+
   static const _gurmukhiRows = [
     ['ਕ', 'ਖ', 'ਗ', 'ਘ', 'ਙ', 'ਚ', 'ਛ', 'ਜ', 'ਝ', 'ਞ'],
     ['ਟ', 'ਠ', 'ਡ', 'ਢ', 'ਣ', 'ਤ', 'ਥ', 'ਦ', 'ਧ', 'ਨ'],
     ['ਪ', 'ਫ', 'ਬ', 'ਭ', 'ਮ', 'ਯ', 'ਰ', 'ਲ', 'ਵ', 'ੜ'],
     ['ਸ', 'ਹ', 'ੳ', 'ਅ', 'ੲ', 'ਸ਼', 'ਖ਼', 'ਗ਼', 'ਜ਼', 'ਫ਼'],
-    ['ਾ', 'ਿ', 'ੀ', 'ੁ', 'ੂ', 'ੇ', 'ੈ', 'ੋ', 'ੌ', 'ੰ', 'ਂ', 'ੱ'],
+    ['ਆ', 'ਇ', 'ਈ', 'ਉ', 'ਊ', 'ਏ', 'ਐ', 'ਓ', 'ਔ'],
+    ['ਾ', 'ਿ', 'ੀ', 'ੁ', 'ੂ', 'ੇ', 'ੈ', 'ੋ'],
+    ['ੌ', 'ੰ', 'ਂ', 'ੱ', '਼', '੍'],
   ];
+
+  String _gurmukhiKeyName(String character) => switch (character) {
+    '਼' => 'nukta mark',
+    '੍' => 'virama, join the next consonant',
+    _ => romanizeGurmukhiGrapheme(character),
+  };
 
   @override
   Widget build(BuildContext context) {
-    final rows = mode == LanguageMode.gurmukhi ? _gurmukhiRows : _latinRows;
+    final rows = <List<String>>[
+      ...(mode == LanguageMode.gurmukhi ? _gurmukhiRows : _latinRows),
+    ];
+    final disabled = mode == LanguageMode.gurmukhi
+        ? const <String>{}
+        : disabledCharacters;
+    if (mode == LanguageMode.romanizedPanjabi) {
+      final existing = rows.expand((row) => row).toSet();
+      final extra = <String>{
+        ...romanizedLetters.map((letter) => letter.toUpperCase()),
+        ...additionalCharacters
+            .map(normalizeRomanizedInput)
+            .map((letter) => letter.toUpperCase()),
+      }.where((letter) => !existing.contains(letter)).toList();
+      for (var start = 0; start < extra.length; start += 10) {
+        rows.add(extra.skip(start).take(10).toList());
+      }
+    }
     return Semantics(
       label: mode == LanguageMode.gurmukhi
           ? 'Gurmukhi game keyboard'
@@ -83,7 +166,9 @@ class GameKeyboard extends StatelessWidget {
                         child: _KeyboardButton(
                           key: ValueKey('key-$character'),
                           fill: _keyFill(context, character),
-                          stateValue: switch (letterResults[character]) {
+                          stateValue: switch (mode == LanguageMode.gurmukhi
+                              ? null
+                              : letterResults[character]) {
                             LetterResult.correct => 'correct position',
                             LetterResult.present =>
                               'present in another position',
@@ -92,15 +177,14 @@ class GameKeyboard extends StatelessWidget {
                           label: mode == LanguageMode.gurmukhi
                               ? null
                               : character,
-                          semanticLabel: disabledCharacters.contains(character)
+                          semanticLabel: disabled.contains(character)
                               ? mode == LanguageMode.gurmukhi
-                                    ? '$character, ${romanizeGurmukhiGrapheme(character)}, not in the word'
+                                    ? '$character, ${_gurmukhiKeyName(character)}, not in the word'
                                     : '$character, not in the word'
                               : mode == LanguageMode.gurmukhi
-                              ? '$character, ${romanizeGurmukhiGrapheme(character)}'
+                              ? '$character, ${_gurmukhiKeyName(character)}'
                               : character,
-                          onPressed:
-                              enabled && !disabledCharacters.contains(character)
+                          onPressed: enabled && !disabled.contains(character)
                               ? InteractionSounds.letterAction(
                                   context,
                                   () => onCharacter(character),
@@ -165,7 +249,7 @@ class GameKeyboard extends StatelessWidget {
   }
 
   double _rowInset(int rowIndex, int rowCount) {
-    if (mode == LanguageMode.gurmukhi) return 0;
+    if (mode != LanguageMode.english) return 0;
     if (rowIndex == 1) return 14;
     if (rowIndex == rowCount - 1) return 24;
     return 0;
