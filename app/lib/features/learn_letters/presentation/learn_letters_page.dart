@@ -1,6 +1,7 @@
 import '../../../core/themes/paper_page.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../../core/themes/game_heading.dart';
+import '../../../core/audio/interaction_sounds.dart';
 
 import 'package:flutter/material.dart';
 
@@ -167,18 +168,20 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
+        leading: gameBackButton(context),
         flexibleSpace: const PaperTexture(),
-        bottom: GameLanguageHeader(
-          textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
-          mode: LanguageMode.gurmukhi,
-          wordLength: null,
-        ),
         toolbarHeight: gameToolbarHeight(context),
-        title: const GameHeading(identity: GameIdentity.letters, compact: true),
+        title: const GameHeading(
+          identity: GameIdentity.letters,
+          compact: true,
+          subtitle: GameLanguageHeader(mode: LanguageMode.gurmukhi),
+        ),
         actions: [
           PopupMenuButton<String>(
+            onOpened: () => InteractionSounds.button(context),
             tooltip: 'Akhar Pachhaan menu',
             onSelected: (action) {
+              InteractionSounds.button(context);
               switch (action) {
                 case 'new':
                   _newRound();
@@ -218,12 +221,6 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const GameSectionIntro(
-                      identity: GameIdentity.letters,
-                      instruction:
-                          'Look, listen and learn. One letter at a time.',
-                    ),
-                    const SizedBox(height: 16),
                     if (_game.isComplete) ...[
                       GamePanel(
                         child: Column(
@@ -350,7 +347,10 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                                 _game.answered ||
                                     _game.wrongChoiceIds.contains(choice.id)
                                 ? null
-                                : () => _answer(choice.id),
+                                : InteractionSounds.letterAction(
+                                    context,
+                                    () => _answer(choice.id),
+                                  ),
                             style: OutlinedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 56),
                               padding: const EdgeInsets.all(14),

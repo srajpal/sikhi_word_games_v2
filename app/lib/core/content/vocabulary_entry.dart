@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'vocabulary_licenses.dart';
+
 enum VocabularyLanguage { english, panjabi }
 
 enum ReviewStatus {
@@ -37,14 +39,7 @@ class VocabularyEntry {
   final String source;
 
   bool get hasDistributableDefinition =>
-      englishDefinition.trim().isNotEmpty &&
-      (source == 'Open English WordNet 2025 (CC BY 4.0)' ||
-          source.startsWith(
-            'Mahan Kosh multilingual dataset; commit '
-            'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6;',
-          ) ||
-          source ==
-              'Project editorial definition; original text for Sikhi Word Games');
+      englishDefinition.trim().isNotEmpty && isTrustedVocabularySource(source);
 
   /// Player-facing form of the source definition. The imported text remains
   /// unchanged for provenance, review, and serialization.
@@ -93,13 +88,7 @@ class VocabularyEntry {
       solutionEligible: json['solutionEligible']! as bool,
       reviewStatus: ReviewStatus.values.byName(json['reviewStatus']! as String),
       source: sources.cast<String>().firstWhere(
-        (source) =>
-            source == 'Open English WordNet 2025 (CC BY 4.0)' ||
-            source.startsWith(
-              'Mahan Kosh multilingual dataset; commit '
-              'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6;',
-            ) ||
-            source == 'Project editorial definition; original text for Sikhi Word Games',
+        isTrustedVocabularySource,
         orElse: () => sources.first as String,
       ),
     );

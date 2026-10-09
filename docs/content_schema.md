@@ -1,122 +1,97 @@
-# Sikhi Word Games V2 — Content Schema
+# Sikhi Word Games V2 content schema
 
-## Canonical editable record
+## Dictionary v2
+
+The runtime dictionary consists of two compact, generated JSON banks:
+
+- `app/assets/content/release/english_v2.json`
+- `app/assets/content/release/punjabi_v2.json`
+
+They contain the same `VocabularyEntry` record shape used by the game engines:
 
 ```json
 {
-  "id": "panjabi_baag",
-  "language": "panjabi",
-  "latin": "BAAG",
-  "gurmukhi": "ਬਾਗ",
-  "definitions": {
-    "en": ["Orchard"],
-    "pa": []
-  },
-  "lengths": {"latin": 4, "gurmukhi": 2},
+  "id": "en_v2_apple",
+  "language": "english",
+  "latin": "APPLE",
+  "gurmukhi": null,
+  "definitions": {"en": ["A sweet, red, yellow or green fruit."], "pa": []},
+  "lengths": {"latin": 5, "gurmukhi": null},
   "acceptedGuess": true,
-  "solutionEligible": false,
-  "reviewStatus": "unreviewed",
-  "sources": []
+  "solutionEligible": true,
+  "reviewStatus": "machineChecked",
+  "sources": ["Simple English Wiktionary contributors (CC BY-SA 4.0); https://simple.wiktionary.org/wiki/apple"]
 }
 ```
 
-This is the persisted import/supplemental/runtime shape. Curation overrides use
-`id` plus partial fields such as `englishDefinition`, eligibility, spelling,
-source and review method. Category/difficulty labels and per-mode eligibility
-arrays are future design options, not fields consumed by the current runtime.
-The release builder always recomputes grapheme lengths.
+Punjabi IDs begin `panjabi_v2_` and encode the native source headword. English
+IDs begin `en_v2_`. ID-based saved targets cannot silently resolve to a new dictionary entry.
+Game restore validation rejects unavailable content and creates a fresh round;
+cumulative statistics remain in their existing storage keys. Bujho and Khoj
+snapshots store spellings, so still-eligible words can resume after current
+spelling/answer validation; changing entry IDs alone does not erase these saves.
 
-## Required validation
+`acceptedGuess` and `solutionEligible` are independent. Punjabi has more
+source-backed dictionary/guess words than bounded everyday answers. Every answer
+must be an accepted guess with a distributable standalone definition. The only
+review statuses are `unreviewed`, `machineChecked`, `communityReviewed`, and
+`editorApproved`; source-checked agent decisions use `machineChecked`.
 
-- IDs are stable and unique.
-- Spellings are normalized to an agreed Unicode form.
-- Runtime matching decomposes only the six canonically equivalent Gurmukhi
-  nukta letters. ੜ (U+0A5C) stays distinct from ਡ਼: it has no Unicode
-  decomposition. Old saved targets using the retired alias are not rewritten
-  ambiguously; normal restore eligibility checks replace an invalid target.
-- Calculated Latin and Gurmukhi grapheme lengths are stored only in generated output, not trusted from hand-edited data.
-- Every curated solution is also an accepted guess for the same mode.
-- Duplicate spellings within a mode are either merged or explicitly disambiguated.
-- Definitions cannot contain malformed field separators inherited from V1 parsing.
-- `reviewStatus` is explicit: `unreviewed`, `machineChecked`, `communityReviewed`, or `editorApproved`.
-- Source entries contain enough information to locate the original reference.
+## Generation and editorial inputs
 
-## Generated artifacts
+The English importer reads a hashed, attributed source snapshot plus
+`assets/content/curation/english_v2_policy.json`. The Punjabi importer reads its
+own hashed snapshot plus `assets/content/curation/punjabi_v2_answers.json`.
+English source evidence is retained on authoring records under `evidence`:
+original gloss, part of speech, sense index, Zipf score, source version/hash and
+transformation method. The compact release builder removes that authoring-only
+field while retaining per-entry source URLs. Punjabi curation binds the exact
+headword, sense ID and original gloss.
 
-Human-editable source content may be transformed into compact, indexed application assets. Generated files are reproducible and must not be edited manually.
+The generated authoring banks are `generated/english_v2.json` and
+`generated/punjabi_v2.json`. No inherited V1 record, old editorial override,
+starter list or legacy hold can enter a v2 release. Legacy authoring files remain
+an archive. Only the two compact release banks and third-party notice are
+bundled. The builder removes the retired release `vocabulary_4/5/6.json` files.
 
-Editorial corrections and exclusions live in
-`app/assets/content/curation/editorial_overrides.json`. Each override references a
-stable imported ID and may replace its definition or Gurmukhi spelling, change
-guess/solution eligibility, and advance its review status. This keeps explicit
-editorial decisions separate from reproducible V1 imports.
+Use `dart run tool/dictionary_v2.dart --write`, followed by `--check`, from
+`app/`. `build_release_content.dart --write` remains the only writer of runtime
+assets; `audit_release_content.dart` checks what is actually distributed. See
+[definition sources](definition_sources.md) for the complete routine and source
+refresh policy.
 
-Curated words that do not exist in V1 live in
-`app/assets/content/curation/supplemental_entries.json`. They use the same
-runtime record shape, retain their external source attribution, and are loaded
-after generated imports. Stable IDs must remain unique across both sources.
+## Validation and game lengths
 
-Machine quarantine decisions live separately in
-`app/assets/content/curation/vocabulary_holds.json`, maintained by
-`dart run tool/vocabulary_pipeline.dart --write`. They contain stable IDs,
-public-content fingerprints and reasons. Holds hide definitions and disable
-solutions without changing accepted guesses or promoting review status. A stale
-fingerprint fails building and requires a recheck. See `docs/definition_sources.md`
-for preview, checking, source locking and the small semantic-review sample.
+IDs and mode spellings are normalized/deduplicated, and both Latin and Gurmukhi
+lengths are recomputed from Unicode grapheme clusters. Runtime matching decomposes
+only the six canonically equivalent Gurmukhi nukta letters. ੜ remains distinct
+from ਡ਼ because it has no Unicode decomposition.
 
-The four-letter English review queue cross-references Open English WordNet,
-SCOWL, and modern usage frequency. Its numeric score only prioritizes human
-review; it never grants editorial approval by itself. The reproducible JSON and
-Markdown results live under `reports/content/four_letter_candidates.*`.
+English v2 supports 3-12 letters. Bujho and Word Quest apply their existing
+4/5/6-grapheme filters. Khoj and Jodo draw from their broader eligible pools,
+with Khoj limiting words to the available grid. A source-backed longer word is
+not truncated to fit a fixed word-length bank.
 
-The generated dictionary audit is JSON so it can be filtered or imported into a
-spreadsheet/review tool, with a short Markdown summary for humans.
+The shared source policy recognizes Wiktionary's **CC BY-SA 4.0** attribution,
+distinct from the retired sources' CC BY 4.0 licenses. The full offline notice
+retains contributor/source credits, modification statements and license links.
+Every current release definition has a recognized source; no blank legacy
+placeholder records are distributed. Player-facing punctuation normalization
+happens through `displayDefinition`, preserving source evidence.
 
-## Runtime storage decision
+The current coverage is reported by the deterministic v2 reports and release
+audit. The higher English answer-frequency threshold and everyday-sense holds
+currently retain 221/191/109 answers at 4/5/6 letters (809 across all lengths),
+from 2,443 dictionary words. Punjabi
+coverage is intentionally smaller, especially six-grapheme Gurmukhi. Tests
+verify honest usable coverage and reject unavailable pools instead of treating
+old 300-answer quotas as approval criteria.
 
-Use JSON for canonical content and editorial review. For the current 47,093-record
-offline dataset, prefer compact, sharded, indexed JSON runtime assets shared by
-Android, iOS, and web. Do not introduce SQLite yet:
+## Runtime storage
 
-- mobile SQLite would require a separate web implementation or a WebAssembly
-  database layer;
-- the vocabulary is read-only and small enough to index in memory;
-- JSON keeps imports, diffs, review, and deployment reproducible;
-- measured size, parse time, and lookup performance should determine whether a
-  database is justified later.
-
-Reconsider SQLite or another embedded database if content grows substantially,
-startup/parse measurements remain unacceptable after compaction, or future games
-need complex relational queries.
-
-## Initial V1 import findings
-
-The reproducible V1 import produced 38,510 accepted-guess records: 20,859 English and 17,651 Punjabi. Curated supplements currently bring the canonical total to 47,093 records. The October 7 recheck keeps all 45,416 accepted guesses, 14,689 answer records and 16,739 visible definitions; 30,354 definitions are hidden, including 17 fresh holds. All V1 word and definition keys align and no duplicate stable IDs were found in the original import. Imported entries default to `solutionEligible: false` until a source-matched or explicit editorial decision makes them playable.
-
-The authoring-archive audit is intentionally broader than the release audit and
-can contain empty, malformed, long, reference-only, or duplicate records that
-are held from play. See `reports/content/dictionary_audit.md` for the latest raw
-archive flags and `reports/content/v1_import_report.md` for the original import
-findings. Those flags must not be reported as defects in the sanitized release
-assets unless the release audit also finds them.
-
-## Measured release coverage (2026-10-07)
-
-After source filtering and the release-QA exclusions, the release-content audit
-produced these unique Bujho answer counts using the actual bundled assets.
-
-| Mode | 4 | 5 | 6 |
-| --- | ---: | ---: | ---: |
-| English | 1,712 | 2,563 | 4,028 |
-| Romanized Punjabi | 990 | 1,378 | 1,106 |
-| Mixed Latin | 2,631 | 3,932 | 5,126 |
-| Gurmukhi | 337 | 2,346 | 533 |
-
-Regression checks require every mode and length to retain at least 300 unique
-Bujho answers and 250 Word Quest clues. Counts above are unique spellings; the
-audit reports raw records separately because aliases can share a spelling.
-Runtime selection deduplicates the actual spelling shown to the player. Khoj draws only accepted, answer-eligible records with a
-distributable definition. These counts establish coverage, not everyday
-usefulness, age suitability, or source accuracy. Authoring files preserve raw
-definitions, while the bundled release shards omit unclear legacy definition
-text. `displayDefinition` normalizes long dashes and Unicode ellipsis.
+Read-only JSON remains appropriate for the offline dictionary across Android,
+iOS and web. Native decoding runs in a compute isolate; web decoding yields
+between language banks and every 250 records. Repository loads coalesce and
+cache immutable entries. No database, API key or runtime network is required.
+Reconsider indexing or an embedded database only with measured evidence that
+loading or lookups need it.

@@ -1,4 +1,5 @@
 import '../../../core/themes/game_heading.dart';
+import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/statistics/game_statistics_dialog.dart';
 import '../../../core/widgets/game_guide.dart';
 import '../../../core/widgets/victory_celebration.dart';
@@ -332,11 +333,14 @@ class _WordQuestPageState extends State<WordQuestPage> {
     final game = _game;
     if (game == null || game.isComplete) return;
     final result = game.guess(letter);
+    if (result.result != WordQuestGuessResult.repeated) {
+      InteractionSounds.letter(context);
+    }
     final correct = result.result == WordQuestGuessResult.correct;
     final feedback = switch (result.result) {
       WordQuestGuessResult.correct => 'Nice find! That letter is in the word.',
       WordQuestGuessResult.incorrect =>
-        'Try another letter. Your garden progress is safe.',
+        'Try another letter. You can still find the word.',
       WordQuestGuessResult.repeated => 'You already tried that letter.',
       _ => '',
     };
@@ -424,13 +428,17 @@ class _WordQuestPageState extends State<WordQuestPage> {
                 const SizedBox(height: 16),
                 DropdownButtonFormField<LanguageMode>(
                   initialValue: mode,
+                  isExpanded: true,
                   decoration: const InputDecoration(labelText: 'Language'),
                   items: [
                     for (final value in LanguageMode.values)
                       DropdownMenuItem(value: value, child: Text(value.label)),
                   ],
                   onChanged: (value) {
-                    if (value != null) setSheetState(() => mode = value);
+                    if (value != null) {
+                      InteractionSounds.button(context);
+                      setSheetState(() => mode = value);
+                    }
                   },
                 ),
                 const SizedBox(height: 12),
@@ -441,12 +449,21 @@ class _WordQuestPageState extends State<WordQuestPage> {
                     ButtonSegment(value: 6, label: Text('6')),
                   ],
                   selected: {size},
-                  onSelectionChanged: (values) =>
-                      setSheetState(() => size = values.first),
+                  onSelectionChanged: (values) {
+                    InteractionSounds.button(context);
+                    setSheetState(() => size = values.first);
+                  },
                 ),
+                if (mode == LanguageMode.gurmukhi && size == 6) ...[
+                  const SizedBox(height: 12),
+                  const Text(gurmukhiVarietyNote),
+                ],
                 const SizedBox(height: 20),
                 FilledButton(
-                  onPressed: () => Navigator.pop(context, (mode, size)),
+                  onPressed: InteractionSounds.buttonAction(
+                    context,
+                    () => Navigator.pop(context, (mode, size)),
+                  ),
                   child: const Text('Apply and start a new word'),
                 ),
               ],
@@ -484,19 +501,24 @@ class _WordQuestPageState extends State<WordQuestPage> {
     return Scaffold(
       backgroundColor: scheme.surface,
       appBar: AppBar(
+        leading: gameBackButton(context),
         flexibleSpace: const PaperTexture(),
-        bottom: GameLanguageHeader(
-          textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
-          mode: _mode,
-          wordLength: _word?.graphemeLength,
-        ),
         centerTitle: true,
         toolbarHeight: gameToolbarHeight(context),
-        title: const GameHeading(identity: GameIdentity.quest, compact: true),
+        title: GameHeading(
+          identity: GameIdentity.quest,
+          compact: true,
+          subtitle: GameLanguageHeader(
+            mode: _mode,
+            wordLength: _word?.graphemeLength,
+          ),
+        ),
         actions: [
           PopupMenuButton<String>(
+            onOpened: () => InteractionSounds.button(context),
             key: const ValueKey('word-quest-menu'),
             onSelected: (value) {
+              InteractionSounds.button(context);
               if (value == 'new') _startNewWord();
               if (value == 'settings') _showSettings();
               if (value == 'help') _showHelp();
@@ -1021,12 +1043,12 @@ class _QuestStatusBar extends StatelessWidget {
           enabled: onHint != null,
           label: 'Hint, $hintsRemaining left',
           excludeSemantics: true,
-          onTap: onHint,
+          onTap: InteractionSounds.buttonAction(context, onHint),
           child: Tooltip(
             message: 'Hint, $hintsRemaining left',
             child: InkWell(
               key: const ValueKey('word-quest-hint'),
-              onTap: onHint,
+              onTap: InteractionSounds.buttonAction(context, onHint),
               borderRadius: Theme.of(context)
                   .extension<GameThemeTokens>()!
                   .controlRadius,
@@ -1066,7 +1088,7 @@ class _StatusIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => IconButton.filledTonal(
-    onPressed: onPressed,
+    onPressed: InteractionSounds.buttonAction(context, onPressed),
     tooltip: tooltip,
     icon: Icon(icon, size: 20),
   );

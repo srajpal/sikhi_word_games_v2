@@ -211,28 +211,28 @@ class WordBridgesContent {
 
   static const _decks = <String, List<String>>{
     'english_everyday': [
-      'english_book',
-      'english_door',
-      'english_chair',
-      'english_milk',
+      'en_v2_book',
+      'en_v2_door',
+      'en_v2_chair',
+      'en_v2_milk',
     ],
     'english_outdoors_and_food': [
-      'english_rain',
-      'english_river',
-      'english_bread',
-      'english_apple',
+      'en_v2_rain',
+      'en_v2_river',
+      'en_v2_bread',
+      'en_v2_apple',
     ],
     'punjabi_everyday': [
-      'panjabi_ghar',
-      'panjabi_pani',
-      'panjabi_kitab',
-      'panjabi_yaar',
+      'panjabi_v2_a15_a3f_a24_a3e_a2c',
+      'panjabi_v2_a2a_a3e_a23_a40',
+      'panjabi_v2_a30_a4b_a1f_a40',
+      'panjabi_v2_a26_a41_a71_a27',
     ],
     'punjabi_connections': [
-      'panjabi_phull',
-      'panjabi_seva',
-      'panjabi_yaad',
-      'panjabi_door',
+      'panjabi_v2_a2b_a41_a71_a32',
+      'panjabi_v2_a26_a4b_a38_a24',
+      'panjabi_v2_a1a_a70_a26',
+      'panjabi_v2_a30_a41_a71_a16',
     ],
   };
 }

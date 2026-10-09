@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:characters/characters.dart';
 
+import 'package:sikhi_word_games_v2/core/content/vocabulary_licenses.dart';
+
 import 'content/punjabi_quality.dart';
 import 'content/vocabulary_checks.dart';
 
@@ -11,77 +13,30 @@ import 'content/vocabulary_checks.dart';
 void main(List<String> arguments) {
   final write = arguments.contains('--write');
   final check = arguments.contains('--check');
-  final holdFile = File('assets/content/curation/vocabulary_holds.json');
-  final holds = <String, Map<String, Object?>>{};
-  if (holdFile.existsSync()) {
-    for (final item in _read(holdFile.path)['entries']! as List) {
-      final hold = item as Map<String, Object?>;
-      final id = hold['id']! as String;
-      if (holds.containsKey(id)) throw FormatException('Duplicate hold: $id');
-      holds[id] = hold;
-    }
-  }
-  final solutionIds =
-      (_read('assets/content/curation/starter_solutions.json')['solutionIds']!
-              as List<Object?>)
-          .cast<String>()
-          .toSet();
-  final overrides = <String, Map<String, Object?>>{};
-  for (final item
-      in _read('assets/content/curation/editorial_overrides.json')['entries']!
-          as List<Object?>) {
-    final override = item! as Map<String, Object?>;
-    final id = override['id']! as String;
-    if (overrides.containsKey(id)) {
-      throw FormatException('Duplicate editorial override ID: $id');
-    }
-    overrides[id] = override;
-  }
-  final shards = <int, List<Map<String, Object?>>>{1: [], 2: [], 3: []};
+  final shards = <String, List<Map<String, Object?>>>{
+    'english': [],
+    'punjabi': [],
+  };
   final seen = <String>{};
-  for (final shard in shards.keys) {
+  for (final language in ['english', 'punjabi']) {
     final entries = jsonDecode(
-      File('assets/content/generated/vocabulary_${shard + 3}.json')
-          .readAsStringSync(),
+      File('assets/content/generated/${language}_v2.json').readAsStringSync(),
     ) as List<Object?>;
     for (final item in entries) {
-      final entry = Map<String, Object?>.from(item! as Map<String, Object?>);
-      ensureUniqueVocabularyId(seen, entry);
-      shards[shard]!.add(
-        buildReleaseEntry(
-          entry,
-          override: overrides[entry['id']],
-          solutionIds: solutionIds,
-          hold: holds[entry['id']],
-        ),
-      );
+      final raw = Map<String, Object?>.from(item! as Map<String, Object?>);
+      final id = raw['id']! as String;
+      if (!(id.startsWith('en_v2_') || id.startsWith('panjabi_v2_'))) {
+        throw StateError('Legacy vocabulary cannot enter a v2 release: $id');
+      }
+      ensureUniqueVocabularyId(seen, raw);
+      final entry = buildReleaseEntry(raw);
+      // Source evidence stays in the authoring snapshot and deterministic report.
+      entry.remove('evidence');
+      shards[language]!.add(entry);
     }
-  }
-  final supplemental =
-      _read('assets/content/curation/supplemental_entries.json')['entries']!
-          as List<Object?>;
-  for (final item in supplemental) {
-    final entry = Map<String, Object?>.from(item! as Map<String, Object?>);
-    ensureUniqueVocabularyId(seen, entry);
-    final releaseEntry = buildReleaseEntry(
-      entry,
-      override: overrides[entry['id']],
-      solutionIds: solutionIds,
-      hold: holds[entry['id']],
-    );
-    final lengths = releaseEntry['lengths']! as Map<String, Object?>;
-    final latin = lengths['latin']! as int;
-    final gurmukhi = lengths['gurmukhi'] as int?;
-    final shard = latin >= 4 && latin <= 6
-        ? latin - 3
-        : (gurmukhi == 5 ? 2 : 3);
-    shards[shard]!.add(releaseEntry);
   }
   final output = Directory('assets/content/release')
     ..createSync(recursive: true);
-  if (!seen.containsAll(holds.keys)) {
-    throw StateError('Unknown vocabulary hold ID.');
-  }
   var trusted = 0;
   var hidden = 0;
   var stale = 0;
@@ -97,10 +52,20 @@ void main(List<String> arguments) {
               as String;
       definition.isEmpty ? hidden++ : trusted++;
     }
-    final file = File('${output.path}/vocabulary_${shard.key + 3}.json');
+    final file = File('${output.path}/${shard.key}_v2.json');
     final encoded = jsonEncode(shard.value);
     if (!file.existsSync() || file.readAsStringSync() != encoded) stale++;
     if (write) file.writeAsStringSync(encoded);
+  }
+  for (final length in [4, 5, 6]) {
+    final retired = File('${output.path}/vocabulary_$length.json');
+    if (retired.existsSync()) {
+      if (write) {
+        retired.deleteSync();
+      } else {
+        stale++;
+      }
+    }
   }
   stdout.writeln(
     'Built ${trusted + hidden} release records: $trusted sourced definitions, '
@@ -159,7 +124,7 @@ Map<String, Object?> buildReleaseEntry(
     'latin': latin.characters.length,
     'gurmukhi': gurmukhi?.characters.length,
   };
-  final trusted = sources.any(_trustedSource);
+  final trusted = sources.any(isTrustedVocabularySource);
   final standalone =
       definition.trim().isNotEmpty &&
       !_referenceOnly.hasMatch(definition.trim());
@@ -188,19 +153,7 @@ Map<String, Object?> buildReleaseEntry(
   return hold == null ? entry : applyVocabularyHold(entry, hold);
 }
 
-bool _trustedSource(String source) =>
-    source == 'Open English WordNet 2025 (CC BY 4.0)' ||
-    source.startsWith(
-      'Mahan Kosh multilingual dataset; commit '
-      'fce213b0120a7cd53ecb11c4e2e96b84ce5d75c6;',
-    ) ||
-    source ==
-        'Project editorial definition; original text for Sikhi Word Games';
-
 final _referenceOnly = RegExp(
-  r'^(?:see|of|plural|past tense|present participle|alternative spelling)\b',
+  r'^(?:see(?: also)?|plural of|past tense of|present participle of|alternative spelling of)\b|^of\s+\S+\.?$',
   caseSensitive: false,
 );
-
-Map<String, Object?> _read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, Object?>;

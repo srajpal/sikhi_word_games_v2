@@ -3,6 +3,7 @@ import '../features/achievements/presentation/achievements_page.dart';
 import '../features/game_library/presentation/progress_page.dart';
 import '../features/settings/presentation/settings_page.dart';
 import '../core/themes/game_ui.dart';
+import '../core/audio/interaction_sounds.dart';
 import '../core/persistence/reset_sections.dart';
 import '../features/learn_letters/data/learn_letters_repository.dart';
 import '../features/learn_letters/presentation/learn_letters_page.dart';
@@ -246,14 +247,16 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
   );
 
   Widget _gameShell({required GameKind game, required Widget child}) =>
-      VictoryCelebration(
-        game: game,
-        settings: _settings,
-        onSettingsChanged: _changeFeedbackSettings,
-        child: GameGuide(
+      ScaffoldMessenger(
+        child: VictoryCelebration(
           game: game,
-          repository: widget.guideRepository,
-          child: child,
+          settings: _settings,
+          onSettingsChanged: _changeFeedbackSettings,
+          child: GameGuide(
+            game: game,
+            repository: widget.guideRepository,
+            child: child,
+          ),
         ),
       );
   Future<WordBridgesContent> _wordBridgesContent() =>
@@ -346,6 +349,8 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
     debugShowCheckedModeBanner: false,
     title: 'Sikhi Word Games | Khalsa Game Studio',
     theme: AppThemes.forChoice(_settings.theme),
+    builder: (context, child) =>
+        InteractionSounds(settings: _settings, child: child!),
     routerConfig: _router,
   );
 }

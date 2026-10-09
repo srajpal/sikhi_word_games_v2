@@ -1,4 +1,5 @@
 import '../persistence/reset_sections.dart';
+import '../audio/interaction_sounds.dart';
 
 import 'package:flutter/material.dart';
 
@@ -89,7 +90,10 @@ class _ResetAppDataDialogState extends State<_ResetAppDataDialog> {
       actions: [
         TextButton(
           autofocus: true,
-          onPressed: _busy ? null : () => Navigator.of(context).pop(),
+          onPressed: InteractionSounds.buttonAction(
+            context,
+            _busy ? null : () => Navigator.of(context).pop(),
+          ),
           child: Text(_failed ? 'Close' : 'Cancel'),
         ),
         FilledButton(
@@ -97,7 +101,10 @@ class _ResetAppDataDialogState extends State<_ResetAppDataDialog> {
             backgroundColor: Theme.of(context).colorScheme.error,
             foregroundColor: Theme.of(context).colorScheme.onError,
           ),
-          onPressed: _busy ? null : _reset,
+          onPressed: InteractionSounds.buttonAction(
+            context,
+            _busy ? null : _reset,
+          ),
           child: Text(_busy ? 'Resetting...' : 'Reset all data'),
         ),
       ],

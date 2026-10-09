@@ -16,10 +16,9 @@ void main() {
 
   setUpAll(() {
     release = [
-      for (final size in [4, 5, 6])
+      for (final language in ['english', 'punjabi'])
         for (final record in jsonDecode(
-          File('assets/content/release/vocabulary_$size.json')
-              .readAsStringSync(),
+          File('assets/content/release/${language}_v2.json').readAsStringSync(),
         ) as List)
           VocabularyEntry.fromJson(Map<String, Object?>.from(record as Map)),
     ];
@@ -64,7 +63,7 @@ void main() {
   test(
     'missing, held, and duplicate records omit the entire affected deck',
     () {
-      final original = release.firstWhere((e) => e.id == 'english_book');
+      final original = release.firstWhere((e) => e.id == 'en_v2_book');
       for (final entries in [
         release.where((e) => e.id != original.id).toList(),
         [
@@ -92,7 +91,7 @@ void main() {
   test('missing script disables only that deck in Gurmukhi', () {
     final changed = [
       for (final e in release)
-        e.id == 'panjabi_ghar' ? e.copyWith(gurmukhi: '') : e,
+        e.id == 'panjabi_v2_a15_a3f_a24_a3e_a2c' ? e.copyWith(gurmukhi: '') : e,
     ];
     final content = WordBridgesContent(changed);
     expect(content.decksFor(LanguageMode.gurmukhi), hasLength(1));
@@ -120,14 +119,14 @@ void main() {
         }
       }
       expect(content.romanizedFor('unknown'), isNull);
-      expect(content.romanizedFor('english_book'), isNull);
+      expect(content.romanizedFor('en_v2_book'), isNull);
     },
   );
 
   test('romanization excludes missing words and trims source text', () {
     final trimmed = WordBridgesContent([
       for (final entry in release)
-        entry.id == 'panjabi_ghar'
+        entry.id == 'panjabi_v2_a15_a3f_a24_a3e_a2c'
             ? VocabularyEntry(
                 id: entry.id,
                 language: entry.language,
@@ -143,13 +142,13 @@ void main() {
               )
             : entry,
     ]);
-    expect(trimmed.romanizedFor('panjabi_ghar'), 'GHAR');
+    expect(trimmed.romanizedFor('panjabi_v2_a15_a3f_a24_a3e_a2c'), 'GHAR');
     final missing = WordBridgesContent(
-      release.where((entry) => entry.id != 'panjabi_ghar'),
+      release.where((entry) => entry.id != 'panjabi_v2_a15_a3f_a24_a3e_a2c'),
     );
-    expect(missing.romanizedFor('panjabi_ghar'), isNull);
-    expect(missing.romanizedFor('panjabi_pani'), 'PANI');
-    expect(missing.romanizedFor('panjabi_phull'), isNotNull);
+    expect(missing.romanizedFor('panjabi_v2_a15_a3f_a24_a3e_a2c'), isNull);
+    expect(missing.romanizedFor('panjabi_v2_a2a_a3e_a23_a40'), 'PANI');
+    expect(missing.romanizedFor('panjabi_v2_a2b_a41_a71_a32'), isNotNull);
   });
 
   test('decks and pairs cannot be changed by callers', () {

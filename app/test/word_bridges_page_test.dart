@@ -5,6 +5,7 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
+import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
@@ -345,12 +346,13 @@ void main() {
       final selected = entries!
           .where(
             (entry) =>
-                entry.id.startsWith('english_') &&
+                entry.language == VocabularyLanguage.english &&
                 entry.solutionEligible &&
                 entry.hasDistributableDefinition,
           )
           .take(4)
           .toList();
+      expect(selected, hasLength(4));
       final content = WordBridgesContent([
         for (var index = 0; index < selected.length; index++)
           selected[index].copyWith(

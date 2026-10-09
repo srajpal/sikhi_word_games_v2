@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/core/themes/game_heading.dart';
+import 'package:sikhi_word_games_v2/core/themes/game_ui.dart';
+import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/game_library/domain/game_launch_options.dart';
 
 void main() {
@@ -52,7 +54,14 @@ void main() {
                               icon: const Icon(Icons.more_vert),
                             ),
                           ],
-                          title: GameHeading(identity: identity, compact: true),
+                          title: GameHeading(
+                            identity: identity,
+                            compact: true,
+                            subtitle: const GameLanguageHeader(
+                              mode: LanguageMode.romanizedPanjabi,
+                              wordLength: 5,
+                            ),
+                          ),
                         ),
                       ),
                     ),

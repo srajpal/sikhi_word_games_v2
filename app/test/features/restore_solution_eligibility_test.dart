@@ -238,7 +238,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(sessions.restore()!.mode, LanguageMode.english);
-    expect(sessions.restore()!.wordSize, 4);
+    expect(sessions.restore()!.wordSize, isNull);
     expect(
       sessions.restore()!.puzzle.words.map((word) => word.word),
       isNot(contains('HOLD')),
@@ -263,6 +263,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(sessions.restore()!.puzzle.cells, _puzzle('PLAY').cells);
+    expect(sessions.restore()!.wordSize, 4);
     expect(sessions.restore()!.puzzle.words.single.word, 'PLAY');
   });
 }

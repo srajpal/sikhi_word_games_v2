@@ -101,7 +101,7 @@ The original editable artwork is in `branding/`. Rebuild it with
 `sharp` installed. The small web icons are generated from the same mark.
 Artwork uses letter tiles and a plant; sacred marks are not gameplay objects.
 
-Keep the English WordNet, Mahan Kosh and bundled-font notices in the game and ZIP.
+Keep the Wiktionary CC BY-SA 4.0, wordfreq and bundled-font notices in the game and ZIP.
 Their source links and licenses are listed in `THIRD_PARTY_NOTICES.txt`.
 Add actual gameplay screenshots from the final package, not mockups.
 

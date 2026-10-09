@@ -5,6 +5,49 @@ remaining work. Completed milestones are evidence, not sign-off for a newer
 package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. Do not approve vocabulary merely to fill a pool quota.
 
+## October 8 mobile navigation and dictionary v2: 1.12.0+23
+
+- [x] Persist the same native bottom navigation on Play, Dictionary, Progress
+  and Badges, with the current destination selected.
+- [x] Put language and applicable word length inside each compact paper title.
+  Scope feedback to its game; remove duplicate Learn Letters and Jodo introductions.
+- [x] Move Jodo New set into its menu. Khoj uses mixed 2–12-grapheme words,
+  a language-only picker and an adaptive grid; valid older saves still restore.
+- [x] Replace runtime vocabulary with two source-backed banks: 2,443 English
+  dictionary records (809 answers), and 4,026 Punjabi records (279 answers).
+  English uses Simple English Wiktionary and pinned wordfreq scores; Punjabi
+  uses source-checked English Wiktionary senses. No Punjabi frequency is claimed.
+- [x] Hold 326 otherwise-neutral English entries from random answers for adult
+  domains, advanced abstractions, misleading homographs or weak clues. Retain
+  those for lookup/guesses; exclude a vandalized source entry entirely. The
+  English 4/5/6-letter answer pools are 221/191/109; frequency alone is insufficient.
+- [x] Reproduce imports, policies, holds, attribution and release assets with
+  `dart run tool/dictionary_v2.dart --check`, offline. Routine changes use preview,
+  exact source-backed exceptions, then `--write`; retired authoring queues are
+  historical. All current decisions are machine checked, not human approval.
+- [x] Add distinct original letter/button click sounds and independent saved
+  Settings switches. Preserve pronunciation audio and victory controls.
+- [x] Review refreshed phone/tablet and theme screenshots. All 367 Flutter tests
+  pass against the reviewed baselines; analysis is clean, 174 Dart files are
+  formatted, content reproduction/audits, nine Python policy tests and both
+  offline-cache/update JavaScript checks pass.
+- [x] Verify the actual release browser: all four destinations keep their
+  navigation with the correct selection; Dictionary finds the new APPLE sense;
+  Jodo starts a new set from its menu with exactly three languages; Khoj has
+  language-only options and mixed lengths; Learn Letters keeps target audio
+  below the letter. Quest feedback disappears immediately when returning to Play.
+- [x] Verify both click-sound opt-outs persist through an actual browser reload;
+  restore the original on settings after the check.
+- [x] Compile release web and debug Android, and install/launch build 23 on
+  K70 PRO using `adb install -r`. Package version 1.12.0/code 23 and running
+  process verified; visible gameplay and speaker audibility remain manual checks.
+- [ ] Sample child-facing definitions and Punjabi romanizations with a fluent
+  reviewer; address specific source senses or policy gaps instead of bulk approval.
+- [ ] Recheck source snapshots deliberately when upstream data changes. Preview
+  changed senses/holds and frequency changes before rebuilding the two banks.
+- [ ] Expand familiar six-grapheme Gurmukhi answers only with reliable sources;
+  the current six-word pool is disclosed in game options.
+
 ## October 8 play consistency update: 1.11.0+22
 
 - [x] Three supported game languages, shared language header and menu-only language
@@ -43,7 +86,7 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
   GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
   from that review. The focused save/restore and keyboard fixes are in
   `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.11.0+22, Paper & Play. The September 18 ZIP and uploaded
+- Current Android testing version: 1.12.0+23, Paper & Play. The September 18 ZIP and uploaded
   itch.io draft remain 1.9.0+17 and
   predate the subsequent audit fixes and October vocabulary recheck. They are
   historical artifacts, not packages of current source. Increment both version
@@ -53,9 +96,9 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
 - Pixel 6 last verified installation: 1.9.0+16 on September 13, preserving data.
   The old request to install build 8 is superseded by verified installs of newer
   builds; current-source device validation remains open below.
-- Latest completed baseline before this content change: 304 Flutter tests,
-  clean analysis/formatting, successful release web build. PR CI validate and
-  goldens passed (run 37712159163). Current-change validation is recorded below.
+- Latest completed baseline before dictionary v2: 343 Flutter tests and
+  successful analysis, web and Android builds (PR #12). Current dictionary v2
+  validation is recorded in the milestone above.
 - All five games, shared content/settings/statistics, offline save handling,
   Modern/Sikhi/Dark themes, responsive shells and Unicode-safe matching exist.
   Reusing these foundations is completed work, not an outstanding new module.
@@ -131,10 +174,10 @@ copying old audits. Do not approve vocabulary merely to fill a pool quota.
   The vocabulary pipeline check passes; Android compilation succeeds. The
   unchanged gameplay baseline previously passed 311 tests. No new web upload.
 
-## Vocabulary recheck and improvement plan
+## Retired vocabulary recheck: historical evidence
 
 Use `docs/definition_sources.md` for the single-command workflow and its limits.
-`reports/content/vocabulary_recheck.json` is the current effective-content report;
+`reports/content/vocabulary_recheck.json` is the archived effective-content report;
 `reports/content/dictionary_audit.*` concerns the broader authoring archive.
 Source-correct, familiar, culturally suitable and suitable for children are
 separate judgments. Existing `editorApproved` labels are not fresh independent
@@ -157,38 +200,19 @@ human review evidence.
   'someone deranged and possibly dangerous', along with the other fresh risks.
 - [x] Require the pinned-source recheck in CI, in addition to release freshness,
   distribution checks, unique-answer/clue floors and valid Jodo starter decks.
-- [ ] Resolve the five Punjabi editorial meanings without sufficient source links:
-  AHSAS, AMRIT, ARPNA, ISPAT and UTPAD. Preserve their holds until exact supporting
-  evidence or an explicit checked editorial decision is recorded. A missing link
-  does not prove the meaning is wrong. Preview Punjabi changes with
-  `review_punjabi_content.dart`, then apply checked decisions with `--write`.
-- [ ] Review the deterministic semantic sample from the fresh report: 20 unique
-  senses per source stratum, including editorial paraphrases. Check meaning,
-  everyday usage, cultural context and Punjabi spelling/pronunciation; record
-  actual reviewer/method. If a failure occurs, add a regression/rule and recheck
-  the affected class before widening the sample. Do not treat a passing sample
-  as proof that every word is suitable for children.
-- [ ] Establish familiar-word difficulty and intended-audience criteria. Rank
-  ambiguous, archaic, technical and regional senses automatically; improve a
-  bounded common-word pool using explicit source-backed sense decisions. Confirm
-  coverage in every language/length and preserve exclusions. Prefer clear short
-  clues over expanding random-answer counts.
-- [ ] Improve held definitions only when worthwhile. Review the current exception
-  queue with active-answer cases first, choose a supported ordinary sense or
-  write a sourced original meaning, and rerun the pipeline. Leaving uncertain
-  records held is an acceptable outcome; restoring every archive word is not a
-  release prerequisite.
-- [ ] Triage broader authoring flags when importing or expanding content. Empty
-  held definitions, legacy references and spelling aliases are not automatically
-  release defects. Never report a successful archive-audit exit as editorial
-  approval or copy superseded flag counts into the active checklist.
+- [x] Retire this inherited authoring chain from runtime in dictionary v2. Its
+  unresolved links and archive holds remain historical evidence. Restoring
+  archive words is not a release prerequisite; use the v2 source/sense workflow
+  for any word worth adding to the current banks.
 
 ## Next itch.io playtest gates
 
-- [ ] Build a new candidate from validated current source with a new build number
+- [x] Build a new candidate from validated current source with a new build number
   using `app/tool/build_itch_io.ps1`. Inspect the actual ZIP, relative paths,
-  release-only assets, attribution, fonts and all 35 offline letter clips;
-  update `reports/release/package_audit.json` and upload the new draft candidate.
+  two release banks, attribution, fonts, all 35 offline letter clips and two
+  click sounds. Record the build 23 ZIP/APK in `reports/release/package_audit.json`.
+- [ ] Upload the validated new draft candidate to itch.io; the existing uploaded
+  build 17 remains historical.
 - [ ] Test all five games in the final uploaded iframe on Chromium, Firefox and
   Safari, plus Android/iOS mobile browsers. Cover first launch, focus, keyboard,
   touch/drag, fullscreen, clipboard/feedback, narrow layouts and Gurmukhi fonts.
@@ -219,9 +243,9 @@ The historical ZIP was 17,708,408 bytes, SHA-256
   rows still need physical touch-target and text-enlargement evaluation.
 - [ ] Improve Bujho board feedback navigation for efficient row-by-row reader
   review; the old browser tree grouped the board/input in a long disabled field.
-- [ ] Finish consistent toolbar, progress and completion treatments through
-  shared theme/components across all three themes. Existing backdrops and
-  button/selection treatments are implemented; this is the remaining polish.
+- [x] Apply consistent compact game titles, shared feedback and themed progress
+  and completion treatments. Continue evaluating physical-device accessibility
+  through the separate reader/text/touch gates above.
 - [ ] Measure cold startup, first download, parsing and dictionary filtering on
   a modest phone and mobile browser. Establish a fresh size/time baseline before
   further optimization. Compact release assets and cooperative decoding already
@@ -290,10 +314,10 @@ These are planned options, not blockers for the itch.io draft.
 - [x] Earlier local packaged-browser/visual checks and Pixel in-place installs
   through build 16. These do not replace current-candidate validation above.
 
-Current vocabulary change validation: 311 full-suite tests passed, including
+Historical pre-v2 vocabulary validation: 311 full-suite tests passed, including
 visual baselines; 20 targeted checks passed after correcting the reference rule.
 All 152 Dart files are format-clean, analysis is clean, and the release web build
-passes. Built vocabulary bytes match all three current release shards. The
+passes. Built vocabulary bytes matched the three historical release shards. The
 pipeline's repeated write/check passes with zero stale shards, all pools/decks
 pass, and the authoring audit still reports 7,931 flags across 47,093 records.
 No new ZIP upload, physical-device or hosted/browser/audio verification occurred.

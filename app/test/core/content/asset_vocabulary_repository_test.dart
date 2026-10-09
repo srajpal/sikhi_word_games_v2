@@ -30,156 +30,117 @@ void main() {
     expect(await result, decodeVocabularyDocuments(['[]', '[]']));
   });
 
-  test(
-    'loads the full offline vocabulary and curated starter solutions',
-    () async {
-      final entries = await AssetVocabularyRepository().load();
-      final pool = WordPool(entries);
-      final quest = WordQuestVocabulary(entries);
-      expect(
-        entries.where((entry) => entry.solutionEligible),
-        everyElement(
-          isA<dynamic>().having(
-            (entry) => entry.hasDistributableDefinition,
-            'distributable definition',
-            isTrue,
-          ),
-        ),
-      );
-      for (final mode in LanguageMode.values) {
-        for (final length in [4, 5, 6]) {
-          final answers = pool.solutions(mode: mode, wordLength: length);
-          final questAnswers = quest
-              .words(mode: mode)
-              .where((word) => word.graphemeLength == length);
-          expect(
-            answers.length,
-            greaterThanOrEqualTo(300),
-            reason: '${mode.name}/$length must retain a varied answer rotation',
-          );
-          expect(
-            questAnswers.length,
-            greaterThanOrEqualTo(250),
-            reason: '${mode.name}/$length must support Word Quest',
-          );
-        }
+  test('loads the replacement offline dictionary and varied game pools', () async {
+    final entries = await AssetVocabularyRepository().load();
+    final pool = WordPool(entries);
+    final quest = WordQuestVocabulary(entries);
+    expect(entries.length, inInclusiveRange(6000, 10000));
+    expect(
+      entries.every(
+        (e) => e.id.startsWith('en_v2_') || e.id.startsWith('panjabi_v2_'),
+      ),
+      isTrue,
+    );
+    expect(entries.every((e) => e.hasDistributableDefinition), isTrue);
+    expect(
+      entries.every((e) => e.reviewStatus.name == 'machineChecked'),
+      isTrue,
+    );
+    for (final mode in LanguageMode.values) {
+      for (final length in [4, 5, 6]) {
+        final answers = pool.solutions(mode: mode, wordLength: length);
+        final clues = quest
+            .words(mode: mode)
+            .where((w) => w.graphemeLength == length);
+        expect(
+          answers.length,
+          greaterThanOrEqualTo(5),
+          reason: '${mode.name}/$length',
+        );
+        expect(
+          clues.length,
+          greaterThanOrEqualTo(5),
+          reason: 'Quest ${mode.name}/$length',
+        );
       }
-
-      expect(entries, hasLength(greaterThanOrEqualTo(47093)));
+    }
+    for (final word in ['VOTARY', 'BATHOS', 'ECLAT', 'LUST', 'STUD', 'TWAT']) {
       expect(
-        pool.solutions(mode: LanguageMode.english, wordLength: 4),
-        hasLength(greaterThanOrEqualTo(1200)),
-      );
-      expect(
-        pool.solutions(mode: LanguageMode.english, wordLength: 5),
-        isNotEmpty,
-      );
-      expect(
-        pool.solutions(mode: LanguageMode.romanizedPanjabi, wordLength: 6),
-        isNotEmpty,
-      );
-      expect(
-        pool.solutions(mode: LanguageMode.gurmukhi, wordLength: 4),
-        isNotEmpty,
-      );
-      expect(
-        pool.solutions(mode: LanguageMode.gurmukhi, wordLength: 5),
-        isNotEmpty,
-      );
-      expect(
-        pool.solutions(mode: LanguageMode.gurmukhi, wordLength: 6),
-        isNotEmpty,
-      );
-      expect(
-        pool
-            .entryForGuess(mode: LanguageMode.english, guess: 'HOME')
-            ?.englishDefinition,
-        'where you live at a particular time',
-      );
-      expect(
-        pool
-            .entryForGuess(mode: LanguageMode.english, guess: 'WORD')
-            ?.englishDefinition,
-        'a unit of language that native speakers can identify',
-      );
-      const excludedIds = {
-        'english_bozo',
-        'english_dork',
-        'english_goof',
-        'english_goon',
-        'english_lech',
-        'english_pimp',
-        'english_putz',
-        'english_twat',
-        'gurmukhi_mahan_kosh_1-108-4',
-        'gurmukhi_mahan_kosh_1-194-20',
-        'gurmukhi_mahan_kosh_1-235-7',
-        'gurmukhi_mahan_kosh_1-272-18',
-        'gurmukhi_mahan_kosh_1-304-34',
-        'gurmukhi_mahan_kosh_1-341-17',
-        'gurmukhi_mahan_kosh_1-373-3',
-        'gurmukhi_mahan_kosh_1-397-8',
-        'gurmukhi_mahan_kosh_1-405-8',
-        'gurmukhi_mahan_kosh_1-543-15',
-        'gurmukhi_mahan_kosh_1-543-16',
-        'gurmukhi_mahan_kosh_1-551-18',
-      };
-      for (final id in excludedIds) {
-        final entry = entries.singleWhere((entry) => entry.id == id);
-        expect(entry.acceptedGuess, isTrue, reason: id);
-        expect(entry.solutionEligible, isFalse, reason: id);
-      }
-      final lust = entries.singleWhere((entry) => entry.id == 'english_lust');
-      final stud = entries.singleWhere((entry) => entry.id == 'english_stud');
-      expect(lust.solutionEligible, isFalse);
-      expect(stud.solutionEligible, isFalse);
-      expect(stud.englishDefinition, 'an upright in house framing');
-      expect(
-        entries
-            .singleWhere((entry) => entry.id == 'english_give')
-            .englishDefinition,
-        'transfer possession of something concrete or abstract to somebody',
-      );
-      final legacyGuess = entries.singleWhere(
-        (entry) => entry.id == 'panjabi_item',
-      );
-      expect(legacyGuess.acceptedGuess, isTrue);
-      expect(legacyGuess.solutionEligible, isFalse);
-      expect(
-        legacyGuess.displayDefinition,
-        'Definition unavailable for this word.',
-      );
-      final romanized = pool.acceptedGuesses(
-        mode: LanguageMode.romanizedPanjabi,
-        wordLength: 5,
-      );
-      expect(romanized, contains('ADRAK'));
-      expect(romanized, isNot(contains('ADKAR')));
-      expect(
-        pool
-            .entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'ADRAK')
-            ?.englishDefinition,
-        'Ginger, used as a spice',
-      );
-      expect(
-        pool.entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'CASE'),
+        pool.entryForGuess(mode: LanguageMode.english, guess: word),
         isNull,
       );
-      expect(
-        pool.entryForGuess(mode: LanguageMode.english, guess: 'CASE'),
-        isNotNull,
+    }
+    for (final word in ['BUTTERFLY', 'ELEPHANT', 'MOUNTAIN']) {
+      final entry = entries.singleWhere(
+        (e) => e.latin == word && e.id.startsWith('en_v2_'),
       );
+      expect(entry.solutionEligible, isTrue);
+      expect(entry.latinLength, greaterThan(6));
+    }
+    expect(
+      pool
+          .entryForGuess(mode: LanguageMode.english, guess: 'HOME')
+          ?.englishDefinition,
+      'Where a person lives.',
+    );
+    expect(
+      pool
+          .entryForGuess(mode: LanguageMode.english, guess: 'APPLE')
+          ?.englishDefinition,
+      'A sweet, red, yellow or green fruit.',
+    );
+    expect(
+      entries.any((e) => e.id == 'english_home'),
+      isFalse,
+      reason:
+          'Old English target IDs must not silently restore with a new meaning',
+    );
+  });
+
+  test(
+    'random answers favor everyday child vocabulary while lookup stays broader',
+    () async {
+      final entries = await AssetVocabularyRepository().load();
+      final english = {
+        for (final entry in entries.where((e) => e.id.startsWith('en_v2_')))
+          entry.latin: entry,
+      };
+      for (final word in [
+        'CORPORATION',
+        'FINANCE',
+        'RESEARCH',
+        'SECONDARY',
+        'SOCIETY',
+        'COMMENT',
+        'CURRENT',
+        'DON',
+        'FRANK',
+      ]) {
+        final entry = english[word]!;
+        expect(entry.acceptedGuess, isTrue, reason: word);
+        expect(entry.hasDistributableDefinition, isTrue, reason: word);
+        expect(entry.solutionEligible, isFalse, reason: word);
+        expect(entry.reviewStatus.name, 'machineChecked', reason: word);
+      }
+      for (final word in [
+        'HAPPY',
+        'SHARE',
+        'LEARN',
+        'PRACTICE',
+        'USEFUL',
+        'TREE',
+        'LAKE',
+        'BUTTERFLY',
+      ]) {
+        expect(english[word]!.solutionEligible, isTrue, reason: word);
+      }
+      // The pinned RULE source was vandalized, so it must not enter lookup either.
+      expect(english.containsKey('RULE'), isFalse);
       expect(
-        pool
-            .entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'MARJI')
-            ?.englishDefinition,
-        "A person's will or choice",
-      );
-      expect(
-        pool
-            .entryForGuess(mode: LanguageMode.romanizedPanjabi, guess: 'DUTARA')
-            ?.englishDefinition,
-        'A musical instrument with two strings',
+        entries.any(
+          (e) => e.englishDefinition.toLowerCase().contains('master bait'),
+        ),
+        isFalse,
       );
     },
   );

@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'victory_celebration.dart';
+import '../audio/interaction_sounds.dart';
 
 /// Explicitly requested preview playback, separate from victory audio settings.
 class LetterPronunciationButton extends StatefulWidget {
@@ -113,7 +114,7 @@ class _LetterPronunciationButtonState extends State<LetterPronunciationButton>
     mainAxisSize: MainAxisSize.min,
     children: [
       TextButton.icon(
-        onPressed: _play,
+        onPressed: InteractionSounds.buttonAction(context, _play),
         icon: Icon(
           _playing ? Icons.stop_circle_outlined : Icons.volume_up_outlined,
         ),

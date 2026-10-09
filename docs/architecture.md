@@ -51,8 +51,9 @@ the app's saved-session contract.
 ### Game-library launch flow
 
 The game library owns the shared launch experience for every playable mode. A
-launch request can start a fresh game with an explicit language and four-, five-,
-or six-grapheme word size, or use `null` for either field to select randomly.
+launch request can start a fresh Bujho or Quest game with an explicit language
+and four-, five-, or six-grapheme word size, or use `null` to select randomly.
+Khoj chooses only a language and mixes word lengths; Jodo also mixes lengths.
 Each mode keeps its own versioned active-game snapshot so the library can offer
 Continue game only for an unfinished session. Starting a new game replaces that
 mode's snapshot; completing a game clears it.
@@ -97,6 +98,11 @@ lib/
 - Gurmukhi remains a separate mode.
 
 ## Khoj: Word Search rules
+
+- New puzzles have no word-size preference. Select six distinct eligible words
+  of 2–12 graphemes, then use a 10-cell grid that grows to fit longer targets.
+  Valid older saved boards can finish with their historical statistics bucket;
+  subsequent puzzles use the language-wide bucket. The title shows language only.
 
 - Each target has a distinct selectable cell path, including reverse-word
   pairs. Saved puzzles must contain one grapheme per cell, unique nonempty
@@ -169,12 +175,19 @@ The main scale risks are the large JSON vocabulary, synchronous parsing/filterin
 on the UI isolate, and large presentation files. Measure cold loading and input
 latency on a modest phone before choosing an indexed format or moving parsing
 work. Keep future extraction focused on tested behavior rather than a release-time
-rewrite. The runtime package contains three sanitized release shards for four-,
-five-, and six-grapheme vocabulary. Visible definitions must carry an approved
+rewrite. The runtime package contains two sanitized dictionary-v2 banks,
+English and Punjabi, across word lengths. Visible definitions must carry a licensed
 source or be original project editorial text. Definitions with unclear legacy
 provenance are removed from the release shards, and affected entries cannot be
 solutions. Generated source data, editorial queues, curation records, and backups
 remain authoring data and must not enter the web archive.
+
+Routine content maintenance now uses `tool/dictionary_v2.dart`: preview,
+write and reproducibility check run locked English/Punjabi importers and the
+release builder/audit. Legacy import/review tools are archival. English uses
+frequency plus first ordinary source-sense checks; Punjabi answer eligibility
+uses bounded exact-sense decisions. The two release filenames do not encode
+word size. Bujho and Quest filter their actual grapheme lengths at runtime.
 
 Bujho, Khoj, and Word Quest all select answers through the curated
 `solutionEligible` boundary. Source provenance, mechanical definition quality,
@@ -240,8 +253,10 @@ LetterPronunciationButton plays bundled WAV previews on explicit activation, sto
 
 ### 1.11 play consistency and progress projection
 
-`GameLanguageHeader` centralizes the text-only language/optional word-size line.
-Shared game toasts float below the toolbar without changing board geometry.
+`GameLanguageHeader` centralizes compact language/optional word-size text inside
+`GameHeading`'s paper label. Shared game toasts float below the toolbar without
+changing board geometry. Each game route owns a `ScaffoldMessenger`; disposal
+removes its feedback rather than carrying it to other routes.
 `PaperPage` owns full-page Settings/Progress/Achievements and per-game details;
 Dictionary retains its dedicated searchable route. The router exposes `/settings`,
 `/progress` and `/achievements` beside the existing game/Dictionary routes.
@@ -257,3 +272,18 @@ Quest session schema 2 enforces 3/4/5 misses. Schema 1 still enforces the previo
 5/6/7 budget for valid unfinished legacy rounds and is retained on their next save.
 New rounds always use schema 2. This preserves played moves without accepting
 arbitrary custom budgets as app sessions.
+
+### Primary navigation and click feedback
+
+`StudioNavigation` uses one native Material navigation bar on all four primary
+pages. Its explicit destination drives selected state, and `context.go` replaces
+the primary selection; game routes remain focused. `PaperPage` accepts an optional
+primary destination so Settings/game-details do not acquire the library bar.
+
+`InteractionSounds` encloses the Navigator in the app builder. Accepted letter
+and button callbacks request independent short, low-volume bundled WAVs. Disabled
+controls, scrolling and background gestures do not play sounds. Separate lazy
+players avoid stopping pronunciation or victory audio; lifecycle disposal and
+backgrounding stop clicks and playback errors remain nonfatal. Independent
+`letterClicks`/`buttonClicks` preferences migrate older settings with enabled
+defaults and are included in reset. Original WAV generation is reproducible.

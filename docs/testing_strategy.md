@@ -41,24 +41,28 @@ Run from `app/`:
 dart format --output=none --set-exit-if-changed lib test integration_test tool
 flutter analyze --suppress-analytics
 flutter test --suppress-analytics
-python tool/fetch_vocabulary_sources.py
-dart run tool/vocabulary_pipeline.dart --check
+python -m unittest discover -s tool/tests -p test_english_dictionary_v2.py
+dart run tool/dictionary_v2.dart --check
 dart run tool\audit_content.dart
 flutter build web --release --no-web-resources-cdn --suppress-analytics
 ```
 
 Run the integration target on a configured supported device separately. It is
 not included in `flutter test` by default. Keep formatter changes scoped when
-preserving another contributor's work. The content audit may finish successfully
-while reporting editorial defects; its issue counts must be reviewed.
+preserving another contributor's work. The current content audit validates the actual v2 release; the optional
+`--legacy-archive` report concerns retired authoring data only.
 
-The vocabulary pipeline verifies locked source bytes before producing decisions.
-Tests cover exact lemma/sense membership, Punjabi headword and sense-index
-requirements, corrupt/missing/extra source files, stale hold fingerprints,
-preserved guess IDs and explicit exclusions, and unique projected coverage.
-CI and the itch.io helper require a fresh report/hold/release check. A semantic
-sample and unresolved exceptions remain separate from these automated gates;
-machine checks never advance an entry to human-reviewed status.
+The v2 pipeline verifies locked offline source snapshots and reproduces both
+language banks and reports. English tests cover frequency/exclusion gates,
+source-linked exceptions, rejected cross-part-of-speech fallback, reference
+forms, source maintenance messages and unclear definitions. Punjabi tests cover
+exact sense decisions, unsafe/reference holds, transliteration and newline-stable
+checks. Runtime checks establish sourced definitions, new IDs, game-specific
+length coverage and Jodo starter decks. Game pools must remain usable, but historical size quotas never promote an
+answer. English tests distinguish the higher answer-frequency threshold from
+broader dictionary inclusion. Punjabi has a deliberately smaller everyday pool. Machine checks never advance an
+entry to human-reviewed status. Targeted semantic sampling remains separate
+from these automated gates.
 
 For itch.io, also verify the packaged relative base path, root `index.html`,
 archive size/file limits, local renderer assets, nested-path loading, iframe
@@ -244,3 +248,24 @@ accepting changed baselines. Page navigation/reset tests exercise the real route
 Saving Settings must return to a playable library after persistence and route
 refresh. The widget regression and browser fixture both assert this transition
 before launching Bujho, then the browser fixture verifies interrupted restore.
+
+### Mobile navigation, feedback and dictionary v2: 1.12.0+23
+
+Navigation regressions exercise all four persistent destinations at phone/tablet
+sizes and 100/200% text, asserting the selected destination and visible bar.
+Game feedback is shown, followed by Back to Play and Dictionary, to ensure a
+toast cannot survive its game route. Mixed-length Khoj ignores older launch-size
+preferences and includes longer targets; valid older saved boards remain usable.
+All three lines of the paper header fit across the existing theme/size/text matrix.
+
+Click audio tests spy on actual callbacks, independent persisted switches,
+disabled/background/scroll silence, playback failures and lifecycle handling.
+Generated WAVs are checked for duration and clipping. Speaker audibility remains
+a device/browser check. The narrower Settings layout has a 200% text regression.
+
+Dictionary validation reproduces both locked source snapshots, exact sense-linked
+decisions and filtered runtime banks with one offline `--check`. Import-policy
+tests cover inappropriate senses, reference/junk/context-dependent clues, unsafe
+cross-part-of-speech fallbacks and transliteration integrity. The source/semantic
+review adds regressions for observed failures; neither source matching nor a
+passing sample certifies all content as human reviewed or child suitable.

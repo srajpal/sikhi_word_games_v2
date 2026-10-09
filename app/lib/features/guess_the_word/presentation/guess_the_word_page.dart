@@ -1,5 +1,6 @@
 import '../../../core/themes/paper_page.dart';
 import '../../../core/themes/game_heading.dart';
+import '../../../core/audio/interaction_sounds.dart';
 
 import 'dart:math' as math;
 
@@ -132,6 +133,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         !RegExp(r'^[A-Za-z]$').hasMatch(character)) {
       return;
     }
+    InteractionSounds.letter(context);
     _appendCharacter(
       _mode == LanguageMode.gurmukhi ? character : character.toUpperCase(),
     );
@@ -402,6 +404,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                     ],
                     onChanged: (value) {
                       if (value == null) return;
+                      InteractionSounds.button(context);
                       setDialogState(() => selectedMode = value);
                     },
                   ),
@@ -419,21 +422,35 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                         ),
                     ],
                     onChanged: (value) {
-                      if (value != null) selectedLength = value;
+                      if (value != null) {
+                        InteractionSounds.button(context);
+                        setDialogState(() => selectedLength = value);
+                      }
                     },
                   ),
+                  if (selectedMode == LanguageMode.gurmukhi &&
+                      selectedLength == 6) ...[
+                    const SizedBox(height: 12),
+                    const Text(gurmukhiVarietyNote),
+                  ],
                 ],
               ),
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
+                onPressed: InteractionSounds.buttonAction(
+                  context,
+                  () => Navigator.of(context).pop(false),
+                ),
                 child: const Text('Cancel'),
               ),
               FilledButton(
                 onPressed: lengths.isEmpty
                     ? null
-                    : () => Navigator.of(context).pop(true),
+                    : InteractionSounds.buttonAction(
+                        context,
+                        () => Navigator.of(context).pop(true),
+                      ),
                 child: const Text('Apply'),
               ),
             ],
@@ -473,6 +490,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   }
 
   void _handleMenuAction(_GameMenuAction action) {
+    InteractionSounds.button(context);
     switch (action) {
       case _GameMenuAction.newGame:
         _startGame();
@@ -509,16 +527,20 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     final isComplete = game?.status != GuessGameStatus.playing;
     return Scaffold(
       appBar: AppBar(
+        leading: gameBackButton(context),
         flexibleSpace: const PaperTexture(),
-        bottom: GameLanguageHeader(
-          textScale: MediaQuery.textScalerOf(context).scale(12) / 12,
-          mode: _mode,
-          wordLength: game?.wordLength,
-        ),
         toolbarHeight: gameToolbarHeight(context),
-        title: const GameHeading(identity: GameIdentity.bujho, compact: true),
+        title: GameHeading(
+          identity: GameIdentity.bujho,
+          compact: true,
+          subtitle: GameLanguageHeader(
+            mode: _mode,
+            wordLength: game?.wordLength,
+          ),
+        ),
         actions: [
           PopupMenuButton<_GameMenuAction>(
+            onOpened: () => InteractionSounds.button(context),
             key: const ValueKey('game-menu'),
             tooltip: 'Game menu',
             onSelected: _handleMenuAction,

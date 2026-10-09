@@ -119,9 +119,9 @@ class GameHeading extends StatelessWidget {
 }
 
 /// Let titles grow with accessibility text instead of shrinking them to fit.
-double gameToolbarHeight(BuildContext context, {bool subtitle = false}) {
+double gameToolbarHeight(BuildContext context, {bool subtitle = true}) {
   final scale = MediaQuery.textScalerOf(context);
-  return scale.scale(20) * 2.5 + scale.scale(12) * (subtitle ? 2 : 1) + 36;
+  return scale.scale(20) * 1.25 + scale.scale(12) * (subtitle ? 3 : 1.5) + 24;
 }
 
 /// A small paper illustration and instruction, without a duplicate game title.

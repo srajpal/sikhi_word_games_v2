@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/themes/game_ui.dart';
@@ -74,29 +75,76 @@ class _SettingsPageState extends State<SettingsPage> {
                   AppThemeChoice.dark =>
                     'Midnight paper with soft blue highlights',
                 }),
-                onTap: () => _update(_draft.copyWith(theme: choice)),
+                onTap: InteractionSounds.buttonAction(
+                  context,
+                  () => _update(_draft.copyWith(theme: choice)),
+                ),
               ),
             const Divider(),
             DropdownButtonFormField<HapticFeedbackLevel>(
+              isExpanded: true,
               initialValue: _draft.hapticLevel,
               decoration: const InputDecoration(labelText: 'Haptic feedback'),
               items: [
                 for (final level in HapticFeedbackLevel.values)
                   DropdownMenuItem(value: level, child: Text(level.label)),
               ],
-              onChanged: (value) {
-                if (value != null) _update(_draft.copyWith(hapticLevel: value));
-              },
+              onChanged: InteractionSounds.buttonChange<HapticFeedbackLevel?>(
+                context,
+                (value) {
+                  if (value != null) {
+                    _update(_draft.copyWith(hapticLevel: value));
+                  }
+                },
+              ),
             ),
             SwitchListTile(
               title: const Text('Reduce motion'),
               subtitle: const Text('Minimize interface animation'),
               value: _draft.reducedMotion,
-              onChanged: (value) =>
-                  _update(_draft.copyWith(reducedMotion: value)),
+              onChanged: InteractionSounds.buttonChange(
+                context,
+                (value) => _update(_draft.copyWith(reducedMotion: value)),
+              ),
             ),
             const Text(
               'Your device text size and reduce-motion settings are also respected.',
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 16),
+      GamePanel(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Click sounds',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            SwitchListTile(
+              key: const ValueKey('letter-clicks'),
+              title: const Text('Letter clicks'),
+              subtitle: const Text(
+                'Gentle ticks when choosing or typing letters',
+              ),
+              value: _draft.letterClicks,
+              onChanged: InteractionSounds.buttonChange(
+                context,
+                (value) => _update(_draft.copyWith(letterClicks: value)),
+              ),
+            ),
+            SwitchListTile(
+              key: const ValueKey('button-clicks'),
+              title: const Text('Button clicks'),
+              subtitle: const Text(
+                'Soft clicks for buttons and other controls',
+              ),
+              value: _draft.buttonClicks,
+              onChanged: InteractionSounds.buttonChange(
+                context,
+                (value) => _update(_draft.copyWith(buttonClicks: value)),
+              ),
             ),
           ],
         ),
@@ -113,18 +161,26 @@ class _SettingsPageState extends State<SettingsPage> {
             SwitchListTile(
               title: const Text('Victory sound'),
               value: _draft.victorySound,
-              onChanged: (value) =>
-                  _update(_draft.copyWith(victorySound: value)),
+              onChanged: InteractionSounds.buttonChange(
+                context,
+                (value) => _update(_draft.copyWith(victorySound: value)),
+              ),
             ),
             SwitchListTile(
               title: const Text('Victory particles'),
               subtitle: const Text('Reduce motion turns these off'),
               value: _draft.victoryParticles,
-              onChanged: (value) =>
-                  _update(_draft.copyWith(victoryParticles: value)),
+              onChanged: InteractionSounds.buttonChange(
+                context,
+                (value) => _update(_draft.copyWith(victoryParticles: value)),
+              ),
             ),
             ExpansionTile(
               title: const Text('Per-game celebrations'),
+              onExpansionChanged: InteractionSounds.buttonChange(
+                context,
+                (_) {},
+              ),
               children: [
                 const Padding(
                   padding: EdgeInsets.all(16),
@@ -138,15 +194,22 @@ class _SettingsPageState extends State<SettingsPage> {
                     key: ValueKey('victory-sound-${game.name}'),
                     title: const Text('Sound'),
                     value: !_draft.mutedVictoryGames.contains(game.name),
-                    onChanged: (value) =>
-                        _update(_draft.withGameVictory(game, sound: value)),
+                    onChanged: InteractionSounds.buttonChange(
+                      context,
+                      (value) =>
+                          _update(_draft.withGameVictory(game, sound: value)),
+                    ),
                   ),
                   SwitchListTile(
                     key: ValueKey('victory-particles-${game.name}'),
                     title: const Text('Particles'),
                     value: !_draft.quietVictoryGames.contains(game.name),
-                    onChanged: (value) =>
-                        _update(_draft.withGameVictory(game, particles: value)),
+                    onChanged: InteractionSounds.buttonChange(
+                      context,
+                      (value) => _update(
+                        _draft.withGameVictory(game, particles: value),
+                      ),
+                    ),
                   ),
                 ],
               ],
@@ -161,26 +224,35 @@ class _SettingsPageState extends State<SettingsPage> {
             ListTile(
               leading: const Icon(Icons.bar_chart),
               title: const Text('Your statistics'),
-              onTap: () => context.push('/progress'),
+              onTap: InteractionSounds.buttonAction(
+                context,
+                () => context.push('/progress'),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.workspace_premium),
               title: const Text('Achievements'),
-              onTap: () => context.push('/achievements'),
+              onTap: InteractionSounds.buttonAction(
+                context,
+                () => context.push('/achievements'),
+              ),
             ),
             if (widget.onResetAllData != null)
               TextButton.icon(
-                onPressed: _saving
-                    ? null
-                    : () async {
-                        await showResetAppDataDialog(
-                          context,
-                          onReset: () async {
-                            await widget.onResetAllData!();
-                            if (mounted) _update(const AppSettings());
-                          },
-                        );
-                      },
+                onPressed: InteractionSounds.buttonAction(
+                  context,
+                  _saving
+                      ? null
+                      : () async {
+                          await showResetAppDataDialog(
+                            context,
+                            onReset: () async {
+                              await widget.onResetAllData!();
+                              if (mounted) _update(const AppSettings());
+                            },
+                          );
+                        },
+                ),
                 icon: const Icon(Icons.restart_alt),
                 label: const Text('Reset all app data'),
               ),
@@ -194,7 +266,10 @@ class _SettingsPageState extends State<SettingsPage> {
         runSpacing: 12,
         children: [
           TextButton(
-            onPressed: _saving ? null : () => Navigator.pop(context),
+            onPressed: InteractionSounds.buttonAction(
+              context,
+              _saving ? null : () => Navigator.pop(context),
+            ),
             child: const Text('Cancel'),
           ),
           GameGradientButton(

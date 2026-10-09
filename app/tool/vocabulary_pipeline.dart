@@ -10,6 +10,7 @@ import 'package:sikhi_word_games_v2/features/word_bridges/domain/word_bridges_co
 import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_definition_quality.dart';
 
 import 'build_release_content.dart' as release;
+import 'dictionary_v2.dart' as dictionary_v2;
 import 'content/vocabulary_checks.dart';
 import 'content/vocabulary_sources.dart';
 
@@ -18,7 +19,10 @@ const reportPath = '../reports/content/vocabulary_recheck.json';
 
 /// One offline workflow: effective content -> pinned source/quality checks ->
 /// grouped exceptions -> reversible holds -> release checks. No answer promotion.
-void main(List<String> arguments) {
+void main(List<String> arguments) => dictionary_v2.main(arguments);
+
+// Retained authoring-archive implementation for historical investigations only.
+void legacyPipeline(List<String> arguments) {
   if (arguments.any((a) => !['--write', '--check'].contains(a)) ||
       arguments.contains('--write') && arguments.contains('--check')) {
     throw ArgumentError('Usage: vocabulary_pipeline.dart [--write | --check]');

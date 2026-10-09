@@ -1,4 +1,6 @@
 import '../../../core/themes/studio_logo.dart';
+import '../../../core/themes/studio_navigation.dart';
+import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../learn_letters/data/learn_letters_repository.dart';
 import '../../../core/widgets/game_guide.dart';
@@ -96,8 +98,10 @@ class GameLibraryPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    'Choose a language and word size, or let the game pick for you.',
+                  Text(
+                    kind == GameKind.wordSearch
+                        ? 'Choose a language, or let the game pick for you.'
+                        : 'Choose a language and word size, or let the game pick for you.',
                   ),
                   const SizedBox(height: 18),
                   DropdownButtonFormField<String>(
@@ -121,26 +125,34 @@ class GameLibraryPage extends StatelessWidget {
                       }
                     },
                   ),
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<String>(
-                    initialValue: selectedWordSize,
-                    isExpanded: true,
-                    decoration: const InputDecoration(labelText: 'Word size'),
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'random',
-                        child: Text('Random size'),
-                      ),
-                      DropdownMenuItem(value: '4', child: Text('4 letters')),
-                      DropdownMenuItem(value: '5', child: Text('5 letters')),
-                      DropdownMenuItem(value: '6', child: Text('6 letters')),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        setSheetState(() => selectedWordSize = value);
-                      }
-                    },
-                  ),
+                  if (kind != GameKind.wordSearch) ...[
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedWordSize,
+                      isExpanded: true,
+                      decoration: const InputDecoration(labelText: 'Word size'),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'random',
+                          child: Text('Random size'),
+                        ),
+                        DropdownMenuItem(value: '4', child: Text('4 letters')),
+                        DropdownMenuItem(value: '5', child: Text('5 letters')),
+                        DropdownMenuItem(value: '6', child: Text('6 letters')),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          setSheetState(() => selectedWordSize = value);
+                        }
+                      },
+                    ),
+                  ],
+                  if (kind != GameKind.wordSearch &&
+                      selectedLanguage == LanguageMode.gurmukhi.name &&
+                      selectedWordSize == '6') ...[
+                    const SizedBox(height: 12),
+                    const Text(gurmukhiVarietyNote),
+                  ],
                   const SizedBox(height: 20),
                   GameGradientButton(
                     label: 'Start new game',
@@ -151,7 +163,9 @@ class GameLibraryPage extends StatelessWidget {
                         language: selectedLanguage == 'random'
                             ? null
                             : LanguageMode.values.byName(selectedLanguage),
-                        wordSize: selectedWordSize == 'random'
+                        wordSize:
+                            kind == GameKind.wordSearch ||
+                                selectedWordSize == 'random'
                             ? null
                             : int.parse(selectedWordSize),
                       ),
@@ -285,8 +299,6 @@ class GameLibraryPage extends StatelessWidget {
   }
 
   void _showFeedbackSettings(BuildContext context) => context.push('/settings');
-  void _showProgress(BuildContext context) => context.push('/progress');
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -296,6 +308,9 @@ class GameLibraryPage extends StatelessWidget {
         ? AppThemeChoice.dark
         : AppThemeChoice.modern;
     return Scaffold(
+      bottomNavigationBar: const StudioNavigation(
+        destination: StudioDestination.play,
+      ),
       appBar: AppBar(
         centerTitle: false,
         toolbarHeight: MediaQuery.textScalerOf(context).scale(28) * 2 + 24,
@@ -304,14 +319,18 @@ class GameLibraryPage extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: 'App settings',
-            onPressed: () => _showFeedbackSettings(context),
+            onPressed: InteractionSounds.buttonAction(
+              context,
+              () => _showFeedbackSettings(context),
+            ),
             icon: const Icon(Icons.settings_outlined),
           ),
           PopupMenuButton<AppThemeChoice>(
+            onOpened: () => InteractionSounds.button(context),
             key: const ValueKey('app-theme-menu'),
             tooltip: 'Choose app theme',
             initialValue: activeTheme,
-            onSelected: onThemeChanged,
+            onSelected: InteractionSounds.buttonChange(context, onThemeChanged),
             icon: const Icon(Icons.palette_outlined),
             itemBuilder: (context) => [
               for (final choice in AppThemeChoice.values)
@@ -366,51 +385,6 @@ class GameLibraryPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurface.withValues(
-                        alpha: .065,
-                      ),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final items = [
-                          Semantics(
-                            selected: true,
-                            child: GameGradientButton(
-                              label: 'Play',
-                              onPressed: () {},
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => context.push('/dictionary'),
-                            child: const Text('Dictionary'),
-                          ),
-                          TextButton(
-                            onPressed: () => _showProgress(context),
-                            child: const Text('Progress'),
-                          ),
-                          TextButton(
-                            onPressed: () => context.push('/achievements'),
-                            child: const Text('Badges'),
-                          ),
-                        ];
-                        if (MediaQuery.textScalerOf(context).scale(14) > 21) {
-                          return Wrap(
-                            alignment: WrapAlignment.center,
-                            children: items,
-                          );
-                        }
-                        return Row(
-                          children: [
-                            for (final item in items) Expanded(child: item),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final twoColumns =
@@ -502,15 +476,8 @@ class GameLibraryPage extends StatelessWidget {
                   const StudioWebsiteLink(),
                   const SizedBox(height: 20),
                   Text(
-                    'English definition data adapted from Open English '
-                    'WordNet 2025, licensed CC BY 4.0.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Gurmukhi dictionary data adapted from Mahan Kosh, '
-                    'licensed CC BY 4.0.',
+                    'Offline dictionary: Wiktionary contributors and wordfreq, '
+                    'CC BY-SA 4.0. Full credits in Dictionary, under Sources.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
@@ -617,7 +584,7 @@ class _GameCard extends StatelessWidget {
           tooltip: gameKind == GameKind.learnLetters
               ? 'How to play'
               : 'New game options',
-          onPressed: onNewGameOptions,
+          onPressed: InteractionSounds.buttonAction(context, onNewGameOptions),
           style: IconButton.styleFrom(
             minimumSize: const Size(48, 48),
             backgroundColor: theme.colorScheme.surface,

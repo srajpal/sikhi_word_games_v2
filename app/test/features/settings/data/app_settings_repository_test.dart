@@ -7,6 +7,42 @@ import 'package:sikhi_word_games_v2/features/game_library/domain/game_launch_opt
 import 'package:sikhi_word_games_v2/features/settings/data/app_settings_repository.dart';
 
 void main() {
+  test('legacy settings enable click sounds without losing other opt-outs', () {
+    final settings = AppSettings.fromJson({
+      'schemaVersion': 1,
+      'theme': 'dark',
+      'hapticLevel': 'off',
+      'victorySound': false,
+    });
+    expect(settings.letterClicks, isTrue);
+    expect(settings.buttonClicks, isTrue);
+    expect(settings.hapticLevel, HapticFeedbackLevel.off);
+    expect(settings.victorySound, isFalse);
+    expect(settings.theme, AppThemeChoice.dark);
+  });
+
+  test('click opt-outs persist independently and reset to defaults', () async {
+    final repository = AppSettingsRepository(MemoryKeyValueStore());
+    for (final letter in [true, false]) {
+      for (final button in [true, false]) {
+        await repository.save(
+          const AppSettings(victorySound: false)
+              .copyWith(letterClicks: letter, buttonClicks: button)
+              .withGameVictory(GameKind.wordQuest, particles: false)
+              .copyWith(theme: AppThemeChoice.dark),
+        );
+        final restored = repository.load();
+        expect(restored.letterClicks, letter);
+        expect(restored.buttonClicks, button);
+        expect(restored.victorySound, isFalse);
+        expect(restored.quietVictoryGames, {'wordQuest'});
+      }
+    }
+    await repository.reset();
+    expect(repository.load().letterClicks, isTrue);
+    expect(repository.load().buttonClicks, isTrue);
+  });
+
   test('uses the Sikhi theme when no settings are stored', () {
     expect(
       AppSettingsRepository(MemoryKeyValueStore()).load().theme,

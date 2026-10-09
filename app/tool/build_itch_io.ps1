@@ -21,9 +21,9 @@ $archivePath = Join-Path $resolvedOutputDirectory "sikhi-word-games-web-$version
 
 Push-Location $appDirectory
 try {
-    dart run tool\vocabulary_pipeline.dart --check
+    dart run tool\dictionary_v2.dart --check
     if ($LASTEXITCODE -ne 0) {
-        throw "Vocabulary recheck or release audit failed. Fetch pinned sources with python tool/fetch_vocabulary_sources.py, then preview/recheck vocabulary."
+        throw "Dictionary v2 reproduction or release audit failed. Preview with dart run tool/dictionary_v2.dart and rebuild checked changes with --write."
     }
     flutter build web --release --no-web-resources-cdn --pwa-strategy=none --suppress-analytics
     if ($LASTEXITCODE -ne 0) {
@@ -50,6 +50,13 @@ try {
     if ($null -ne $privateContent) {
         $paths = ($privateContent | Select-Object -ExpandProperty FullName) -join [Environment]::NewLine
         throw "The web build contains authoring-only content that must not be distributed:$([Environment]::NewLine)$paths"
+    }
+    foreach ($retiredDirectory in @("build\web\assets\assets\content\generated", "build\web\assets\assets\content\curation")) {
+        $retiredPath = Join-Path $appDirectory $retiredDirectory
+        if ((Test-Path -LiteralPath $retiredPath) -and
+            @(Get-ChildItem -LiteralPath $retiredPath -Force).Count -eq 0) {
+            Remove-Item -LiteralPath $retiredPath
+        }
     }
     New-Item -ItemType Directory -Force -Path $resolvedOutputDirectory | Out-Null
     if (Test-Path -LiteralPath $archivePath) {

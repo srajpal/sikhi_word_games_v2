@@ -3,35 +3,34 @@ import 'package:flutter/material.dart';
 import 'app_theme.dart';
 import 'paper_assets.dart';
 import '../../features/guess_the_word/domain/language_mode.dart';
+import '../audio/interaction_sounds.dart';
 
-/// Identical, non-interactive language information on every game route.
-class GameLanguageHeader extends StatelessWidget
-    implements PreferredSizeWidget {
-  const GameLanguageHeader({
-    required this.mode,
-    this.wordLength,
-    this.textScale = 1,
-    super.key,
-  });
+/// Compact language information inside the shared paper game title.
+class GameLanguageHeader extends StatelessWidget {
+  const GameLanguageHeader({required this.mode, this.wordLength, super.key});
   final LanguageMode mode;
   final int? wordLength;
-  final double textScale;
   @override
-  Size get preferredSize =>
-      Size.fromHeight(textScale > 1.5 ? 64 * textScale / 2 : 36);
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-    child: Text(
-      '${mode.label}${wordLength == null ? '' : ' · $wordLength letters'}',
-      key: const ValueKey('game-language-status'),
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.labelMedium,
-    ),
+  Widget build(BuildContext context) => Text(
+    '${mode.label}${wordLength == null ? '' : ' · $wordLength letters'}',
+    key: const ValueKey('game-language-status'),
+    textAlign: TextAlign.center,
+    style: Theme.of(context).textTheme.labelMedium,
   );
 }
 
 const gameSnackBarDuration = Duration(seconds: 5);
+const gurmukhiVarietyNote =
+    'For more variety in Gurmukhi, choose 4 or 5 letters.';
+
+Widget? gameBackButton(BuildContext context) => Navigator.canPop(context)
+    ? BackButton(
+        onPressed: InteractionSounds.buttonAction(
+          context,
+          () => Navigator.maybePop(context),
+        ),
+      )
+    : null;
 
 void showGameSnackBar(BuildContext context, String message) {
   final messenger = ScaffoldMessenger.of(context);
@@ -39,15 +38,7 @@ void showGameSnackBar(BuildContext context, String message) {
   final scheme = Theme.of(context).colorScheme;
   final appBar = context.findAncestorWidgetOfExactType<Scaffold>()?.appBar;
   final scaler = media.textScaler;
-  final header = GameLanguageHeader(
-    mode: LanguageMode.english,
-    textScale: scaler.scale(12) / 12,
-  );
-  final toolbarHeight =
-      scaler.scale(20) * 2.5 +
-      scaler.scale(12) +
-      36 +
-      header.preferredSize.height;
+  final toolbarHeight = scaler.scale(20) * 1.25 + scaler.scale(12) * 3 + 24;
   // Float below the toolbar without changing board geometry or covering keys.
   final painter = TextPainter(
     text: TextSpan(
@@ -259,7 +250,7 @@ class GameGradientButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: onPressed,
+            onTap: InteractionSounds.buttonAction(context, onPressed),
             borderRadius: radius,
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 48, minWidth: 48),

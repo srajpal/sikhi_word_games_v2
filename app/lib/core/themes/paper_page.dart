@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'game_ui.dart';
+import '../audio/interaction_sounds.dart';
+import 'studio_navigation.dart';
 
 Future<void> showPaperDetails(
   BuildContext context, {
@@ -17,7 +19,10 @@ Future<void> showPaperDetails(
         GamePanel(child: child),
         const SizedBox(height: 16),
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: InteractionSounds.buttonAction(
+            context,
+            () => Navigator.pop(context),
+          ),
           child: const Text('Close'),
         ),
       ],
@@ -32,6 +37,7 @@ class PaperPage extends StatelessWidget {
     required this.introduction,
     required this.children,
     this.actions,
+    this.destination,
     super.key,
   });
   final String title;
@@ -39,9 +45,14 @@ class PaperPage extends StatelessWidget {
   final String introduction;
   final List<Widget> children;
   final List<Widget>? actions;
+  final StudioDestination? destination;
   @override
   Widget build(BuildContext context) => Scaffold(
+    bottomNavigationBar: destination == null
+        ? null
+        : StudioNavigation(destination: destination!),
     appBar: AppBar(
+      leading: gameBackButton(context),
       flexibleSpace: const PaperTexture(),
       title: Text(title),
       actions: actions,
