@@ -6,7 +6,7 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
-## October 9 review fixes: candidate 1.16.2+31
+## October 9 review fixes and follow-ups: candidate 1.17.0+31
 
 - [x] Follow-up 3.1: ignore lone Gurmukhi vowel signs in Quest hardware input and
   the engine without consuming misses; cover unchanged counts and marked tiles.
@@ -18,6 +18,21 @@ source snapshot; integrity checks do not reopen editorial approval.
   first-try answers through shared count text; verify zero, one and two.
 - [x] Follow-up 3.5: replace six selection/restore candidate conditions with
   `AnswerEligibility.isCandidate`, preserving game-specific requirements.
+- [x] Follow-up 3.6: set both version sources and README to 1.17.0+31 as the
+  final follow-up commit; retain build number 31 as requested.
+
+Follow-ups 3.1 through 3.5 each passed formatting, analysis and the full suite
+before their separate commits: 426, 427, 428, 431 and 432 tests respectively,
+including all 42 Windows goldens each time. Reviewed the changed English Jodo
+phone capture. Source/content and release checks verify all 20,601 unchanged
+records, original attribution/licenses and zero source/runtime differences.
+The Romanization rule finds 13 exact leaks, or 87 including plain equivalents
+needed for granthī/granthi; two overlap existing exclusions, so 85 more native
+answers are excluded. English has 766/928/1,122 answers at 4/5/6 tiles. Native
+4/5/6 pools have 772/218/33; broader pools and small-pool notes are in the schema.
+Follow-up 3.6 validation: all 432 tests including 42 goldens pass; analysis is
+clean and all 163 Dart files are formatted. No new physical-device or hosted-web
+validation is claimed for this candidate.
 
 - [x] Follow-up 1: make Shabad Banao anagram-first, with the meaning revealed
   only through Hint or completion; persist clue visibility and preserve old saves.
@@ -73,11 +88,13 @@ Item 5 validation: 417 tests including all 40 unchanged goldens passed;
 analysis is clean and 162 Dart files are formatted. Updated Scramble help fits
 the existing phone and enlarged-text guide tests. Current docs describe the
 six-game boundaries, mechanical exclusions and retired Jodo/tool behavior.
-Build 31 validation: all 417 tests, including 40 goldens, pass; analysis is clean
+Initial 1.16.2+31 review validation: all 417 tests, including 40 goldens, pass; analysis is clean
 and 162 Dart files are formatted. Source/release checks and the packaged web
 audit verify 20,601 unchanged records and original notices/licenses. The release
 ZIP is `app/dist/sikhi-word-games-web-1.16.2+31.zip`. No physical-device install,
-actual-host iframe/offline reload or publication is claimed for this build.
+actual-host iframe/offline reload or publication was claimed at that validation
+point. The later Pixel update installed and launched commit 947b047 (1.16.2+31), before these
+follow-ups; physical testing of the current 1.17.0+31 candidate remains separate.
 
 ## October 9 Gurmukhi scramble labels: candidate 1.16.1+30
 
