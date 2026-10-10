@@ -43,6 +43,15 @@ abstract final class AnswerEligibility {
         ? entry.gurmukhi ?? ''
         : entry.latin;
     if (containsWholeWord(entry.englishDefinition, spelling)) return false;
+    if (script == VocabularyScript.gurmukhi) {
+      final plainDefinition = simplifyRomanizedPunjabi(entry.englishDefinition);
+      if ([entry.latin, ...entry.romanizations].any(
+        (alias) =>
+            containsWholeWord(plainDefinition, simplifyRomanizedPunjabi(alias)),
+      )) {
+        return false;
+      }
+    }
     if (script == VocabularyScript.english &&
         spelling.trim().isNotEmpty &&
         _romanNumeral.hasMatch(spelling.trim())) {

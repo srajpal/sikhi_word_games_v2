@@ -26,6 +26,16 @@ void main() {
         };
         final entry = VocabularyEntry.fromApprovedJson(json, script);
         expect(entry.latin, latin);
+        expect(entry.romanizations, ['aprēl', 'aprail']);
+        expect(entry.copyWith(latin: latin).romanizations, ['aprēl', 'aprail']);
+        expect(VocabularyEntry.fromJson(entry.toJson()).romanizations, [
+          'aprēl',
+          'aprail',
+        ]);
+        expect(
+          () => entry.romanizations.add('another'),
+          throwsUnsupportedError,
+        );
         expect(entry.gurmukhi, native);
         expect(
           entry.wordNetTagCount,

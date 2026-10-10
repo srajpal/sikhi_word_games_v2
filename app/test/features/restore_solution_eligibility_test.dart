@@ -121,7 +121,7 @@ void main() {
         VocabularyEntry(
           id: word,
           language: VocabularyLanguage.panjabi,
-          latin: 'TEST',
+          latin: word == 'ਸ਼ਬਦਕ' ? 'SHABADAK' : 'KALAMAK',
           gurmukhi: word,
           englishDefinition: 'A test fixture',
           latinLength: 4,

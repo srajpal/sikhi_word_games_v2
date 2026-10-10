@@ -115,6 +115,11 @@ and accepted guess remains available; masters and runtime JSON bytes are unchang
   definition, case-insensitively, with Unicode letters/marks/digits forming
   word boundaries. Canonically equivalent spellings match. The Simple Punjabi
   view also retains exclusions detected in the original accented spelling.
+- For Gurmukhi, also exclude definitions containing any supplied Romanization
+  as a whole word. Compare scholarly/plain Roman forms with accents folded in
+  this check only, so ਗ੍ਰੰਥੀ / granthī / "granthi" cannot leak the answer.
+  Keep all counterpart aliases in memory and through entry copies/serialization;
+  never turn them into extra Romanized-mode membership or rewrite source text.
 - Exclude Roman numeral spellings, including the source's older ILXX/ILXXX
   subtractive forms. Ordinary words such as CIVIC and MILD do not match.
 - English answers require the supplied WordNet `tag_count` to be at least 3.

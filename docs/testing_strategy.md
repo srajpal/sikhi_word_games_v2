@@ -54,6 +54,9 @@ English answer-only usage tests cover missing counts, 0/1/2, the inclusive
 threshold 3 and larger counts across the five game pools. Lookup and accepted
 guesses retain excluded words; Punjabi does not require WordNet metadata.
 Native decoding, entry copying and JSON round-trips preserve supplied counts.
+Gurmukhi clue-leak tests cover alternate Romanizations, canonical/accent-folded
+forms such as granthī/granthi, whole-word boundaries and unchanged lookup/guesses.
+The aliases survive decoding and copies without adding counterpart-mode words.
 
 Test narrow and short screens, large text, all themes, visible keyboard focus,
 screen-reader labels, contrast, motion settings, and long definitions. Real

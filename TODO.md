@@ -12,6 +12,8 @@ source snapshot; integrity checks do not reopen editorial approval.
   the engine without consuming misses; cover unchanged counts and marked tiles.
 - [x] Follow-up 3.2: require supplied WordNet tag counts of at least 3 for every
   English game answer; retain all Dictionary entries and accepted guesses.
+- [x] Follow-up 3.3: retain every Gurmukhi Romanization and exclude whole-word
+  clue references, including plain/accented equivalents such as granthī/granthi.
 
 - [x] Follow-up 1: make Shabad Banao anagram-first, with the meaning revealed
   only through Hint or completion; persist clue visibility and preserve old saves.
@@ -41,7 +43,7 @@ vocabulary audit passes with 20,601 unchanged records and original notices.
 
 Dictionary/source counts remain 13,182 English, 2,991 Romanized and 4,428
 Gurmukhi. Answer coverage is in `docs/content_schema.md`; original answers total
-2,816 / 2,975 / 4,422, Simple Romanized 2,791, and Gurmukhi Scramble 4,407.
+2,816 / 2,975 / 4,337, Simple Romanized 2,791, and Gurmukhi Scramble 4,323.
 Gurmukhi lengths 7 and 8 have only 7 and 1 answers in the mixed-length games;
 the supported six-tile Bujho/Quest pool retains 33. No approved files were edited.
 The larger descriptor map, board split and RoundSetup refactors are deferred

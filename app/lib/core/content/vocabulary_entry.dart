@@ -29,6 +29,7 @@ class VocabularyEntry {
     required this.source,
     this.script,
     this.wordNetTagCount,
+    this.romanizations = const [],
   });
 
   final String id;
@@ -46,6 +47,9 @@ class VocabularyEntry {
 
   /// Tagged occurrences of the selected English WordNet sense, when supplied.
   final int? wordNetTagCount;
+
+  /// Every supplied native-word Romanization, retained as counterpart metadata.
+  final List<String> romanizations;
 
   bool get isOwnerApproved =>
       script != null && reviewStatus == ReviewStatus.editorApproved;
@@ -90,6 +94,7 @@ class VocabularyEntry {
     source: source ?? this.source,
     script: script,
     wordNetTagCount: wordNetTagCount,
+    romanizations: romanizations,
   );
 
   factory VocabularyEntry.fromJson(Map<String, Object?> json) {
@@ -116,6 +121,9 @@ class VocabularyEntry {
           ? VocabularyScript.values.byName(json['script']! as String)
           : null,
       wordNetTagCount: json['wordNetTagCount'] as int?,
+      romanizations: List.unmodifiable(
+        (json['romanizations'] as List<Object?>? ?? const []).cast<String>(),
+      ),
     );
   }
 
@@ -135,6 +143,7 @@ class VocabularyEntry {
     'sources': [source],
     if (script != null) 'script': script!.name,
     if (wordNetTagCount != null) 'wordNetTagCount': wordNetTagCount,
+    if (romanizations.isNotEmpty) 'romanizations': romanizations,
   };
 
   factory VocabularyEntry.fromApprovedJson(
@@ -157,9 +166,11 @@ class VocabularyEntry {
     if (definition.trim().isEmpty) {
       throw FormatException('Approved word has no definition: $word');
     }
-    final romanizations = json['romanizations'] as List<Object?>?;
+    final romanizations = List<String>.unmodifiable(
+      (json['romanizations'] as List<Object?>? ?? const []).cast<String>(),
+    );
     final latin = script == VocabularyScript.gurmukhi
-        ? (romanizations?.firstOrNull as String? ?? '').toUpperCase()
+        ? (romanizations.firstOrNull ?? '').toUpperCase()
         : word.toUpperCase();
     final gurmukhi = script == VocabularyScript.gurmukhi
         ? word
@@ -189,6 +200,7 @@ class VocabularyEntry {
       wordNetTagCount: script == VocabularyScript.english
           ? json['tag_count'] as int?
           : null,
+      romanizations: romanizations,
     );
   }
 

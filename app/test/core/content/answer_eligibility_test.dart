@@ -17,6 +17,74 @@ import 'package:sikhi_word_games_v2/features/word_search/presentation/word_searc
 
 void main() {
   test(
+    'native self-references include every Romanization and its plain form',
+    () {
+      for (final definition in ['granthi', 'A GRANTHĪ.', 'a granthi\u0304']) {
+        final entry = _entry(
+          'OTHER',
+          definition,
+          script: VocabularyScript.gurmukhi,
+          native: 'ਗ੍ਰੰਥੀ',
+          aliases: ['other', 'granthī'],
+        );
+        expect(
+          AnswerEligibility.allows(entry, VocabularyScript.gurmukhi),
+          isFalse,
+        );
+        expect(
+          WordBridgesContent([entry]).pairsFor(LanguageMode.gurmukhi),
+          isEmpty,
+        );
+        expect(
+          WordScrambleVocabulary([entry]).words(LanguageMode.gurmukhi),
+          isEmpty,
+        );
+        expect(
+          WordPool([entry])
+              .entryForGuess(mode: LanguageMode.gurmukhi, guess: 'ਗ੍ਰੰਥੀ'),
+          isNotNull,
+        );
+        expect(
+          WordPool([entry])
+              .search(mode: LanguageMode.gurmukhi, query: 'ਗ੍ਰੰਥੀ'),
+          hasLength(1),
+        );
+      }
+      for (final definition in [
+        'granthiness',
+        'granthi2',
+        'granthi_name',
+        'a keeper of a scripture',
+      ]) {
+        expect(
+          AnswerEligibility.allows(
+            _entry(
+              'GRANTHĪ',
+              definition,
+              script: VocabularyScript.gurmukhi,
+              native: 'ਗ੍ਰੰਥੀ',
+              aliases: ['granthī'],
+            ),
+            VocabularyScript.gurmukhi,
+          ),
+          isTrue,
+        );
+      }
+      expect(
+        AnswerEligibility.allows(
+          _entry(
+            'OTHER',
+            'granthi',
+            script: VocabularyScript.romanizedPunjabi,
+            aliases: ['granthī'],
+          ),
+          VocabularyScript.romanizedPunjabi,
+        ),
+        isTrue,
+      );
+    },
+  );
+  test(
     'English usage threshold includes 3 and rejects missing or lower counts',
     () {
       for (final count in [null, -1, 0, 1, 2, 3, 4]) {
@@ -242,9 +310,11 @@ VocabularyEntry _entry(
   VocabularyScript script = VocabularyScript.english,
   String? native,
   int? tagCount = 3,
+  List<String> aliases = const [],
 }) => VocabularyEntry(
   id: word,
   wordNetTagCount: script == VocabularyScript.english ? tagCount : null,
+  romanizations: aliases,
   language: script == VocabularyScript.english
       ? VocabularyLanguage.english
       : VocabularyLanguage.panjabi,

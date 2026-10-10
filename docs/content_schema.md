@@ -34,6 +34,9 @@ English adapters retain the selected sense's supplied `tag_count` as nullable
 `wordNetTagCount`, including through copies and entry serialization. English
 game answers require a count of at least 3 through `AnswerEligibility`; missing
 counts fail this answer-only gate. Dictionary rows and accepted guesses do not.
+All supplied `romanizations` also survive decoding, copies and entry JSON
+round-trips. Gurmukhi answer hygiene compares every alias, including its plain
+form, against whole words in the definition. These remain counterpart metadata.
 
 ## Separate mode membership
 
@@ -84,24 +87,27 @@ answer coverage is:
 
 | Tiles | English | Romanized original | Romanized Simple | Gurmukhi |
 | --- | ---: | ---: | ---: | ---: |
-| 2 | 0 | 0 | 0 | 1,512 |
-| 3 | 0 | 0 | 0 | 1,864 |
-| 4 | 766 | 654 | 601 | 785 |
-| 5 | 928 | 1,350 | 1,255 | 220 |
+| 2 | 0 | 0 | 0 | 1,479 |
+| 3 | 0 | 0 | 0 | 1,827 |
+| 4 | 766 | 654 | 601 | 772 |
+| 5 | 928 | 1,350 | 1,255 | 218 |
 | 6 | 1,122 | 971 | 935 | 33 |
 | 7 | 0 | 0 | 0 | 7 |
 | 8 | 0 | 0 | 0 | 1 |
-| Total | 2,816 | 2,975 | 2,791 | 4,422 |
+| Total | 2,816 | 2,975 | 2,791 | 4,337 |
 
 Bujho and Word Quest use only the 4/5/6 rows. Khoj and Jodo use all displayed
-rows. Shabad Banao uses the same rows except two-tile Gurmukhi is 1,497 (4,407
-total), because 15 repeated-identical-tile spellings cannot be scrambled.
+rows. Shabad Banao uses the same rows except two-tile Gurmukhi is 1,465 (4,323
+total), because 14 remaining repeated-identical-tile spellings cannot be scrambled.
 Simple Romanized counts deduplicate spellings after folding marks; they do not
 remove dictionary entries. Gurmukhi seven- and eight-tile pools contain fewer
 than 20 answers (7 and 1) in Khoj, Jodo and Shabad Banao. Six-tile Gurmukhi
 still has 33 answers in both spelling games. These are variety notes, not new
 quotas. Reproduce coverage with the answer-coverage test in
 `test/core/content/asset_vocabulary_repository_test.dart`.
+The Romanization check finds 13 exact-spelling leaks and 87 with accent folding,
+which covers granthī / "granthi". Two already fail other exclusions, leaving
+85 additional exclusions and 4,337 native answers. Approved records stay intact.
 
 ## Import, distribution and checks
 
