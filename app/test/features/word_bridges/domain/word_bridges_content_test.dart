@@ -265,15 +265,17 @@ void main() {
     expect(WordBridgesContent([]).romanizedFor(native.id), isNull);
   });
 
-  test('short and long approved definitions remain globally eligible', () {
+  test('short and long definitions remain eligible when usage qualifies', () {
     final short = release.firstWhere(
       (entry) =>
           entry.script == VocabularyScript.english &&
+          AnswerEligibility.allows(entry, VocabularyScript.english) &&
           entry.englishDefinition.trim().length < 4,
     );
     final long = release.firstWhere(
       (entry) =>
           entry.script == VocabularyScript.english &&
+          AnswerEligibility.allows(entry, VocabularyScript.english) &&
           entry.englishDefinition.length > 180,
     );
     final pairs = content.pairsFor(LanguageMode.english);
@@ -289,7 +291,11 @@ void main() {
 
   test('conflicting clues are avoided only within a board', () {
     final entries = release
-        .where((entry) => entry.script == VocabularyScript.english)
+        .where(
+          (entry) =>
+              entry.script == VocabularyScript.english &&
+              AnswerEligibility.allows(entry, VocabularyScript.english),
+        )
         .take(5)
         .toList();
     final clues = [

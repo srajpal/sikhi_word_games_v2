@@ -17,6 +17,31 @@ import 'package:sikhi_word_games_v2/features/word_search/presentation/word_searc
 
 void main() {
   test(
+    'English usage threshold includes 3 and rejects missing or lower counts',
+    () {
+      for (final count in [null, -1, 0, 1, 2, 3, 4]) {
+        final entry = _entry('APPLE', 'a round fruit', tagCount: count);
+        expect(
+          AnswerEligibility.allows(entry, VocabularyScript.english),
+          count != null && count >= 3,
+          reason: '$count',
+        );
+      }
+      expect(
+        AnswerEligibility.allows(
+          _entry(
+            'ASAN',
+            'easy',
+            script: VocabularyScript.romanizedPunjabi,
+            tagCount: null,
+          ),
+          VocabularyScript.romanizedPunjabi,
+        ),
+        isTrue,
+      );
+    },
+  );
+  test(
     'whole-word leaks respect Unicode, punctuation, case and attached marks',
     () {
       for (final (word, clue) in [
@@ -107,6 +132,9 @@ void main() {
         _entry('XLIV', 'being four more than forty'),
         _entry('GURU', 'spiritual teacher'),
         _entry('APPLE', 'a round fruit'),
+        _entry('RARE', 'not often seen', tagCount: 2),
+        _entry('ZERO', 'the number before one', tagCount: 0),
+        _entry('UNKNOWN', 'not known', tagCount: null),
       ];
       final pool = WordPool(entries);
       final quest = WordQuestVocabulary(entries);
@@ -131,7 +159,7 @@ void main() {
       expect(scramble.words(LanguageMode.english).map((e) => e.spelling), [
         'APPLE',
       ]);
-      for (final word in ['ABACA', 'XLIV', 'GURU']) {
+      for (final word in ['ABACA', 'XLIV', 'GURU', 'RARE', 'ZERO', 'UNKNOWN']) {
         expect(
           pool.entryForGuess(mode: LanguageMode.english, guess: word),
           isNotNull,
@@ -190,6 +218,7 @@ void main() {
               _entry('GURU', 'spiritual teacher'),
               _entry('APPLE', 'a round fruit'),
               _entry('BREAD', 'food baked from flour'),
+              _entry('RARE', 'not often seen', tagCount: 2),
             ]),
             sessionRepository: repository,
             initialMode: LanguageMode.english,
@@ -212,8 +241,10 @@ VocabularyEntry _entry(
   String clue, {
   VocabularyScript script = VocabularyScript.english,
   String? native,
+  int? tagCount = 3,
 }) => VocabularyEntry(
   id: word,
+  wordNetTagCount: script == VocabularyScript.english ? tagCount : null,
   language: script == VocabularyScript.english
       ? VocabularyLanguage.english
       : VocabularyLanguage.panjabi,

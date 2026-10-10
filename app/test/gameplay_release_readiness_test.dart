@@ -123,6 +123,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_apple',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'APPLE',
     gurmukhi: null,
     englishDefinition: 'A round fruit',

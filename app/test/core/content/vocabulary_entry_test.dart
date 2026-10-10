@@ -19,6 +19,7 @@ void main() {
           'gurmukhi_word': native,
           'romanizations': ['aprēl', 'aprail'],
           'synset_id': 'n00000001',
+          'tag_count': 3,
           'source_url': 'https://en.wiktionary.org/wiki/$word',
           'source_history_url':
               'https://en.wiktionary.org/w/index.php?title=$word&action=history',
@@ -26,6 +27,18 @@ void main() {
         final entry = VocabularyEntry.fromApprovedJson(json, script);
         expect(entry.latin, latin);
         expect(entry.gurmukhi, native);
+        expect(
+          entry.wordNetTagCount,
+          script == VocabularyScript.english ? 3 : null,
+        );
+        expect(
+          entry.copyWith(latin: latin).wordNetTagCount,
+          entry.wordNetTagCount,
+        );
+        expect(
+          VocabularyEntry.fromJson(entry.toJson()).wordNetTagCount,
+          entry.wordNetTagCount,
+        );
         expect(entry.englishDefinition, json['definition']);
         expect(
           entry.displayDefinition,
@@ -128,6 +141,7 @@ void main() {
     const entry = VocabularyEntry(
       id: 'legacy_test',
       language: VocabularyLanguage.english,
+      wordNetTagCount: 3,
       latin: 'TEST',
       gurmukhi: null,
       englishDefinition: 'Legacy source text',

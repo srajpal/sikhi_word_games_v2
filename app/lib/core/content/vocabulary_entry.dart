@@ -28,6 +28,7 @@ class VocabularyEntry {
     required this.reviewStatus,
     required this.source,
     this.script,
+    this.wordNetTagCount,
   });
 
   final String id;
@@ -42,6 +43,9 @@ class VocabularyEntry {
   final ReviewStatus reviewStatus;
   final String source;
   final VocabularyScript? script;
+
+  /// Tagged occurrences of the selected English WordNet sense, when supplied.
+  final int? wordNetTagCount;
 
   bool get isOwnerApproved =>
       script != null && reviewStatus == ReviewStatus.editorApproved;
@@ -85,6 +89,7 @@ class VocabularyEntry {
     reviewStatus: reviewStatus ?? this.reviewStatus,
     source: source ?? this.source,
     script: script,
+    wordNetTagCount: wordNetTagCount,
   );
 
   factory VocabularyEntry.fromJson(Map<String, Object?> json) {
@@ -110,6 +115,7 @@ class VocabularyEntry {
       script: json['script'] is String
           ? VocabularyScript.values.byName(json['script']! as String)
           : null,
+      wordNetTagCount: json['wordNetTagCount'] as int?,
     );
   }
 
@@ -128,6 +134,7 @@ class VocabularyEntry {
     'reviewStatus': reviewStatus.name,
     'sources': [source],
     if (script != null) 'script': script!.name,
+    if (wordNetTagCount != null) 'wordNetTagCount': wordNetTagCount,
   };
 
   factory VocabularyEntry.fromApprovedJson(
@@ -179,6 +186,9 @@ class VocabularyEntry {
           ? 'Princeton WordNet 3.0 (WordNet license); https://wordnet.princeton.edu/; synset ${json['synset_id']}'
           : 'English Wiktionary contributors (CC BY-SA 4.0); ${json['source_url']}; contributor history ${json['source_history_url']}',
       script: script,
+      wordNetTagCount: script == VocabularyScript.english
+          ? json['tag_count'] as int?
+          : null,
     );
   }
 

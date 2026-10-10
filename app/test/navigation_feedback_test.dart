@@ -145,6 +145,7 @@ void main() {
 VocabularyEntry _entry(String word) => VocabularyEntry(
   id: 'test_${word.toLowerCase()}',
   language: VocabularyLanguage.english,
+  wordNetTagCount: 3,
   latin: word,
   gurmukhi: null,
   englishDefinition: 'A familiar everyday thing',

@@ -117,14 +117,22 @@ and accepted guess remains available; masters and runtime JSON bytes are unchang
   view also retains exclusions detected in the original accented spelling.
 - Exclude Roman numeral spellings, including the source's older ILXX/ILXXX
   subtractive forms. Ordinary words such as CIVIC and MILD do not match.
+- English answers require the supplied WordNet `tag_count` to be at least 3.
+  Missing counts are ineligible. Use the selected sense's count exactly as
+  supplied, including base-sense counts on exception-table inflections; do not
+  substitute an invented frequency or modify the source. This historical
+  tagged-text count is a mechanical usage threshold, not a current popularity
+  measure or a guarantee of child familiarity. All words remain in Dictionary
+  lookup and accepted guesses regardless of this answer-only threshold.
 - The owner reserves ਗੁਰਬਾਣੀ, ਅਰਦਾਸ, ਖੰਡਾ, ਗੁਰੂ, ਗ੍ਰੰਥ and ਨਿਸ਼ਾਨ for
   Dictionary lookup, never answers or shuffled game pieces. The short list
   also matches their scholarly/plain Romanizations: gurbani/gurubani/gurbaani,
   ardas/aradas, khanda, guru, granth, nishan/nisan. Matching uses unchanged
   counterpart metadata and folds Roman marks for this comparison only.
 
-This rule does not introduce frequency, familiarity or subjective clue-quality
-thresholds. Small pools remain available; report actual counts rather than
+No familiarity or subjective clue-quality thresholds are added. The explicit
+English usage threshold supersedes the earlier no-frequency-filter decision
+for game answers only. Small pools remain available; report actual counts rather than
 silently importing counterpart-mode words or changing definitions.
 
 ### Approved source snapshot

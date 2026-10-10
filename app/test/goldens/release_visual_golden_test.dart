@@ -452,6 +452,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_apple',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'APPLE',
     gurmukhi: null,
     englishDefinition: 'A round fruit',
@@ -465,6 +466,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_grape',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'GRAPE',
     gurmukhi: null,
     englishDefinition: 'A small fruit',
@@ -478,6 +480,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_test',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'TEST',
     gurmukhi: null,
     englishDefinition: 'A check of how something works',

@@ -157,6 +157,7 @@ void main() {
           final store = MemoryKeyValueStore();
           final entry = VocabularyEntry(
             id: 'phone-${mode.name}-$size',
+            wordNetTagCount: mode == LanguageMode.english ? 3 : null,
             language: mode == LanguageMode.english
                 ? VocabularyLanguage.english
                 : VocabularyLanguage.panjabi,

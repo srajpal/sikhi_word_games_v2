@@ -1075,6 +1075,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_apple',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'APPLE',
     gurmukhi: null,
     englishDefinition: 'A round fruit',
@@ -1088,6 +1089,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_planet',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'PLANET',
     gurmukhi: null,
     englishDefinition: 'A world that travels around a star',
@@ -1101,6 +1103,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_jump',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'JUMP',
     gurmukhi: null,
     englishDefinition: 'A quick movement off the ground',
@@ -1114,6 +1117,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_grape',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'GRAPE',
     gurmukhi: null,
     englishDefinition: 'A small fruit that grows in bunches',
@@ -1143,6 +1147,7 @@ const _khojCompactVocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_apple',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'APPLE',
     gurmukhi: null,
     englishDefinition: 'A round fruit',
@@ -1156,6 +1161,7 @@ const _khojCompactVocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_grape',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'GRAPE',
     gurmukhi: null,
     englishDefinition: 'A small fruit that grows in bunches',

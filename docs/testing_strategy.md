@@ -50,6 +50,10 @@ from another mode. Verify imported rows remain present without old frequency,
 clue-quality or everyday-answer filters. Tampered/missing source or release
 files must fail integrity checks; repeat an unchanged rebuild/check to establish
 reproduction. These checks do not reopen the owner's content approval.
+English answer-only usage tests cover missing counts, 0/1/2, the inclusive
+threshold 3 and larger counts across the five game pools. Lookup and accepted
+guesses retain excluded words; Punjabi does not require WordNet metadata.
+Native decoding, entry copying and JSON round-trips preserve supplied counts.
 
 Test narrow and short screens, large text, all themes, visible keyboard focus,
 screen-reader labels, contrast, motion settings, and long definitions. Real

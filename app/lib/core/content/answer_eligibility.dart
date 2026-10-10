@@ -34,6 +34,11 @@ abstract final class AnswerEligibility {
   );
 
   static bool allows(VocabularyEntry entry, VocabularyScript script) {
+    // Missing frequency metadata is not evidence of the minimum usage count.
+    if (script == VocabularyScript.english &&
+        (entry.wordNetTagCount ?? 0) < 3) {
+      return false;
+    }
     final spelling = script == VocabularyScript.gurmukhi
         ? entry.gurmukhi ?? ''
         : entry.latin;

@@ -30,6 +30,10 @@ Complete records retain original source senses, page/history links,
 romanizations and tags. Runtime adapters construct game entries in memory; they
 do not rewrite the JSON masters or definitions into a second release schema.
 Shared display punctuation normalization preserves source wording and provenance.
+English adapters retain the selected sense's supplied `tag_count` as nullable
+`wordNetTagCount`, including through copies and entry serialization. English
+game answers require a count of at least 3 through `AnswerEligibility`; missing
+counts fail this answer-only gate. Dictionary rows and accepted guesses do not.
 
 ## Separate mode membership
 
@@ -75,18 +79,19 @@ broader applicable mode bank. Six-tile Gurmukhi has 33 source words; describe
 actual variety without importing other-mode words or imposing historical quotas.
 
 After the October 9 mechanical answer-pool rule, dictionary/source counts above
-are unchanged. Current distinct answer coverage is:
+are unchanged. With the English `tag_count >= 3` follow-up, current distinct
+answer coverage is:
 
 | Tiles | English | Romanized original | Romanized Simple | Gurmukhi |
 | --- | ---: | ---: | ---: | ---: |
 | 2 | 0 | 0 | 0 | 1,512 |
 | 3 | 0 | 0 | 0 | 1,864 |
-| 4 | 2,206 | 654 | 601 | 785 |
-| 5 | 3,954 | 1,350 | 1,255 | 220 |
-| 6 | 6,456 | 971 | 935 | 33 |
+| 4 | 766 | 654 | 601 | 785 |
+| 5 | 928 | 1,350 | 1,255 | 220 |
+| 6 | 1,122 | 971 | 935 | 33 |
 | 7 | 0 | 0 | 0 | 7 |
 | 8 | 0 | 0 | 0 | 1 |
-| Total | 12,616 | 2,975 | 2,791 | 4,422 |
+| Total | 2,816 | 2,975 | 2,791 | 4,422 |
 
 Bujho and Word Quest use only the 4/5/6 rows. Khoj and Jodo use all displayed
 rows. Shabad Banao uses the same rows except two-tile Gurmukhi is 1,497 (4,407

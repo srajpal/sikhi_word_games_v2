@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
+import 'package:sikhi_word_games_v2/core/content/answer_eligibility.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
@@ -120,7 +121,7 @@ void main() {
       final pairs = [
         'PLANET',
         'BREAD',
-        'APPLE',
+        'HAND',
         'BOOK',
       ].map((word) => pool.singleWhere((pair) => pair.word == word)).toList();
       expect(pairs.first.meaning.length, greaterThan(180));
@@ -353,7 +354,8 @@ void main() {
             (entry) =>
                 entry.language == VocabularyLanguage.english &&
                 entry.solutionEligible &&
-                entry.hasDistributableDefinition,
+                entry.hasDistributableDefinition &&
+                AnswerEligibility.allows(entry, VocabularyScript.english),
           )
           .take(4)
           .toList();

@@ -15,6 +15,7 @@ import 'word_scramble_game_test.dart' show scramble;
 
 VocabularyEntry fixture(String spelling, LanguageMode mode) => VocabularyEntry(
   id: 'fixture-$spelling',
+  wordNetTagCount: mode == LanguageMode.english ? 3 : null,
   language: mode == LanguageMode.english
       ? VocabularyLanguage.english
       : VocabularyLanguage.panjabi,
