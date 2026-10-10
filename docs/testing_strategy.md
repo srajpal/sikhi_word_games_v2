@@ -265,8 +265,12 @@ schema. Two 360-pixel golden fixtures cover English and Gurmukhi phone layouts.
 Studio branding checks verify that the website action uses the supplied HTTPS
 address and offers a selectable fallback when browser launch is unavailable.
 Library golden references include the byline and studio link in all three themes.
-Android launcher artwork is regenerated from the existing SWG vector source;
-Android packaging is separate from physical-device or store-listing validation.
+Launcher artwork is regenerated from the approved S + ਗ font-derived vector
+source for Android, iOS and web. Verify the export dimensions, opaque iOS icons,
+maskable safe area, and SikhiGames display labels separately from widget tests.
+Library golden references cover the shared wordmark in all three themes on
+phones and tablets. Packaging is separate from physical-device launcher or
+store-listing validation.
 
 Reset coverage includes cancel preservation, exact owned-key deletion, defaults and first-launch guide restoration, pending-write ordering across repository instances, storage failure recovery, and retry. Real user-device data must not be cleared merely to exercise this feature.
 

@@ -6,6 +6,33 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 10 approved bilingual branding: candidate 1.18.3+35
+
+- [x] Use English S + Gurmukhi ਗ (Sikhi + Games) in the shared wordmark and
+  regenerate all Android, iOS and web launcher icons from font-derived paths.
+- [x] Use SikhiGames for Android/iOS launcher labels, web name/short_name and
+  Apple web shortcut titles; retain the full in-app title and application IDs.
+- [x] Refresh the release cover to the approved cream/teal/tile identity and
+  correctly list all six games. Keep the exporter as the source of future assets.
+- [x] Review the updated phone/tablet library goldens across all three themes.
+
+Formatting and analysis pass; all 486 tests pass, including the 52 golden tests.
+All 19 iOS catalog entries and five Android density exports have the expected
+dimensions; iOS PNGs are opaque. The complete maskable mark fits inside the
+central safe circle (measured radius 196.0px versus 204.8px at 512px).
+The 1.18.3+35 release web package builds with 96 offline-cache files and unchanged
+integrity/attribution checks for all 20,601 vocabulary records. The normal arm64
+profile/AOT APK builds successfully; aapt confirms version 1.18.3/code 35,
+launcher label SikhiGames and the existing application ID. iOS assets/labels
+are checked at source/export level; native iOS compilation is unavailable here.
+The last installed phone/tablet build remains 1.18.2+34; this branding candidate
+has not been installed on devices.
+Activated the updated local web preview on port 8921 without clearing storage;
+the new Gurmukhi ਗ wordmark renders, existing Continue actions remain, Settings
+opens and returns, and the browser reports no console errors.
+Real-gameplay promotional screenshots still need the refresh tracked in the
+release checklist below; the updated golden images are test evidence.
+
 ## October 10 direct-grid Bujho input: candidate 1.18.2+34
 
 - [x] Put typed letters directly in the active grid row and remove the separate

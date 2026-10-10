@@ -2,6 +2,6 @@
 ///
 /// Keep these values synchronized with the `version` field in `pubspec.yaml`
 /// whenever a release or build is updated.
-const appVersionName = '1.18.2';
-const appBuildNumber = 34;
+const appVersionName = '1.18.3';
+const appBuildNumber = 35;
 const appVersionLabel = 'Version $appVersionName (build $appBuildNumber)';

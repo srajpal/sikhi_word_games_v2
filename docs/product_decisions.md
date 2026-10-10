@@ -1,5 +1,19 @@
 # Sikhi Word Games V2 — Product Decisions
 
+## October 10 bilingual identity and launcher label
+
+The approved Paper & Play app mark is two overlapping tiles: English **S** and
+Gurmukhi **ਗ** (gagga), representing Sikhi + Games. Use the same letters in the
+shared, theme-aware in-app wordmark and platform icons. The canonical launcher
+art uses teal, warm peach and cream; retain Modern, Sikhi and Dark inside the app.
+This supersedes the older SWG/sprout launcher identity. Keep **Sikhi Word Games**
+as the full in-app/product title and **Khalsa Game Studio** as the publisher.
+Use **SikhiGames** for Android/iOS launcher labels, installed web `name`/`short_name`
+and Apple web shortcut titles. Application identifiers and storage keys stay
+unchanged. The icon exporter generates font-independent letter paths, maskable
+web artwork and opaque square iOS icons. The release cover now lists six games;
+fresh real-gameplay promotional screenshots remain a separate release task.
+
 ## October 10 mobile quality of life
 
 Bujho enters the unfinished guess directly into its current grid row, with no
@@ -449,7 +463,8 @@ The library shows a compact studio byline and an explicit external website link;
 if no browser can launch, the address remains selectable. Opening the website is
 optional and does not participate in gameplay, storage, or offline startup.
 Web title, description, loading copy and release cover repeat the attribution.
-The app retains its existing SWG tile/garden icon and its three themes. The studio
+At that milestone the app retained its SWG tile/garden icon; the October 10
+bilingual-identity decision above supersedes that icon. The studio
 identity is a text wordmark, not an invented replacement for an official logo.
 The supplied site could not be retrieved during implementation; this change does
 not claim website deployment, domain health or store publication.

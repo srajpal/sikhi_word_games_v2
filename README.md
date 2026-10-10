@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.18.2` (build `34`). The uploaded web draft remains
+The current testing build is `1.18.3` (build `35`). The uploaded web draft remains
 `1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
@@ -139,4 +139,12 @@ The historical `app/dist/sikhi-word-games-web-1.9.0+17.zip` is not a package of
 current source. Use the newly validated, versioned ZIP for the next draft upload.
 The directory is ignored by Git. Artwork sources
 live in `branding/`; cover and real gameplay screenshots live in `reports/release/`.
+The launcher display name is **SikhiGames** on Android, iOS and installed web
+shortcuts. The full in-app title remains **Sikhi Word Games**. The approved mark
+pairs English **S** with Gurmukhi **ਗ** for Sikhi + Games. Regenerate Android,
+iOS and web icons plus the six-game cover with
+`node app/tool/create_brand_assets.cjs` (requires `sharp`); use `--icons-only` or
+`--cover-only` for a narrower export. Letter outlines in `branding/letterforms.json`
+come from the bundled Noto Sans/Noto Sans Gurmukhi fonts under their supplied
+SIL Open Font License; exports need no installed Gurmukhi font.
 Keep `THIRD_PARTY_NOTICES.txt`, all supplied dictionary licenses and bundled-font licenses in the package.

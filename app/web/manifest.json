@@ -1,11 +1,11 @@
 {
-    "name": "Sikhi Word Games",
-    "short_name": "Sikhi Games",
+    "name": "SikhiGames",
+    "short_name": "SikhiGames",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#FFF8E8",
-    "theme_color": "#173A67",
-    "description": "Four offline word games by Khalsa Game Studio in English, Punjabi, and Gurmukhi.",
+    "background_color": "#FFF7E5",
+    "theme_color": "#10535D",
+    "description": "Six offline word and letter games by Khalsa Game Studio in English, Romanized Punjabi, and Gurmukhi.",
     "prefer_related_applications": false,
     "icons": [
         {
