@@ -196,11 +196,10 @@ class _WordScramblePageState extends State<WordScramblePage> {
 
   void _hint() {
     if (!_game!.hint()) {
-      setState(() => _message = 'Your word is ready. Tap Check word!');
       return;
     }
     setState(
-      () => _message = 'One tile is in the right place. You can do the rest.',
+      () => _message = 'Meaning revealed. Your tiles stay where they are.',
     );
     _save();
   }
@@ -364,25 +363,32 @@ class _WordScramblePageState extends State<WordScramblePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        PaperLabel(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'YOUR CLUE',
-                style: theme.textTheme.labelSmall?.copyWith(letterSpacing: 1.5),
+        if (game.clueRevealed || game.isComplete) ...[
+          Semantics(
+            liveRegion: true,
+            child: PaperLabel(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    game.isComplete ? 'THE MEANING' : 'YOUR HINT',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    game.definition,
+                    key: const ValueKey('scramble-clue'),
+                    style: theme.textTheme.titleLarge,
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                game.definition,
-                key: const ValueKey('scramble-clue'),
-                style: theme.textTheme.titleLarge,
-              ),
-            ],
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
+          const SizedBox(height: 16),
+        ],
         Text(
           'BUILD THE WORD',
           textAlign: TextAlign.center,
@@ -481,7 +487,10 @@ class _WordScramblePageState extends State<WordScramblePage> {
                 onPressed: game.canShuffle ? _shuffle : null,
               ),
               GameGradientButton(
-                label: 'Hint · ${game.hintsRemaining} left',
+                key: const ValueKey('scramble-hint'),
+                label: game.usedHint
+                    ? 'Meaning revealed'
+                    : 'Hint: show meaning',
                 icon: const Icon(Icons.lightbulb_outline, size: 18),
                 compact: true,
                 prominent: false,

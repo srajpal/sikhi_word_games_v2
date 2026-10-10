@@ -55,38 +55,43 @@ void main() {
       expect(game.checks, 2);
     },
   );
-  test('hint relocates a selected tile without losing duplicates and locks only one', () {
+  test('meaning hint preserves misplaced tiles and does not lock them', () {
     final game = scramble();
     for (final id in [1, 0, 2, 4, 3]) {
       game.place(id);
     }
+    final slots = game.slots;
+    final tray = game.tray;
+    expect(game.clueRevealed, isFalse);
     expect(game.hint(), isTrue);
-    expect(game.slots[0], 0);
-    expect(game.slots[1], isNull);
-    expect(game.tray, [1]);
-    expect(game.remove(0), isFalse);
+    expect(game.clueRevealed, isTrue);
+    expect(game.slots, slots);
+    expect(game.tray, tray);
+    expect(game.locked, isEmpty);
+    expect(game.remove(0), isTrue);
     expect(game.hint(), isFalse);
     expect(game.hintsRemaining, 0);
     solve(game);
   });
-  test('a ready correct word does not consume a hint', () {
+  test('meaning can be requested before checking a ready word', () {
     final game = scramble();
     for (var i = 0; i < 5; i++) {
       game.place(i);
     }
-    expect(game.hint(), isFalse);
-    expect(game.hintsRemaining, 1);
+    expect(game.hint(), isTrue);
+    expect(game.slots, [0, 1, 2, 3, 4]);
+    expect(game.hintsRemaining, 0);
   });
-  test('a duplicate-letter hint keeps already correct tiles in place', () {
+  test('meaning hint leaves duplicate-letter arrangements unchanged', () {
     final game = scramble();
     for (final id in [0, 1, 3, 2, 4]) {
       game.place(id);
     }
     expect(game.hint(), isTrue);
     expect(game.slots[1], 1);
-    expect(game.slots[2], 2);
-    expect(game.slots[3], isNull);
-    expect(game.tray, [3]);
+    expect(game.slots[2], 3);
+    expect(game.slots[3], 2);
+    expect(game.tray, isEmpty);
     solve(game);
   });
   test(
@@ -100,6 +105,7 @@ void main() {
       expect(restored.units, game.units);
       expect(restored.slots, game.slots);
       expect(restored.locked, game.locked);
+      expect(restored.clueRevealed, isTrue);
       solve(restored);
     },
   );
@@ -143,6 +149,7 @@ void main() {
           'locked': [0],
         },
         {'checks': -1},
+        {'clueRevealed': 'true'},
         {'complete': true},
         {
           'slots': [0, 1, 2, 3, 4],
@@ -159,4 +166,33 @@ void main() {
       expect(() => scramble('AAAA'), throwsArgumentError);
     },
   );
+  test(
+    'older unhinted and tile-hinted rounds restore without losing progress',
+    () {
+      final unhinted = scramble()..place(1);
+      final old = unhinted.toJson()..remove('clueRevealed');
+      final restored = WordScrambleGame.fromJson(old);
+      expect(restored.slots, unhinted.slots);
+      expect(restored.usedHint, isFalse);
+      expect(restored.clueRevealed, isFalse);
+      final hinted = scramble()..place(0);
+      final legacy = hinted.toJson()
+        ..remove('clueRevealed')
+        ..['locked'] = [0];
+      final resumed = WordScrambleGame.fromJson(legacy);
+      expect(resumed.clueRevealed, isTrue);
+      expect(resumed.usedHint, isTrue);
+      expect(resumed.remove(0), isFalse);
+      solve(resumed);
+    },
+  );
+  test('Gurmukhi vowel signs stay attached through the anagram and hint', () {
+    final game = scramble('ਕਰੇਲਾ');
+    expect(game.units, ['ਕ', 'ਰੇ', 'ਲਾ']);
+    final tray = game.tray;
+    game.hint();
+    expect(game.tray, tray);
+    expect(game.locked, isEmpty);
+    solve(game);
+  });
 }

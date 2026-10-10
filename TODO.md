@@ -8,6 +8,16 @@ source snapshot; integrity checks do not reopen editorial approval.
 
 ## October 9 review fixes: candidate 1.16.2+31
 
+- [x] Follow-up 1: make Shabad Banao anagram-first, with the meaning revealed
+  only through Hint or completion; persist clue visibility and preserve old saves.
+- [ ] Follow-up 2: start Quest with the full alphabet, retain its miss limit and
+  lantern, and keep the small bank available as an easier option.
+
+Follow-up 1 validation: all 421 tests, including 41 goldens, pass; analysis and
+formatting are clean. Reviewed hidden-clue captures in all themes, native/large
+Gurmukhi and the revealed meaning. Tests cover silent initial semantics, hint
+immutability/persistence, unhinted completion and legacy locked-tile saves.
+
 - [x] 1. Apply one mechanical answer rule across all five word games, retaining
   the complete Dictionary and accepted guesses; document actual pool coverage.
 - [x] 2. Fail release audits on boundary-matched crude/vandalized definitions.

@@ -54,7 +54,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
   GameKind.wordScramble => const [
     (
       title: 'Make a word',
-      body: 'Read the English meaning clue. Tap the shuffled tiles to put the word in order. Word lengths vary. There is no timer and no limited lives.',
+      body: 'Start with the shuffled letters. Tap the tiles to put the word in order. The meaning stays hidden until you choose Hint or solve the word. Word lengths vary. There is no timer or limited lives.',
     ),
     (
       title: 'Move the pieces',
@@ -62,7 +62,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
     ),
     (
       title: 'Check and discover',
-      body: 'Choose Check word when every space is filled. A wrong order lets you keep trying. One optional hint locks a correct tile. Use Next word after solving. Touch, keyboard and screen-reader activation work. In Game settings, Apply a different language starts a new word; Cancel keeps this one.',
+      body: 'Choose Check word when every space is filled. A wrong order lets you keep trying. Hint reveals the meaning without moving tiles. Use Next word after solving. Touch, keyboard and screen-reader activation work. In Game settings, Apply a different language starts a new word; Cancel keeps this one.',
     ),
   ],
   GameKind.learnLetters => const [

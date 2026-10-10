@@ -333,9 +333,14 @@ uses the current preference and a matching keyboard/input normalization.
 `features/word_scramble/` separates a pure tile engine, cached mode pools,
 single-key repository and presentation. Stable tile IDs distinguish repeated
 letters; visible units come from shared `wordUnits`, preserving Gurmukhi
-conjuncts. Placement, undo, shuffle, one locked hint and checks maintain a
+conjuncts. Placement, undo, shuffle and checks maintain a
 complete tile permutation. Restore validates that permutation and current
 source ID, spelling and definition in the recorded original/simple view.
+New rounds start with the anagram only. Hint reveals the meaning without moving
+or locking tiles; completion shows the meaning even on an unhinted win. The
+optional `clueRevealed` field persists hint use in the existing session schema.
+Older saves without it retain earned tile locks and their hint accounting;
+unhinted saves resume with the meaning hidden. Malformed visibility fails closed.
 
 `wordScramble.state.v1` stores a frozen session snapshot, per-mode rotation,
 completion IDs and statistics atomically through the shared ordered write queue.

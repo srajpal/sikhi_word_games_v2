@@ -571,9 +571,10 @@ Its English title appears above the Punjabi name and language/length inside the
 shared paper heading. It uses equal library cards, shared paper tiles/buttons,
 three themes, click sounds, help, celebrations and dedicated statistics.
 
-An English definition clues a shuffled word. Tap tiles into the first empty
-space; tap a placed tile to return it. Shuffle rearranges remaining tiles. Each
-word offers one optional hint that places and locks one correct tile. Check word
+Start with the shuffled letters and a hidden meaning. Tap tiles into the first
+empty space; tap a placed tile to return it. Shuffle rearranges remaining tiles.
+The optional Hint reveals the English meaning without moving or locking tiles.
+The meaning also appears after solving, without counting as a used hint. Check word
 accepts the target spelling; incorrect checks give gentle inline feedback with
 unlimited retries. Next word starts a fresh word. There is no timer, life budget
 or penalty for leaving. Lengths vary across the approved mode's pool, and native
@@ -586,6 +587,8 @@ immediate repeat when possible. Simple Punjabi applies to new words; Continue
 retains the saved spelling view. Ten additional stable badge goals cover solved
 counts, unhinted/first-check words, repeated/long tiles and all three languages.
 There are now 60 badges. Existing player progress is preserved.
+New clue visibility persists with the round. Legacy saves keep their earned
+tile locks and hint accounting; historical achievements are not recalculated.
 
 Gurmukhi Word Scramble tiles show a small Romanized pronunciation label below
 each written unit, both in the shuffled tray and in placed, hinted and completed

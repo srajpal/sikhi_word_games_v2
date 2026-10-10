@@ -6,7 +6,7 @@
   source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
-- Forty Windows golden image tests cover Modern, Sikhi, and Dark. They run
+- Forty-one Windows golden image tests cover Modern, Sikhi, and Dark. They run
   separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.
@@ -324,7 +324,7 @@ retaining search results and both Punjabi keyboard views.
 ### Shabad Banao: 1.16.0+29
 
 Engine checks exercise duplicate tile IDs, incomplete/incorrect/correct checks,
-hint relocation/locking, 150 seeded move sequences, restore corruption and
+meaning-hint immutability, 150 seeded move sequences, restore corruption and
 intact Gurmukhi conjuncts. Repository checks cover frozen queued snapshots,
 once-only scoring across instances, a late completion preserving a newer round,
 malformed-history recovery and reset. Vocabulary checks use the actual three
@@ -340,7 +340,12 @@ captures too. Actual packaged-browser persistence, font rendering and device
 installation are separate evidence recorded in TODO.md.
 
 Gurmukhi tile-label regressions verify visible and spoken Romanization in the
-tray, after placement, after a hint lock and after completion across all three
+tray, after placement, after revealing the meaning and after completion across all three
 themes. Empty spaces and English tiles reveal no pronunciation labels. Enlarged
 Gurmukhi text remains scrollable without splitting a written unit; actual-font
 phone and 200% captures must be reviewed after changes to label sizing.
+Anagram-first regressions require the definition to be absent from the visual
+and semantics trees until Hint or completion. Hint must preserve slots/tray,
+survive navigation/recreation, count as hinted, and reset for the next word.
+Unhinted completion reveals the meaning without changing unhinted statistics.
+Restore covers optional clue visibility and legacy already-locked hint tiles.

@@ -53,6 +53,50 @@ Widget scramblePage(
 );
 void main() {
   testWidgets(
+    'meaning is hidden, hint persists and the next word starts hidden',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      final repo = WordScrambleRepository(MemoryKeyValueStore());
+      await tester.pumpWidget(scramblePage(repo));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('scramble-clue')), findsNothing);
+      expect(find.text('A test clue'), findsNothing);
+      expect(find.bySemanticsLabel(RegExp('A test clue')), findsNothing);
+      await tester.tap(find.byKey(const ValueKey('scramble-tile-1')));
+      await tester.pumpAndSettle();
+      final before = repo.restore()!.game;
+      await tester.tap(find.byKey(const ValueKey('scramble-hint')));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.slots, before.slots);
+      expect(repo.restore()!.game.tray, before.tray);
+      expect(find.text('A test clue'), findsOneWidget);
+      expect(repo.restore()!.game.usedHint, isTrue);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(scramblePage(repo));
+      await tester.pumpAndSettle();
+      expect(find.text('A test clue'), findsOneWidget);
+      expect(repo.restore()!.game.slots, before.slots);
+      await tester.tap(find.byKey(const ValueKey('scramble-slot-0')));
+      await tester.pumpAndSettle();
+      for (var id = 0; id < 5; id++) {
+        await tester.tap(find.byKey(ValueKey('scramble-tile-$id')));
+        await tester.pumpAndSettle();
+      }
+      await tester.ensureVisible(find.text('Check word'));
+      await tester.tap(find.text('Check word'));
+      await tester.pumpAndSettle();
+      expect(repo.total.solved, 1);
+      expect(repo.total.unhinted, 0);
+      expect(find.text('A test clue'), findsOneWidget);
+      await tester.ensureVisible(find.text('Next word'));
+      await tester.tap(find.text('Next word'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('scramble-clue')), findsNothing);
+      expect(repo.restore()!.game.usedHint, isFalse);
+      semantics.dispose();
+    },
+  );
+  testWidgets(
     'settings preserve the round until a different language is applied',
     (tester) async {
       tester.view.physicalSize = const Size(390, 780);
@@ -154,6 +198,8 @@ void main() {
         await tester.tap(find.text('Check word'));
         await tester.pumpAndSettle();
         expect(repo.total.solved, 1);
+        expect(repo.total.unhinted, 1);
+        expect(find.text('A test clue'), findsOneWidget);
         expect(find.text('1 word solved'), findsOneWidget);
         expect(find.text('1 words solved'), findsNothing);
         expect(find.text('Next word'), findsOneWidget);
@@ -188,10 +234,13 @@ void main() {
         findsOneWidget,
       );
       expect(find.byType(SnackBar), findsNothing);
-      await tester.tap(find.text('Hint · 1 left'));
+      final before = repo.restore()!.game.slots;
+      await tester.tap(find.byKey(const ValueKey('scramble-hint')));
       await tester.pumpAndSettle();
       expect(repo.restore()!.game.usedHint, isTrue);
-      expect(repo.restore()!.game.slots[0], 0);
+      expect(repo.restore()!.game.slots, before);
+      expect(repo.restore()!.game.locked, isEmpty);
+      expect(find.text('A test clue'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
@@ -256,13 +305,17 @@ void main() {
         await tester.tap(find.byKey(const ValueKey('scramble-tile-0')));
         await tester.pumpAndSettle();
         expectLabels();
-        await tester.ensureVisible(find.text('Hint · 1 left'));
-        await tester.tap(find.text('Hint · 1 left'));
+        await tester.ensureVisible(find.byKey(const ValueKey('scramble-hint')));
+        await tester.tap(find.byKey(const ValueKey('scramble-hint')));
+        await tester.pumpAndSettle();
+        expect(repo.restore()!.game.locked, isEmpty);
+        expect(find.text('A test clue'), findsOneWidget);
+        await tester.tap(find.byKey(const ValueKey('scramble-tile-1')));
         await tester.pumpAndSettle();
         final hinted = tester.widget<PaperLetterTile>(
           find.byKey(const ValueKey('scramble-slot-1')),
         );
-        expect(hinted.locked, isTrue);
+        expect(hinted.locked, isFalse);
         expect(hinted.romanization, 'Prai');
         expectLabels();
         await tester.ensureVisible(
