@@ -25,8 +25,12 @@ integrity/attribution checks for all 20,601 vocabulary records. The normal arm64
 profile/AOT APK builds successfully; aapt confirms version 1.18.3/code 35,
 launcher label SikhiGames and the existing application ID. iOS assets/labels
 are checked at source/export level; native iOS compilation is unavailable here.
-The last installed phone/tablet build remains 1.18.2+34; this branding candidate
-has not been installed on devices.
+The K70 PRO tablet was updated on October 10 from 1.18.2+34 to the normal arm64
+profile/AOT 1.18.3+35 APK built from a54bbb3. Used `adb install -r` to preserve
+app data. Android confirms version 1.18.3/code 35 and a successful cold
+MainActivity launch; running PID 4664 was verified. The APK launcher label is
+SikhiGames. Hands-on launcher/icon checks remain a player check. Pixel 6 still
+has the previously installed 1.18.2+34 candidate.
 Activated the updated local web preview on port 8921 without clearing storage;
 the new Gurmukhi ਗ wordmark renders, existing Continue actions remain, Settings
 opens and returns, and the browser reports no console errors.
