@@ -31,11 +31,7 @@ class WordScrambleVocabulary {
   List<ScrambleWord> words(LanguageMode mode) => _pools.putIfAbsent(mode, () {
     final unique = <String, ScrambleWord>{};
     for (final entry in _entries) {
-      if (!entry.supportsScript(mode.script) ||
-          !entry.acceptedGuess ||
-          !entry.solutionEligible ||
-          !entry.hasDistributableDefinition ||
-          !AnswerEligibility.allows(entry, mode.script)) {
+      if (!AnswerEligibility.isCandidate(entry, mode.script)) {
         continue;
       }
       final spelling =

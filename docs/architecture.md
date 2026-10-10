@@ -216,9 +216,15 @@ Gurmukhi preserves its native written units. Bujho and Quest use available
 Games deduplicate the active mode's displayed spelling, and validate restored
 targets against current mode membership and units. Removed historical content
 recovers through a fresh round while cumulative statistics remain.
-`AnswerEligibility` applies the shared mechanical answer exclusions for
-self-revealing definitions, Roman numerals and the owner's short sacred-term
-list. Dictionary records and accepted guesses remain complete. See
+`AnswerEligibility.isCandidate` is the shared selection/restore gate used by all
+five word games (including both Khoj paths). It combines accepted/solution flags,
+script membership, distributable definitions for clue games and the mechanical
+rule in `allows`. Bujho keeps definition-free answers available with the explicit
+`requireDefinition: false` option. Game-specific length, clue, deduplication and
+board checks remain in their domains. Mechanical exclusions cover self-revealing
+definitions, every Gurmukhi Romanization (including plain forms), Roman numerals,
+the owner's short sacred-term list and English WordNet `tag_count < 3` or missing
+counts. Dictionary records and accepted guesses remain complete. See
 `docs/product_decisions.md` for the exact policy and `docs/content_schema.md`
 for current coverage. Release audits compare the exact three masters with the
 approved manifest, verify required licenses and fail on a small boundary-matched

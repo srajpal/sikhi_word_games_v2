@@ -142,11 +142,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
   bool _canRestore(WordSearchSession restored) => restored.puzzle.words.every(
     (placed) => (_entries ?? const <VocabularyEntry>[]).any(
       (entry) =>
-          entry.acceptedGuess &&
-          entry.solutionEligible &&
-          entry.hasDistributableDefinition &&
-          AnswerEligibility.allows(entry, restored.mode.script) &&
-          _supportsMode(entry, restored.mode) &&
+          AnswerEligibility.isCandidate(entry, restored.mode.script) &&
           WordPool.spelling(entry, restored.mode)?.trim().toUpperCase() ==
               placed.word.trim().toUpperCase(),
     ),
@@ -165,11 +161,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
       final candidates = <String>[];
       final seen = <String>{};
       for (final entry in entries) {
-        if (!entry.acceptedGuess ||
-            !entry.solutionEligible ||
-            !entry.hasDistributableDefinition ||
-            !_supportsMode(entry, _mode) ||
-            !AnswerEligibility.allows(entry, _mode.script)) {
+        if (!AnswerEligibility.isCandidate(entry, _mode.script)) {
           continue;
         }
         final spelling = WordPool.spelling(entry, _mode);

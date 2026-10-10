@@ -35,9 +35,13 @@ class WordPool {
     required int wordLength,
   }) => _bestBySpelling(
     _entries
-        .where((entry) => entry.acceptedGuess && entry.solutionEligible)
-        .where((entry) => _supportsLanguage(entry, mode))
-        .where((entry) => AnswerEligibility.allows(entry, mode.script))
+        .where(
+          (entry) => AnswerEligibility.isCandidate(
+            entry,
+            mode.script,
+            requireDefinition: false,
+          ),
+        )
         .where(
           (entry) =>
               (spelling(entry, mode) == null

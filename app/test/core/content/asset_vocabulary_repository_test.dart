@@ -56,14 +56,7 @@ void main() {
         count(
           'Khoj',
           entries
-              .where(
-                (e) =>
-                    e.acceptedGuess &&
-                    e.solutionEligible &&
-                    e.hasDistributableDefinition &&
-                    e.supportsScript(mode.script) &&
-                    AnswerEligibility.allows(e, mode.script),
-              )
+              .where((e) => AnswerEligibility.isCandidate(e, mode.script))
               .map((e) => WordPool.spelling(e, mode)!)
               .where(
                 (word) => wordUnitCount(word) >= 2 && wordUnitCount(word) <= 12,

@@ -38,11 +38,7 @@ class WordBridgesContent {
       final candidates = <BridgePair>[];
       for (final entry in byId.values) {
         if (duplicateIds.contains(entry.id) ||
-            !entry.acceptedGuess ||
-            !entry.solutionEligible ||
-            !entry.hasDistributableDefinition ||
-            !entry.supportsScript(mode.script) ||
-            !AnswerEligibility.allows(entry, mode.script)) {
+            !AnswerEligibility.isCandidate(entry, mode.script)) {
           continue;
         }
         final word =

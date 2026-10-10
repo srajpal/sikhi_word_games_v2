@@ -16,6 +16,8 @@ source snapshot; integrity checks do not reopen editorial approval.
   clue references, including plain/accented equivalents such as granthī/granthi.
 - [x] Follow-up 3.4: pluralize Progress rounds, puzzles, words, sets, pairs and
   first-try answers through shared count text; verify zero, one and two.
+- [x] Follow-up 3.5: replace six selection/restore candidate conditions with
+  `AnswerEligibility.isCandidate`, preserving game-specific requirements.
 
 - [x] Follow-up 1: make Shabad Banao anagram-first, with the meaning revealed
   only through Hint or completion; persist clue visibility and preserve old saves.

@@ -33,6 +33,19 @@ abstract final class AnswerEligibility {
     caseSensitive: false,
   );
 
+  /// Shared selection/restore gate. Clue games require a distributable meaning;
+  /// Bujho preserves its ability to use an answer without a definition.
+  static bool isCandidate(
+    VocabularyEntry entry,
+    VocabularyScript script, {
+    bool requireDefinition = true,
+  }) =>
+      entry.acceptedGuess &&
+      entry.solutionEligible &&
+      entry.supportsScript(script) &&
+      (!requireDefinition || entry.hasDistributableDefinition) &&
+      allows(entry, script);
+
   static bool allows(VocabularyEntry entry, VocabularyScript script) {
     // Missing frequency metadata is not evidence of the minimum usage count.
     if (script == VocabularyScript.english &&

@@ -17,6 +17,49 @@ import 'package:sikhi_word_games_v2/features/word_search/presentation/word_searc
 
 void main() {
   test(
+    'candidate gate combines flags, membership, meaning and answer policy',
+    () {
+      final entry = _entry('APPLE', 'a round fruit');
+      expect(
+        AnswerEligibility.isCandidate(entry, VocabularyScript.english),
+        isTrue,
+      );
+      for (final invalid in [
+        entry.copyWith(acceptedGuess: false),
+        entry.copyWith(solutionEligible: false),
+        entry.copyWith(englishDefinition: ' '),
+        entry.copyWith(source: 'unknown source'),
+        _entry('APPLE', 'a round fruit', tagCount: 2),
+        _entry('APPLE', 'the apple fruit'),
+      ]) {
+        expect(
+          AnswerEligibility.isCandidate(invalid, VocabularyScript.english),
+          isFalse,
+        );
+      }
+      expect(
+        AnswerEligibility.isCandidate(entry, VocabularyScript.gurmukhi),
+        isFalse,
+      );
+      expect(
+        AnswerEligibility.isCandidate(
+          entry.copyWith(englishDefinition: ''),
+          VocabularyScript.english,
+          requireDefinition: false,
+        ),
+        isTrue,
+      );
+      expect(
+        AnswerEligibility.isCandidate(
+          _entry('APPLE', '', tagCount: 2),
+          VocabularyScript.english,
+          requireDefinition: false,
+        ),
+        isFalse,
+      );
+    },
+  );
+  test(
     'native self-references include every Romanization and its plain form',
     () {
       for (final definition in ['granthi', 'A GRANTHĪ.', 'a granthi\u0304']) {
