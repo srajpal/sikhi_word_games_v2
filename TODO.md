@@ -31,8 +31,13 @@ and verified integrity/attributions for the unchanged 20,601 records. Activated
 the preview update on port 8921 without clearing storage. Real-browser checks
 verify on-screen/hardware typing, hardware deletion, current-row announcements,
 Gurmukhi sign attachment into one tile and whole-unit deletion, readable larger
-key labels and no console errors. Native devices remain on their earlier builds:
-tablet 1.18.1+33, Pixel 1.18.0+32; no new native install is claimed for this change.
+key labels and no console errors.
+
+Pixel 6 was updated on October 10 from 1.18.0+32 to the normal arm64 profile/AOT
+APK built from commit a557fad, using `adb install -r` to preserve existing app
+data. Android confirms 1.18.2/code 34; MainActivity was brought to the foreground
+successfully and running PID 22762 was verified. Hands-on direct-grid testing
+remains a player check. The tablet remains on 1.18.1+33.
 
 ## October 10 tablet launch delay: candidate 1.18.1+33
 
