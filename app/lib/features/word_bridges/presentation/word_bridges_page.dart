@@ -1,3 +1,8 @@
+import '../../achievements/presentation/achievement_feedback.dart';
+
+import 'package:go_router/go_router.dart';
+
+import '../../../core/widgets/game_menu.dart';
 import '../../../core/themes/paper_page.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/audio/interaction_sounds.dart';
@@ -158,6 +163,7 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
 
   Future<void> _save() async {
     final game = _game!;
+    final completed = game.isComplete;
     setState(() => _pendingSaves++);
     try {
       await widget.repository.save(
@@ -165,7 +171,10 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
         game: game,
         simpleRomanized: _simpleRomanized,
       );
-      if (mounted) setState(() => _saveError = null);
+      if (mounted) {
+        setState(() => _saveError = null);
+        if (completed) AchievementFeedback.check(context);
+      }
     } on Object {
       if (mounted) {
         setState(
@@ -513,7 +522,9 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
       title: GameHeading(
         identity: GameIdentity.jodo,
         compact: true,
-        subtitle: GameLanguageHeader(mode: _mode),
+        subtitle: GameLanguageHeader(
+          mode: _game == null ? widget.initialMode : _mode,
+        ),
       ),
       actions: [
         PopupMenuButton<String>(
@@ -521,6 +532,7 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
           tooltip: 'Jodo menu',
           onSelected: (action) {
             InteractionSounds.button(context);
+            if (action == 'dictionary') context.push('/dictionary');
             if (action == 'new') _newSet();
             if (action == 'settings') _gameSettings();
             if (action == 'help') showGameHelp(context, GameKind.wordBridges);
@@ -529,16 +541,14 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
               VictoryCelebration.showSettings(context);
             }
           },
-          itemBuilder: (_) => const [
-            PopupMenuItem(value: 'new', child: Text('New set')),
-            PopupMenuItem(value: 'settings', child: Text('Game settings')),
-            PopupMenuItem(value: 'help', child: Text('How to play')),
-            PopupMenuItem(value: 'statistics', child: Text('Statistics')),
-            PopupMenuItem(
-              value: 'celebrations',
-              child: Text('Celebration settings'),
-            ),
-          ],
+          itemBuilder: (_) => gameMenuItems(
+            newGame: 'new',
+            settings: 'settings',
+            help: 'help',
+            statistics: 'statistics',
+            dictionary: 'dictionary',
+            celebrations: 'celebrations',
+          ),
         ),
       ],
     ),

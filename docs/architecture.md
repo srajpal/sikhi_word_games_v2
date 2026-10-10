@@ -302,6 +302,13 @@ in its existing state. Repeated completion IDs remain inert. Missing new fields
 in older states mean zero; malformed new fields fall back safely. App-wide reset
 already owns these keys. Achievement IDs/goals live in a pure Dart catalog.
 
+`AchievementFeedback` takes a baseline of persisted facts when a game route opens.
+Successful page writes check that projection and enqueue only newly earned badges
+for that game. Its colorful banner and timer belong to the route; no extra totals
+or earned-badge store are introduced. Failed writes cannot announce unsaved facts.
+Accessible navigation retains each banner until dismissed; reduced motion removes
+its scale animation. Existing earned badges do not replay after relaunch.
+
 Quest session schema 2 enforces 3/4/5 misses. Schema 1 still enforces the previous
 5/6/7 budget for valid unfinished legacy rounds and is retained on their next save.
 New rounds always use schema 2. This preserves played moves without accepting
@@ -313,6 +320,22 @@ arbitrary custom budgets as app sessions.
 pages. Its explicit destination drives selected state, and `context.go` replaces
 the primary selection; game routes remain focused. `PaperPage` accepts an optional
 primary destination so Settings/game-details do not acquire the library bar.
+
+Game menus use `gameMenuItems` for shared labels, icon treatment and ordering.
+Library cards measure all six titles, descriptions and action labels to
+reserve one common height, including Continue. Learn Letters' optional launch
+preference `letterPracticeMode` defaults to listening in older preferences;
+session restoration continues to honor the saved round's mode.
+Router pages use a 120 ms fade with zero duration for reduced motion, preserving
+ordinary Navigator back behavior. Bundled vocabulary starts loading after the
+first library frame through the existing cached, retryable repository.
+
+Scramble drag payloads carry a round ID and stable tile ID. Drops onto occupied
+spaces swap placed tiles or return displaced tray placements. Returning and
+recalling tiles retain legacy locks, hints and check counts. Completion and
+cross-round drops cannot alter the permutation; tap controls remain available.
+Quest uses a side-by-side alphabet/lantern layout at wide widths and ordinary
+text scales, with a stacked scrollable fallback for narrow or enlarged text.
 
 `InteractionSounds` encloses the Navigator in the app builder. Accepted letter
 and button callbacks request independent short, low-volume bundled WAVs. Disabled

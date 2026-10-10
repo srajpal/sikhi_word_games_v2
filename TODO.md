@@ -1,12 +1,37 @@
 # Sikhi Word Games V2 TODO
 
-This is the current checklist, reconciled on October 9, 2026. Open boxes describe
+This is the current checklist, reconciled on October 10, 2026. Open boxes describe
 remaining work. Completed milestones are evidence, not sign-off for a newer
 package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
-## October 9 review fixes and follow-ups: candidate 1.17.0+31
+## October 10 mobile quality of life: candidate 1.18.0+32
+
+- [x] Equal phone/tablet/web library card heights, including Continue and wrapped text.
+- [x] Learn Letters Game type on Play, listening default and larger choice glyphs.
+- [x] Selected-language loading headers instead of an English placeholder.
+- [x] Scramble recall and dragging both ways, swaps and preserved legacy locks.
+- [x] Shared menu labels, icons and order for all six games.
+- [x] Wide Quest lantern beside the alphabet, retained when toggling input modes.
+- [x] Named, colorful achievement banners after successful persistence, with queue.
+- [x] Short route fades and dictionary preloading from Play.
+- [x] Complete full checks, visual review and release web preview validation.
+
+Formatting and analysis pass. The full suite passes 474 tests, including all
+50 Windows goldens; reviewed the changed/new images across all three themes,
+phone/tablet layouts and large text. The release web package passes vocabulary
+and attribution integrity for the unchanged 20,601 records and contains 96
+offline-cache files. The cache-worker behavior check also passes.
+Verified version 1.18.0+32 in the browser at 1024x768 and 390x844: Learn Letters
+mode selection/listening layout, shared menu, Quest lantern with both input
+banks, Scramble placement/recall and mouse dragging both ways at the normal web
+size, and Settings navigation. Browser console reported no errors. The updated
+preview is open on port 8921 after allowing its offline update to activate;
+port 8920 retains the previous preview's separate saved data. Real-device
+navigation latency and native touch dragging still need device testing.
+
+## October 9 review fixes and follow-ups: released 1.17.0+31
 
 - [x] Follow-up 3.1: ignore lone Gurmukhi vowel signs in Quest hardware input and
   the engine without consuming misses; cover unchanged counts and marked tiles.

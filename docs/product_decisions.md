@@ -1,5 +1,33 @@
 # Sikhi Word Games V2 — Product Decisions
 
+## October 10 mobile quality of life
+
+- All six library cards have one measured height on phone, tablet and web, including
+  cards with Continue actions. Large accessibility text can still use one column.
+- Learn Letters offers Listen and find the letter / See the letter and find its
+  name from the library's Game type button. Listening is the default for new
+  players; a saved round retains its mode. Listening choices use larger glyphs
+  without a large ear illustration; visual naming retains the large target.
+- Game headings show the launch language during loading, or Choosing language
+  for random/restore launches until their language is known. Never flash English
+  as a placeholder for another language.
+- Every game menu uses this order and shared icons: New game, Game settings,
+  How to play, Statistics, Dictionary, Celebration settings. Bujho's Copy result
+  follows these common actions. New game retains the current game settings.
+- Shabad Banao supports tray-to-space, space-to-tray and space-to-space dragging,
+  alongside tap and accessible activation. Dropping on an occupied space swaps
+  placed tiles or returns its displaced tile to the tray. Recall tiles returns
+  all movable tiles; historical hint locks remain fixed. Written units stay whole.
+- Quest places the lantern beside the alphabet on wide screens with ordinary
+  text sizes. Narrow/large-text screens retain the stacked, scrollable layout.
+- Newly earned, persisted achievements announce their title and description in
+  a colorful game-local banner. Multiple awards queue; existing awards do not
+  replay on launch. Dismiss and View badges remain accessible, with no automatic
+  dismissal for accessible navigation. The three existing themes supply colors.
+- Navigation uses a short 120 ms fade, or no transition with reduced motion.
+  The asset repository starts its cached dictionary load after the first home
+  frame so the first game need not initiate the asset download/decoder.
+
 ## Confirmed scope
 
 - Build V2 as a clean Flutter/Dart application rather than modifying V1 in place.

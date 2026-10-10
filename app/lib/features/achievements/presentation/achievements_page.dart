@@ -1,3 +1,5 @@
+import 'achievement_emblems.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/themes/app_theme.dart';
@@ -121,7 +123,7 @@ class _AchievementCard extends StatelessWidget {
                   Positioned(
                     top: 22,
                     child: Icon(
-                      _emblems[badge.emblem] ?? Icons.star,
+                      achievementEmblems[badge.emblem] ?? Icons.star,
                       size: 36,
                       color: earned
                           ? theme.colorScheme.onSecondaryContainer
@@ -168,27 +170,6 @@ class _AchievementCard extends StatelessWidget {
     );
   }
 }
-
-const _emblems = <String, IconData>{
-  'key': Icons.vpn_key_outlined,
-  'search': Icons.search,
-  'book': Icons.auto_stories,
-  'bolt': Icons.bolt,
-  'star': Icons.star,
-  'ribbon': Icons.military_tech,
-  'pen': Icons.edit,
-  'sun': Icons.wb_sunny_outlined,
-  'tiles': Icons.grid_view,
-  'compass': Icons.explore_outlined,
-  'map': Icons.route,
-  'crown': Icons.workspace_premium,
-  'globe': Icons.public,
-  'lantern': Icons.light_outlined,
-  'hand': Icons.volunteer_activism,
-  'bridge': Icons.architecture,
-  'link': Icons.link,
-  'ear': Icons.hearing,
-};
 
 class _BadgePainter extends CustomPainter {
   const _BadgePainter(this.colors, this.tokens, this.earned);

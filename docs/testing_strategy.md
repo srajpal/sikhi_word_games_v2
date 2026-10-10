@@ -2,6 +2,15 @@
 
 ## Coverage and limits
 
+October 10 quality-of-life regressions cover equal phone/tablet card heights with a
+Continue save at 1x/1.5x/2x text, both Learn Letters launch types and continuation,
+selected-language loading frames in all five vocabulary games, shared menu order
+and icons in all six games, visible wide Quest alphabet/lantern, badge queue and
+no-replay behavior, and Scramble dragging/swapping/recall of whole Gurmukhi units.
+Domain tests retain legacy locked hints and tile permutation/persistence invariants.
+Navigation timing checks verify the configured transition; actual device latency
+and pronunciation quality remain separate manual checks.
+
 - Pure Dart unit tests cover game rules, content transformations, pool selection,
   source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed

@@ -316,7 +316,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Khoj: Word Search menu'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Language'));
+    await tester.tap(find.text('Game settings'));
     await tester.pumpAndSettle();
     final gurmukhi = find.text('Gurmukhi').last;
     await tester.ensureVisible(gurmukhi);
@@ -924,6 +924,12 @@ void main() {
     await tester.pump();
     expect(find.text('You found it!'), findsOneWidget);
     expect(find.text('A round fruit'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(find.text('First discovery'), findsOneWidget);
+    while (find.byTooltip('Dismiss achievement').evaluate().isNotEmpty) {
+      await tester.tap(find.byTooltip('Dismiss achievement'));
+      await tester.pumpAndSettle();
+    }
     expect(find.byIcon(Icons.check), findsNWidgets(6));
     expect(find.byIcon(Icons.swap_horiz), findsNWidgets(2));
     expect(find.byIcon(Icons.close), findsNWidgets(2));

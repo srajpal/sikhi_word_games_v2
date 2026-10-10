@@ -3,8 +3,39 @@ import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/features/game_library/data/game_launch_preferences_repository.dart';
 import 'package:sikhi_word_games_v2/features/game_library/domain/game_launch_options.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
+import 'package:sikhi_word_games_v2/features/learn_letters/domain/learn_letters_game.dart';
 
 void main() {
+  test('letter practice choice persists and missing old fields default to listening', () async {
+    final store = MemoryKeyValueStore();
+    final repository = GameLaunchPreferencesRepository(store);
+    expect(
+      repository.load(GameKind.learnLetters).letterPracticeMode,
+      LetterPracticeMode.listening,
+    );
+    await store.setString(
+      GameLaunchPreferencesRepository.storageKey,
+      '{"schemaVersion":1,"learnLetters":{"language":"gurmukhi","wordSize":null}}',
+    );
+    expect(
+      repository.load(GameKind.learnLetters).letterPracticeMode,
+      LetterPracticeMode.listening,
+    );
+    await repository.save(
+      GameKind.learnLetters,
+      const GameLaunchOptions(
+        language: LanguageMode.gurmukhi,
+        letterPracticeMode: LetterPracticeMode.name,
+      ),
+    );
+    expect(
+      GameLaunchPreferencesRepository(store)
+          .load(GameKind.learnLetters)
+          .options
+          .letterPracticeMode,
+      LetterPracticeMode.name,
+    );
+  });
   test('keeps launch choices separate for each game mode', () async {
     final repository = GameLaunchPreferencesRepository(MemoryKeyValueStore());
 

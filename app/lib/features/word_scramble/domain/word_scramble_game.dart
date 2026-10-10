@@ -78,6 +78,47 @@ class WordScrambleGame {
     return true;
   }
 
+  /// Place at a specific space, swapping occupied spaces or returning a
+  /// displaced tile to the tray. IDs keep repeated written units independent.
+  bool canMoveTo(int id, int position) =>
+      !(isComplete ||
+          position < 0 ||
+          position >= units.length ||
+          _locked.contains(position) ||
+          _locked.any((i) => _slots[i] == id)) &&
+      _slots.indexOf(id) != position &&
+      (_tray.contains(id) || _slots.contains(id));
+
+  bool moveTo(int id, int position) {
+    if (!canMoveTo(id, position)) return false;
+    final from = _slots.indexOf(id);
+    if (from == position || (from < 0 && !_tray.contains(id))) return false;
+    final displaced = _slots[position];
+    if (from >= 0) {
+      _slots[from] = displaced;
+    } else {
+      _tray.remove(id);
+      if (displaced != null) _tray.add(displaced);
+    }
+    _slots[position] = id;
+    return true;
+  }
+
+  bool get canRecall =>
+      !isComplete &&
+      _slots.indexed.any(
+        (slot) => slot.$2 != null && !_locked.contains(slot.$1),
+      );
+
+  /// Historical hint locks stay in place, as with individual tile returns.
+  bool recall() {
+    if (!canRecall) return false;
+    for (var i = 0; i < _slots.length; i++) {
+      remove(i);
+    }
+    return true;
+  }
+
   bool remove(int position) {
     if (isComplete ||
         position < 0 ||

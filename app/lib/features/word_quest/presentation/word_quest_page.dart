@@ -1,3 +1,5 @@
+import '../../achievements/presentation/achievement_feedback.dart';
+import '../../../core/widgets/game_menu.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/statistics/game_statistics_dialog.dart';
@@ -420,6 +422,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
             hintsUsed: game.hintsUsed,
           ),
         ),
+        checkAchievements: true,
       );
     } else {
       _persist(
@@ -455,6 +458,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
             hintsUsed: game.hintsUsed,
           ),
         ),
+        checkAchievements: true,
       );
     } else {
       _persist(
@@ -542,9 +546,13 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   void _showHelp() => showGameHelp(context, GameKind.wordQuest);
 
-  Future<void> _persist(Future<void> write) async {
+  Future<void> _persist(
+    Future<void> write, {
+    bool checkAchievements = false,
+  }) async {
     try {
       await write;
+      if (mounted && checkAchievements) AchievementFeedback.check(context);
     } on Object {
       if (!mounted) return;
       showGameSnackBar(
@@ -570,7 +578,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
           identity: GameIdentity.quest,
           compact: true,
           subtitle: GameLanguageHeader(
-            mode: _mode,
+            mode: _loading ? widget.initialMode : _mode,
             wordLength: _word?.graphemeLength,
           ),
         ),
@@ -599,23 +607,14 @@ class _WordQuestPageState extends State<WordQuestPage> {
               }
               if (value == 'dictionary') context.push('/dictionary');
             },
-            itemBuilder: (context) => const [
-              PopupMenuItem(value: 'new', child: Text('New word')),
-              PopupMenuItem(value: 'settings', child: Text('Game settings')),
-              PopupMenuItem(value: 'statistics', child: Text('Statistics')),
-              PopupMenuItem(
-                value: 'celebrations',
-                child: Text('Celebration settings'),
-              ),
-              PopupMenuItem(value: 'help', child: Text('How to play')),
-              PopupMenuItem(
-                value: 'dictionary',
-                child: ListTile(
-                  leading: Icon(Icons.menu_book_outlined),
-                  title: Text('Dictionary'),
-                ),
-              ),
-            ],
+            itemBuilder: (_) => gameMenuItems(
+              newGame: 'new',
+              settings: 'settings',
+              help: 'help',
+              statistics: 'statistics',
+              dictionary: 'dictionary',
+              celebrations: 'celebrations',
+            ),
           ),
         ],
       ),
@@ -643,7 +642,11 @@ class _WordQuestPageState extends State<WordQuestPage> {
                 child: SafeArea(
                   child: Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 620),
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.sizeOf(context).width >= 800
+                            ? 980
+                            : 620,
+                      ),
                       child: LayoutBuilder(
                         builder: (context, constraints) =>
                             SingleChildScrollView(
@@ -737,11 +740,16 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                         _mode == LanguageMode.gurmukhi,
                                   ),
                                   const SizedBox(height: 16),
-                                  QuestLantern(
-                                    missesLeft: game.triesRemaining,
-                                    maximumMisses: game.maximumTries,
-                                    won: game.status == WordQuestStatus.won,
-                                  ),
+                                  if (constraints.maxWidth < 760 ||
+                                      game.isComplete ||
+                                      MediaQuery.textScalerOf(context)
+                                              .scale(14) >
+                                          21)
+                                    QuestLantern(
+                                      missesLeft: game.triesRemaining,
+                                      maximumMisses: game.maximumTries,
+                                      won: game.status == WordQuestStatus.won,
+                                    ),
                                   const SizedBox(height: 10),
                                   if (game.isComplete)
                                     _ResultCard(
@@ -756,15 +764,50 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                           : null,
                                     )
                                   else ...[
-                                    _LetterBank(
-                                      letters: _showFullKeyboard
-                                          ? _fullLetterBank(game)
-                                          : _letterBank,
-                                      game: game,
-                                      onPressed: _guess,
-                                      showRomanization:
-                                          _mode == LanguageMode.gurmukhi,
-                                    ),
+                                    constraints.maxWidth >= 760 &&
+                                            MediaQuery.textScalerOf(context)
+                                                    .scale(14) <=
+                                                21
+                                        ? Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Expanded(
+                                                child: _LetterBank(
+                                                  letters: _showFullKeyboard
+                                                      ? _fullLetterBank(game)
+                                                      : _letterBank,
+                                                  game: game,
+                                                  onPressed: _guess,
+                                                  showRomanization:
+                                                      _mode ==
+                                                      LanguageMode.gurmukhi,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 24),
+                                              SizedBox(
+                                                width: 252,
+                                                child: QuestLantern(
+                                                  missesLeft:
+                                                      game.triesRemaining,
+                                                  maximumMisses:
+                                                      game.maximumTries,
+                                                  won:
+                                                      game.status ==
+                                                      WordQuestStatus.won,
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : _LetterBank(
+                                            letters: _showFullKeyboard
+                                                ? _fullLetterBank(game)
+                                                : _letterBank,
+                                            game: game,
+                                            onPressed: _guess,
+                                            showRomanization:
+                                                _mode == LanguageMode.gurmukhi,
+                                          ),
                                   ],
                                 ],
                               ),

@@ -1,3 +1,5 @@
+import '../../achievements/presentation/achievement_feedback.dart';
+import '../../../core/widgets/game_menu.dart';
 import '../../../core/language/hardware_input.dart';
 import '../../../core/content/romanized_vocabulary_views.dart';
 import '../../../core/themes/paper_page.dart';
@@ -324,6 +326,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           widget.gameRepository.clear(
             after: widget.statisticsRepository.save(_statistics),
           ),
+          checkAchievements: true,
         );
       } else {
         _persist(
@@ -536,9 +539,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     }
   }
 
-  Future<void> _persist(Future<void> write) async {
+  Future<void> _persist(
+    Future<void> write, {
+    bool checkAchievements = false,
+  }) async {
     try {
       await write;
+      if (mounted && checkAchievements) AchievementFeedback.check(context);
     } on Object {
       if (!mounted) return;
       showGameSnackBar(
@@ -561,7 +568,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           identity: GameIdentity.bujho,
           compact: true,
           subtitle: GameLanguageHeader(
-            mode: _mode,
+            mode: _loading ? widget.initialMode : _mode,
             wordLength: game?.wordLength,
           ),
         ),
@@ -571,60 +578,22 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
             key: const ValueKey('game-menu'),
             tooltip: 'Game menu',
             onSelected: _handleMenuAction,
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: _GameMenuAction.newGame,
-                child: ListTile(
-                  leading: Icon(Icons.refresh),
-                  title: Text('New game'),
-                  subtitle: Text('Keep current settings'),
+            itemBuilder: (_) => gameMenuItems(
+              newGame: _GameMenuAction.newGame,
+              settings: _GameMenuAction.settings,
+              help: _GameMenuAction.help,
+              statistics: _GameMenuAction.statistics,
+              dictionary: _GameMenuAction.dictionary,
+              celebrations: _GameMenuAction.celebrations,
+              extra: [
+                gameMenuItem(
+                  _GameMenuAction.copyResult,
+                  'Copy result',
+                  Icons.copy,
+                  enabled: isComplete && game != null,
                 ),
-              ),
-              const PopupMenuDivider(),
-              const PopupMenuItem(
-                value: _GameMenuAction.settings,
-                child: ListTile(
-                  leading: Icon(Icons.tune),
-                  title: Text('Game settings'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _GameMenuAction.celebrations,
-                child: ListTile(
-                  leading: Icon(Icons.celebration_outlined),
-                  title: Text('Celebration settings'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _GameMenuAction.help,
-                child: ListTile(
-                  leading: Icon(Icons.help_outline),
-                  title: Text('How to play'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _GameMenuAction.statistics,
-                child: ListTile(
-                  leading: Icon(Icons.bar_chart),
-                  title: Text('Statistics'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _GameMenuAction.dictionary,
-                child: ListTile(
-                  leading: Icon(Icons.menu_book_outlined),
-                  title: Text('Dictionary'),
-                ),
-              ),
-              PopupMenuItem(
-                value: _GameMenuAction.copyResult,
-                enabled: isComplete && game != null,
-                child: const ListTile(
-                  leading: Icon(Icons.copy),
-                  title: Text('Copy result'),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
