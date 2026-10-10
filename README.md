@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.16.0` (build `29`). The uploaded web draft remains
+The current testing build is `1.16.1` (build `30`). The uploaded web draft remains
 `1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only

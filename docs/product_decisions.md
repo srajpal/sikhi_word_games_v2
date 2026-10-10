@@ -550,6 +550,13 @@ retains the saved spelling view. Ten additional stable badge goals cover solved
 counts, unhinted/first-check words, repeated/long tiles and all three languages.
 There are now 60 badges. Existing player progress is preserved.
 
+Gurmukhi Word Scramble tiles show a small Romanized pronunciation label below
+each written unit, both in the shuffled tray and in placed, hinted and completed
+answers. Labels use the existing shared Gurmukhi learning aid, matching keyboards;
+they do not replace the approved whole-word Romanization. Empty spaces reveal
+no labels. Screen readers include the label, and large text expands tile width
+and height without splitting Gurmukhi groups.
+
 The new bundled `scramble.webp` illustration was generated with the built-in
 image tool using `letters.webp` as a style reference, then converted to WebP.
 Final prompt: "Use case: illustration-story. Asset type: a landscape 1536x1024
