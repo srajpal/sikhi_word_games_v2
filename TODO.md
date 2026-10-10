@@ -13,7 +13,7 @@ source snapshot; integrity checks do not reopen editorial approval.
 - [x] Reserve space for enlarged labels without splitting native written groups.
 - [x] Validate phone/theme/large-text captures, rebuild and refresh the preview,
   and update connected testing devices.
-- [ ] Install build 30 on Pixel when it reconnects; it remains on build 27.
+- [x] Install build 30 on Pixel 6 with saved app data retained.
 
 Build 30 evidence: 394 tests, including 40 visual baselines, passed; analysis is
 clean and 159 Dart files are formatted. Reviewed actual-font normal/200% Gurmukhi
@@ -22,7 +22,9 @@ themes. The packaged browser at 390x780 resumed the existing two-tile ਬੁੱ�
 with Bu/Dhee captions and spoken labels, without changing the round or progress.
 The 1.16.1+30 web ZIP and debug APK are built, and source integrity still verifies
 20,601 unchanged approved records. K70 PRO installed with data retained; version
-1.16.1/code 30 and launch PID 5425 were verified. Pixel was not connected.
+1.16.1/code 30 and launch PID 5425 were verified. Pixel 6 subsequently reconnected
+and was updated with `adb install -r`; version 1.16.1/code 30 and launch PID 21859
+were verified on October 9, retaining app data.
 
 ## October 9 Shabad Banao: candidate 1.16.0+29
 
