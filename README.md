@@ -39,6 +39,7 @@ dart format --output=none --set-exit-if-changed lib test integration_test test_d
 flutter analyze --suppress-analytics
 flutter test --suppress-analytics
 dart run tool/build_release_content.dart --check
+dart run tool/audit_release_content.dart
 dart run tool\audit_content.dart
 flutter build web --release --no-web-resources-cdn --suppress-analytics
 ```
@@ -46,7 +47,11 @@ flutter build web --release --no-web-resources-cdn --suppress-analytics
 The content checks validate the supplied manifest, exact release bytes, counts,
 script membership and written letter units. All supplied words are approved by
 the project owner; the retired dictionary's quality and frequency filters do not
-remove words from this release. See [testing strategy](docs/testing_strategy.md)
+remove words from this release. Game answer pools apply the shared mechanical
+exclusions documented in [product decisions](docs/product_decisions.md), while
+Dictionary records and accepted guesses remain complete. The release audit also
+rejects a small list of boundary-matched crude-definition regressions without
+rewriting source data. See [testing strategy](docs/testing_strategy.md)
 for device, accessibility, browser and integration checks.
 
 The approved release is under `app/content/approved_release/`, outside runtime

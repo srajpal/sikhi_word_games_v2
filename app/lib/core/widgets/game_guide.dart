@@ -58,11 +58,11 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
     ),
     (
       title: 'Move the pieces',
-      body: 'Tap a placed tile to return it to the tray. Repeated letters each have their own tile. Shuffle mixes the remaining tiles. In Gurmukhi, vowel marks and subjoined letters stay attached to their base.',
+      body: 'Tap a placed tile to return it to the tray. Repeated letters each have their own tile. Shuffle mixes the remaining tiles. Gurmukhi marks stay attached to their base, with Romanized captions below to help pronunciation.',
     ),
     (
       title: 'Check and discover',
-      body: 'Choose Check word when every space is filled. A wrong order lets you keep trying. One optional hint places and locks a correct tile. Use Next word after solving. Touch, Tab and Enter or Space, and screen-reader activation all work. Game settings chooses a language for a new word.',
+      body: 'Choose Check word when every space is filled. A wrong order lets you keep trying. One optional hint locks a correct tile. Use Next word after solving. Touch, keyboard and screen-reader activation work. In Game settings, Apply a different language starts a new word; Cancel keeps this one.',
     ),
   ],
   GameKind.learnLetters => const [

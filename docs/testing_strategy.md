@@ -6,7 +6,7 @@
   source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
-- Thirty-five Windows golden image tests cover Modern, Sikhi, and Dark. They run
+- Forty Windows golden image tests cover Modern, Sikhi, and Dark. They run
   separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.
@@ -78,7 +78,8 @@ coverage should include a validated `--import-from` package, locally reproducibl
 checks exercise each mode's actual written units, available sizes, input,
 keyboards, restored targets and Jodo sets. Jodo tests distinguish avoiding
 conflicting clues within one board from excluding approved dictionary words;
-long selected definitions must remain globally eligible. Current source counts are in
+long selected definitions alone must not disqualify a word. The shared mechanical
+answer rule is checked separately from Dictionary membership. Current source counts are in
 `docs/content_schema.md`; historical quotas and quality filters are not approval
 criteria. Existing older filter tests and source reports are historical evidence
 rather than gates for this owner-approved import.
@@ -190,9 +191,10 @@ remain open in TODO.md.
 
 The engine and repository checks cover either-side selection, mismatch/clear,
 immutable snapshots, invalid saves, idempotent completion, per-language totals,
-and late/stale writes. Content checks resolve all four fixed starter decks from
-actual shipped assets and fail closed for held, missing, duplicated, unsourced,
-or script-incomplete entries. Widget checks cover semantic activation, physical
+and late/stale writes. Content checks resolve the three mode pools and their
+compatible preview decks from actual approved assets; fixed starter decks are
+retired. Restore rejects missing/ineligible words, changed definitions and
+malformed or unsupported saves. Widget checks cover semantic activation, physical
 keyboard Space, a 320-pixel viewport with 200% text, restore after navigation,
 obsolete definitions, unavailable content, failed storage and rapid input during
 slow saves. An app integration test covers library launch, first guide, Continue,

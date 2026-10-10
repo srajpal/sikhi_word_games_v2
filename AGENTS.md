@@ -39,6 +39,9 @@ repository or vocabulary corpus without a concrete need.
   `app/`; ordinary `--write` rebuilds locally. Verify with `--check` and
   `dart run tool/audit_release_content.dart`. These are integrity checks, not
   editorial reapproval.
+- Keep shared mechanical answer exclusions in `AnswerEligibility`, preserving
+  every Dictionary record and accepted guess. The release audit also rejects a
+  small boundary-matched crude-definition list; it does not rewrite source data.
 - Ship three distinct masters: `english/words.json`,
   `punjabi/romanized/words.json` and `punjabi/gurmukhi/words.json`, with source
   attribution and licenses. Counterpart spellings are metadata and must never

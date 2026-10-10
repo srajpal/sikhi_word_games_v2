@@ -15,7 +15,7 @@ source snapshot; integrity checks do not reopen editorial approval.
   and the Simple Punjabi default description.
 - [x] 4. Share hardware-input validation, use theme tokens, remove confirmed
   dead code and add corrupt/unsupported save/native-decoder regressions.
-- [ ] 5. Reconcile architecture, current Jodo pools, guides and retired-tool docs.
+- [x] 5. Reconcile architecture, current Jodo pools, guides and retired-tool docs.
 - [ ] Bump both version sources, finish validation and open an unmerged PR.
 
 Dictionary/source counts remain 13,182 English, 2,991 Romanized and 4,428
@@ -42,6 +42,10 @@ Item 4 validation: 417 tests including all 40 goldens passed; analysis is clean
 and 162 Dart files are formatted. Reviewed the three themed badge captures.
 Corrupt Jodo rotation, unsupported Scramble schemas and native approved-record
 decoding fail safely; settings storage-failure coverage remains passing.
+Item 5 validation: 417 tests including all 40 unchanged goldens passed;
+analysis is clean and 162 Dart files are formatted. Updated Scramble help fits
+the existing phone and enlarged-text guide tests. Current docs describe the
+six-game boundaries, mechanical exclusions and retired Jodo/tool behavior.
 
 ## October 9 Gurmukhi scramble labels: candidate 1.16.1+30
 
@@ -228,10 +232,10 @@ Build 23 results below are historical evidence.
   domains, advanced abstractions, misleading homographs or weak clues. Retain
   those for lookup/guesses; exclude a vandalized source entry entirely. The
   English 4/5/6-letter answer pools are 221/191/109; frequency alone is insufficient.
-- [x] Reproduce imports, policies, holds, attribution and release assets with
-  `dart run tool/dictionary_v2.dart --check`, offline. Routine changes use preview,
-  exact source-backed exceptions, then `--write`; retired authoring queues are
-  historical. All current decisions are machine checked, not human approval.
+- [x] Historical dictionary-v2 imports, policies, holds and attribution were
+  reproducible offline. That pipeline is retired; current releases use the
+  owner-approved snapshot with `dart run tool/build_release_content.dart --check`
+  and release audits. Historical machine decisions were not human approval.
 - [x] Add distinct original letter/button click sounds and independent saved
   Settings switches. Preserve pronunciation audio and victory controls.
 - [x] Review refreshed phone/tablet and theme screenshots. All 367 Flutter tests

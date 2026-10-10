@@ -27,8 +27,8 @@ First playable scope:
 
 - A small untimed set of four pairs. Select an item and then its partner;
   support tap, keyboard and screen-reader activation without requiring dragging.
-- Start with word-to-meaning matching. Add Gurmukhi-to-romanized pairs once the
-  starter pool has been checked for unambiguous mappings and spelling aliases.
+- Match words to English meanings. Gurmukhi words show Romanized pronunciation
+  captions; a separate script-to-script matching mode remains a future idea.
 - Keep successful pairs visible. A mismatch gives clear feedback and allows
   another attempt without taking away progress or imposing a timer.
 - Draw from the owner-approved mode bank. Within one set, avoid identical or
@@ -39,8 +39,9 @@ First playable scope:
   finished sets and matching attempts without inventing a cross-game win rate.
 
 As of 1.11.0+22, new sets draw from the eligible shipped vocabulary in the
-chosen script, across word lengths. All meanings are English. Four legacy starter
-decks remain as content regression fixtures, not the live randomization boundary.
+chosen script, across word lengths. All meanings are English. Fixed starter
+decks are retired; each mode's preview uses compatible eligible pairs from its
+current pool and does not limit live randomization.
 New sets prefer unused words and avoid the previous set where the pool permits.
 Used/previous IDs persist per language in the existing Jodo state. A completed set
 also records distinct matched IDs, perfect four-attempt sets and sets with longer
@@ -126,9 +127,12 @@ This rule does not introduce frequency, familiarity or subjective clue-quality
 thresholds. Small pools remain available; report actual counts rather than
 silently importing counterpart-mode words or changing definitions.
 
+### Approved source snapshot
+
 - Use the October 9 owner-approved source release with separate English,
   Romanized Punjabi and Gurmukhi masters. All included words and selected
-  definitions are approved for their own mode, for lookup, guesses and play.
+  definitions are approved for their own mode. Lookup and guesses retain all
+  records; game answers also apply the mechanical rule above.
 - Preserve native JSON bytes, scholarly Roman diacritics, Gurmukhi spellings,
   one selected definition, provenance, attribution and supplied licenses.
 - Counterpart spelling is presentation metadata, never additional membership
@@ -574,7 +578,8 @@ accepts the target spelling; incorrect checks give gentle inline feedback with
 unlimited retries. Next word starts a fresh word. There is no timer, life budget
 or penalty for leaving. Lengths vary across the approved mode's pool, and native
 Gurmukhi written groups remain intact. Only words with fewer than two units or
-all-identical units are unplayable; this is not another editorial filter.
+all-identical units are unplayable. The shared mechanical answer rule also
+applies; neither rule edits or editorially filters Dictionary records.
 
 New words rotate through unseen source IDs before a new cycle and avoid an
 immediate repeat when possible. Simple Punjabi applies to new words; Continue
