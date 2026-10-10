@@ -16,7 +16,8 @@ source snapshot; integrity checks do not reopen editorial approval.
 - [x] 4. Share hardware-input validation, use theme tokens, remove confirmed
   dead code and add corrupt/unsupported save/native-decoder regressions.
 - [x] 5. Reconcile architecture, current Jodo pools, guides and retired-tool docs.
-- [ ] Bump both version sources, finish validation and open an unmerged PR.
+- [x] Bump both version sources, finish validation and prepare the branch for
+  an unmerged PR. Owner review is required before merging.
 
 Dictionary/source counts remain 13,182 English, 2,991 Romanized and 4,428
 Gurmukhi. Answer coverage is in `docs/content_schema.md`; original answers total
@@ -46,6 +47,11 @@ Item 5 validation: 417 tests including all 40 unchanged goldens passed;
 analysis is clean and 162 Dart files are formatted. Updated Scramble help fits
 the existing phone and enlarged-text guide tests. Current docs describe the
 six-game boundaries, mechanical exclusions and retired Jodo/tool behavior.
+Build 31 validation: all 417 tests, including 40 goldens, pass; analysis is clean
+and 162 Dart files are formatted. Source/release checks and the packaged web
+audit verify 20,601 unchanged records and original notices/licenses. The release
+ZIP is `app/dist/sikhi-word-games-web-1.16.2+31.zip`. No physical-device install,
+actual-host iframe/offline reload or publication is claimed for this build.
 
 ## October 9 Gurmukhi scramble labels: candidate 1.16.1+30
 
