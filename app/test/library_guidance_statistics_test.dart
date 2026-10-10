@@ -169,7 +169,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('3 rounds finished'), findsOneWidget);
     expect(find.text('7 words solved'), findsOneWidget);
-    expect(find.text('1 puzzles finished, 6 words found'), findsOneWidget);
+    expect(find.text('1 puzzle finished, 6 words found'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

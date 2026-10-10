@@ -77,10 +77,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Your statistics'));
       await tester.pumpAndSettle();
-      expect(find.text('1 rounds finished'), findsOneWidget);
+      expect(find.text('1 round finished'), findsOneWidget);
       expect(find.text('0 words solved'), findsOneWidget);
       expect(
-        find.textContaining('1 rounds finished, 5 first-try answers'),
+        find.textContaining('1 round finished, 5 first-try answers'),
         findsOneWidget,
       );
       expect(tester.takeException(), isNull);

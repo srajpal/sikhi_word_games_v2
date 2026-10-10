@@ -61,7 +61,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Progress'));
       await tester.pumpAndSettle();
-      expect(find.text('1 rounds finished'), findsOneWidget);
+      expect(find.text('1 round finished'), findsOneWidget);
       expect(find.text('1 word solved'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },

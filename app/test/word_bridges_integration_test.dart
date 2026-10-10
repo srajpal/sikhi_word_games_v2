@@ -84,9 +84,9 @@ void main() {
       await tester.ensureVisible(find.text('Your statistics'));
       await tester.tap(find.text('Your statistics'));
       await tester.pumpAndSettle();
-      expect(find.text('1 rounds finished'), findsOneWidget);
+      expect(find.text('1 round finished'), findsOneWidget);
       expect(find.text('4 words solved'), findsOneWidget);
-      expect(find.text('1 sets finished, 4 pairs matched'), findsOneWidget);
+      expect(find.text('1 set finished, 4 pairs matched'), findsOneWidget);
       await tester.pageBack();
       await tester.pumpAndSettle();
       await tester.pageBack();
