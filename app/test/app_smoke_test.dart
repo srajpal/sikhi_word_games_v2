@@ -398,13 +398,13 @@ void main() {
       const ValueKey('word-quest-keyboard-toggle'),
     );
     expect(find.text('Choose a letter to begin your quest.'), findsNothing);
-    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+    expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
     await tester.tap(keyboardToggle);
     await tester.pump();
-    expect(find.byIcon(Icons.keyboard_hide_outlined), findsOneWidget);
+    expect(find.byTooltip('Use full alphabet'), findsOneWidget);
     await tester.tap(keyboardToggle);
     await tester.pump();
-    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+    expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('word-quest-menu')));
     await tester.pumpAndSettle();
@@ -533,13 +533,13 @@ void main() {
     final keyboardToggle = find.byKey(
       const ValueKey('word-quest-keyboard-toggle'),
     );
-    await tester.tap(keyboardToggle);
-    await tester.pump();
-    expect(find.byIcon(Icons.keyboard_hide_outlined), findsOneWidget);
-    expect(find.byType(Divider), findsOneWidget);
-    expect(find.bySemanticsLabel(RegExp('Paper lantern')), findsNothing);
+    expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
+    expect(find.text('Keep the light'), findsOneWidget);
     expect(find.byKey(const ValueKey('word-quest-key-ਅ')), findsOneWidget);
     await tester.tap(keyboardToggle);
+    await tester.pump();
+    expect(find.byTooltip('Use full alphabet'), findsOneWidget);
+    expect(find.text('Keep the light'), findsOneWidget);
     await tester.pump();
     expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp('Paper lantern')), findsOneWidget);

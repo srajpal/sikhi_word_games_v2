@@ -68,8 +68,7 @@ void main() {
     final card = find.ancestor(of: title, matching: find.byType(GamePanel));
     await _startEnglishGame(tester, card);
 
-    await tester.tap(find.byKey(const ValueKey('word-quest-keyboard-toggle')));
-    await tester.pump();
+    expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
     for (final letter in ['B', 'C', 'D', 'F']) {
       await tester.ensureVisible(
         find.byKey(ValueKey('word-quest-key-$letter')),

@@ -52,6 +52,37 @@ void main() {
     )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
   });
 
+  testWidgets('Word Quest starts with the full alphabet on a phone', (
+    tester,
+  ) async {
+    _setGoldenSurface(tester);
+    tester.view.physicalSize = const Size(390, 844);
+    await tester.pumpWidget(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+        home: WordQuestPage(
+          vocabularyRepository: _vocabulary,
+          hapticLevel: HapticFeedbackLevel.off,
+          reducedMotion: true,
+          sessionRepository: WordQuestSessionRepository(MemoryKeyValueStore()),
+          initialMode: LanguageMode.english,
+          initialWordSize: 5,
+          startFresh: true,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
+    for (final letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')) {
+      expect(find.byKey(ValueKey('word-quest-key-$letter')), findsOneWidget);
+    }
+    await expectLater(
+      find.byType(Scaffold),
+      matchesGoldenFile('images/word_quest_full_alphabet_phone_sikhi.png'),
+    );
+  }, tags: 'golden');
+
   for (final mode in [LanguageMode.english, LanguageMode.gurmukhi]) {
     testWidgets('Jodo ${mode.name} phone board renders in Sikhi', (
       tester,

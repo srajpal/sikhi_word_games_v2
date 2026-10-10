@@ -156,6 +156,13 @@ states this. Quest hardware Gurmukhi input accepts one letter or vowel sign,
 never digits, ੴ or multiple code points. Marked/conjunct on-screen tiles retain
 their existing behavior. Jodo help locates New set in the game menu.
 
+Quest is deduction-first: new words and retries start with the full alphabet,
+retaining the definition clue, existing miss/hint limits and visible lantern.
+The keyboard toggle offers an easier bank without restarting or changing the
+budget. The choice persists with unfinished rounds; older saves default to full.
+Gurmukhi full keys retain whole marked units and distractors in sorted order,
+alongside the basic alphabet, rather than exposing the answer's unit order.
+
 - Players choose their active theme.
 - Ship exactly three themes: Modern, Sikhi, and Dark. Sikhi is the default.
 - Keep all three themes in the shared theme system without duplicating game screens.

@@ -6,6 +6,7 @@ import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/core/themes/app_theme.dart';
+import 'package:sikhi_word_games_v2/core/themes/quest_lantern.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/settings/data/app_settings_repository.dart';
 import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_repository.dart';
@@ -13,6 +14,96 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.d
 import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
 
 void main() {
+  for (final mode in LanguageMode.values) {
+    testWidgets(
+      '${mode.name} starts with full alphabet and retains its miss limit',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final repo = WordQuestSessionRepository(MemoryKeyValueStore());
+        final vocabulary = switch (mode) {
+          LanguageMode.english => _vocabulary,
+          LanguageMode.romanizedPanjabi => _romanizedVocabulary,
+          LanguageMode.gurmukhi => _gurmukhiVocabulary,
+        };
+        Widget page({bool fresh = false}) => MaterialApp(
+          theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+          home: WordQuestPage(
+            vocabularyRepository: vocabulary,
+            hapticLevel: HapticFeedbackLevel.off,
+            reducedMotion: true,
+            sessionRepository: repo,
+            initialMode: mode,
+            initialWordSize: mode == LanguageMode.english ? 5 : 4,
+            startFresh: fresh,
+          ),
+        );
+        await tester.pumpWidget(page(fresh: true));
+        await tester.pumpAndSettle();
+        expect(repo.restore()!.fullKeyboard, isTrue);
+        expect(find.byType(QuestLantern), findsOneWidget);
+        if (mode == LanguageMode.gurmukhi) {
+          for (final letter in ['ਕ', 'ਖ', 'ਗ', 'ਪ', 'ੳ', 'ਤਿ']) {
+            expect(
+              find.byKey(ValueKey('word-quest-key-$letter')),
+              findsOneWidget,
+            );
+          }
+        } else {
+          for (final letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')) {
+            expect(
+              find.byKey(ValueKey('word-quest-key-$letter')),
+              findsOneWidget,
+            );
+          }
+          if (mode == LanguageMode.romanizedPanjabi) {
+            expect(
+              find.byKey(const ValueKey('word-quest-key-Ā')),
+              findsOneWidget,
+            );
+          }
+        }
+        final budget = repo.restore()!.game.maximumTries;
+        expect(budget, mode == LanguageMode.english ? 4 : 3);
+        await tester.sendKeyEvent(
+          LogicalKeyboardKey.keyZ,
+          character: mode == LanguageMode.gurmukhi ? 'ਖ' : 'z',
+        );
+        await tester.pumpAndSettle();
+        expect(repo.restore()!.game.triesRemaining, budget - 1);
+        await tester.tap(find.text('Dismiss'));
+        await tester.pumpAndSettle();
+        final before = repo.restore()!.game.toJson();
+        await tester.ensureVisible(find.byTooltip('Use easier letter bank'));
+        await tester.tap(find.byTooltip('Use easier letter bank'));
+        await tester.pumpAndSettle();
+        expect(repo.restore()!.fullKeyboard, isFalse);
+        expect(repo.restore()!.game.toJson(), before);
+        expect(find.byType(QuestLantern), findsOneWidget);
+        final correct = switch (mode) {
+          LanguageMode.gurmukhi => 'ਸ',
+          LanguageMode.romanizedPanjabi => 'Ā',
+          LanguageMode.english => 'A',
+        };
+        await tester.sendKeyEvent(LogicalKeyboardKey.keyA, character: correct);
+        await tester.pumpAndSettle();
+        expect(repo.restore()!.fullKeyboard, isFalse);
+        expect(repo.restore()!.game.triesRemaining, budget - 1);
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpWidget(page());
+        await tester.pumpAndSettle();
+        expect(find.byTooltip('Use full alphabet'), findsOneWidget);
+        expect(repo.restore()!.game.guessedGraphemes, contains(correct));
+        await tester.tap(find.byTooltip('Use full alphabet'));
+        await tester.pumpAndSettle();
+        expect(repo.restore()!.fullKeyboard, isTrue);
+        expect(repo.restore()!.game.triesRemaining, budget - 1);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
   testWidgets(
     'Gurmukhi hardware accepts a single letter or vowel and rejects other input',
     (tester) async {
@@ -264,6 +355,23 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
+    source: 'Project editorial definition; original text for Sikhi Word Games',
+  ),
+]);
+
+const _romanizedVocabulary = MemoryVocabularyRepository([
+  VocabularyEntry(
+    id: 'punjabi_asan',
+    language: VocabularyLanguage.panjabi,
+    script: VocabularyScript.romanizedPunjabi,
+    latin: 'ĀSĀN',
+    gurmukhi: null,
+    englishDefinition: 'A task that needs little effort',
+    latinLength: 4,
+    gurmukhiLength: null,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.editorApproved,
     source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
 ]);

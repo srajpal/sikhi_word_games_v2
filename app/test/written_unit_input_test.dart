@@ -264,10 +264,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(
-        find.byKey(const ValueKey('word-quest-keyboard-toggle')),
-      );
-      await tester.pumpAndSettle();
+      expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
       expect(find.byKey(const ValueKey('word-quest-key-Ī̃')), findsOneWidget);
       expect(find.byKey(const ValueKey('word-quest-key-Ā̃')), findsOneWidget);
       await _type(tester, 'A\u0304\u0303');

@@ -120,7 +120,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
   List<String> _letterBank = const [];
   String _message = '';
   bool _loading = true;
-  bool _showFullKeyboard = false;
+  bool _showFullKeyboard = true;
   int _startRequest = 0;
 
   @override
@@ -202,6 +202,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
             _word = word;
             _game = restored.game;
             _letterBank = bank;
+            _showFullKeyboard = restored.fullKeyboard;
             _loading = false;
           });
           return;
@@ -270,7 +271,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
       _word = word;
       _game = game;
       _letterBank = bank;
-      _showFullKeyboard = false;
+      _showFullKeyboard = true;
       _message = '';
       _loading = false;
     });
@@ -279,6 +280,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
         simpleRomanized: _simpleRomanized,
         mode: _mode,
         wordSize: _wordSize,
+        fullKeyboard: _showFullKeyboard,
         game: game,
       ),
     );
@@ -291,7 +293,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     setState(() {
       _game = game;
       _letterBank = _buildLetterBank(game);
-      _showFullKeyboard = false;
+      _showFullKeyboard = true;
       _message = '';
     });
     _persist(
@@ -299,6 +301,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
         simpleRomanized: _simpleRomanized,
         mode: _mode,
         wordSize: _wordSize,
+        fullKeyboard: _showFullKeyboard,
         game: game,
       ),
     );
@@ -337,12 +340,28 @@ class _WordQuestPageState extends State<WordQuestPage> {
         ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.characters,
         ...game.letterBankGraphemes,
         ..._vocabulary!.graphemes(mode: _mode),
-      }.toList(growable: false);
+      }.toList(growable: false)..sort();
     }
     return <String>{
-      ...game.letterBankGraphemes,
       ..._gurmukhiAlphabet,
-    }.toList(growable: false);
+      ..._letterBank,
+      ...game.guessedGraphemes,
+    }.toList(growable: false)..sort();
+  }
+
+  void _toggleKeyboard() {
+    final game = _game;
+    if (game == null || game.isComplete) return;
+    setState(() => _showFullKeyboard = !_showFullKeyboard);
+    _persist(
+      widget.sessionRepository.save(
+        mode: _mode,
+        wordSize: _wordSize,
+        simpleRomanized: _simpleRomanized,
+        fullKeyboard: _showFullKeyboard,
+        game: game,
+      ),
+    );
   }
 
   Future<void> _haptic({required bool correct, bool complete = false}) async {
@@ -408,6 +427,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
           simpleRomanized: _simpleRomanized,
           mode: _mode,
           wordSize: _wordSize,
+          fullKeyboard: _showFullKeyboard,
           game: game,
         ),
       );
@@ -442,6 +462,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
           simpleRomanized: _simpleRomanized,
           mode: _mode,
           wordSize: _wordSize,
+          fullKeyboard: _showFullKeyboard,
           game: game,
         ),
       );
@@ -644,10 +665,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                     showFullKeyboard: _showFullKeyboard,
                                     onToggleKeyboard: game.isComplete
                                         ? null
-                                        : () => setState(
-                                            () => _showFullKeyboard =
-                                                !_showFullKeyboard,
-                                          ),
+                                        : _toggleKeyboard,
                                   ),
                                   const SizedBox(height: 14),
                                   _RaisedPanel(
@@ -719,23 +737,12 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                         _mode == LanguageMode.gurmukhi,
                                   ),
                                   const SizedBox(height: 16),
-                                  if (_showFullKeyboard) ...[
-                                    const SizedBox(height: 4),
-                                    Divider(
-                                      color: scheme.onSurface.withValues(
-                                        alpha: .2,
-                                      ),
-                                      height: 1,
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ] else ...[
-                                    QuestLantern(
-                                      missesLeft: game.triesRemaining,
-                                      maximumMisses: game.maximumTries,
-                                      won: game.status == WordQuestStatus.won,
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
+                                  QuestLantern(
+                                    missesLeft: game.triesRemaining,
+                                    maximumMisses: game.maximumTries,
+                                    won: game.status == WordQuestStatus.won,
+                                  ),
+                                  const SizedBox(height: 10),
                                   if (game.isComplete)
                                     _ResultCard(
                                       word: word,
@@ -1107,7 +1114,9 @@ class _QuestStatusBar extends StatelessWidget {
         icon: showFullKeyboard
             ? Icons.keyboard_hide_outlined
             : Icons.keyboard_alt_outlined,
-        tooltip: showFullKeyboard ? 'Show simple letters' : 'Show all letters',
+        tooltip: showFullKeyboard
+            ? 'Use easier letter bank'
+            : 'Use full alphabet',
         onPressed: onToggleKeyboard,
       ),
     ],

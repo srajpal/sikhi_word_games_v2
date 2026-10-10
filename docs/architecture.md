@@ -33,6 +33,9 @@ Those layouts must reuse the shared pronunciation and label components.
 validation, without importing a feature's presentation layer. Quest hardware
 input accepts a single Gurmukhi letter or vowel sign; its on-screen tiles still
 select whole written units.
+Quest starts each new word/retry with the full alphabet and a visible lantern.
+Its optional easier bank preserves the same miss/hint rules; `fullKeyboard`
+persists that choice in the active session and defaults to true on older saves.
 
 ### Feature modules
 

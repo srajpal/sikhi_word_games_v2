@@ -6,7 +6,7 @@
   source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
-- Forty-one Windows golden image tests cover Modern, Sikhi, and Dark. They run
+- Forty-two Windows golden image tests cover Modern, Sikhi, and Dark. They run
   separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.
@@ -24,6 +24,10 @@ Jodo rotation tests round-trip `usedWords`/`previousWords` by language, retain
 history after clearing a round, fail closed on malformed rows and accept older
 saves without the fields. Unsupported Scramble schemas restore neither a round
 nor statistics/history; a subsequent valid save recovers cleanly.
+Quest regressions cover full-alphabet startup in all three modes, unchanged
+miss limits when toggling banks, continued lantern feedback and persisted easier
+choices after guesses/recreation. Older saves default to full; malformed keyboard
+flags fail closed. Phone full-alphabet and completion captures are reviewed.
 
 Check exact/present/absent feedback and repeated letters; four-, five-, and
 six-tile games in all three language modes; valid and unavailable mode words;

@@ -124,7 +124,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
   GameKind.wordQuest => const [
     (
       title: 'Reveal the hidden word',
-      body: 'Read the definition clue and choose one letter at a time using the on-screen letters or a physical keyboard. A correct letter reveals every place it appears without dimming your paper lantern.',
+      body: 'Read the definition clue and deduce likely letters from the full alphabet. Choose one letter at a time on screen or with a physical keyboard. A correct letter reveals every place it appears without dimming your paper lantern.',
     ),
     (
       title: 'Keep the light',
@@ -171,7 +171,7 @@ Future<void> showGameHelp(BuildContext context, GameKind game) async {
               ),
               const SizedBox(height: 8),
               const Text(
-                'The simple letter bank includes the answer letters and some extra choices. Use Show all letters for the full bank, or Show simple letters to switch back. After a missed word, Try again starts the same word with fresh lights and hints. Each finished attempt counts in Statistics, including retries.',
+                'New words start with the full alphabet. The keyboard button offers Use easier letter bank, with the answer letters and some extras, or Use full alphabet to switch back. Your choice stays with a saved round and the miss limit stays the same. Try again starts the same word with the full alphabet, fresh lights and hints. Each finished attempt counts in Statistics, including retries.',
               ),
               const SizedBox(height: 16),
             ],
