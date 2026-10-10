@@ -205,6 +205,12 @@ void main() {
         await gesture.moveTo(endCenter);
         await gesture.up();
         await tester.pumpAndSettle();
+        if (index < words.length - 1) {
+          expect(repository.restore()!.foundWords, contains(words[index].word));
+          // Let success feedback leave the grid before dragging the next word.
+          await tester.pump(const Duration(seconds: 5));
+          await tester.pumpAndSettle();
+        }
         expect(sounds, index == words.length - 1 ? 1 : 0);
       }
       expect(repository.hasActiveGame, isFalse);

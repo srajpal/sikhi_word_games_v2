@@ -19,7 +19,10 @@ Check exact/present/absent feedback and repeated letters; four-, five-, and
 six-tile games in all three language modes; valid and unavailable mode words;
 random selection/exhaustion; winning and losing; new/continue/back navigation;
 corrupt and unsupported saves; restart and settings isolation. For Khoj include
-drag direction, duplicate target detection, hints, and completion. For Word Quest
+drag direction, duplicate target detection, hints, and completion. In sequential
+drag tests, assert each target was found and let success feedback expire before
+the next gesture so an overlapping snack bar cannot intercept its pointer.
+For Word Quest
 include repeated guesses, adaptive tries/hints, simple/full keyboards, preserved
 definitions and readable clues. A vocabulary coverage count is not a human definition-quality review.
 For approved-release changes, test the three separate mode memberships,
