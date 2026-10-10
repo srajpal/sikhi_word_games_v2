@@ -85,28 +85,3 @@ class GameArtwork extends StatelessWidget {
     ),
   );
 }
-
-/// Theme-aware illustration colors shared by game previews and the word garden.
-class GameSceneColors {
-  GameSceneColors(ThemeData theme)
-    : sky = theme.colorScheme.surface,
-      horizon = theme.colorScheme.secondaryContainer,
-      leaf = theme.brightness == Brightness.dark
-          ? const Color(0xFF48977F)
-          : const Color(0xFF438A62),
-      hill = theme.brightness == Brightness.dark
-          ? const Color(0xFF234B4D)
-          : const Color(0xFFB4D5A7),
-      sun = theme.brightness == Brightness.dark
-          ? const Color(0xFFFFDC8B)
-          : const Color(0xFFE8AD35),
-      stem = theme.brightness == Brightness.dark
-          ? const Color(0xFF9BC7AE)
-          : const Color(0xFF315C44);
-  final Color sky;
-  final Color horizon;
-  final Color leaf;
-  final Color hill;
-  final Color sun;
-  final Color stem;
-}

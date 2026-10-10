@@ -34,16 +34,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _update(AppSettings next) async {
     setState(() => _settings = next);
-    try {
-      await widget.onChanged(next);
-    } on Object {
-      if (mounted) {
-        showGameSnackBar(
-          context,
-          'Settings could not be saved. Please try again.',
-        );
-      }
-    }
+    // The app callback applies changes and reports persistence failures.
+    await widget.onChanged(next);
   }
 
   @override

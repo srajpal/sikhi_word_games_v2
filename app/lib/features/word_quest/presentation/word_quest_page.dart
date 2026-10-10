@@ -16,7 +16,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/language/gurmukhi_romanization.dart';
 import '../../../core/language/word_units.dart';
-import '../../guess_the_word/presentation/game_keyboard.dart';
+import '../../../core/language/hardware_input.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/widgets/gurmukhi_key_label.dart';
@@ -151,17 +151,10 @@ class _WordQuestPageState extends State<WordQuestPage> {
         : character;
     // Hardware Gurmukhi input is one letter or vowel sign. Whole marked tiles
     // remain available through the on-screen keys and their accessible actions.
-    final isLetter =
-        GameKeyboard.acceptsHardwareCharacter(_mode, normalized) &&
-        (_mode == LanguageMode.gurmukhi
-            ? normalized.runes.length == 1 &&
-                  RegExp(
-                    r'^[\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73\u0A3E-\u0A42\u0A47\u0A48\u0A4B\u0A4C]$',
-                  ).hasMatch(normalized)
-            : wordUnitCount(normalized) == 1 &&
-                  RegExp(
-                    r'^[A-Za-z\u00C0-\u024F\u1E00-\u1EFF\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73]',
-                  ).hasMatch(normalized));
+    final isLetter = HardwareInput.acceptsQuestCharacter(
+      _mode.script,
+      normalized,
+    );
     if (!isLetter) {
       return KeyEventResult.ignored;
     }
@@ -839,7 +832,7 @@ class _WordTiles extends StatelessWidget {
                       : showRomanization
                       ? GurmukhiKeyLabel(
                           grapheme: game.revealedGraphemes[i]!,
-                          color: Colors.white,
+                          color: tokens.foregroundFor(tokens.correct),
                           gurmukhiFontSize: 24,
                           romanizationFontSize: 10,
                         )
@@ -849,7 +842,7 @@ class _WordTiles extends StatelessWidget {
                             game.revealedGraphemes[i]!,
                             style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(
-                                  color: Colors.white,
+                                  color: tokens.foregroundFor(tokens.correct),
                                   fontWeight: FontWeight.w900,
                                 ),
                           ),

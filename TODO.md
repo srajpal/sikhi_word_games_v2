@@ -13,7 +13,7 @@ source snapshot; integrity checks do not reopen editorial approval.
 - [x] 2. Fail release audits on boundary-matched crude/vandalized definitions.
 - [x] 3. Correct statistics/help/plurals, Scramble settings, Quest hardware input
   and the Simple Punjabi default description.
-- [ ] 4. Share hardware-input validation, use theme tokens, remove confirmed
+- [x] 4. Share hardware-input validation, use theme tokens, remove confirmed
   dead code and add corrupt/unsupported save/native-decoder regressions.
 - [ ] 5. Reconcile architecture, current Jodo pools, guides and retired-tool docs.
 - [ ] Bump both version sources, finish validation and open an unmerged PR.
@@ -38,6 +38,10 @@ Item 3 validation: 409 tests including all 40 goldens passed; analysis is clean
 and 162 Dart files are formatted. Reviewed the Settings phone baseline. Tests
 cover one statistics detail, singular word counts, same-language/cancel/apply
 round preservation, forbidden Gurmukhi hardware input and vowel-sign saves.
+Item 4 validation: 417 tests including all 40 goldens passed; analysis is clean
+and 162 Dart files are formatted. Reviewed the three themed badge captures.
+Corrupt Jodo rotation, unsupported Scramble schemas and native approved-record
+decoding fail safely; settings storage-failure coverage remains passing.
 
 ## October 9 Gurmukhi scramble labels: candidate 1.16.1+30
 

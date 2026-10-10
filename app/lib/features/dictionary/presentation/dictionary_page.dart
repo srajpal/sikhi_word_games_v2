@@ -1,3 +1,4 @@
+import '../../../core/language/hardware_input.dart';
 import '../../../core/content/romanized_vocabulary_views.dart';
 
 import 'dart:async';
@@ -159,7 +160,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
     }
     final character = event.character;
     if (character == null || character.isEmpty) return;
-    if (!GameKeyboard.acceptsHardwareCharacter(_mode, character)) {
+    if (!HardwareInput.acceptsCharacter(_mode.script, character)) {
       return;
     }
     InteractionSounds.letter(context);

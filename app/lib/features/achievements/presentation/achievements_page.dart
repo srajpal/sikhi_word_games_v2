@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/themes/app_theme.dart';
+
 import '../../../core/themes/game_heading.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/themes/paper_page.dart';
@@ -109,7 +111,11 @@ class _AchievementCard extends StatelessWidget {
                 children: [
                   Positioned.fill(
                     child: CustomPaint(
-                      painter: _BadgePainter(theme.colorScheme, earned),
+                      painter: _BadgePainter(
+                        theme.colorScheme,
+                        theme.extension<GameThemeTokens>()!,
+                        earned,
+                      ),
                     ),
                   ),
                   Positioned(
@@ -185,8 +191,9 @@ const _emblems = <String, IconData>{
 };
 
 class _BadgePainter extends CustomPainter {
-  const _BadgePainter(this.colors, this.earned);
+  const _BadgePainter(this.colors, this.tokens, this.earned);
   final ColorScheme colors;
+  final GameThemeTokens tokens;
   final bool earned;
   @override
   void paint(Canvas canvas, Size size) {
@@ -220,12 +227,12 @@ class _BadgePainter extends CustomPainter {
       ..lineTo(10, 14)
       ..quadraticBezierTo(24, 10, 46, 1)
       ..close();
-    canvas.drawShadow(shield, const Color(0x44312616), 3, false);
+    canvas.drawShadow(shield, tokens.elevationShadow.first.color, 3, false);
     canvas.drawPath(
       shield,
       Paint()
         ..shader = LinearGradient(
-          colors: [Color.lerp(fill, Colors.white, .15)!, fill],
+          colors: [Color.lerp(fill, colors.surface, .15)!, fill],
         ).createShader(rect),
     );
     canvas.drawPath(
@@ -264,5 +271,5 @@ class _BadgePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_BadgePainter old) =>
-      old.colors != colors || old.earned != earned;
+      old.colors != colors || old.tokens != tokens || old.earned != earned;
 }

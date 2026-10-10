@@ -15,6 +15,16 @@
 
 ## Required cases
 
+Hardware input validation is shared under `core/language/`, separate from game
+widgets. Bujho/Dictionary preserve complete composable input; Quest accepts one
+Gurmukhi letter or vowel sign while rejecting digits, sacred marks and batches.
+Direct native-decoder tests cover all three scripts, unchanged definitions,
+counterpart-only metadata, exact written units and invalid conjunct/count data.
+Jodo rotation tests round-trip `usedWords`/`previousWords` by language, retain
+history after clearing a round, fail closed on malformed rows and accept older
+saves without the fields. Unsupported Scramble schemas restore neither a round
+nor statistics/history; a subsequent valid save recovers cleanly.
+
 Check exact/present/absent feedback and repeated letters; four-, five-, and
 six-tile games in all three language modes; valid and unavailable mode words;
 random selection/exhaustion; winning and losing; new/continue/back navigation;

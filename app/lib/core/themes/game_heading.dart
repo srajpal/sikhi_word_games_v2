@@ -169,27 +169,3 @@ double gameToolbarHeight(
       scale.scale(12) * (subtitle ? 3 : 1.5) +
       24;
 }
-
-/// A small paper illustration and instruction, without a duplicate game title.
-class GameSectionIntro extends StatelessWidget {
-  const GameSectionIntro({
-    required this.identity,
-    required this.instruction,
-    super.key,
-  });
-  final GameIdentity identity;
-  final String instruction;
-  @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      GameArtwork(kind: identity.artwork, size: 64),
-      const SizedBox(width: 16),
-      Expanded(
-        child: Text(
-          instruction,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ),
-    ],
-  );
-}
