@@ -31,6 +31,12 @@ preview is open on port 8921 after allowing its offline update to activate;
 port 8920 retains the previous preview's separate saved data. Real-device
 navigation latency and native touch dragging still need device testing.
 
+Pixel 6 was updated on October 10 with the arm64 debug testing APK from commit
+1803f94 using `adb install -r`, preserving existing app data. Android reports
+version 1.18.0/code 32; launching MainActivity succeeded and running PID 15571
+was verified. This supersedes its previous 1.16.2+31 installation. Hands-on
+touch dragging and navigation-speed checks remain pending.
+
 ## October 9 review fixes and follow-ups: released 1.17.0+31
 
 - [x] Follow-up 3.1: ignore lone Gurmukhi vowel signs in Quest hardware input and
