@@ -290,6 +290,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_apple',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'APPLE',
     gurmukhi: null,
     englishDefinition: 'A round fruit',
@@ -305,6 +306,7 @@ const _vocabulary = MemoryVocabularyRepository([
 const _bread = VocabularyEntry(
   id: 'english_bread',
   language: VocabularyLanguage.english,
+  wordNetTagCount: 3,
   latin: 'BREAD',
   gurmukhi: null,
   englishDefinition: 'Food baked from flour and water',

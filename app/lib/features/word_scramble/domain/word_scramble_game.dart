@@ -43,6 +43,7 @@ class WordScrambleGame {
     required this._slots,
     required this._tray,
     required this._locked,
+    required this._clueRevealed,
     required this.checks,
     required this.isComplete,
   }) : units = List.unmodifiable(wordUnits(spelling));
@@ -55,14 +56,16 @@ class WordScrambleGame {
   late final List<int?> _slots;
   late final List<int> _tray;
   Set<int> _locked = {};
+  bool _clueRevealed = false;
   int checks = 0;
   bool isComplete = false;
 
   List<int?> get slots => List.unmodifiable(_slots);
   List<int> get tray => List.unmodifiable(_tray);
   Set<int> get locked => Set.unmodifiable(_locked);
-  int get hintsRemaining => _locked.isEmpty ? 1 : 0;
-  bool get usedHint => _locked.isNotEmpty;
+  bool get clueRevealed => _clueRevealed;
+  int get hintsRemaining => usedHint ? 0 : 1;
+  bool get usedHint => _clueRevealed || _locked.isNotEmpty;
   bool get canCheck => !isComplete && !_slots.contains(null);
   bool get canShuffle =>
       !isComplete && _tray.map((id) => units[id]).toSet().length > 1;
@@ -99,29 +102,10 @@ class WordScrambleGame {
     return true;
   }
 
-  /// Relocate one misplaced tile, returning displaced tiles to the tray.
+  /// Reveal the meaning without moving or locking any tiles.
   bool hint() {
     if (isComplete || hintsRemaining == 0) return false;
-    final position = _slots.indexed
-        .where((e) => e.$2 == null || units[e.$2!] != units[e.$1])
-        .firstOrNull
-        ?.$1;
-    if (position == null) return false;
-    final misplaced = _slots.indexed
-        .where((e) => e.$2 != null && units[e.$2!] != units[e.$1])
-        .map((e) => e.$2!);
-    final id = [..._tray, ...misplaced].firstWhere(
-      (id) =>
-          units[id] == units[position] &&
-          !_locked.any((slot) => _slots[slot] == id),
-    );
-    final previous = _slots[position];
-    final existing = _slots.indexOf(id);
-    if (existing != -1) _slots[existing] = null;
-    _tray.remove(id);
-    if (previous != null) _tray.add(previous);
-    _slots[position] = id;
-    _locked.add(position);
+    _clueRevealed = true;
     return true;
   }
 
@@ -143,6 +127,7 @@ class WordScrambleGame {
     'slots': slots,
     'tray': tray,
     'locked': locked.toList(),
+    'clueRevealed': clueRevealed,
     'checks': checks,
     'complete': isComplete,
   };
@@ -153,6 +138,13 @@ class WordScrambleGame {
     final slots = (json['slots'] as List).cast<int?>();
     final tray = (json['tray'] as List).cast<int>();
     final locked = (json['locked'] as List).cast<int>();
+    if (json.containsKey('clueRevealed') && json['clueRevealed'] is! bool) {
+      throw const FormatException('Invalid saved clue visibility');
+    }
+    // Older rounds retain their already-earned tile lock and hint accounting.
+    final clueRevealed = json.containsKey('clueRevealed')
+        ? json['clueRevealed'] as bool
+        : locked.isNotEmpty;
     final ids = [...slots.whereType<int>(), ...tray];
     final checks = json['checks'] as int;
     final complete = json['complete'] as bool;
@@ -170,6 +162,7 @@ class WordScrambleGame {
         ids.any((id) => id < 0 || id >= units.length) ||
         checks < 0 ||
         locked.length > 1 ||
+        (locked.isNotEmpty && !clueRevealed) ||
         locked.any(
           (i) =>
               i < 0 ||
@@ -191,6 +184,7 @@ class WordScrambleGame {
       slots: List.of(slots),
       tray: List.of(tray),
       locked: locked.toSet(),
+      clueRevealed: clueRevealed,
       checks: checks,
       isComplete: complete,
     );

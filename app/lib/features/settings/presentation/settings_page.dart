@@ -34,16 +34,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _update(AppSettings next) async {
     setState(() => _settings = next);
-    try {
-      await widget.onChanged(next);
-    } on Object {
-      if (mounted) {
-        showGameSnackBar(
-          context,
-          'Settings could not be saved. Please try again.',
-        );
-      }
-    }
+    // The app callback applies changes and reports persistence failures.
+    await widget.onChanged(next);
   }
 
   @override
@@ -122,7 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
           key: const ValueKey('simple-romanized-punjabi'),
           title: const Text('Simple Romanized Punjabi'),
           subtitle: const Text(
-            'Plain letters and an A–Z keyboard. Turn off for accents. Applies to new rounds and Dictionary; saved rounds keep their spelling.',
+            'On by default: plain letters and an A-Z keyboard. Turn off for accents. Applies to new rounds and Dictionary; saved rounds keep their spelling.',
           ),
           value: _settings.simpleRomanizedPunjabi,
           onChanged: InteractionSounds.buttonChange(

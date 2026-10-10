@@ -3,13 +3,30 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.d
 
 void main() {
   group('WordQuestGame', () {
-    test('standalone marks are invalid and never consume a miss', () {
-      final game = WordQuestGame(solution: 'ĀSĀN');
-      for (final mark in ['\u0304', 'ਿ', '੍']) {
-        expect(game.guess(mark).result, WordQuestGuessResult.invalid);
+    test(
+      'standalone Roman and non-vowel marks are invalid and cost no miss',
+      () {
+        final game = WordQuestGame(solution: 'ĀSĀN');
+        for (final mark in ['\u0304', 'ੰ', '੍']) {
+          expect(game.guess(mark).result, WordQuestGuessResult.invalid);
+        }
+        expect(game.incorrectGuesses, 0);
+        expect(game.guessedGraphemes, isEmpty);
+      },
+    );
+    test('lone Gurmukhi vowel signs are ignored without consuming a miss', () {
+      final game = WordQuestGame(solution: 'ਕਿਤਾਬ');
+      game.guess('ਸ');
+      final misses = game.incorrectGuesses;
+      final remaining = game.triesRemaining;
+      for (final sign in ['ਾ', 'ਿ', 'ੀ', 'ੁ', 'ੂ', 'ੇ', 'ੈ', 'ੋ', 'ੌ']) {
+        expect(game.guess(sign).result, WordQuestGuessResult.invalid);
+        expect(game.incorrectGuesses, misses, reason: sign);
+        expect(game.triesRemaining, remaining, reason: sign);
+        expect(game.guessedGraphemes, {'ਸ'});
       }
-      expect(game.incorrectGuesses, 0);
-      expect(game.guessedGraphemes, isEmpty);
+      expect(WordQuestGame.restore(game.toJson()).incorrectGuesses, misses);
+      expect(game.guess('ਤਾ').result, WordQuestGuessResult.correct);
     });
     test('rejects guesses recorded after the round would have ended', () {
       final snapshot = WordQuestGame(solution: 'SEVA').toJson();

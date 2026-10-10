@@ -1,3 +1,4 @@
+import 'package:sikhi_word_games_v2/core/language/hardware_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -263,10 +264,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(
-        find.byKey(const ValueKey('word-quest-keyboard-toggle')),
-      );
-      await tester.pumpAndSettle();
+      expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
       expect(find.byKey(const ValueKey('word-quest-key-Ī̃')), findsOneWidget);
       expect(find.byKey(const ValueKey('word-quest-key-Ā̃')), findsOneWidget);
       await _type(tester, 'A\u0304\u0303');
@@ -295,28 +293,28 @@ void main() {
       '\u0304',
     ]) {
       expect(
-        GameKeyboard.acceptsHardwareCharacter(
-          LanguageMode.romanizedPanjabi,
+        HardwareInput.acceptsCharacter(
+          LanguageMode.romanizedPanjabi.script,
           unit,
         ),
         isTrue,
       );
     }
     expect(
-      GameKeyboard.acceptsHardwareCharacter(LanguageMode.gurmukhi, 'ਪ੍ਰਿ'),
+      HardwareInput.acceptsCharacter(LanguageMode.gurmukhi.script, 'ਪ੍ਰਿ'),
       isTrue,
     );
     for (final unrelated in ['1', ' ', '🙂']) {
       expect(
-        GameKeyboard.acceptsHardwareCharacter(
-          LanguageMode.romanizedPanjabi,
+        HardwareInput.acceptsCharacter(
+          LanguageMode.romanizedPanjabi.script,
           unrelated,
         ),
         isFalse,
       );
     }
     expect(
-      GameKeyboard.acceptsHardwareCharacter(LanguageMode.english, 'Ā'),
+      HardwareInput.acceptsCharacter(LanguageMode.english.script, 'Ā'),
       isFalse,
     );
   });

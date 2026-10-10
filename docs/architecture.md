@@ -29,6 +29,14 @@ two-line key label used across games. Games may own different keyboard layouts
 when their input rules differ: Bujho and Dictionary compose a word from base
 letters and vowel signs, while Word Quest selects whole written units.
 Those layouts must reuse the shared pronunciation and label components.
+`HardwareInput` in `core/language/` owns script alphabets and pure input
+validation, without importing a feature's presentation layer. Quest hardware
+input accepts a single Gurmukhi letter and ignores lone vowel signs without a
+miss; its on-screen tiles still
+select whole written units.
+Quest starts each new word/retry with the full alphabet and a visible lantern.
+Its optional easier bank preserves the same miss/hint rules; `fullKeyboard`
+persists that choice in the active session and defaults to true on older saves.
 
 ### Feature modules
 
@@ -53,7 +61,8 @@ the app's saved-session contract.
 The game library owns the shared launch experience for every playable mode. A
 launch request can start a fresh Bujho or Quest game with an explicit language
 and four-, five-, or six-tile word size, or use `null` to select randomly.
-Khoj chooses only a language and mixes word lengths; Jodo also mixes lengths.
+Khoj and Shabad Banao choose only a language, skip the word-size picker and mix
+word lengths; Jodo also mixes lengths. Learn Letters uses its separate alphabet.
 Each mode keeps its own versioned active-game snapshot so the library can offer
 Continue game only for an unfinished session. Starting a new game replaces that
 mode's snapshot; completing a game clears it.
@@ -71,6 +80,9 @@ lib/
   app/
   core/
     content/
+    language/
+    audio/
+    statistics/
     persistence/
     themes/
     accessibility/
@@ -85,6 +97,10 @@ lib/
     settings/
     word_search/
     word_quest/
+    word_bridges/
+    word_scramble/
+    learn_letters/
+    achievements/
     dictionary/
 ```
 
@@ -141,12 +157,12 @@ lib/
 ## Release architecture assessment
 
 The current separation is suitable for a small static playtest: game engines are
-pure Dart, persistence is behind a key-value interface, and the three games share
+pure Dart, persistence is behind a key-value interface, and the six games share
 vocabulary, launch preferences, themes, and language utilities. No backend is
 needed for the present scope. Bujho preserves its existing statistics and durable
 answer rotation. Khoj and Word Quest use a shared statistics repository with
 separate per-game storage keys and language/length buckets. The library reads
-all three repositories for its summary; it does not store a second aggregate or
+all six game repositories for its summary; it does not store a second aggregate or
 combine their win rates. Riverpod currently
 wraps the app at startup while most state is owned by widgets and repositories.
 Do not add another state layer just to prepare the web release.
@@ -199,10 +215,20 @@ Gurmukhi preserves its native written units. Bujho and Quest use available
 
 Games deduplicate the active mode's displayed spelling, and validate restored
 targets against current mode membership and units. Removed historical content
-recovers through a fresh round while cumulative statistics remain. Integrity
-and compatibility checks do not create a new editorial answer subset. Release
-audits compare the exact three masters with the approved manifest and verify
-required licenses, without treating old queues or pool quotas as approval gates.
+recovers through a fresh round while cumulative statistics remain.
+`AnswerEligibility.isCandidate` is the shared selection/restore gate used by all
+five word games (including both Khoj paths). It combines accepted/solution flags,
+script membership, distributable definitions for clue games and the mechanical
+rule in `allows`. Bujho keeps definition-free answers available with the explicit
+`requireDefinition: false` option. Game-specific length, clue, deduplication and
+board checks remain in their domains. Mechanical exclusions cover self-revealing
+definitions, every Gurmukhi Romanization (including plain forms), Roman numerals,
+the owner's short sacred-term list and English WordNet `tag_count < 3` or missing
+counts. Dictionary records and accepted guesses remain complete. See
+`docs/product_decisions.md` for the exact policy and `docs/content_schema.md`
+for current coverage. Release audits compare the exact three masters with the
+approved manifest, verify required licenses and fail on a small boundary-matched
+crude-definition regression list. They never rewrite or reapprove the snapshot.
 
 The itch.io package generates a content-identified service worker after the final
 web build. It caches only a bounded allowlist of same-origin files within the
@@ -238,9 +264,9 @@ and round-ID deduplication are saved atomically. Restore checks the saved pairs
 against current mode membership. New sets use every eligible owner-approved
 mode word without a global definition-length/quality filter; identical or
 conflicting clues are avoided only within the current four-pair board.
-Historical starter decks are regression fixtures rather than current release
-inputs. Restore fails closed when
-a saved target or its definition is unavailable in that mode.
+Fixed starter decks are retired. Each mode's preview deck is assembled from
+compatible eligible pairs; live sets use the randomized mode pool. Restore fails
+closed when a saved target or its definition is unavailable or ineligible.
 
 Studio attribution lives in `lib/core/studio_brand.dart`. Its website action uses
 `url_launcher` to open the supplied Khalsa Game Studio HTTPS address in an external
@@ -248,7 +274,7 @@ browser. It is invoked only by a player tap; no studio network requests are need
 for app startup, puzzle play or persistence. A launch failure shows a selectable
 address instead of interrupting the game library.
 
-App-wide reset is available only from the library. Repositories remove their exact owned keys; unrelated origin data is preserved. Writes and removals are queued by store identity and key to drain pending saves before removal, including writes from multiple repository instances. Failure may leave a partial reset and is reported with retry. UI reloads persisted settings and library state after either outcome.
+App-wide reset is available from the library and Settings. Repositories remove their exact owned keys; unrelated origin data is preserved. Writes and removals are queued by store identity and key to drain pending saves before removal, including writes from multiple repository instances. Failure may leave a partial reset and is reported with retry. UI reloads persisted settings and library state after either outcome.
 
 
 VictoryCelebration is a shared route-owned wrapper around GameGuide. Games notify only from accepted player-action win transitions; the wrapper owns the finite animation and audio player, stops on a new round/background/disposal, and does not persist events. Preferences remain within app.settings, so app-wide reset includes them. Audio uses audioplayers with a bundled original PCM WAV generated by app/tool/generate_victory_sound.py; no runtime network is needed. Audio errors are nonfatal. Particle colors derive from the active shared theme.
@@ -317,9 +343,14 @@ uses the current preference and a matching keyboard/input normalization.
 `features/word_scramble/` separates a pure tile engine, cached mode pools,
 single-key repository and presentation. Stable tile IDs distinguish repeated
 letters; visible units come from shared `wordUnits`, preserving Gurmukhi
-conjuncts. Placement, undo, shuffle, one locked hint and checks maintain a
+conjuncts. Placement, undo, shuffle and checks maintain a
 complete tile permutation. Restore validates that permutation and current
 source ID, spelling and definition in the recorded original/simple view.
+New rounds start with the anagram only. Hint reveals the meaning without moving
+or locking tiles; completion shows the meaning even on an unhinted win. The
+optional `clueRevealed` field persists hint use in the existing session schema.
+Older saves without it retain earned tile locks and their hint accounting;
+unhinted saves resume with the meaning hidden. Malformed visibility fails closed.
 
 `wordScramble.state.v1` stores a frozen session snapshot, per-mode rotation,
 completion IDs and statistics atomically through the shared ordered write queue.

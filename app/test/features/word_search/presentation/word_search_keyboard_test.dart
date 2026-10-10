@@ -334,6 +334,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_test',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'TEST',
     gurmukhi: null,
     englishDefinition: 'A check of how something works',
@@ -347,6 +348,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_play',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'PLAY',
     gurmukhi: null,
     englishDefinition: 'To take part in a game',

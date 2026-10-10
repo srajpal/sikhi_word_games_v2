@@ -88,6 +88,17 @@ void main() {
       matchesGoldenFile('images/scramble_gurmukhi_sikhi.png'),
     );
   }, tags: 'golden');
+  testWidgets('Shabad Banao meaning appears only after Hint', (tester) async {
+    await mount(tester, AppThemeChoice.sikhi);
+    expect(find.text('A test clue'), findsNothing);
+    await tester.tap(find.byKey(const ValueKey('scramble-hint')));
+    await tester.pumpAndSettle();
+    expect(find.text('A test clue'), findsOneWidget);
+    await expectLater(
+      find.byType(Scaffold),
+      matchesGoldenFile('images/scramble_meaning_hint_sikhi.png'),
+    );
+  }, tags: 'golden');
   testWidgets('Shabad Banao narrow large-text header and tiles', (
     tester,
   ) async {

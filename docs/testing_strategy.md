@@ -6,7 +6,7 @@
   source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
-- Thirty-five Windows golden image tests cover Modern, Sikhi, and Dark. They run
+- Forty-two Windows golden image tests cover Modern, Sikhi, and Dark. They run
   separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.
@@ -14,6 +14,22 @@
   assets, local storage, mouse/touch, physical keyboard, and Gurmukhi rendering.
 
 ## Required cases
+
+Hardware input validation is shared under `core/language/`, separate from game
+widgets. Bujho/Dictionary preserve complete composable input; Quest accepts one
+Gurmukhi letter while ignoring lone vowel signs without consuming a miss, and
+rejecting digits, sacred marks and batches. Whole marked on-screen units remain
+valid guesses.
+Direct native-decoder tests cover all three scripts, unchanged definitions,
+counterpart-only metadata, exact written units and invalid conjunct/count data.
+Jodo rotation tests round-trip `usedWords`/`previousWords` by language, retain
+history after clearing a round, fail closed on malformed rows and accept older
+saves without the fields. Unsupported Scramble schemas restore neither a round
+nor statistics/history; a subsequent valid save recovers cleanly.
+Quest regressions cover full-alphabet startup in all three modes, unchanged
+miss limits when toggling banks, continued lantern feedback and persisted easier
+choices after guesses/recreation. Older saves default to full; malformed keyboard
+flags fail closed. Phone full-alphabet and completion captures are reviewed.
 
 Check exact/present/absent feedback and repeated letters; four-, five-, and
 six-tile games in all three language modes; valid and unavailable mode words;
@@ -34,6 +50,13 @@ from another mode. Verify imported rows remain present without old frequency,
 clue-quality or everyday-answer filters. Tampered/missing source or release
 files must fail integrity checks; repeat an unchanged rebuild/check to establish
 reproduction. These checks do not reopen the owner's content approval.
+English answer-only usage tests cover missing counts, 0/1/2, the inclusive
+threshold 3 and larger counts across the five game pools. Lookup and accepted
+guesses retain excluded words; Punjabi does not require WordNet metadata.
+Native decoding, entry copying and JSON round-trips preserve supplied counts.
+Gurmukhi clue-leak tests cover alternate Romanizations, canonical/accent-folded
+forms such as granthī/granthi, whole-word boundaries and unchanged lookup/guesses.
+The aliases survive decoding and copies without adding counterpart-mode words.
 
 Test narrow and short screens, large text, all themes, visible keyboard focus,
 screen-reader labels, contrast, motion settings, and long definitions. Real
@@ -68,7 +91,8 @@ coverage should include a validated `--import-from` package, locally reproducibl
 checks exercise each mode's actual written units, available sizes, input,
 keyboards, restored targets and Jodo sets. Jodo tests distinguish avoiding
 conflicting clues within one board from excluding approved dictionary words;
-long selected definitions must remain globally eligible. Current source counts are in
+long selected definitions alone must not disqualify a word. The shared mechanical
+answer rule is checked separately from Dictionary membership. Current source counts are in
 `docs/content_schema.md`; historical quotas and quality filters are not approval
 criteria. Existing older filter tests and source reports are historical evidence
 rather than gates for this owner-approved import.
@@ -180,9 +204,10 @@ remain open in TODO.md.
 
 The engine and repository checks cover either-side selection, mismatch/clear,
 immutable snapshots, invalid saves, idempotent completion, per-language totals,
-and late/stale writes. Content checks resolve all four fixed starter decks from
-actual shipped assets and fail closed for held, missing, duplicated, unsourced,
-or script-incomplete entries. Widget checks cover semantic activation, physical
+and late/stale writes. Content checks resolve the three mode pools and their
+compatible preview decks from actual approved assets; fixed starter decks are
+retired. Restore rejects missing/ineligible words, changed definitions and
+malformed or unsupported saves. Widget checks cover semantic activation, physical
 keyboard Space, a 320-pixel viewport with 200% text, restore after navigation,
 obsolete definitions, unavailable content, failed storage and rapid input during
 slow saves. An app integration test covers library launch, first guide, Continue,
@@ -312,7 +337,7 @@ retaining search results and both Punjabi keyboard views.
 ### Shabad Banao: 1.16.0+29
 
 Engine checks exercise duplicate tile IDs, incomplete/incorrect/correct checks,
-hint relocation/locking, 150 seeded move sequences, restore corruption and
+meaning-hint immutability, 150 seeded move sequences, restore corruption and
 intact Gurmukhi conjuncts. Repository checks cover frozen queued snapshots,
 once-only scoring across instances, a late completion preserving a newer round,
 malformed-history recovery and reset. Vocabulary checks use the actual three
@@ -328,7 +353,12 @@ captures too. Actual packaged-browser persistence, font rendering and device
 installation are separate evidence recorded in TODO.md.
 
 Gurmukhi tile-label regressions verify visible and spoken Romanization in the
-tray, after placement, after a hint lock and after completion across all three
+tray, after placement, after revealing the meaning and after completion across all three
 themes. Empty spaces and English tiles reveal no pronunciation labels. Enlarged
 Gurmukhi text remains scrollable without splitting a written unit; actual-font
 phone and 200% captures must be reviewed after changes to label sizing.
+Anagram-first regressions require the definition to be absent from the visual
+and semantics trees until Hint or completion. Hint must preserve slots/tray,
+survive navigation/recreation, count as hinted, and reset for the next word.
+Unhinted completion reveals the meaning without changing unhinted statistics.
+Restore covers optional clue visibility and legacy already-locked hint tiles.

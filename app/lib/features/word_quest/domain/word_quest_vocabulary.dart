@@ -1,4 +1,5 @@
 import '../../../core/content/romanized_vocabulary_views.dart';
+import '../../../core/content/answer_eligibility.dart';
 
 import 'dart:math';
 
@@ -116,10 +117,7 @@ class WordQuestVocabulary {
   List<WordQuestWord> _deduplicatedWords(LanguageMode mode) {
     final bestBySpelling = <String, VocabularyEntry>{};
     for (final entry in _entries) {
-      if (!entry.acceptedGuess ||
-          !entry.solutionEligible ||
-          !entry.hasDistributableDefinition ||
-          !_supports(entry, mode)) {
+      if (!AnswerEligibility.isCandidate(entry, mode.script)) {
         continue;
       }
       final spelling = _spelling(entry, mode)?.trim();
@@ -171,9 +169,6 @@ class WordQuestVocabulary {
     final spelling = _spelling(entry, mode)!.trim();
     return mode == LanguageMode.gurmukhi ? spelling : spelling.toUpperCase();
   }
-
-  static bool _supports(VocabularyEntry entry, LanguageMode mode) =>
-      entry.supportsScript(mode.script);
 
   static String _normalize(String spelling) =>
       normalizeGurmukhi(normalizeRomanizedInput(spelling.trim().toUpperCase()));

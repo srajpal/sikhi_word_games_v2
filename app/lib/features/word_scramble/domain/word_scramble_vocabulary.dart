@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import '../../../core/content/answer_eligibility.dart';
+
 import '../../../core/content/romanized_vocabulary_views.dart';
 import '../../../core/content/vocabulary_entry.dart';
 import '../../../core/language/word_units.dart';
@@ -12,7 +14,7 @@ class ScrambleWord {
   final String definition;
 }
 
-/// Gameplay excludes only words whose identical tiles cannot be scrambled.
+/// Shared answer hygiene and distinct tiles make each clue-led round playable.
 class WordScrambleVocabulary {
   WordScrambleVocabulary(Iterable<VocabularyEntry> entries)
     : _entries = List.unmodifiable(entries);
@@ -29,10 +31,7 @@ class WordScrambleVocabulary {
   List<ScrambleWord> words(LanguageMode mode) => _pools.putIfAbsent(mode, () {
     final unique = <String, ScrambleWord>{};
     for (final entry in _entries) {
-      if (!entry.supportsScript(mode.script) ||
-          !entry.acceptedGuess ||
-          !entry.solutionEligible ||
-          !entry.hasDistributableDefinition) {
+      if (!AnswerEligibility.isCandidate(entry, mode.script)) {
         continue;
       }
       final spelling =

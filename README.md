@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.16.1` (build `30`). The uploaded web draft remains
+The current testing build is `1.17.0` (build `31`). The uploaded web draft remains
 `1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
@@ -39,6 +39,7 @@ dart format --output=none --set-exit-if-changed lib test integration_test test_d
 flutter analyze --suppress-analytics
 flutter test --suppress-analytics
 dart run tool/build_release_content.dart --check
+dart run tool/audit_release_content.dart
 dart run tool\audit_content.dart
 flutter build web --release --no-web-resources-cdn --suppress-analytics
 ```
@@ -46,7 +47,11 @@ flutter build web --release --no-web-resources-cdn --suppress-analytics
 The content checks validate the supplied manifest, exact release bytes, counts,
 script membership and written letter units. All supplied words are approved by
 the project owner; the retired dictionary's quality and frequency filters do not
-remove words from this release. See [testing strategy](docs/testing_strategy.md)
+remove words from this release. Game answer pools apply the shared mechanical
+exclusions documented in [product decisions](docs/product_decisions.md), while
+Dictionary records and accepted guesses remain complete. The release audit also
+rejects a small list of boundary-matched crude-definition regressions without
+rewriting source data. See [testing strategy](docs/testing_strategy.md)
 for device, accessibility, browser and integration checks.
 
 The approved release is under `app/content/approved_release/`, outside runtime

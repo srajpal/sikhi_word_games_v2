@@ -27,8 +27,8 @@ First playable scope:
 
 - A small untimed set of four pairs. Select an item and then its partner;
   support tap, keyboard and screen-reader activation without requiring dragging.
-- Start with word-to-meaning matching. Add Gurmukhi-to-romanized pairs once the
-  starter pool has been checked for unambiguous mappings and spelling aliases.
+- Match words to English meanings. Gurmukhi words show Romanized pronunciation
+  captions; a separate script-to-script matching mode remains a future idea.
 - Keep successful pairs visible. A mismatch gives clear feedback and allows
   another attempt without taking away progress or imposing a timer.
 - Draw from the owner-approved mode bank. Within one set, avoid identical or
@@ -39,14 +39,15 @@ First playable scope:
   finished sets and matching attempts without inventing a cross-game win rate.
 
 As of 1.11.0+22, new sets draw from the eligible shipped vocabulary in the
-chosen script, across word lengths. All meanings are English. Four legacy starter
-decks remain as content regression fixtures, not the live randomization boundary.
+chosen script, across word lengths. All meanings are English. Fixed starter
+decks are retired; each mode's preview uses compatible eligible pairs from its
+current pool and does not limit live randomization.
 New sets prefer unused words and avoid the previous set where the pool permits.
 Used/previous IDs persist per language in the existing Jodo state. A completed set
 also records distinct matched IDs, perfect four-attempt sets and sets with longer
 words, atomically with its existing statistics and completion-ID deduplication.
 
-All owner-approved mode words remain eligible, with unchanged selected meanings
+Owner-approved mode words retain unchanged selected meanings
 and provenance. No global definition-length or quality filter narrows that bank.
 Each four-pair board avoids identical/conflicting clues and duplicate words;
 this local compatibility check keeps a set solvable without reopening content
@@ -103,9 +104,48 @@ Dictionary saved words remain separate product follow-ups.
 
 ## Vocabulary policy
 
+### Mechanical answer-pool hygiene (October 9 review)
+
+One shared runtime rule applies to Bujho, Word Quest, Khoj, Jodo and Shabad
+Banao, including restored answer checks. It is a mechanical answer-pool rule,
+not editorial filtering of the dictionary. Every supplied record, definition
+and accepted guess remains available; masters and runtime JSON bytes are unchanged.
+
+- Exclude an answer when its own spelling occurs as a whole word in its
+  definition, case-insensitively, with Unicode letters/marks/digits forming
+  word boundaries. Canonically equivalent spellings match. The Simple Punjabi
+  view also retains exclusions detected in the original accented spelling.
+- For Gurmukhi, also exclude definitions containing any supplied Romanization
+  as a whole word. Compare scholarly/plain Roman forms with accents folded in
+  this check only, so ਗ੍ਰੰਥੀ / granthī / "granthi" cannot leak the answer.
+  Keep all counterpart aliases in memory and through entry copies/serialization;
+  never turn them into extra Romanized-mode membership or rewrite source text.
+- Exclude Roman numeral spellings, including the source's older ILXX/ILXXX
+  subtractive forms. Ordinary words such as CIVIC and MILD do not match.
+- English answers require the supplied WordNet `tag_count` to be at least 3.
+  Missing counts are ineligible. Use the selected sense's count exactly as
+  supplied, including base-sense counts on exception-table inflections; do not
+  substitute an invented frequency or modify the source. This historical
+  tagged-text count is a mechanical usage threshold, not a current popularity
+  measure or a guarantee of child familiarity. All words remain in Dictionary
+  lookup and accepted guesses regardless of this answer-only threshold.
+- The owner reserves ਗੁਰਬਾਣੀ, ਅਰਦਾਸ, ਖੰਡਾ, ਗੁਰੂ, ਗ੍ਰੰਥ and ਨਿਸ਼ਾਨ for
+  Dictionary lookup, never answers or shuffled game pieces. The short list
+  also matches their scholarly/plain Romanizations: gurbani/gurubani/gurbaani,
+  ardas/aradas, khanda, guru, granth, nishan/nisan. Matching uses unchanged
+  counterpart metadata and folds Roman marks for this comparison only.
+
+No familiarity or subjective clue-quality thresholds are added. The explicit
+English usage threshold supersedes the earlier no-frequency-filter decision
+for game answers only. Small pools remain available; report actual counts rather than
+silently importing counterpart-mode words or changing definitions.
+
+### Approved source snapshot
+
 - Use the October 9 owner-approved source release with separate English,
   Romanized Punjabi and Gurmukhi masters. All included words and selected
-  definitions are approved for their own mode, for lookup, guesses and play.
+  definitions are approved for their own mode. Lookup and guesses retain all
+  records; game answers also apply the mechanical rule above.
 - Preserve native JSON bytes, scholarly Roman diacritics, Gurmukhi spellings,
   one selected definition, provenance, attribution and supplied licenses.
 - Counterpart spelling is presentation metadata, never additional membership
@@ -119,6 +159,22 @@ Dictionary saved words remain separate product follow-ups.
   explicit import. Old curation queues are historical, not current gates.
 
 ## Design policy
+
+Review fixes for 1.16.2+31: shared statistics print language/length once using
+"Mixed lengths", and solved-word counts use singular/plural labels. Shabad
+Banao stages language changes until Apply; Cancel/dismiss and applying the
+current language preserve the round. A different applied language starts a new
+word. Simple Romanized Punjabi remains enabled by default; the Settings copy
+states this. Quest hardware Gurmukhi input accepts one letter or vowel sign,
+never digits, ੴ or multiple code points. Marked/conjunct on-screen tiles retain
+their existing behavior. Jodo help locates New set in the game menu.
+
+Quest is deduction-first: new words and retries start with the full alphabet,
+retaining the definition clue, existing miss/hint limits and visible lantern.
+The keyboard toggle offers an easier bank without restarting or changing the
+budget. The choice persists with unfinished rounds; older saves default to full.
+Gurmukhi full keys retain whole marked units and distractors in sorted order,
+alongside the basic alphabet, rather than exposing the answer's unit order.
 
 - Players choose their active theme.
 - Ship exactly three themes: Modern, Sikhi, and Dark. Sikhi is the default.
@@ -535,20 +591,24 @@ Its English title appears above the Punjabi name and language/length inside the
 shared paper heading. It uses equal library cards, shared paper tiles/buttons,
 three themes, click sounds, help, celebrations and dedicated statistics.
 
-An English definition clues a shuffled word. Tap tiles into the first empty
-space; tap a placed tile to return it. Shuffle rearranges remaining tiles. Each
-word offers one optional hint that places and locks one correct tile. Check word
+Start with the shuffled letters and a hidden meaning. Tap tiles into the first
+empty space; tap a placed tile to return it. Shuffle rearranges remaining tiles.
+The optional Hint reveals the English meaning without moving or locking tiles.
+The meaning also appears after solving, without counting as a used hint. Check word
 accepts the target spelling; incorrect checks give gentle inline feedback with
 unlimited retries. Next word starts a fresh word. There is no timer, life budget
 or penalty for leaving. Lengths vary across the approved mode's pool, and native
 Gurmukhi written groups remain intact. Only words with fewer than two units or
-all-identical units are unplayable; this is not another editorial filter.
+all-identical units are unplayable. The shared mechanical answer rule also
+applies; neither rule edits or editorially filters Dictionary records.
 
 New words rotate through unseen source IDs before a new cycle and avoid an
 immediate repeat when possible. Simple Punjabi applies to new words; Continue
 retains the saved spelling view. Ten additional stable badge goals cover solved
 counts, unhinted/first-check words, repeated/long tiles and all three languages.
 There are now 60 badges. Existing player progress is preserved.
+New clue visibility persists with the round. Legacy saves keep their earned
+tile locks and hint accounting; historical achievements are not recalculated.
 
 Gurmukhi Word Scramble tiles show a small Romanized pronunciation label below
 each written unit, both in the shuffled tray and in placed, hinted and completed

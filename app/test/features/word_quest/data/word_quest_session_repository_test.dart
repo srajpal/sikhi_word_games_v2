@@ -7,6 +7,33 @@ import 'package:sikhi_word_games_v2/features/word_quest/data/word_quest_session_
 import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.dart';
 
 void main() {
+  test(
+    'keyboard choice round-trips and old saves default to the full alphabet',
+    () async {
+      final store = MemoryKeyValueStore();
+      final repository = WordQuestSessionRepository(store);
+      await repository.save(
+        mode: LanguageMode.english,
+        wordSize: 5,
+        fullKeyboard: false,
+        game: WordQuestGame(solution: 'APPLE'),
+      );
+      expect(repository.restore()!.fullKeyboard, isFalse);
+      final saved = jsonDecode(
+        store.getString(WordQuestSessionRepository.storageKey)!,
+      ) as Map<String, Object?>;
+      saved.remove('fullKeyboard');
+      store.values[WordQuestSessionRepository.storageKey] = jsonEncode(saved);
+      expect(repository.restore()!.fullKeyboard, isTrue);
+      for (final invalid in [null, 'false', 0, [], {}]) {
+        store.values[WordQuestSessionRepository.storageKey] = jsonEncode({
+          ...saved,
+          'fullKeyboard': invalid,
+        });
+        expect(repository.restore(), isNull);
+      }
+    },
+  );
   test('rejects an old conjunct size label while retaining progress', () async {
     final store = MemoryKeyValueStore()..values['player.progress'] = 'retained';
     final repository = WordQuestSessionRepository(store);

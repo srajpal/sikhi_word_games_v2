@@ -11,6 +11,32 @@ import 'package:sikhi_word_games_v2/features/word_scramble/data/word_scramble_re
 import 'word_scramble_game_test.dart' show scramble, solve;
 
 void main() {
+  test(
+    'unsupported schema fails closed and a new save recovers independently',
+    () async {
+      final store = MemoryKeyValueStore();
+      final repository = WordScrambleRepository(store);
+      final completed = scramble();
+      solve(completed);
+      await repository.save(mode: LanguageMode.english, game: completed);
+      await repository.save(mode: LanguageMode.english, game: scramble('BOOK'));
+      final snapshot = jsonDecode(
+        store.getString(WordScrambleRepository.storageKey)!,
+      ) as Map<String, Object?>;
+      for (final version in [0, 2, '1', null]) {
+        await store.setString(
+          WordScrambleRepository.storageKey,
+          jsonEncode({...snapshot, 'schemaVersion': version}),
+        );
+        expect(repository.restore(), isNull);
+        expect(repository.total.solved, 0);
+        expect(repository.seen(LanguageMode.english), isEmpty);
+      }
+      await repository.save(mode: LanguageMode.english, game: scramble('MICE'));
+      expect(repository.restore()!.game.spelling, 'MICE');
+      expect(repository.total.solved, 0);
+    },
+  );
   test('partial moves restore exactly and keep their Romanized view', () async {
     final store = MemoryKeyValueStore(),
         repo = WordScrambleRepository(MemoryKeyValueStore());

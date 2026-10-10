@@ -11,12 +11,14 @@ class WordQuestSession {
   const WordQuestSession({
     required this.mode,
     this.simpleRomanized = false,
+    this.fullKeyboard = true,
     required this.wordSize,
     required this.game,
   });
 
   final LanguageMode mode;
   final bool simpleRomanized;
+  final bool fullKeyboard;
   final int wordSize;
   final WordQuestGame game;
 }
@@ -35,6 +37,7 @@ class WordQuestSessionRepository {
   Future<void> save({
     required LanguageMode mode,
     bool simpleRomanized = false,
+    bool fullKeyboard = true,
     required int wordSize,
     required WordQuestGame game,
   }) => KeyValueStoreWrites.setString(
@@ -49,6 +52,7 @@ class WordQuestSessionRepository {
           : 2,
       'mode': mode.name,
       'simpleRomanized': simpleRomanized,
+      'fullKeyboard': fullKeyboard,
       'wordSize': wordSize,
       'game': game.toJson(),
     }),
@@ -62,6 +66,7 @@ class WordQuestSessionRepository {
       if (!const [1, 2].contains(json['schemaVersion']) ||
           json['mode'] is! String ||
           json['wordSize'] is! int ||
+          (json.containsKey('fullKeyboard') && json['fullKeyboard'] is! bool) ||
           !const [4, 5, 6].contains(json['wordSize']) ||
           json['game'] is! Map<String, Object?>) {
         return null;
@@ -81,6 +86,7 @@ class WordQuestSessionRepository {
       return WordQuestSession(
         mode: mode,
         simpleRomanized: json['simpleRomanized'] == true,
+        fullKeyboard: json['fullKeyboard'] as bool? ?? true,
         wordSize: json['wordSize']! as int,
         game: game,
       );

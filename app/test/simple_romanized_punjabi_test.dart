@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/romanized_vocabulary_views.dart';
+import 'package:sikhi_word_games_v2/core/content/answer_eligibility.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/core/language/word_units.dart';
@@ -114,7 +115,16 @@ void main() {
               .solutions(mode: mode, wordLength: size)
               .map((e) => e.latin)
               .toSet(),
-          expected,
+          simple
+              .where(
+                (e) =>
+                    e.supportsScript(mode.script) &&
+                    e.solutionEligible &&
+                    AnswerEligibility.allows(e, mode.script) &&
+                    e.latinLength == size,
+              )
+              .map((e) => e.latin)
+              .toSet(),
         );
       }
       final english = plain.acceptedGuesses(
@@ -147,6 +157,7 @@ void main() {
           final store = MemoryKeyValueStore();
           final entry = VocabularyEntry(
             id: 'phone-${mode.name}-$size',
+            wordNetTagCount: mode == LanguageMode.english ? 3 : null,
             language: mode == LanguageMode.english
                 ? VocabularyLanguage.english
                 : VocabularyLanguage.panjabi,

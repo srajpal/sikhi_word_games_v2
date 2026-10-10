@@ -290,6 +290,7 @@ VocabularyEntry _entry(
 }) => VocabularyEntry(
   id: id,
   language: language,
+  wordNetTagCount: language == VocabularyLanguage.english ? 3 : null,
   latin: latin,
   gurmukhi: gurmukhi,
   englishDefinition: definition,

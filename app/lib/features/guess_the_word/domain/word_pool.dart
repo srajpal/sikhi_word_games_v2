@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import '../../../core/content/answer_eligibility.dart';
+
 import '../../../core/language/word_units.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
@@ -33,8 +35,13 @@ class WordPool {
     required int wordLength,
   }) => _bestBySpelling(
     _entries
-        .where((entry) => entry.acceptedGuess && entry.solutionEligible)
-        .where((entry) => _supportsLanguage(entry, mode))
+        .where(
+          (entry) => AnswerEligibility.isCandidate(
+            entry,
+            mode.script,
+            requireDefinition: false,
+          ),
+        )
         .where(
           (entry) =>
               (spelling(entry, mode) == null

@@ -47,10 +47,42 @@ void main() {
     await tester.tap(find.text('Open statistics'));
     await tester.pumpAndSettle();
     expect(find.text('Finished: 1'), findsOneWidget);
+    expect(find.text('English · 4 letters'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.ensureVisible(find.text('Close'));
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
     expect(find.text('Word Quest statistics'), findsNothing);
+  });
+  testWidgets('mixed-length statistics show the language detail exactly once', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemes.forChoice(AppThemeChoice.modern),
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => showGameStatistics(
+                context,
+                title: 'Khoj',
+                repository: GameStatisticsRepository(
+                  MemoryKeyValueStore(),
+                  'wordSearch',
+                ),
+                mode: 'english',
+                size: null,
+                modeLabel: 'English',
+              ),
+              child: const Text('Open'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+    expect(find.text('English · Mixed lengths'), findsOneWidget);
+    expect(find.textContaining('Varied lengths'), findsNothing);
   });
 }

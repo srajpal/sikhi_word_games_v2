@@ -398,13 +398,13 @@ void main() {
       const ValueKey('word-quest-keyboard-toggle'),
     );
     expect(find.text('Choose a letter to begin your quest.'), findsNothing);
-    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+    expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
     await tester.tap(keyboardToggle);
     await tester.pump();
-    expect(find.byIcon(Icons.keyboard_hide_outlined), findsOneWidget);
+    expect(find.byTooltip('Use full alphabet'), findsOneWidget);
     await tester.tap(keyboardToggle);
     await tester.pump();
-    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+    expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('word-quest-menu')));
     await tester.pumpAndSettle();
@@ -533,13 +533,13 @@ void main() {
     final keyboardToggle = find.byKey(
       const ValueKey('word-quest-keyboard-toggle'),
     );
-    await tester.tap(keyboardToggle);
-    await tester.pump();
-    expect(find.byIcon(Icons.keyboard_hide_outlined), findsOneWidget);
-    expect(find.byType(Divider), findsOneWidget);
-    expect(find.bySemanticsLabel(RegExp('Paper lantern')), findsNothing);
+    expect(find.byTooltip('Use easier letter bank'), findsOneWidget);
+    expect(find.text('Keep the light'), findsOneWidget);
     expect(find.byKey(const ValueKey('word-quest-key-ਅ')), findsOneWidget);
     await tester.tap(keyboardToggle);
+    await tester.pump();
+    expect(find.byTooltip('Use full alphabet'), findsOneWidget);
+    expect(find.text('Keep the light'), findsOneWidget);
     await tester.pump();
     expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp('Paper lantern')), findsOneWidget);
@@ -1075,6 +1075,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_apple',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'APPLE',
     gurmukhi: null,
     englishDefinition: 'A round fruit',
@@ -1088,6 +1089,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_planet',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'PLANET',
     gurmukhi: null,
     englishDefinition: 'A world that travels around a star',
@@ -1101,6 +1103,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_jump',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'JUMP',
     gurmukhi: null,
     englishDefinition: 'A quick movement off the ground',
@@ -1114,6 +1117,7 @@ const _vocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_grape',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'GRAPE',
     gurmukhi: null,
     englishDefinition: 'A small fruit that grows in bunches',
@@ -1143,6 +1147,7 @@ const _khojCompactVocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_apple',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'APPLE',
     gurmukhi: null,
     englishDefinition: 'A round fruit',
@@ -1156,6 +1161,7 @@ const _khojCompactVocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'english_grape',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'GRAPE',
     gurmukhi: null,
     englishDefinition: 'A small fruit that grows in bunches',

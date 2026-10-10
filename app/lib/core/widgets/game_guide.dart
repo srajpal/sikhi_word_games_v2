@@ -54,15 +54,15 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
   GameKind.wordScramble => const [
     (
       title: 'Make a word',
-      body: 'Read the English meaning clue. Tap the shuffled tiles to put the word in order. Word lengths vary. There is no timer and no limited lives.',
+      body: 'Start with the shuffled letters. Tap the tiles to put the word in order. The meaning stays hidden until you choose Hint or solve the word. Word lengths vary. There is no timer or limited lives.',
     ),
     (
       title: 'Move the pieces',
-      body: 'Tap a placed tile to return it to the tray. Repeated letters each have their own tile. Shuffle mixes the remaining tiles. In Gurmukhi, vowel marks and subjoined letters stay attached to their base.',
+      body: 'Tap a placed tile to return it to the tray. Repeated letters each have their own tile. Shuffle mixes the remaining tiles. Gurmukhi marks stay attached to their base, with Romanized captions below to help pronunciation.',
     ),
     (
       title: 'Check and discover',
-      body: 'Choose Check word when every space is filled. A wrong order lets you keep trying. One optional hint places and locks a correct tile. Use Next word after solving. Touch, Tab and Enter or Space, and screen-reader activation all work. Game settings chooses a language for a new word.',
+      body: 'Choose Check word when every space is filled. A wrong order lets you keep trying. Hint reveals the meaning without moving tiles. Use Next word after solving. Touch, keyboard and screen-reader activation work. In Game settings, Apply a different language starts a new word; Cancel keeps this one.',
     ),
   ],
   GameKind.learnLetters => const [
@@ -90,7 +90,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
     ),
     (
       title: 'Play your way',
-      body: 'Tap cards or use Tab and Enter or Space on a keyboard. With a screen reader, focus and activate each card. No dragging is needed. Use New set above the cards or Game settings in the menu to choose a language. Open the game menu for Statistics or these instructions.',
+      body: 'Tap cards or use Tab and Enter or Space on a keyboard. With a screen reader, focus and activate each card. No dragging is needed. Open the game menu for New set, Game settings, Statistics or these instructions. Game settings chooses a language.',
     ),
   ],
   GameKind.guessTheWord => const [
@@ -124,7 +124,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
   GameKind.wordQuest => const [
     (
       title: 'Reveal the hidden word',
-      body: 'Read the definition clue and choose one letter at a time using the on-screen letters or a physical keyboard. A correct letter reveals every place it appears without dimming your paper lantern.',
+      body: 'Read the definition clue and deduce likely letters from the full alphabet. Choose one letter at a time on screen or with a physical keyboard. A correct letter reveals every place it appears without dimming your paper lantern.',
     ),
     (
       title: 'Keep the light',
@@ -171,7 +171,7 @@ Future<void> showGameHelp(BuildContext context, GameKind game) async {
               ),
               const SizedBox(height: 8),
               const Text(
-                'The simple letter bank includes the answer letters and some extra choices. Use Show all letters for the full bank, or Show simple letters to switch back. After a missed word, Try again starts the same word with fresh lights and hints. Each finished attempt counts in Statistics, including retries.',
+                'New words start with the full alphabet. The keyboard button offers Use easier letter bank, with the answer letters and some extras, or Use full alphabet to switch back. Your choice stays with a saved round and the miss limit stays the same. Try again starts the same word with the full alphabet, fresh lights and hints. Each finished attempt counts in Statistics, including retries.',
               ),
               const SizedBox(height: 16),
             ],

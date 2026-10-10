@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
@@ -17,6 +18,71 @@ void main() {
       game.selectWord(pair.id);
       game.selectMeaning(pair.id);
     }
+  }
+
+  test(
+    'rotation histories round-trip independently by mode and survive clearing',
+    () async {
+      final store = MemoryKeyValueStore();
+      final repository = WordBridgesRepository(store);
+      await repository.save(mode: LanguageMode.english, game: game());
+      final expected = pairs.map((p) => p.id).toSet();
+      final restored = WordBridgesRepository(store);
+      expect(restored.usedWords(LanguageMode.english), expected);
+      expect(restored.previousWords(LanguageMode.english), expected);
+      expect(restored.usedWords(LanguageMode.gurmukhi), isEmpty);
+      expect(restored.previousWords(LanguageMode.gurmukhi), isEmpty);
+      await restored.clear();
+      expect(restored.restore(), isNull);
+      expect(restored.usedWords(LanguageMode.english), expected);
+      expect(restored.previousWords(LanguageMode.english), expected);
+    },
+  );
+  for (final field in ['usedWords', 'previousWords']) {
+    test(
+      'corrupt $field fails closed without retaining stale session or statistics',
+      () async {
+        final store = MemoryKeyValueStore();
+        final repository = WordBridgesRepository(store);
+        final completed = game();
+        finish(completed);
+        await repository.recordCompletion(
+          mode: LanguageMode.english,
+          game: completed,
+        );
+        await repository.save(mode: LanguageMode.english, game: game());
+        final snapshot = jsonDecode(
+          store.getString(WordBridgesRepository.storageKey)!,
+        ) as Map<String, Object?>;
+        for (final corrupt in [
+          42,
+          ['id'],
+          {'english': 'id'},
+          {
+            'english': ['id', 42],
+          },
+          {'gurmukhi': null},
+        ]) {
+          await store.setString(
+            WordBridgesRepository.storageKey,
+            jsonEncode({...snapshot, field: corrupt}),
+          );
+          expect(repository.restore(), isNull);
+          expect(repository.total.finishedSets, 0);
+          expect(repository.usedWords(LanguageMode.english), isEmpty);
+          expect(repository.previousWords(LanguageMode.english), isEmpty);
+        }
+        snapshot.remove(
+          field,
+        ); // Missing rotation fields are supported older saves.
+        await store.setString(
+          WordBridgesRepository.storageKey,
+          jsonEncode(snapshot),
+        );
+        expect(repository.restore(), isNotNull);
+        expect(repository.total.finishedSets, 1);
+      },
+    );
   }
 
   test('either side first, toggle and replacement do not count attempts', () {

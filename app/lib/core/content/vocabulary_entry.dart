@@ -28,6 +28,8 @@ class VocabularyEntry {
     required this.reviewStatus,
     required this.source,
     this.script,
+    this.wordNetTagCount,
+    this.romanizations = const [],
   });
 
   final String id;
@@ -42,6 +44,12 @@ class VocabularyEntry {
   final ReviewStatus reviewStatus;
   final String source;
   final VocabularyScript? script;
+
+  /// Tagged occurrences of the selected English WordNet sense, when supplied.
+  final int? wordNetTagCount;
+
+  /// Every supplied native-word Romanization, retained as counterpart metadata.
+  final List<String> romanizations;
 
   bool get isOwnerApproved =>
       script != null && reviewStatus == ReviewStatus.editorApproved;
@@ -85,6 +93,8 @@ class VocabularyEntry {
     reviewStatus: reviewStatus ?? this.reviewStatus,
     source: source ?? this.source,
     script: script,
+    wordNetTagCount: wordNetTagCount,
+    romanizations: romanizations,
   );
 
   factory VocabularyEntry.fromJson(Map<String, Object?> json) {
@@ -110,6 +120,10 @@ class VocabularyEntry {
       script: json['script'] is String
           ? VocabularyScript.values.byName(json['script']! as String)
           : null,
+      wordNetTagCount: json['wordNetTagCount'] as int?,
+      romanizations: List.unmodifiable(
+        (json['romanizations'] as List<Object?>? ?? const []).cast<String>(),
+      ),
     );
   }
 
@@ -128,6 +142,8 @@ class VocabularyEntry {
     'reviewStatus': reviewStatus.name,
     'sources': [source],
     if (script != null) 'script': script!.name,
+    if (wordNetTagCount != null) 'wordNetTagCount': wordNetTagCount,
+    if (romanizations.isNotEmpty) 'romanizations': romanizations,
   };
 
   factory VocabularyEntry.fromApprovedJson(
@@ -150,9 +166,11 @@ class VocabularyEntry {
     if (definition.trim().isEmpty) {
       throw FormatException('Approved word has no definition: $word');
     }
-    final romanizations = json['romanizations'] as List<Object?>?;
+    final romanizations = List<String>.unmodifiable(
+      (json['romanizations'] as List<Object?>? ?? const []).cast<String>(),
+    );
     final latin = script == VocabularyScript.gurmukhi
-        ? (romanizations?.firstOrNull as String? ?? '').toUpperCase()
+        ? (romanizations.firstOrNull ?? '').toUpperCase()
         : word.toUpperCase();
     final gurmukhi = script == VocabularyScript.gurmukhi
         ? word
@@ -179,6 +197,10 @@ class VocabularyEntry {
           ? 'Princeton WordNet 3.0 (WordNet license); https://wordnet.princeton.edu/; synset ${json['synset_id']}'
           : 'English Wiktionary contributors (CC BY-SA 4.0); ${json['source_url']}; contributor history ${json['source_history_url']}',
       script: script,
+      wordNetTagCount: script == VocabularyScript.english
+          ? json['tag_count'] as int?
+          : null,
+      romanizations: romanizations,
     );
   }
 

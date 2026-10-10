@@ -305,7 +305,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
       : const GameLaunchOptions();
 
   Future<void> _resetAllData() async {
-    // Only the library exposes reset: game routes must be closed first.
+    // The library and Settings expose app-wide reset after leaving game routes.
     try {
       await resetSections({
         'Bujho game': widget.gameRepository.resetAll,

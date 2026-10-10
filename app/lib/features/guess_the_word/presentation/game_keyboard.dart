@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/language/gurmukhi_romanization.dart';
-import '../../../core/language/gurmukhi_normalization.dart';
 import '../../../core/language/word_units.dart';
+import '../../../core/language/hardware_input.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/widgets/gurmukhi_key_label.dart';
@@ -49,74 +49,6 @@ class GameKeyboard extends StatelessWidget {
     };
   }
 
-  static const _latinRows = [
-    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-    ['Z', 'X', 'C', 'V', 'B', 'N', 'M'],
-  ];
-
-  // The approved Roman alphabet preserves scholarly marks as whole keys.
-  static const romanizedLetters = [
-    'á',
-    'ã',
-    'ñ',
-    'õ',
-    'ā',
-    'ā́',
-    'ā̃',
-    'ă',
-    'ē',
-    'ē̃',
-    'ġ',
-    'ĩ',
-    'ī',
-    'ī̃',
-    'ĭ',
-    'ś',
-    'ũ',
-    'ū',
-    'ū̃',
-    'ḍ',
-    'ḷ',
-    'ṃ',
-    'ṅ',
-    'ṇ',
-    'ṛ',
-    'ṭ',
-    'ẽ',
-  ];
-
-  static bool acceptsHardwareCharacter(LanguageMode mode, String character) {
-    if (character.isEmpty) return false;
-    if (mode == LanguageMode.english) {
-      return RegExp(r'^[A-Za-z]+$').hasMatch(character);
-    }
-    if (mode == LanguageMode.romanizedPanjabi) {
-      final normalized = normalizeRomanizedInput(character).toUpperCase();
-      final allowed = {
-        ..._latinRows.expand((row) => row),
-        ...romanizedLetters.map((letter) => letter.toUpperCase()),
-      };
-      return wordUnits(normalized).every(
-        (unit) =>
-            allowed.contains(unit) ||
-            RegExp(r'^[\u0300-\u036F]+$').hasMatch(unit),
-      );
-    }
-    final allowed = _gurmukhiRows.expand((row) => row).join().runes.toSet();
-    return normalizeGurmukhi(character).runes.every(allowed.contains);
-  }
-
-  static const _gurmukhiRows = [
-    ['ਕ', 'ਖ', 'ਗ', 'ਘ', 'ਙ', 'ਚ', 'ਛ', 'ਜ', 'ਝ', 'ਞ'],
-    ['ਟ', 'ਠ', 'ਡ', 'ਢ', 'ਣ', 'ਤ', 'ਥ', 'ਦ', 'ਧ', 'ਨ'],
-    ['ਪ', 'ਫ', 'ਬ', 'ਭ', 'ਮ', 'ਯ', 'ਰ', 'ਲ', 'ਵ', 'ੜ'],
-    ['ਸ', 'ਹ', 'ੳ', 'ਅ', 'ੲ', 'ਸ਼', 'ਖ਼', 'ਗ਼', 'ਜ਼', 'ਫ਼'],
-    ['ਆ', 'ਇ', 'ਈ', 'ਉ', 'ਊ', 'ਏ', 'ਐ', 'ਓ', 'ਔ'],
-    ['ਾ', 'ਿ', 'ੀ', 'ੁ', 'ੂ', 'ੇ', 'ੈ', 'ੋ'],
-    ['ੌ', 'ੰ', 'ਂ', 'ੱ', '਼', '੍'],
-  ];
-
   String _gurmukhiKeyName(String character) => switch (character) {
     '਼' => 'nukta mark',
     '੍' => 'virama, join the next consonant',
@@ -126,7 +58,9 @@ class GameKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final rows = <List<String>>[
-      ...(mode == LanguageMode.gurmukhi ? _gurmukhiRows : _latinRows),
+      ...(mode == LanguageMode.gurmukhi
+          ? HardwareInput.gurmukhiRows
+          : HardwareInput.latinRows),
     ];
     final disabled = mode == LanguageMode.gurmukhi
         ? const <String>{}
@@ -134,7 +68,7 @@ class GameKeyboard extends StatelessWidget {
     if (mode == LanguageMode.romanizedPanjabi && !simpleRomanized) {
       final existing = rows.expand((row) => row).toSet();
       final extra = <String>{
-        ...romanizedLetters.map((letter) => letter.toUpperCase()),
+        ...HardwareInput.romanizedLetters.map((letter) => letter.toUpperCase()),
         ...additionalCharacters
             .map(normalizeRomanizedInput)
             .map((letter) => letter.toUpperCase()),

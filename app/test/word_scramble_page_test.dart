@@ -15,6 +15,7 @@ import 'word_scramble_game_test.dart' show scramble;
 
 VocabularyEntry fixture(String spelling, LanguageMode mode) => VocabularyEntry(
   id: 'fixture-$spelling',
+  wordNetTagCount: mode == LanguageMode.english ? 3 : null,
   language: mode == LanguageMode.english
       ? VocabularyLanguage.english
       : VocabularyLanguage.panjabi,
@@ -52,6 +53,114 @@ Widget scramblePage(
   ),
 );
 void main() {
+  testWidgets(
+    'meaning is hidden, hint persists and the next word starts hidden',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      final repo = WordScrambleRepository(MemoryKeyValueStore());
+      await tester.pumpWidget(scramblePage(repo));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('scramble-clue')), findsNothing);
+      expect(find.text('A test clue'), findsNothing);
+      expect(find.bySemanticsLabel(RegExp('A test clue')), findsNothing);
+      await tester.tap(find.byKey(const ValueKey('scramble-tile-1')));
+      await tester.pumpAndSettle();
+      final before = repo.restore()!.game;
+      await tester.tap(find.byKey(const ValueKey('scramble-hint')));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.slots, before.slots);
+      expect(repo.restore()!.game.tray, before.tray);
+      expect(find.text('A test clue'), findsOneWidget);
+      expect(repo.restore()!.game.usedHint, isTrue);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(scramblePage(repo));
+      await tester.pumpAndSettle();
+      expect(find.text('A test clue'), findsOneWidget);
+      expect(repo.restore()!.game.slots, before.slots);
+      await tester.tap(find.byKey(const ValueKey('scramble-slot-0')));
+      await tester.pumpAndSettle();
+      for (var id = 0; id < 5; id++) {
+        await tester.tap(find.byKey(ValueKey('scramble-tile-$id')));
+        await tester.pumpAndSettle();
+      }
+      await tester.ensureVisible(find.text('Check word'));
+      await tester.tap(find.text('Check word'));
+      await tester.pumpAndSettle();
+      expect(repo.total.solved, 1);
+      expect(repo.total.unhinted, 0);
+      expect(find.text('A test clue'), findsOneWidget);
+      await tester.ensureVisible(find.text('Next word'));
+      await tester.tap(find.text('Next word'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('scramble-clue')), findsNothing);
+      expect(repo.restore()!.game.usedHint, isFalse);
+      semantics.dispose();
+    },
+  );
+  testWidgets(
+    'settings preserve the round until a different language is applied',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 780);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final repo = WordScrambleRepository(MemoryKeyValueStore());
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemes.forChoice(AppThemeChoice.modern),
+          home: WordScramblePage(
+            repository: repo,
+            vocabularyRepository: MemoryVocabularyRepository([
+              fixture('APPLE', LanguageMode.english),
+              fixture('ĀSĀN', LanguageMode.romanizedPanjabi),
+              fixture('ਕਲਮਤ', LanguageMode.gurmukhi),
+            ]),
+            initialMode: LanguageMode.english,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('scramble-tile-0')));
+      await tester.pumpAndSettle();
+      final snapshot = repo.restore()!.game.toJson();
+      Future<void> openSettings() async {
+        await tester.tap(find.byTooltip('Shabad Banao menu'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Game settings'));
+        await tester.pumpAndSettle();
+      }
+
+      await openSettings();
+      await tester.tap(find.byKey(const ValueKey('scramble-language-english')));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.toJson(), snapshot);
+      await tester.tap(find.text('Apply'));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.toJson(), snapshot);
+      await openSettings();
+      await tester.tap(
+        find.byKey(const ValueKey('scramble-language-gurmukhi')),
+      );
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.mode, LanguageMode.english);
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.toJson(), snapshot);
+      await openSettings();
+      await tester.tap(
+        find.byKey(const ValueKey('scramble-language-gurmukhi')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Apply'));
+      await tester.pumpAndSettle();
+      final changed = repo.restore()!;
+      expect(changed.mode, LanguageMode.gurmukhi);
+      expect(changed.game.roundId, isNot(snapshot['roundId']));
+      expect(changed.game.slots.every((id) => id == null), isTrue);
+      expect(repo.total.solved, 0);
+      expect(tester.takeException(), isNull);
+    },
+  );
   for (final theme in AppThemeChoice.values) {
     testWidgets(
       'phone board fits and semantic tile play completes once in ${theme.name}',
@@ -90,6 +199,10 @@ void main() {
         await tester.tap(find.text('Check word'));
         await tester.pumpAndSettle();
         expect(repo.total.solved, 1);
+        expect(repo.total.unhinted, 1);
+        expect(find.text('A test clue'), findsOneWidget);
+        expect(find.text('1 word solved'), findsOneWidget);
+        expect(find.text('1 words solved'), findsNothing);
         expect(find.text('Next word'), findsOneWidget);
         expect(repo.hasActiveGame, isFalse);
         expect(tester.takeException(), isNull);
@@ -122,10 +235,13 @@ void main() {
         findsOneWidget,
       );
       expect(find.byType(SnackBar), findsNothing);
-      await tester.tap(find.text('Hint · 1 left'));
+      final before = repo.restore()!.game.slots;
+      await tester.tap(find.byKey(const ValueKey('scramble-hint')));
       await tester.pumpAndSettle();
       expect(repo.restore()!.game.usedHint, isTrue);
-      expect(repo.restore()!.game.slots[0], 0);
+      expect(repo.restore()!.game.slots, before);
+      expect(repo.restore()!.game.locked, isEmpty);
+      expect(find.text('A test clue'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
@@ -190,13 +306,17 @@ void main() {
         await tester.tap(find.byKey(const ValueKey('scramble-tile-0')));
         await tester.pumpAndSettle();
         expectLabels();
-        await tester.ensureVisible(find.text('Hint · 1 left'));
-        await tester.tap(find.text('Hint · 1 left'));
+        await tester.ensureVisible(find.byKey(const ValueKey('scramble-hint')));
+        await tester.tap(find.byKey(const ValueKey('scramble-hint')));
+        await tester.pumpAndSettle();
+        expect(repo.restore()!.game.locked, isEmpty);
+        expect(find.text('A test clue'), findsOneWidget);
+        await tester.tap(find.byKey(const ValueKey('scramble-tile-1')));
         await tester.pumpAndSettle();
         final hinted = tester.widget<PaperLetterTile>(
           find.byKey(const ValueKey('scramble-slot-1')),
         );
-        expect(hinted.locked, isTrue);
+        expect(hinted.locked, isFalse);
         expect(hinted.romanization, 'Prai');
         expectLabels();
         await tester.ensureVisible(

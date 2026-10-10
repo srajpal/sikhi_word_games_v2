@@ -121,7 +121,7 @@ void main() {
         VocabularyEntry(
           id: word,
           language: VocabularyLanguage.panjabi,
-          latin: 'TEST',
+          latin: word == 'ਸ਼ਬਦਕ' ? 'SHABADAK' : 'KALAMAK',
           gurmukhi: word,
           englishDefinition: 'A test fixture',
           latinLength: 4,
@@ -294,6 +294,7 @@ const _restoreVocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'play',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'PLAY',
     gurmukhi: null,
     englishDefinition: 'Take part in a game',
@@ -307,6 +308,7 @@ const _restoreVocabulary = MemoryVocabularyRepository([
   VocabularyEntry(
     id: 'hold',
     language: VocabularyLanguage.english,
+    wordNetTagCount: 3,
     latin: 'HOLD',
     gurmukhi: null,
     englishDefinition: 'Keep in your hand',

@@ -16,7 +16,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/content/vocabulary_repository.dart';
 import '../../../core/language/gurmukhi_romanization.dart';
 import '../../../core/language/word_units.dart';
-import '../../guess_the_word/presentation/game_keyboard.dart';
+import '../../../core/language/hardware_input.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/widgets/gurmukhi_key_label.dart';
@@ -120,7 +120,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
   List<String> _letterBank = const [];
   String _message = '';
   bool _loading = true;
-  bool _showFullKeyboard = false;
+  bool _showFullKeyboard = true;
   int _startRequest = 0;
 
   @override
@@ -149,14 +149,12 @@ class _WordQuestPageState extends State<WordQuestPage> {
     final normalized = _mode == LanguageMode.romanizedPanjabi
         ? normalizeRomanizedInput(character)
         : character;
-    // Quest selects complete written units; isolated input-method marks do not
-    // form guesses and must never consume a miss.
-    final isLetter =
-        GameKeyboard.acceptsHardwareCharacter(_mode, normalized) &&
-        wordUnitCount(normalized) == 1 &&
-        RegExp(
-          r'^[A-Za-z\u00C0-\u024F\u1E00-\u1EFF\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73]',
-        ).hasMatch(normalized);
+    // Hardware Gurmukhi input is one letter. Whole marked tiles
+    // remain available through the on-screen keys and their accessible actions.
+    final isLetter = HardwareInput.acceptsQuestCharacter(
+      _mode.script,
+      normalized,
+    );
     if (!isLetter) {
       return KeyEventResult.ignored;
     }
@@ -204,6 +202,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
             _word = word;
             _game = restored.game;
             _letterBank = bank;
+            _showFullKeyboard = restored.fullKeyboard;
             _loading = false;
           });
           return;
@@ -272,7 +271,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
       _word = word;
       _game = game;
       _letterBank = bank;
-      _showFullKeyboard = false;
+      _showFullKeyboard = true;
       _message = '';
       _loading = false;
     });
@@ -281,6 +280,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
         simpleRomanized: _simpleRomanized,
         mode: _mode,
         wordSize: _wordSize,
+        fullKeyboard: _showFullKeyboard,
         game: game,
       ),
     );
@@ -293,7 +293,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     setState(() {
       _game = game;
       _letterBank = _buildLetterBank(game);
-      _showFullKeyboard = false;
+      _showFullKeyboard = true;
       _message = '';
     });
     _persist(
@@ -301,6 +301,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
         simpleRomanized: _simpleRomanized,
         mode: _mode,
         wordSize: _wordSize,
+        fullKeyboard: _showFullKeyboard,
         game: game,
       ),
     );
@@ -339,12 +340,28 @@ class _WordQuestPageState extends State<WordQuestPage> {
         ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.characters,
         ...game.letterBankGraphemes,
         ..._vocabulary!.graphemes(mode: _mode),
-      }.toList(growable: false);
+      }.toList(growable: false)..sort();
     }
     return <String>{
-      ...game.letterBankGraphemes,
       ..._gurmukhiAlphabet,
-    }.toList(growable: false);
+      ..._letterBank,
+      ...game.guessedGraphemes,
+    }.toList(growable: false)..sort();
+  }
+
+  void _toggleKeyboard() {
+    final game = _game;
+    if (game == null || game.isComplete) return;
+    setState(() => _showFullKeyboard = !_showFullKeyboard);
+    _persist(
+      widget.sessionRepository.save(
+        mode: _mode,
+        wordSize: _wordSize,
+        simpleRomanized: _simpleRomanized,
+        fullKeyboard: _showFullKeyboard,
+        game: game,
+      ),
+    );
   }
 
   Future<void> _haptic({required bool correct, bool complete = false}) async {
@@ -410,6 +427,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
           simpleRomanized: _simpleRomanized,
           mode: _mode,
           wordSize: _wordSize,
+          fullKeyboard: _showFullKeyboard,
           game: game,
         ),
       );
@@ -444,6 +462,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
           simpleRomanized: _simpleRomanized,
           mode: _mode,
           wordSize: _wordSize,
+          fullKeyboard: _showFullKeyboard,
           game: game,
         ),
       );
@@ -646,10 +665,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                     showFullKeyboard: _showFullKeyboard,
                                     onToggleKeyboard: game.isComplete
                                         ? null
-                                        : () => setState(
-                                            () => _showFullKeyboard =
-                                                !_showFullKeyboard,
-                                          ),
+                                        : _toggleKeyboard,
                                   ),
                                   const SizedBox(height: 14),
                                   _RaisedPanel(
@@ -721,23 +737,12 @@ class _WordQuestPageState extends State<WordQuestPage> {
                                         _mode == LanguageMode.gurmukhi,
                                   ),
                                   const SizedBox(height: 16),
-                                  if (_showFullKeyboard) ...[
-                                    const SizedBox(height: 4),
-                                    Divider(
-                                      color: scheme.onSurface.withValues(
-                                        alpha: .2,
-                                      ),
-                                      height: 1,
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ] else ...[
-                                    QuestLantern(
-                                      missesLeft: game.triesRemaining,
-                                      maximumMisses: game.maximumTries,
-                                      won: game.status == WordQuestStatus.won,
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
+                                  QuestLantern(
+                                    missesLeft: game.triesRemaining,
+                                    maximumMisses: game.maximumTries,
+                                    won: game.status == WordQuestStatus.won,
+                                  ),
+                                  const SizedBox(height: 10),
                                   if (game.isComplete)
                                     _ResultCard(
                                       word: word,
@@ -834,7 +839,7 @@ class _WordTiles extends StatelessWidget {
                       : showRomanization
                       ? GurmukhiKeyLabel(
                           grapheme: game.revealedGraphemes[i]!,
-                          color: Colors.white,
+                          color: tokens.foregroundFor(tokens.correct),
                           gurmukhiFontSize: 24,
                           romanizationFontSize: 10,
                         )
@@ -844,7 +849,7 @@ class _WordTiles extends StatelessWidget {
                             game.revealedGraphemes[i]!,
                             style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(
-                                  color: Colors.white,
+                                  color: tokens.foregroundFor(tokens.correct),
                                   fontWeight: FontWeight.w900,
                                 ),
                           ),
@@ -1109,7 +1114,9 @@ class _QuestStatusBar extends StatelessWidget {
         icon: showFullKeyboard
             ? Icons.keyboard_hide_outlined
             : Icons.keyboard_alt_outlined,
-        tooltip: showFullKeyboard ? 'Show simple letters' : 'Show all letters',
+        tooltip: showFullKeyboard
+            ? 'Use easier letter bank'
+            : 'Use full alphabet',
         onPressed: onToggleKeyboard,
       ),
     ],

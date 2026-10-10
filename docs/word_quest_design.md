@@ -33,20 +33,22 @@ The static Sikhi library mark remains separate from game state.
    altered budgets, unsupported sizes and moves after completion remain rejected.
 
 This is a deliberately tighter challenge than the previous forgiving rule. The
-clue, reduced letter bank and non-punitive finish provide support. Real playtesting
+clue, optional easier letter bank and non-punitive finish provide support. New
+rounds start with the full alphabet so choosing likely letters is the core skill.
+Switching banks never changes guesses, misses or hints. Real playtesting
 must assess whether familiar-word selection or a future optional easier mode is
 needed; a passing rule test does not establish child suitability.
 
 ## Screen layout and consistency
 
 - Use the shared two-line GameHeading: smaller English title above Chardi Kala.
-  The shared text-only language/word-size line sits below the toolbar. There is no
+  The shared text-only language/word-size line sits inside its paper label. There is no
   language icon or duplicate language pill in the body.
 - The wrapping status row contains remaining misses, the Hint control and the
-  simple/full letter-bank toggle. Counts have text alternatives.
+  easier/full alphabet toggle. Counts have text alternatives.
 - Follow with a full, wrapping definition clue, grapheme tiles, the compact paper
   lantern, and the letter bank. At completion, show the result card. Expanded
-  keyboards replace the decorative lantern with a separator to conserve space.
+  keyboards retain the lantern so deduction keeps its visible miss feedback.
 - Shared feedback uses the same five-second paper toast as other games, floating
   below the toolbar without shifting the board or covering keyboard controls.
   It includes Dismiss; accessible navigation keeps it until dismissed. Terminal
@@ -57,13 +59,24 @@ needed; a passing rule test does not establish child suitability.
 
 ## Keyboards, responsiveness and accessibility
 
-English and Romanized Punjabi share Latin input. The simple bank contains every
-unique answer letter and up to six shuffled distractors. Show all letters opens
-A-Z. Hardware letters use the same handler; modifiers/shortcuts are ignored.
+English and Romanized Punjabi share Latin input. English and Simple Punjabi
+start with A-Z; the original Romanized view also retains its accented units.
+Use easier letter bank offers every unique answer letter and up to six shuffled
+distractors; Use full alphabet switches back. The selection persists with the
+unfinished round through an optional `fullKeyboard` field; older saves default
+to full. A fresh word or retry starts full. Hardware letters use the same handler;
+modifiers/shortcuts are ignored.
+
+Gurmukhi hardware input accepts exactly one letter per event, excluding digits,
+ੴ, lone vowel signs, other signs and multi-code-point input. Lone signs are
+ignored without consuming a miss because answer tiles keep their marks attached
+to the base letter. Roman combining marks alone also cost no miss. These hardware
+limits do not split or restrict the on-screen marked tiles.
 
 Gurmukhi's bank uses whole answer graphemes plus eligible-vocabulary distractors.
 Keys and revealed tiles show shared Romanized pronunciation aids. The full bank
-adds basic Gurmukhi letters while retaining complete solution graphemes. It never
+adds basic Gurmukhi letters and marked distractors while retaining complete
+solution graphemes. Its keys are sorted, never displayed in answer order. It never
 asks a child to assemble isolated marks. The terminal answer shows the source
 Romanized spelling below the Gurmukhi word.
 
