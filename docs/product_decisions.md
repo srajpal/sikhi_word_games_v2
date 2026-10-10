@@ -1,5 +1,14 @@
 # Sikhi Word Games V2 — Product Decisions
 
+## October 10 developer-email feedback
+
+Share feedback uses the developer address **khalsagamestudio.apps@gmail.com**.
+Offer an email draft with the current app version and game/language/device
+prompts, plus a selectable address and Copy email address. Missing mail handlers
+or clipboard access must leave a usable manual fallback. Opening the draft does
+not send it automatically. The prior public GitHub issue form is retired from
+this player-facing action.
+
 ## October 10 bilingual identity and launcher label
 
 The approved Paper & Play app mark is two overlapping tiles: English **S** and

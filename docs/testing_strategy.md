@@ -2,6 +2,11 @@
 
 ## Coverage and limits
 
+Feedback regressions verify the exact developer mail recipient, percent-encoded
+draft prompts, successful email-app launch, missing/throwing mail handlers, plain
+address copying, and a selectable fallback when the clipboard is unavailable.
+These checks do not send email or establish a user's installed mail-app setup.
+
 `game_loading_test.dart` verifies that every vocabulary-game destination submits
 its loading header and indicator before consulting warm content, with no ancestor
 route fade hiding the acknowledgement. Unicode regressions include attached

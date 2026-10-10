@@ -18,7 +18,7 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.18.3` (build `35`). The uploaded web draft remains
+The current testing build is `1.18.4` (build `36`). The uploaded web draft remains
 `1.9.0+17`; native test installs do not update it. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
@@ -109,7 +109,8 @@ itch.io is a new host.
    uploaded build; local saved progress is not a cloud backup.
 6. Use the cover and screenshots in `reports/release/` and the prepared page copy
    in [app/README.md](app/README.md). The in-game Share feedback action points to
-   this repository's issue form. Publish only after the gates are satisfied.
+   the developer email **khalsagamestudio.apps@gmail.com**, with an email-app
+   action and a copy-address fallback. Publish only after the gates are satisfied.
 
 The official [itch.io HTML5 upload guide](https://itch.io/docs/creators/html5)
 requires relative asset paths and a root `index.html` in the ZIP. Check its

@@ -37,8 +37,8 @@ to play. Unfinished games are saved in this browser.
 This is **public playtest 1.9.0 (build 17)**. Words and meanings are still being
 reviewed. Some vocabulary is uncommon or historical. Report confusing clues or
 problems through **Share feedback** in the game library or the game page's
-comments. The feedback link opens a public GitHub issue form and requires a
-GitHub account; playing does not.
+comments. Share feedback opens an email draft to
+**khalsagamestudio.apps@gmail.com** and offers a copy-address fallback.
 
 Learn Letters includes computer-generated pronunciation previews for feedback.
 They have not been approved by a fluent speaker as teaching audio. Words and
@@ -100,7 +100,8 @@ Use `reports/release/itch-cover-630x500.png` at the repository root for the cove
 The original editable artwork is in `branding/`. Rebuild it with
 `node app/tool/create_brand_assets.cjs` from the root in a Node environment with
 `sharp` installed. The small web icons are generated from the same mark.
-Artwork uses letter tiles and a plant; sacred marks are not gameplay objects.
+The approved artwork pairs English S with Gurmukhi ਗ letter tiles for Sikhi +
+Games; sacred marks are not gameplay objects.
 
 Keep the Princeton WordNet license, Wiktionary CC BY-SA 4.0 attribution,
 Shutterstock screening-list CC BY 4.0 credits and bundled-font notices in the game and ZIP.

@@ -6,6 +6,26 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 10 developer-email feedback: candidate 1.18.4+36
+
+- [x] Replace the player-facing GitHub feedback URL with
+  khalsagamestudio.apps@gmail.com and an Email feedback action.
+- [x] Include the current app version and game/language/device prompts in the
+  draft; retain a copy-address/manual fallback without sending automatically.
+
+All five targeted feedback tests pass: successful launch, unavailable/throwing
+mail handlers, plain-address copying and blocked clipboard fallback. Formatting
+and analysis pass; all 490 tests pass, including the 52 Windows golden tests.
+The release web package and normal arm64 profile/AOT APK build successfully.
+The web cache includes 96 files; integrity checks preserve all 20,601 records
+and their source attribution/licenses. aapt confirms version 1.18.4/code 36 and
+the SikhiGames launcher label. This candidate is not installed on devices;
+the tablet has 1.18.3+35 and Pixel 6 has 1.18.2+34.
+Activated 1.18.4+36 in the local web preview without clearing storage. The
+feedback dialog visibly shows the developer email, version, Copy email address
+and Email feedback actions, with no GitHub-account copy or console errors.
+No actual feedback email was sent during verification.
+
 ## October 10 approved bilingual branding: candidate 1.18.3+35
 
 - [x] Use English S + Gurmukhi ਗ (Sikhi + Games) in the shared wordmark and
