@@ -1,4 +1,5 @@
 import '../../../core/content/romanized_vocabulary_views.dart';
+import '../../../core/content/answer_eligibility.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/statistics/game_statistics_dialog.dart';
@@ -144,6 +145,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
           entry.acceptedGuess &&
           entry.solutionEligible &&
           entry.hasDistributableDefinition &&
+          AnswerEligibility.allows(entry, restored.mode.script) &&
           _supportsMode(entry, restored.mode) &&
           WordPool.spelling(entry, restored.mode)?.trim().toUpperCase() ==
               placed.word.trim().toUpperCase(),
@@ -166,7 +168,8 @@ class _WordSearchPageState extends State<WordSearchPage> {
         if (!entry.acceptedGuess ||
             !entry.solutionEligible ||
             !entry.hasDistributableDefinition ||
-            !_supportsMode(entry, _mode)) {
+            !_supportsMode(entry, _mode) ||
+            !AnswerEligibility.allows(entry, _mode.script)) {
           continue;
         }
         final spelling = WordPool.spelling(entry, _mode);

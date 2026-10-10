@@ -1,4 +1,5 @@
 import '../../../core/content/romanized_vocabulary_views.dart';
+import '../../../core/content/answer_eligibility.dart';
 
 import 'dart:math';
 
@@ -40,7 +41,8 @@ class WordBridgesContent {
             !entry.acceptedGuess ||
             !entry.solutionEligible ||
             !entry.hasDistributableDefinition ||
-            !entry.supportsScript(mode.script)) {
+            !entry.supportsScript(mode.script) ||
+            !AnswerEligibility.allows(entry, mode.script)) {
           continue;
         }
         final word =
@@ -61,13 +63,15 @@ class WordBridgesContent {
         }
       }
       _pairsByMode[mode] = List.unmodifiable(candidates);
-      if (candidates.length >= 4) {
-        decks.add(
-          WordBridgesDeck(
-            id: '${mode.name}_preview',
-            pairs: candidates.take(4),
-          ),
-        );
+      final preview = <BridgePair>[];
+      for (final candidate in candidates) {
+        if (preview.every((pair) => !ambiguous(pair, candidate))) {
+          preview.add(candidate);
+        }
+        if (preview.length == 4) break;
+      }
+      if (preview.length == 4) {
+        decks.add(WordBridgesDeck(id: '${mode.name}_preview', pairs: preview));
       }
       _byMode[mode] = List.unmodifiable(decks);
     }

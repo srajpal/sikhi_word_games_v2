@@ -6,6 +6,31 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 9 review fixes: candidate 1.16.2+31
+
+- [x] 1. Apply one mechanical answer rule across all five word games, retaining
+  the complete Dictionary and accepted guesses; document actual pool coverage.
+- [ ] 2. Fail release audits on boundary-matched crude/vandalized definitions.
+- [ ] 3. Correct statistics/help/plurals, Scramble settings, Quest hardware input
+  and the Simple Punjabi default description.
+- [ ] 4. Share hardware-input validation, use theme tokens, remove confirmed
+  dead code and add corrupt/unsupported save/native-decoder regressions.
+- [ ] 5. Reconcile architecture, current Jodo pools, guides and retired-tool docs.
+- [ ] Bump both version sources, finish validation and open an unmerged PR.
+
+Dictionary/source counts remain 13,182 English, 2,991 Romanized and 4,428
+Gurmukhi. Answer coverage is in `docs/content_schema.md`; original answers total
+12,616 / 2,975 / 4,422, Simple Romanized 2,791, and Gurmukhi Scramble 4,407.
+Gurmukhi lengths 7 and 8 have only 7 and 1 answers in the mixed-length games;
+the supported six-tile Bujho/Quest pool retains 33. No approved files were edited.
+The larger descriptor map, board split and RoundSetup refactors are deferred
+to keep these fixes focused.
+
+Item 1 validation: 401 Flutter tests, including all 40 goldens, passed;
+analysis is clean and 161 Dart files are formatted. Reviewed the changed Jodo
+English phone baseline using eligible, unambiguous preview pairs. Content audit
+and release `--check`/audit pass with 20,601 records and zero byte differences.
+
 ## October 9 Gurmukhi scramble labels: candidate 1.16.1+30
 
 - [x] Show shared Romanized pronunciation labels beneath Gurmukhi units in

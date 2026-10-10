@@ -1,4 +1,5 @@
 import '../../../core/content/romanized_vocabulary_views.dart';
+import '../../../core/content/answer_eligibility.dart';
 
 import 'dart:math';
 
@@ -119,7 +120,8 @@ class WordQuestVocabulary {
       if (!entry.acceptedGuess ||
           !entry.solutionEligible ||
           !entry.hasDistributableDefinition ||
-          !_supports(entry, mode)) {
+          !_supports(entry, mode) ||
+          !AnswerEligibility.allows(entry, mode.script)) {
         continue;
       }
       final spelling = _spelling(entry, mode)?.trim();

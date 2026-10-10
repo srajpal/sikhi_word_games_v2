@@ -74,6 +74,30 @@ count. Bujho and Word Quest retain 4/5/6-tile rounds. Khoj and Jodo use their
 broader applicable mode bank. Six-tile Gurmukhi has 33 source words; describe
 actual variety without importing other-mode words or imposing historical quotas.
 
+After the October 9 mechanical answer-pool rule, dictionary/source counts above
+are unchanged. Current distinct answer coverage is:
+
+| Tiles | English | Romanized original | Romanized Simple | Gurmukhi |
+| --- | ---: | ---: | ---: | ---: |
+| 2 | 0 | 0 | 0 | 1,512 |
+| 3 | 0 | 0 | 0 | 1,864 |
+| 4 | 2,206 | 654 | 601 | 785 |
+| 5 | 3,954 | 1,350 | 1,255 | 220 |
+| 6 | 6,456 | 971 | 935 | 33 |
+| 7 | 0 | 0 | 0 | 7 |
+| 8 | 0 | 0 | 0 | 1 |
+| Total | 12,616 | 2,975 | 2,791 | 4,422 |
+
+Bujho and Word Quest use only the 4/5/6 rows. Khoj and Jodo use all displayed
+rows. Shabad Banao uses the same rows except two-tile Gurmukhi is 1,497 (4,407
+total), because 15 repeated-identical-tile spellings cannot be scrambled.
+Simple Romanized counts deduplicate spellings after folding marks; they do not
+remove dictionary entries. Gurmukhi seven- and eight-tile pools contain fewer
+than 20 answers (7 and 1) in Khoj, Jodo and Shabad Banao. Six-tile Gurmukhi
+still has 33 answers in both spelling games. These are variety notes, not new
+quotas. Reproduce coverage with the answer-coverage test in
+`test/core/content/asset_vocabulary_repository_test.dart`.
+
 ## Import, distribution and checks
 
 From `app/`, import an approved release with

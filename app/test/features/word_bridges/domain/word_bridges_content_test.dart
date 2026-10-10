@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
+import 'package:sikhi_word_games_v2/core/content/answer_eligibility.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
 import 'package:sikhi_word_games_v2/core/persistence/key_value_store.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
@@ -23,7 +24,7 @@ void main() {
   });
 
   test(
-    'every approved mode word remains in its independent matching pool',
+    'eligible mode answers retain their original meanings and provenance',
     () async {
       final loaded = await WordBridgesContent.load(
         MemoryVocabularyRepository(release),
@@ -36,16 +37,24 @@ void main() {
       };
       final byId = {for (final entry in release) entry.id: entry};
       for (final mode in LanguageMode.values) {
-        final expected = release.where((entry) => entry.script == mode.script);
+        final expected = release.where(
+          (entry) =>
+              entry.script == mode.script &&
+              AnswerEligibility.allows(entry, mode.script),
+        );
         final pairs = loaded.pairsFor(mode);
-        expect(pairs, hasLength(counts[mode]!));
+        expect(
+          release.where((entry) => entry.script == mode.script),
+          hasLength(counts[mode]!),
+        );
+        expect(pairs, hasLength(expected.length));
         expect(
           pairs.map((pair) => pair.id).toSet(),
           expected.map((e) => e.id).toSet(),
         );
         expect(
           pairs.map((pair) => pair.word).toSet(),
-          hasLength(counts[mode]!),
+          hasLength(expected.length),
         );
         for (final pair in pairs) {
           final entry = byId[pair.id]!;
@@ -69,7 +78,15 @@ void main() {
         final decks = content.decksFor(mode);
         expect(decks, hasLength(1));
         expect(decks.single.id, '${mode.name}_preview');
-        expect(decks.single.pairs, content.pairsFor(mode).take(4));
+        expect(decks.single.pairs, hasLength(4));
+        for (final pair in decks.single.pairs) {
+          expect(content.containsPair(mode, pair), isTrue);
+          for (final other in decks.single.pairs.where(
+            (p) => p.id != pair.id,
+          )) {
+            expect(WordBridgesContent.ambiguous(pair, other), isFalse);
+          }
+        }
       }
       expect(WordBridgesContent([]).availableModes, isEmpty);
       expect(
@@ -110,7 +127,11 @@ void main() {
     'missing, ineligible, unlicensed and duplicate IDs cannot restore a pair',
     () {
       final entries = release
-          .where((entry) => entry.script == VocabularyScript.english)
+          .where(
+            (entry) =>
+                entry.script == VocabularyScript.english &&
+                AnswerEligibility.allows(entry, VocabularyScript.english),
+          )
           .take(5)
           .toList();
       final original = entries.first;
@@ -169,9 +190,18 @@ void main() {
       for (final entry in release)
         entry.id == native.id ? entry.copyWith(gurmukhi: '') : entry,
     ]);
-    expect(changed.pairsFor(LanguageMode.gurmukhi), hasLength(4427));
-    expect(changed.pairsFor(LanguageMode.romanizedPanjabi), hasLength(2991));
-    expect(changed.pairsFor(LanguageMode.english), hasLength(13182));
+    expect(
+      changed.pairsFor(LanguageMode.gurmukhi),
+      hasLength(content.pairsFor(LanguageMode.gurmukhi).length - 1),
+    );
+    expect(
+      changed.pairsFor(LanguageMode.romanizedPanjabi),
+      hasLength(content.pairsFor(LanguageMode.romanizedPanjabi).length),
+    );
+    expect(
+      changed.pairsFor(LanguageMode.english),
+      hasLength(content.pairsFor(LanguageMode.english).length),
+    );
     expect(changed.romanizedFor(native.id), isNull);
   });
 

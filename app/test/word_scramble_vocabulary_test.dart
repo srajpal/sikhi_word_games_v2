@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_entry.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
+import 'package:sikhi_word_games_v2/core/content/answer_eligibility.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/word_scramble/domain/word_scramble_vocabulary.dart';
 
@@ -59,7 +60,11 @@ void main() {
     'a pool is exhausted before repeats, then avoids the previous word',
     () async {
       final entries = (await AssetVocabularyRepository().load())
-          .where((e) => e.script == VocabularyScript.english)
+          .where(
+            (e) =>
+                e.script == VocabularyScript.english &&
+                AnswerEligibility.allows(e, VocabularyScript.english),
+          )
           .take(4);
       final vocabulary = WordScrambleVocabulary(entries), seen = <String>{};
       String? previous;

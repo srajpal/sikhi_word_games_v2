@@ -3,6 +3,9 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sikhi_word_games_v2/core/content/vocabulary_repository.dart';
+import 'package:sikhi_word_games_v2/core/content/answer_eligibility.dart';
+import 'package:sikhi_word_games_v2/core/content/romanized_vocabulary_views.dart';
+import 'package:sikhi_word_games_v2/features/word_scramble/domain/word_scramble_vocabulary.dart';
 import 'package:sikhi_word_games_v2/core/language/word_units.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/language_mode.dart';
 import 'package:sikhi_word_games_v2/features/guess_the_word/domain/word_pool.dart';
@@ -14,6 +17,66 @@ import 'package:sikhi_word_games_v2/features/word_search/domain/word_search_puzz
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test('report answer coverage by game, mode, view and written length', () async {
+    final original = await AssetVocabularyRepository().load();
+    final views = RomanizedVocabularyViews(original);
+    for (final simple in [false, true]) {
+      final entries = views.entries(simple: simple);
+      final pool = WordPool(entries);
+      final quest = WordQuestVocabulary(entries);
+      final bridges = WordBridgesContent(entries);
+      final scramble = WordScrambleVocabulary(entries);
+      for (final mode in LanguageMode.values) {
+        if (simple && mode != LanguageMode.romanizedPanjabi) continue;
+        final lengths = <String, Map<int, int>>{};
+        void count(String game, Iterable<String> words) {
+          final buckets = <int, int>{};
+          for (final word in words) {
+            final size = wordUnitCount(word);
+            buckets[size] = (buckets[size] ?? 0) + 1;
+          }
+          lengths[game] = buckets;
+        }
+
+        count('Bujho', [
+          for (final size in [4, 5, 6])
+            ...pool
+                .solutions(mode: mode, wordLength: size)
+                .map((e) => WordPool.spelling(e, mode)!),
+        ]);
+        count(
+          'Quest',
+          quest
+              .words(mode: mode, preferKidManageable: false)
+              .where((e) => [4, 5, 6].contains(e.graphemeLength))
+              .map((e) => e.spelling),
+        );
+        count('Jodo', bridges.pairsFor(mode).map((e) => e.word));
+        count('Scramble', scramble.words(mode).map((e) => e.spelling));
+        count(
+          'Khoj',
+          entries
+              .where(
+                (e) =>
+                    e.acceptedGuess &&
+                    e.solutionEligible &&
+                    e.hasDistributableDefinition &&
+                    e.supportsScript(mode.script) &&
+                    AnswerEligibility.allows(e, mode.script),
+              )
+              .map((e) => WordPool.spelling(e, mode)!)
+              .where(
+                (word) => wordUnitCount(word) >= 2 && wordUnitCount(word) <= 12,
+              )
+              .toSet(),
+        );
+        expect(lengths['Bujho'], lengths['Quest']);
+        // Prints the actual game's candidates, not manifest/dictionary counts.
+        // ignore: avoid_print
+        print('${mode.name}/${simple ? "simple" : "original"}: $lengths');
+      }
+    }
+  });
   test('both decoding paths identify a malformed native record', () async {
     const documents = ['{"words":[{"word":"broken_record"}]}'];
     final failure = isA<FormatException>().having(
@@ -40,7 +103,7 @@ void main() {
   });
 
   test(
-    'every approved word belongs to its own script and stays eligible',
+    'all approved words remain in lookup while answers apply shared hygiene',
     () async {
       final repository = AssetVocabularyRepository();
       final entries = await repository.load();
@@ -78,16 +141,31 @@ void main() {
           entries.where((e) => e.supportsScript(mode.script)),
           hasLength(total),
         );
-        expect(bridges.pairsFor(mode), hasLength(total));
+        final eligible = entries
+            .where(
+              (e) =>
+                  e.supportsScript(mode.script) &&
+                  AnswerEligibility.allows(e, mode.script),
+            )
+            .toList();
+        expect(bridges.pairsFor(mode), hasLength(eligible.length));
         expect(
           quest.words(mode: mode, preferKidManageable: false),
-          hasLength(total),
+          hasLength(eligible.length),
         );
         for (final bucket in counts[mode]!.entries) {
           final solutions = pool.solutions(mode: mode, wordLength: bucket.key);
           expect(
             solutions,
-            hasLength(bucket.value),
+            hasLength(
+              eligible
+                  .where(
+                    (e) =>
+                        wordUnitCount(WordPool.spelling(e, mode)!) ==
+                        bucket.key,
+                  )
+                  .length,
+            ),
             reason: '${mode.name}/${bucket.key}',
           );
           expect(
@@ -98,7 +176,15 @@ void main() {
             quest
                 .words(mode: mode, preferKidManageable: false)
                 .where((w) => w.graphemeLength == bucket.key),
-            hasLength(bucket.value),
+            hasLength(
+              eligible
+                  .where(
+                    (e) =>
+                        wordUnitCount(WordPool.spelling(e, mode)!) ==
+                        bucket.key,
+                  )
+                  .length,
+            ),
           );
         }
       }

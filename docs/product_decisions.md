@@ -46,7 +46,7 @@ Used/previous IDs persist per language in the existing Jodo state. A completed s
 also records distinct matched IDs, perfect four-attempt sets and sets with longer
 words, atomically with its existing statistics and completion-ID deduplication.
 
-All owner-approved mode words remain eligible, with unchanged selected meanings
+Owner-approved mode words retain unchanged selected meanings
 and provenance. No global definition-length or quality filter narrows that bank.
 Each four-pair board avoids identical/conflicting clues and duplicate words;
 this local compatibility check keeps a set solvable without reopening content
@@ -102,6 +102,29 @@ Dictionary saved words remain separate product follow-ups.
 - Do not combine Latin and Gurmukhi guesses in one game because their keyboards and length rules differ.
 
 ## Vocabulary policy
+
+### Mechanical answer-pool hygiene (October 9 review)
+
+One shared runtime rule applies to Bujho, Word Quest, Khoj, Jodo and Shabad
+Banao, including restored answer checks. It is a mechanical answer-pool rule,
+not editorial filtering of the dictionary. Every supplied record, definition
+and accepted guess remains available; masters and runtime JSON bytes are unchanged.
+
+- Exclude an answer when its own spelling occurs as a whole word in its
+  definition, case-insensitively, with Unicode letters/marks/digits forming
+  word boundaries. Canonically equivalent spellings match. The Simple Punjabi
+  view also retains exclusions detected in the original accented spelling.
+- Exclude Roman numeral spellings, including the source's older ILXX/ILXXX
+  subtractive forms. Ordinary words such as CIVIC and MILD do not match.
+- The owner reserves ਗੁਰਬਾਣੀ, ਅਰਦਾਸ, ਖੰਡਾ, ਗੁਰੂ, ਗ੍ਰੰਥ and ਨਿਸ਼ਾਨ for
+  Dictionary lookup, never answers or shuffled game pieces. The short list
+  also matches their scholarly/plain Romanizations: gurbani/gurubani/gurbaani,
+  ardas/aradas, khanda, guru, granth, nishan/nisan. Matching uses unchanged
+  counterpart metadata and folds Roman marks for this comparison only.
+
+This rule does not introduce frequency, familiarity or subjective clue-quality
+thresholds. Small pools remain available; report actual counts rather than
+silently importing counterpart-mode words or changing definitions.
 
 - Use the October 9 owner-approved source release with separate English,
   Romanized Punjabi and Gurmukhi masters. All included words and selected

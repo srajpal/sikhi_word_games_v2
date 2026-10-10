@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import '../../../core/content/answer_eligibility.dart';
+
 import '../../../core/language/word_units.dart';
 
 import '../../../core/content/vocabulary_entry.dart';
@@ -35,6 +37,7 @@ class WordPool {
     _entries
         .where((entry) => entry.acceptedGuess && entry.solutionEligible)
         .where((entry) => _supportsLanguage(entry, mode))
+        .where((entry) => AnswerEligibility.allows(entry, mode.script))
         .where(
           (entry) =>
               (spelling(entry, mode) == null
