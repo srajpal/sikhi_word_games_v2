@@ -37,6 +37,12 @@ version 1.18.0/code 32; launching MainActivity succeeded and running PID 15571
 was verified. This supersedes its previous 1.16.2+31 installation. Hands-on
 touch dragging and navigation-speed checks remain pending.
 
+The K70 PRO tablet was also updated on October 10 using `adb install -r`,
+preserving existing app data. Android reports version 1.18.0/code 32;
+MainActivity launch succeeded and running PID 21298 was verified. This
+supersedes its previous 1.16.1+30 installation. Tablet layout and touch
+interaction playtesting remain hands-on checks.
+
 ## October 9 review fixes and follow-ups: released 1.17.0+31
 
 - [x] Follow-up 3.1: ignore lone Gurmukhi vowel signs in Quest hardware input and
