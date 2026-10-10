@@ -37,7 +37,13 @@ Pixel 6 was updated on October 10 from 1.18.0+32 to the normal arm64 profile/AOT
 APK built from commit a557fad, using `adb install -r` to preserve existing app
 data. Android confirms 1.18.2/code 34; MainActivity was brought to the foreground
 successfully and running PID 22762 was verified. Hands-on direct-grid testing
-remains a player check. The tablet remains on 1.18.1+33.
+remains a player check.
+
+The K70 PRO tablet was then updated from 1.18.1+33 to the same normal arm64
+profile/AOT APK using `adb install -r`, preserving app data. Android confirms
+1.18.2/code 34; a cold MainActivity launch succeeded and running PID 27234 was
+verified. Both devices now have the direct-grid build; hands-on tablet checks
+remain separate from these installation and launch confirmations.
 
 ## October 10 tablet launch delay: candidate 1.18.1+33
 
