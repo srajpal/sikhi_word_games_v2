@@ -100,6 +100,15 @@ quotas. Reproduce coverage with the answer-coverage test in
 
 ## Import, distribution and checks
 
+The release audit also fails on a small boundary-matched deny-list of crude
+terms and vandalism phrases such as "your mom" in definitions, including
+case/whitespace variants. Innocent substrings such as farther, sextant and
+Sussex do not match. The guard reports dataset/word identity, including when
+the supplied hashes and runtime bytes are otherwise valid. It never rewrites
+approved definitions or removes Dictionary records. This regression check is
+not exhaustive editorial verification; source changes still require a newly
+owner-approved release.
+
 From `app/`, import an approved release with
 `dart run tool/build_release_content.dart --import-from <path> --write`.
 Ordinary `--write` rebuilds from the local approved snapshot; `--check` verifies

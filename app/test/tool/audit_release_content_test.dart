@@ -17,6 +17,72 @@ void main() {
   tearDown(() => temporary.deleteSync(recursive: true));
 
   test(
+    'definition guard matches boundaries and case without innocent substrings',
+    () {
+      for (final term in crudeDefinitionTerms) {
+        expect(
+          () => checkDefinitionText('A ($term).', identity: 'fixture'),
+          throwsFormatException,
+        );
+        expect(
+          () => checkDefinitionText(
+            'A ${term.toUpperCase()}!',
+            identity: 'fixture',
+          ),
+          throwsFormatException,
+        );
+      }
+      expect(
+        () => checkDefinitionText('your\n\tmom', identity: 'fixture'),
+        throwsFormatException,
+      );
+      expect(
+        () => checkDefinitionText(
+          'Farther away in Sussex; a sextant, a classic compass and a shiitake mushroom.',
+          identity: 'fixture',
+        ),
+        returnsNormally,
+      );
+      expect(
+        () => checkDefinitionText('motherfuckersuffix', identity: 'fixture'),
+        returnsNormally,
+      );
+    },
+  );
+
+  for (final dataset in approvedDatasets) {
+    test(
+      'release audit fails on vandalism in $dataset even with correct hashes',
+      () {
+        final files = approvedFixture();
+        final path = '$dataset/words.json';
+        final master = decodeObject(files[path]!, path);
+        final record = (master['words'] as List).single as Map<String, Object?>;
+        record['definition'] = 'A continent is your mom.';
+        files[path] = utf8.encode(jsonEncode(master));
+        files['$dataset/definitions.txt'] = utf8.encode(
+          '${record['word']}\t${record['definition']}\n',
+        );
+        refreshManifest(files);
+        writeFixture(source, files);
+        final snapshot = ApprovedRelease.load(source);
+        final packaged = Directory('${temporary.path}/runtime');
+        writeFixture(packaged, snapshot.runtimeFiles);
+        expect(
+          () => auditRelease(snapshot, directory: packaged),
+          throwsA(
+            isA<FormatException>().having(
+              (e) => e.message,
+              'record identity',
+              contains('$dataset/${record['word']}'),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  test(
     'approved rare words and original review metadata bypass editorial filters',
     () {
       writeFixture(source, approvedFixture());

@@ -10,7 +10,7 @@ source snapshot; integrity checks do not reopen editorial approval.
 
 - [x] 1. Apply one mechanical answer rule across all five word games, retaining
   the complete Dictionary and accepted guesses; document actual pool coverage.
-- [ ] 2. Fail release audits on boundary-matched crude/vandalized definitions.
+- [x] 2. Fail release audits on boundary-matched crude/vandalized definitions.
 - [ ] 3. Correct statistics/help/plurals, Scramble settings, Quest hardware input
   and the Simple Punjabi default description.
 - [ ] 4. Share hardware-input validation, use theme tokens, remove confirmed
@@ -30,6 +30,10 @@ Item 1 validation: 401 Flutter tests, including all 40 goldens, passed;
 analysis is clean and 161 Dart files are formatted. Reviewed the changed Jodo
 English phone baseline using eligible, unambiguous preview pairs. Content audit
 and release `--check`/audit pass with 20,601 records and zero byte differences.
+Item 2 validation: 405 tests including all goldens passed; analysis/formatting,
+content audit and release checks pass. The regression guard checks definitions
+in all three datasets, including correctly hashed vandalized fixtures, without
+editing the approved snapshot.
 
 ## October 9 Gurmukhi scramble labels: candidate 1.16.1+30
 
