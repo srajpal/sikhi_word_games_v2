@@ -1,3 +1,4 @@
+import '../../../core/widgets/game_loading.dart';
 import '../../achievements/presentation/achievement_feedback.dart';
 
 import 'package:go_router/go_router.dart';
@@ -65,6 +66,8 @@ class _WordBridgesPageState extends State<WordBridgesPage> {
 
   Future<void> _load() async {
     try {
+      await showGameLoadingFrame();
+      if (!mounted) return;
       final content =
           await (widget.contentFuture ??
               WordBridgesContent.load(widget.vocabularyRepository));

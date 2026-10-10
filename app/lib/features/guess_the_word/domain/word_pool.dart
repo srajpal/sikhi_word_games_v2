@@ -18,6 +18,7 @@ class WordPool {
       <LanguageMode, (String, List<(VocabularyEntry, String)>)>{};
 
   final _charactersByMode = <LanguageMode, List<String>>{};
+  final _solutions = <(LanguageMode, int), List<VocabularyEntry>>{};
 
   List<String> charactersFor(LanguageMode mode) =>
       _charactersByMode.putIfAbsent(mode, () {
@@ -33,23 +34,26 @@ class WordPool {
   List<VocabularyEntry> solutions({
     required LanguageMode mode,
     required int wordLength,
-  }) => _bestBySpelling(
-    _entries
-        .where(
-          (entry) => AnswerEligibility.isCandidate(
-            entry,
-            mode.script,
-            requireDefinition: false,
+  }) => _solutions.putIfAbsent(
+    (mode, wordLength),
+    () => _bestBySpelling(
+      _entries
+          .where(
+            (entry) => AnswerEligibility.isCandidate(
+              entry,
+              mode.script,
+              requireDefinition: false,
+            ),
+          )
+          .where(
+            (entry) =>
+                (spelling(entry, mode) == null
+                    ? null
+                    : wordUnitCount(spelling(entry, mode)!)) ==
+                wordLength,
           ),
-        )
-        .where(
-          (entry) =>
-              (spelling(entry, mode) == null
-                  ? null
-                  : wordUnitCount(spelling(entry, mode)!)) ==
-              wordLength,
-        ),
-    mode,
+      mode,
+    ),
   );
 
   Set<String> acceptedGuesses({

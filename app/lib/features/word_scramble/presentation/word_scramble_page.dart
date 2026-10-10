@@ -1,3 +1,4 @@
+import '../../../core/widgets/game_loading.dart';
 import '../../achievements/presentation/achievement_feedback.dart';
 import '../../../core/widgets/game_menu.dart';
 
@@ -57,6 +58,8 @@ class _WordScramblePageState extends State<WordScramblePage> {
 
   Future<void> _load() async {
     try {
+      await showGameLoadingFrame();
+      if (!mounted) return;
       final words = WordScrambleVocabulary(
         await widget.vocabularyRepository.load(),
       );

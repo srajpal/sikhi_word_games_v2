@@ -18,6 +18,17 @@ Native platforms decode and construct entries in a `compute` isolate. Web yields
 before each JSON shard and every 250 constructed records; individual shard JSON
 parsing still runs on the browser thread. Malformed records report their IDs.
 
+Game routes use `NoTransitionPage` so their loading header is opaque on its first
+frame. `showGameLoadingFrame` waits for frame submission and an event-loop turn
+before cached vocabulary Futures resume preparation. Quest and Bridges loaders
+also defer their shared construction. Non-game routes keep the 120 ms fade.
+Normalization checks whether conversion/joining is necessary before walking
+code points or replacing marks. `AnswerEligibility` weakly caches decisions per
+immutable entry identity and script; plain/source copies remain separate.
+`WordPool` caches its solution lists by language/length, and Bujho retains its
+pool when the spelling setting is unchanged. Dictionary and guess membership
+continue to include all supplied entries.
+
 `GameThemeTokens` owns panel, control and tile treatment. `GameArtwork` provides
 decorative library previews, and `QuestLantern` draws a secular countdown from
 the active color scheme. All three game modes use the active theme; Word Quest does not maintain

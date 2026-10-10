@@ -2,6 +2,18 @@
 
 ## Coverage and limits
 
+`game_loading_test.dart` verifies that every vocabulary-game destination submits
+its loading header and indicator before consulting warm content, with no ancestor
+route fade hiding the acknowledgement. Unicode regressions include attached
+marks, Gurmukhi links, emoji families and CRLF graphemes.
+`integration_test/game_launch_performance_test.dart` measures actual bundled
+dictionary preparation and all six launches on an Android device, using fresh
+decoded identities for the route samples and exclusively in-memory saves.
+It reports timings instead of imposing a device-dependent CI threshold. Compare
+debug measurements with debug; use profile builds for realistic rendering costs.
+Test-driver pump/settle timings include harness work and animation settling,
+so they are evidence rather than guaranteed touch-to-display latency.
+
 October 10 quality-of-life regressions cover equal phone/tablet card heights with a
 Continue save at 1x/1.5x/2x text, both Learn Letters launch types and continuation,
 selected-language loading frames in all five vocabulary games, shared menu order
@@ -15,7 +27,7 @@ and pronunciation quality remain separate manual checks.
   source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
-- Forty-two Windows golden image tests cover Modern, Sikhi, and Dark. They run
+- Fifty Windows golden image tests cover Modern, Sikhi, and Dark. They run
   separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.

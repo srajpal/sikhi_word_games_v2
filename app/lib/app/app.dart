@@ -1,3 +1,4 @@
+import '../core/widgets/game_loading.dart';
 import '../features/achievements/domain/player_progress.dart';
 
 import 'dart:async';
@@ -152,7 +153,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
           routes: [
             GoRoute(
               path: 'word-scramble',
-              pageBuilder: (context, state) => _page(
+              pageBuilder: (context, state) => _gamePage(
                 context,
                 state,
                 _gameShell(
@@ -171,7 +172,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             ),
             GoRoute(
               path: 'learn-letters',
-              pageBuilder: (context, state) => _page(
+              pageBuilder: (context, state) => _gamePage(
                 context,
                 state,
                 _gameShell(
@@ -189,7 +190,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             ),
             GoRoute(
               path: 'word-bridges',
-              pageBuilder: (context, state) => _page(
+              pageBuilder: (context, state) => _gamePage(
                 context,
                 state,
                 _gameShell(
@@ -210,7 +211,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             ),
             GoRoute(
               path: 'guess-the-word',
-              pageBuilder: (context, state) => _page(
+              pageBuilder: (context, state) => _gamePage(
                 context,
                 state,
                 _gameShell(
@@ -274,7 +275,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             ),
             GoRoute(
               path: 'word-search',
-              pageBuilder: (context, state) => _page(
+              pageBuilder: (context, state) => _gamePage(
                 context,
                 state,
                 _gameShell(
@@ -295,7 +296,7 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
             ),
             GoRoute(
               path: 'word-quest',
-              pageBuilder: (context, state) => _page(
+              pageBuilder: (context, state) => _gamePage(
                 context,
                 state,
                 _gameShell(
@@ -324,6 +325,14 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
       ],
     );
   }
+
+  // The first loading frame must be opaque. A fade starting at zero would
+  // conceal acknowledgement while preparation resumes after that frame.
+  NoTransitionPage<void> _gamePage(
+    BuildContext context,
+    GoRouterState state,
+    Widget child,
+  ) => NoTransitionPage<void>(key: state.pageKey, child: child);
 
   CustomTransitionPage<void> _page(
     BuildContext context,
@@ -373,13 +382,20 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
       );
   Future<WordBridgesContent> _wordBridgesContent() =>
       _wordBridgesContentFuture ??=
-          widget.wordBridgesContentFuture ??
-          WordBridgesContent.load(widget.vocabularyRepository);
+          widget.wordBridgesContentFuture ?? _prepareWordBridges();
+
+  Future<WordBridgesContent> _prepareWordBridges() async {
+    await showGameLoadingFrame();
+    return WordBridgesContent.load(widget.vocabularyRepository);
+  }
 
   Future<WordQuestVocabulary> _wordQuestVocabulary() =>
-      _wordQuestVocabularyFuture ??= WordQuestVocabulary.load(
-        widget.vocabularyRepository,
-      );
+      _wordQuestVocabularyFuture ??= _prepareWordQuest();
+
+  Future<WordQuestVocabulary> _prepareWordQuest() async {
+    await showGameLoadingFrame();
+    return WordQuestVocabulary.load(widget.vocabularyRepository);
+  }
 
   GameLaunchOptions _launchOptions(GoRouterState state) =>
       state.extra is GameLaunchOptions

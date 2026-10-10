@@ -2,6 +2,15 @@
 
 ## October 10 mobile quality of life
 
+Game routes appear immediately without a fade, with an opaque loading frame
+before vocabulary preparation. This acknowledges New game even when its answer
+pool is not ready. Other pages retain the short, reduced-motion-aware fade.
+Normalization skips text that needs no conversion; shared mechanical eligibility
+decisions and Bujho solution pools are reused without changing approved content,
+accepted guesses, written units or answer rules. Native performance checks use
+the real bundled dictionaries with in-memory test saves; optimized profile builds
+are preferred for testing navigation speed on slower Android devices.
+
 - All six library cards have one measured height on phone, tablet and web, including
   cards with Continue actions. Large accessibility text can still use one column.
 - Learn Letters offers Listen and find the letter / See the letter and find its
@@ -24,7 +33,7 @@
   a colorful game-local banner. Multiple awards queue; existing awards do not
   replay on launch. Dismiss and View badges remain accessible, with no automatic
   dismissal for accessible navigation. The three existing themes supply colors.
-- Navigation uses a short 120 ms fade, or no transition with reduced motion.
+- Non-game navigation uses a short 120 ms fade, or no transition with reduced motion.
   The asset repository starts its cached dictionary load after the first home
   frame so the first game need not initiate the asset download/decoder.
 

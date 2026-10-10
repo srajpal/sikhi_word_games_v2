@@ -1,3 +1,4 @@
+import '../../../core/widgets/game_loading.dart';
 import '../../achievements/presentation/achievement_feedback.dart';
 import '../../../core/widgets/game_menu.dart';
 import '../../../core/language/hardware_input.dart';
@@ -150,6 +151,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
 
   Future<void> _loadVocabulary() async {
     try {
+      await showGameLoadingFrame();
+      if (!mounted) return;
       final entries = await widget.vocabularyRepository.load();
       if (!mounted) return;
       _views = RomanizedVocabularyViews(entries);
@@ -245,6 +248,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   }
 
   void _useSpelling(bool simple) {
+    if (_pool != null && _simpleRomanized == simple) return;
     _simpleRomanized = simple;
     _pool = WordPool(_views!.entries(simple: simple));
   }

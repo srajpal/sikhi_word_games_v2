@@ -6,6 +6,36 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 10 tablet launch delay: candidate 1.18.1+33
+
+- [x] Show an opaque destination/loading frame before vocabulary preparation;
+  remove the game-route fade that initially concealed that acknowledgement.
+- [x] Skip unnecessary normalization, reuse eligibility decisions and Bujho
+  solution pools, and retain the pool when its spelling setting is unchanged.
+- [x] Add warm-content loading regressions and a real-dictionary Android launch
+  benchmark using in-memory saves, without reading or resetting player data.
+- [x] Validate and install the normal optimized app on the K70 PRO tablet.
+
+Formatting and analysis pass; all 480 tests pass, including the unchanged 50
+Windows goldens. The release web package for 1.18.1+33 builds successfully with
+96 offline-cache files. Vocabulary/attribution integrity passes for all 20,601
+unchanged records. No vocabulary or answer eligibility rules were changed.
+
+The K70 PRO debug benchmark reduced English Bujho pool preparation from 3,565
+to 171 ms and Gurmukhi from 12,542 to 378 ms for the same multi-length workload.
+The final profile integration run passed all six game launches after the tablet
+was unlocked. Tap plus first pump / settled timings, in milliseconds, were
+Bujho 112/611, Search 471/909, Quest 82/451, Bridges 95/842, Learn Letters
+103/333 and Scramble 98/535. These include test-harness/rendering work and are
+not guaranteed touch-to-display latency; hands-on feedback remains necessary.
+
+The temporary benchmark was replaced with the normal `lib/main.dart` arm64
+profile APK using `adb install -r`, preserving existing app data. Android
+reports version 1.18.1/code 33; MainActivity launch succeeded and running PID
+24758 was verified. Profile/AOT is used because local release-signing keys are
+not configured. The Pixel remains on 1.18.0+32. The rebuilt web package has not
+had a fresh browser playthrough; the earlier 1.18.0 checks below are historical.
+
 ## October 10 mobile quality of life: candidate 1.18.0+32
 
 - [x] Equal phone/tablet/web library card heights, including Continue and wrapped text.

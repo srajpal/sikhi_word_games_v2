@@ -1,3 +1,4 @@
+import '../../../core/widgets/game_loading.dart';
 import '../../achievements/presentation/achievement_feedback.dart';
 import '../../../core/widgets/game_menu.dart';
 import '../../../core/themes/game_heading.dart';
@@ -166,6 +167,8 @@ class _WordQuestPageState extends State<WordQuestPage> {
 
   Future<void> _load() async {
     try {
+      await showGameLoadingFrame();
+      if (!mounted) return;
       await _loadContents();
     } on Object catch (error) {
       if (!mounted) return;

@@ -1,3 +1,4 @@
+import '../../../core/widgets/game_loading.dart';
 import '../../achievements/presentation/achievement_feedback.dart';
 import '../../../core/widgets/game_menu.dart';
 import '../../../core/content/romanized_vocabulary_views.dart';
@@ -91,6 +92,8 @@ class _WordSearchPageState extends State<WordSearchPage> {
 
   Future<void> _load() async {
     try {
+      await showGameLoadingFrame();
+      if (!mounted) return;
       _views = RomanizedVocabularyViews(
         await widget.vocabularyRepository.load(),
       );

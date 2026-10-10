@@ -1,5 +1,11 @@
 import 'package:characters/characters.dart';
 
+final _romanizedCombiningMarks = RegExp(r'[\u0300-\u036F]');
+final _nonAscii = RegExp(r'[^\x00-\x7F]');
+final _gurmukhiVirama = RegExp(r'\u0A4D');
+final _linkedGurmukhiEnding = RegExp(r'\u0A4D[\u200C\u200D]*$');
+final _gurmukhiConsonantStart = RegExp(r'^[\u0A15-\u0A39\u0A59-\u0A5E]');
+
 const _romanizedCompositions = {
   'a\u0301': 'á',
   'a\u0303': 'ã',
@@ -30,6 +36,8 @@ const _romanizedCompositions = {
 /// This preserves case and every accent, including marks attached to macron
 /// letters (such as ā̃). It leaves text outside that alphabet unchanged.
 String normalizeRomanizedInput(String value) {
+  // Already composed and ordinary English text needs none of these replacements.
+  if (!_romanizedCombiningMarks.hasMatch(value)) return value;
   var result = value;
   for (final composition in _romanizedCompositions.entries) {
     result = result.replaceAll(composition.key, composition.value);
@@ -44,6 +52,7 @@ String normalizeRomanizedInput(String value) {
 /// A beginner spelling view, not a replacement for the approved source text.
 /// Each marked Roman letter becomes its plain base, preserving tile positions.
 String simplifyRomanizedPunjabi(String value) {
+  if (!_nonAscii.hasMatch(value)) return value;
   var result = normalizeRomanizedInput(value);
   for (final composition in _romanizedCompositions.entries) {
     result = result.replaceAll(composition.value, composition.key[0]);
@@ -52,17 +61,20 @@ String simplifyRomanizedPunjabi(String value) {
       composition.key[0].toUpperCase(),
     );
   }
-  return result.replaceAll(RegExp(r'[\u0300-\u036F]'), '');
+  return result.replaceAll(_romanizedCombiningMarks, '');
 }
 
 /// Written tiles: a Latin letter with marks, or a Gurmukhi base with marks
 /// and virama-linked subjoined letters. This matches the approved dictionaries.
 List<String> wordUnits(String value) {
+  // Characters already handles attached marks and emoji. Only Gurmukhi virama
+  // links need the additional joining rule below.
+  if (!_gurmukhiVirama.hasMatch(value)) return value.characters.toList();
   final units = <String>[];
   for (final cluster in value.characters) {
     if (units.isNotEmpty &&
-        RegExp(r'\u0A4D[\u200C\u200D]*$').hasMatch(units.last) &&
-        RegExp(r'^[\u0A15-\u0A39\u0A59-\u0A5E]').hasMatch(cluster)) {
+        _linkedGurmukhiEnding.hasMatch(units.last) &&
+        _gurmukhiConsonantStart.hasMatch(cluster)) {
       units[units.length - 1] += cluster;
     } else {
       units.add(cluster);

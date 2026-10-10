@@ -1,7 +1,10 @@
+final _gurmukhiPrecomposed = RegExp(r'[\u0A33\u0A36\u0A59-\u0A5B\u0A5E]');
+
 /// Returns one stable code-point spelling for canonically equivalent Gurmukhi
 /// letters. Source and display strings can keep their original spelling; use
 /// this value for comparison, lookup, persistence state, and de-duplication.
 String normalizeGurmukhi(String value) {
+  if (!_gurmukhiPrecomposed.hasMatch(value)) return value;
   const decompositions = {
     0x0A33: '\u0A32\u0A3C', // ਲ਼ -> ਲ਼
     0x0A36: '\u0A38\u0A3C', // ਸ਼ -> ਸ਼
