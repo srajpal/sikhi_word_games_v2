@@ -61,6 +61,12 @@ English and Romanized Punjabi share Latin input. The simple bank contains every
 unique answer letter and up to six shuffled distractors. Show all letters opens
 A-Z. Hardware letters use the same handler; modifiers/shortcuts are ignored.
 
+Gurmukhi hardware input accepts exactly one letter or vowel sign per event,
+excluding digits, ੴ, other signs and multi-code-point input. A vowel sign is
+validated and saved like a letter guess; a sign absent from the answer's whole
+tiles counts as a miss. Roman combining marks alone remain invalid and cost no
+miss. These hardware limits do not split or restrict the on-screen marked tiles.
+
 Gurmukhi's bank uses whole answer graphemes plus eligible-vocabulary distractors.
 Keys and revealed tiles show shared Romanized pronunciation aids. The full bank
 adds basic Gurmukhi letters while retaining complete solution graphemes. It never

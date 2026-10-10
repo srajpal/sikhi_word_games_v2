@@ -1,4 +1,5 @@
 import '../../../core/themes/game_heading.dart';
+import '../../../core/language/player_text.dart';
 
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,12 @@ Future<void> showLibraryStatistics(
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-              '${bujhoWon + khoj.wordsFound + quest.won + (bridges?.pairsMatched ?? 0)} words solved',
+              wordsSolvedLabel(
+                bujhoWon +
+                    khoj.wordsFound +
+                    quest.won +
+                    (bridges?.pairsMatched ?? 0),
+              ),
             ),
             const SizedBox(height: 16),
             _Summary(

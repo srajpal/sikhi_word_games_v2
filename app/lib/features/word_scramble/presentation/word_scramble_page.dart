@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import '../../../core/language/player_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -216,36 +218,72 @@ class _WordScramblePageState extends State<WordScramblePage> {
   }
 
   Future<void> _settings() async {
+    var draft = _mode;
     final mode = await showModalBottomSheet<LanguageMode>(
       context: context,
       showDragHandle: true,
       isScrollControlled: true,
-      builder: (context) => SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const ListTile(
-                title: Text('Game settings'),
-                subtitle: Text(
-                  'Choose a language to start a new word. Word lengths vary.',
-                ),
-              ),
-              for (final mode in _original!.availableModes)
-                ListTile(
-                  title: Text(mode.label),
-                  selected: mode == _mode,
-                  onTap: InteractionSounds.buttonAction(
-                    context,
-                    () => Navigator.pop(context, mode),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) => SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const ListTile(
+                  title: Text('Game settings'),
+                  subtitle: Text(
+                    'A different language starts a new word when you apply. Cancel keeps your current word. Word lengths vary.',
                   ),
                 ),
-            ],
+                for (final mode in _original!.availableModes)
+                  ListTile(
+                    key: ValueKey('scramble-language-${mode.name}'),
+                    title: Text(mode.label),
+                    selected: mode == draft,
+                    leading: Icon(
+                      mode == draft
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                    ),
+                    onTap: InteractionSounds.buttonAction(
+                      context,
+                      () => setSheetState(() => draft = mode),
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: InteractionSounds.buttonAction(
+                            context,
+                            () => Navigator.pop(context),
+                          ),
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: FilledButton(
+                          key: const ValueKey('scramble-settings-apply'),
+                          onPressed: InteractionSounds.buttonAction(
+                            context,
+                            () => Navigator.pop(context, draft),
+                          ),
+                          child: const Text('Apply'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
-    if (mode != null && mounted) await _newWord(mode: mode);
+    if (mode != null && mounted && mode != _mode) await _newWord(mode: mode);
   }
 
   void _statistics() {
@@ -257,7 +295,7 @@ class _WordScramblePageState extends State<WordScramblePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${total.solved} words solved'),
+          Text(wordsSolvedLabel(total.solved)),
           Text('${total.unhinted} without a hint'),
           Text('${total.firstCheck} on the first check'),
           const SizedBox(height: 16),
@@ -475,7 +513,7 @@ class _WordScramblePageState extends State<WordScramblePage> {
         ),
         const SizedBox(height: 12),
         Text(
-          '${widget.repository.total.solved} words solved',
+          wordsSolvedLabel(widget.repository.total.solved),
           textAlign: TextAlign.center,
           style: theme.textTheme.bodySmall,
         ),

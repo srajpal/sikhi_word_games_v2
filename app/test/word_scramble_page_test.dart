@@ -52,6 +52,70 @@ Widget scramblePage(
   ),
 );
 void main() {
+  testWidgets(
+    'settings preserve the round until a different language is applied',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 780);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final repo = WordScrambleRepository(MemoryKeyValueStore());
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemes.forChoice(AppThemeChoice.modern),
+          home: WordScramblePage(
+            repository: repo,
+            vocabularyRepository: MemoryVocabularyRepository([
+              fixture('APPLE', LanguageMode.english),
+              fixture('ĀSĀN', LanguageMode.romanizedPanjabi),
+              fixture('ਕਲਮਤ', LanguageMode.gurmukhi),
+            ]),
+            initialMode: LanguageMode.english,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('scramble-tile-0')));
+      await tester.pumpAndSettle();
+      final snapshot = repo.restore()!.game.toJson();
+      Future<void> openSettings() async {
+        await tester.tap(find.byTooltip('Shabad Banao menu'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Game settings'));
+        await tester.pumpAndSettle();
+      }
+
+      await openSettings();
+      await tester.tap(find.byKey(const ValueKey('scramble-language-english')));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.toJson(), snapshot);
+      await tester.tap(find.text('Apply'));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.toJson(), snapshot);
+      await openSettings();
+      await tester.tap(
+        find.byKey(const ValueKey('scramble-language-gurmukhi')),
+      );
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.mode, LanguageMode.english);
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.toJson(), snapshot);
+      await openSettings();
+      await tester.tap(
+        find.byKey(const ValueKey('scramble-language-gurmukhi')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Apply'));
+      await tester.pumpAndSettle();
+      final changed = repo.restore()!;
+      expect(changed.mode, LanguageMode.gurmukhi);
+      expect(changed.game.roundId, isNot(snapshot['roundId']));
+      expect(changed.game.slots.every((id) => id == null), isTrue);
+      expect(repo.total.solved, 0);
+      expect(tester.takeException(), isNull);
+    },
+  );
   for (final theme in AppThemeChoice.values) {
     testWidgets(
       'phone board fits and semantic tile play completes once in ${theme.name}',
@@ -90,6 +154,8 @@ void main() {
         await tester.tap(find.text('Check word'));
         await tester.pumpAndSettle();
         expect(repo.total.solved, 1);
+        expect(find.text('1 word solved'), findsOneWidget);
+        expect(find.text('1 words solved'), findsNothing);
         expect(find.text('Next word'), findsOneWidget);
         expect(repo.hasActiveGame, isFalse);
         expect(tester.takeException(), isNull);

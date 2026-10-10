@@ -260,7 +260,10 @@ class WordQuestGame {
     final startsWithLetter = RegExp(
       r'^[A-Za-z\u00C0-\u024F\u1E00-\u1EFF\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73]',
     ).hasMatch(normalised);
-    return wordUnitCount(normalised) == 1 && startsWithLetter
+    final isGurmukhiVowel = RegExp(r'^[\u0A3E-\u0A42\u0A47\u0A48\u0A4B\u0A4C]$')
+        .hasMatch(normalised);
+    return wordUnitCount(normalised) == 1 &&
+            (startsWithLetter || isGurmukhiVowel)
         ? normalised
         : null;
   }

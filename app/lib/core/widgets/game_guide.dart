@@ -90,7 +90,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
     ),
     (
       title: 'Play your way',
-      body: 'Tap cards or use Tab and Enter or Space on a keyboard. With a screen reader, focus and activate each card. No dragging is needed. Use New set above the cards or Game settings in the menu to choose a language. Open the game menu for Statistics or these instructions.',
+      body: 'Tap cards or use Tab and Enter or Space on a keyboard. With a screen reader, focus and activate each card. No dragging is needed. Open the game menu for New set, Game settings, Statistics or these instructions. Game settings chooses a language.',
     ),
   ],
   GameKind.guessTheWord => const [

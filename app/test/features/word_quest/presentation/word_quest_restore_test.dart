@@ -13,6 +13,48 @@ import 'package:sikhi_word_games_v2/features/word_quest/domain/word_quest_game.d
 import 'package:sikhi_word_games_v2/features/word_quest/presentation/word_quest_page.dart';
 
 void main() {
+  testWidgets(
+    'Gurmukhi hardware accepts a single letter or vowel and rejects other input',
+    (tester) async {
+      final repository = WordQuestSessionRepository(MemoryKeyValueStore());
+      await repository.save(
+        mode: LanguageMode.gurmukhi,
+        wordSize: 4,
+        game: WordQuestGame(solution: 'ਸਤਿਗੁਰ'),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemes.forChoice(AppThemeChoice.modern),
+          home: WordQuestPage(
+            vocabularyRepository: _gurmukhiVocabulary,
+            hapticLevel: HapticFeedbackLevel.off,
+            reducedMotion: true,
+            sessionRepository: repository,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      for (final value in ['੨', '1', 'ੴ', 'ਕਾ', 'ਸਤਿ', 'ਖ਼', '੍', 'ੰ', '🙂']) {
+        await tester.sendKeyEvent(LogicalKeyboardKey.keyA, character: value);
+        await tester.pumpAndSettle();
+        expect(
+          repository.restore()!.game.guessedGraphemes,
+          isEmpty,
+          reason: value,
+        );
+        expect(repository.restore()!.game.incorrectGuesses, 0, reason: value);
+      }
+      await tester.sendKeyEvent(LogicalKeyboardKey.keyA, character: 'ਸ');
+      await tester.pumpAndSettle();
+      expect(repository.restore()!.game.guessedGraphemes, contains('ਸ'));
+      expect(repository.restore()!.game.incorrectGuesses, 0);
+      await tester.sendKeyEvent(LogicalKeyboardKey.keyA, character: 'ਿ');
+      await tester.pumpAndSettle();
+      expect(repository.restore()!.game.guessedGraphemes, contains('ਿ'));
+      expect(repository.restore()!.game.incorrectGuesses, 1);
+      expect(tester.takeException(), isNull);
+    },
+  );
   for (final gurmukhi in [false, true]) {
     testWidgets(
       '${gurmukhi ? 'Gurmukhi' : 'Latin'} letter key activates with keyboard Space',

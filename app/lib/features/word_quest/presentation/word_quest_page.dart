@@ -149,14 +149,19 @@ class _WordQuestPageState extends State<WordQuestPage> {
     final normalized = _mode == LanguageMode.romanizedPanjabi
         ? normalizeRomanizedInput(character)
         : character;
-    // Quest selects complete written units; isolated input-method marks do not
-    // form guesses and must never consume a miss.
+    // Hardware Gurmukhi input is one letter or vowel sign. Whole marked tiles
+    // remain available through the on-screen keys and their accessible actions.
     final isLetter =
         GameKeyboard.acceptsHardwareCharacter(_mode, normalized) &&
-        wordUnitCount(normalized) == 1 &&
-        RegExp(
-          r'^[A-Za-z\u00C0-\u024F\u1E00-\u1EFF\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73]',
-        ).hasMatch(normalized);
+        (_mode == LanguageMode.gurmukhi
+            ? normalized.runes.length == 1 &&
+                  RegExp(
+                    r'^[\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73\u0A3E-\u0A42\u0A47\u0A48\u0A4B\u0A4C]$',
+                  ).hasMatch(normalized)
+            : wordUnitCount(normalized) == 1 &&
+                  RegExp(
+                    r'^[A-Za-z\u00C0-\u024F\u1E00-\u1EFF\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73]',
+                  ).hasMatch(normalized));
     if (!isLetter) {
       return KeyEventResult.ignored;
     }

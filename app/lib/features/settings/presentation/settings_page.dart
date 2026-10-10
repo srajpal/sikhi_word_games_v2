@@ -122,7 +122,7 @@ class _SettingsPageState extends State<SettingsPage> {
           key: const ValueKey('simple-romanized-punjabi'),
           title: const Text('Simple Romanized Punjabi'),
           subtitle: const Text(
-            'Plain letters and an A–Z keyboard. Turn off for accents. Applies to new rounds and Dictionary; saved rounds keep their spelling.',
+            'On by default: plain letters and an A-Z keyboard. Turn off for accents. Applies to new rounds and Dictionary; saved rounds keep their spelling.',
           ),
           value: _settings.simpleRomanizedPunjabi,
           onChanged: InteractionSounds.buttonChange(

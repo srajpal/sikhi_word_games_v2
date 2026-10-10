@@ -143,6 +143,15 @@ silently importing counterpart-mode words or changing definitions.
 
 ## Design policy
 
+Review fixes for 1.16.2+31: shared statistics print language/length once using
+"Mixed lengths", and solved-word counts use singular/plural labels. Shabad
+Banao stages language changes until Apply; Cancel/dismiss and applying the
+current language preserve the round. A different applied language starts a new
+word. Simple Romanized Punjabi remains enabled by default; the Settings copy
+states this. Quest hardware Gurmukhi input accepts one letter or vowel sign,
+never digits, ੴ or multiple code points. Marked/conjunct on-screen tiles retain
+their existing behavior. Jodo help locates New set in the game menu.
+
 - Players choose their active theme.
 - Ship exactly three themes: Modern, Sikhi, and Dark. Sikhi is the default.
 - Keep all three themes in the shared theme system without duplicating game screens.

@@ -19,16 +19,11 @@ Future<void> showGameStatistics(
     context,
     title: '$title statistics',
     introduction:
-        '$modeLabel · ${size == null ? 'Varied lengths' : '$size letters'}',
+        '$modeLabel · ${size == null ? 'Mixed lengths' : '$size letters'}',
     child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '$modeLabel · ${size == null ? 'Mixed lengths' : '$size letters'}',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 12),
         Text('Finished: ${current.played}'),
         Text('Solved: ${current.won}'),
         if (isQuest) Text('Solved with hints: ${current.hintedWins}'),

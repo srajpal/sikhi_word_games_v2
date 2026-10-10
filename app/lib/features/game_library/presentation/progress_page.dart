@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../../../core/language/player_text.dart';
+
 import 'package:go_router/go_router.dart';
 
 import '../../../core/themes/game_artwork.dart';
@@ -44,7 +47,7 @@ class ProgressPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               Text(
-                '$words words solved',
+                wordsSolvedLabel(words),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
@@ -93,7 +96,7 @@ class ProgressPage extends StatelessWidget {
                   GameKind.learnLetters =>
                     '${facts['learnLetters:won'] ?? 0} rounds finished, ${facts['learnLetters:firstTry'] ?? 0} first-try answers',
                   GameKind.wordScramble =>
-                    '${facts['wordScramble:won'] ?? 0} words solved, ${facts['wordScramble:unhinted'] ?? 0} without a hint',
+                    '${wordsSolvedLabel(facts['wordScramble:won'] ?? 0)}, ${facts['wordScramble:unhinted'] ?? 0} without a hint',
                 }, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 12),
                 if (game == GameKind.learnLetters)

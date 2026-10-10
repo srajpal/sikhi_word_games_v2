@@ -11,7 +11,7 @@ source snapshot; integrity checks do not reopen editorial approval.
 - [x] 1. Apply one mechanical answer rule across all five word games, retaining
   the complete Dictionary and accepted guesses; document actual pool coverage.
 - [x] 2. Fail release audits on boundary-matched crude/vandalized definitions.
-- [ ] 3. Correct statistics/help/plurals, Scramble settings, Quest hardware input
+- [x] 3. Correct statistics/help/plurals, Scramble settings, Quest hardware input
   and the Simple Punjabi default description.
 - [ ] 4. Share hardware-input validation, use theme tokens, remove confirmed
   dead code and add corrupt/unsupported save/native-decoder regressions.
@@ -34,6 +34,10 @@ Item 2 validation: 405 tests including all goldens passed; analysis/formatting,
 content audit and release checks pass. The regression guard checks definitions
 in all three datasets, including correctly hashed vandalized fixtures, without
 editing the approved snapshot.
+Item 3 validation: 409 tests including all 40 goldens passed; analysis is clean
+and 162 Dart files are formatted. Reviewed the Settings phone baseline. Tests
+cover one statistics detail, singular word counts, same-language/cancel/apply
+round preservation, forbidden Gurmukhi hardware input and vowel-sign saves.
 
 ## October 9 Gurmukhi scramble labels: candidate 1.16.1+30
 
