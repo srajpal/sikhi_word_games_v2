@@ -149,7 +149,7 @@ class _WordQuestPageState extends State<WordQuestPage> {
     final normalized = _mode == LanguageMode.romanizedPanjabi
         ? normalizeRomanizedInput(character)
         : character;
-    // Hardware Gurmukhi input is one letter or vowel sign. Whole marked tiles
+    // Hardware Gurmukhi input is one letter. Whole marked tiles
     // remain available through the on-screen keys and their accessible actions.
     final isLetter = HardwareInput.acceptsQuestCharacter(
       _mode.script,

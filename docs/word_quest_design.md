@@ -67,11 +67,11 @@ unfinished round through an optional `fullKeyboard` field; older saves default
 to full. A fresh word or retry starts full. Hardware letters use the same handler;
 modifiers/shortcuts are ignored.
 
-Gurmukhi hardware input accepts exactly one letter or vowel sign per event,
-excluding digits, ੴ, other signs and multi-code-point input. A vowel sign is
-validated and saved like a letter guess; a sign absent from the answer's whole
-tiles counts as a miss. Roman combining marks alone remain invalid and cost no
-miss. These hardware limits do not split or restrict the on-screen marked tiles.
+Gurmukhi hardware input accepts exactly one letter per event, excluding digits,
+ੴ, lone vowel signs, other signs and multi-code-point input. Lone signs are
+ignored without consuming a miss because answer tiles keep their marks attached
+to the base letter. Roman combining marks alone also cost no miss. These hardware
+limits do not split or restrict the on-screen marked tiles.
 
 Gurmukhi's bank uses whole answer graphemes plus eligible-vocabulary distractors.
 Keys and revealed tiles show shared Romanized pronunciation aids. The full bank

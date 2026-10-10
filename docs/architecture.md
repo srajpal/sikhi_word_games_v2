@@ -31,7 +31,8 @@ letters and vowel signs, while Word Quest selects whole written units.
 Those layouts must reuse the shared pronunciation and label components.
 `HardwareInput` in `core/language/` owns script alphabets and pure input
 validation, without importing a feature's presentation layer. Quest hardware
-input accepts a single Gurmukhi letter or vowel sign; its on-screen tiles still
+input accepts a single Gurmukhi letter and ignores lone vowel signs without a
+miss; its on-screen tiles still
 select whole written units.
 Quest starts each new word/retry with the full alphabet and a visible lantern.
 Its optional easier bank preserves the same miss/hint rules; `fullKeyboard`

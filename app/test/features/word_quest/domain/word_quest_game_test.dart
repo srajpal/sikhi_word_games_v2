@@ -14,11 +14,19 @@ void main() {
         expect(game.guessedGraphemes, isEmpty);
       },
     );
-    test('single Gurmukhi vowel guesses survive snapshot validation', () {
+    test('lone Gurmukhi vowel signs are ignored without consuming a miss', () {
       final game = WordQuestGame(solution: 'ਕਿਤਾਬ');
-      expect(game.guess('ਿ').result, WordQuestGuessResult.incorrect);
-      expect(WordQuestGame.restore(game.toJson()).guessedGraphemes, {'ਿ'});
-      expect(game.incorrectGuesses, 1);
+      game.guess('ਸ');
+      final misses = game.incorrectGuesses;
+      final remaining = game.triesRemaining;
+      for (final sign in ['ਾ', 'ਿ', 'ੀ', 'ੁ', 'ੂ', 'ੇ', 'ੈ', 'ੋ', 'ੌ']) {
+        expect(game.guess(sign).result, WordQuestGuessResult.invalid);
+        expect(game.incorrectGuesses, misses, reason: sign);
+        expect(game.triesRemaining, remaining, reason: sign);
+        expect(game.guessedGraphemes, {'ਸ'});
+      }
+      expect(WordQuestGame.restore(game.toJson()).incorrectGuesses, misses);
+      expect(game.guess('ਤਾ').result, WordQuestGuessResult.correct);
     });
     test('rejects guesses recorded after the round would have ended', () {
       final snapshot = WordQuestGame(solution: 'SEVA').toJson();

@@ -17,7 +17,9 @@
 
 Hardware input validation is shared under `core/language/`, separate from game
 widgets. Bujho/Dictionary preserve complete composable input; Quest accepts one
-Gurmukhi letter or vowel sign while rejecting digits, sacred marks and batches.
+Gurmukhi letter while ignoring lone vowel signs without consuming a miss, and
+rejecting digits, sacred marks and batches. Whole marked on-screen units remain
+valid guesses.
 Direct native-decoder tests cover all three scripts, unchanged definitions,
 counterpart-only metadata, exact written units and invalid conjunct/count data.
 Jodo rotation tests round-trip `usedWords`/`previousWords` by language, retain

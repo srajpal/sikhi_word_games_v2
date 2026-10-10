@@ -8,6 +8,9 @@ source snapshot; integrity checks do not reopen editorial approval.
 
 ## October 9 review fixes: candidate 1.16.2+31
 
+- [x] Follow-up 3.1: ignore lone Gurmukhi vowel signs in Quest hardware input and
+  the engine without consuming misses; cover unchanged counts and marked tiles.
+
 - [x] Follow-up 1: make Shabad Banao anagram-first, with the meaning revealed
   only through Hint or completion; persist clue visibility and preserve old saves.
 - [x] Follow-up 2: start Quest with the full alphabet, retain its miss limit and

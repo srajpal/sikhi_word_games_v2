@@ -105,7 +105,7 @@ void main() {
     );
   }
   testWidgets(
-    'Gurmukhi hardware accepts a single letter or vowel and rejects other input',
+    'Gurmukhi hardware accepts a single letter and ignores lone vowel signs',
     (tester) async {
       final repository = WordQuestSessionRepository(MemoryKeyValueStore());
       await repository.save(
@@ -141,8 +141,8 @@ void main() {
       expect(repository.restore()!.game.incorrectGuesses, 0);
       await tester.sendKeyEvent(LogicalKeyboardKey.keyA, character: 'ਿ');
       await tester.pumpAndSettle();
-      expect(repository.restore()!.game.guessedGraphemes, contains('ਿ'));
-      expect(repository.restore()!.game.incorrectGuesses, 1);
+      expect(repository.restore()!.game.guessedGraphemes, {'ਸ'});
+      expect(repository.restore()!.game.incorrectGuesses, 0);
       expect(tester.takeException(), isNull);
     },
   );

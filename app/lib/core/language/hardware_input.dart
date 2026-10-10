@@ -72,17 +72,12 @@ abstract final class HardwareInput {
     ['ੌ', 'ੰ', 'ਂ', 'ੱ', '਼', '੍'],
   ];
 
-  static bool isGurmukhiVowelSign(String value) =>
-      RegExp(r'^[\u0A3E-\u0A42\u0A47\u0A48\u0A4B\u0A4C]$').hasMatch(value);
-
   /// Quest guesses one unit, rather than composing a word like Bujho/Dictionary.
   static bool acceptsQuestCharacter(VocabularyScript script, String value) {
     if (!acceptsCharacter(script, value)) return false;
     if (script == VocabularyScript.gurmukhi) {
       return value.runes.length == 1 &&
-          RegExp(
-            r'^[\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73\u0A3E-\u0A42\u0A47\u0A48\u0A4B\u0A4C]$',
-          ).hasMatch(value);
+          RegExp(r'^[\u0A05-\u0A39\u0A59-\u0A5E\u0A72\u0A73]$').hasMatch(value);
     }
     final normalized = normalizeRomanizedInput(value);
     return wordUnitCount(normalized) == 1 &&
