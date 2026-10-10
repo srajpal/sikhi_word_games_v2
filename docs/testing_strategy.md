@@ -14,6 +14,14 @@ debug measurements with debug; use profile builds for realistic rendering costs.
 Test-driver pump/settle timings include harness work and animation settling,
 so they are evidence rather than guaranteed touch-to-display latency.
 
+Bujho direct-grid input regressions cover on-screen and hardware typing, the
+tile cap, unchanged rejected guesses, complete-unit deletion, accepted row
+advancement, neutral draft tiles, active-row semantics and completion. Existing
+Romanized combining-mark and Gurmukhi conjunct cases now assert the actual grid
+contents. English fit checks include 320x568, 390x844 and tablet landscape;
+Punjabi keyboards remain reachable at 200% text. Visual baselines cover draft
+rows in all themes, with separate English/Gurmukhi phone captures.
+
 October 10 quality-of-life regressions cover equal phone/tablet card heights with a
 Continue save at 1x/1.5x/2x text, both Learn Letters launch types and continuation,
 selected-language loading frames in all five vocabulary games, shared menu order

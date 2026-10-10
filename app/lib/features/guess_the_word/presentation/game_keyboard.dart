@@ -18,6 +18,7 @@ class GameKeyboard extends StatelessWidget {
     required this.enabled,
     required this.disabledCharacters,
     this.compact = false,
+    this.largeKeys = false,
     this.enterLabel = 'ENTER',
     this.letterResults = const {},
     this.additionalCharacters = const [],
@@ -32,6 +33,7 @@ class GameKeyboard extends StatelessWidget {
   final bool enabled;
   final Set<String> disabledCharacters;
   final bool compact;
+  final bool largeKeys;
   final String enterLabel;
   final Map<String, LetterResult> letterResults;
   final Iterable<String> additionalCharacters;
@@ -57,6 +59,9 @@ class GameKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final keyHeight = largeKeys
+        ? (compact ? 44.0 : 52.0)
+        : (compact ? 31.0 : 43.0);
     final rows = <List<String>>[
       ...(mode == LanguageMode.gurmukhi
           ? HardwareInput.gurmukhiRows
@@ -126,7 +131,8 @@ class GameKeyboard extends StatelessWidget {
                                   () => onCharacter(character),
                                 )
                               : null,
-                          height: compact ? 31 : 43,
+                          height: keyHeight,
+                          fontSize: largeKeys ? (compact ? 20 : 22) : null,
                           child: mode == LanguageMode.gurmukhi
                               ? GurmukhiKeyLabel(
                                   grapheme: character,
@@ -137,8 +143,12 @@ class GameKeyboard extends StatelessWidget {
                                             .foregroundFor(
                                               _keyFill(context, character)!,
                                             ),
-                                  gurmukhiFontSize: compact ? 13 : 15,
-                                  romanizationFontSize: compact ? 6 : 7,
+                                  gurmukhiFontSize: largeKeys
+                                      ? (compact ? 20 : 24)
+                                      : (compact ? 13 : 15),
+                                  romanizationFontSize: largeKeys
+                                      ? (compact ? 8 : 9)
+                                      : (compact ? 6 : 7),
                                 )
                               : null,
                         ),
@@ -154,7 +164,7 @@ class GameKeyboard extends StatelessWidget {
                           context,
                           enabled ? onBackspace : null,
                         ),
-                        height: compact ? 31 : 43,
+                        height: keyHeight,
                         child: const Icon(Icons.backspace_outlined, size: 20),
                       ),
                     ),
@@ -176,7 +186,7 @@ class GameKeyboard extends StatelessWidget {
                 context,
                 enabled ? onEnter : null,
               ),
-              height: compact ? 31 : 43,
+              height: keyHeight,
             ),
           ),
         ],
@@ -202,6 +212,7 @@ class _KeyboardButton extends StatelessWidget {
     this.fill,
     this.foreground,
     this.stateValue,
+    this.fontSize,
     super.key,
   });
 
@@ -213,6 +224,7 @@ class _KeyboardButton extends StatelessWidget {
   final Color? fill;
   final Color? foreground;
   final String? stateValue;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) => Semantics(
@@ -232,17 +244,21 @@ class _KeyboardButton extends StatelessWidget {
           foreground: foreground,
           child:
               child ??
-              Text(
-                label!,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color:
-                      foreground ??
-                      (fill == null
-                          ? Theme.of(context).colorScheme.onSurface
-                          : Theme.of(context)
-                                .extension<GameThemeTokens>()!
-                                .foregroundFor(fill!)),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label!,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    fontSize: fontSize,
+                    color:
+                        foreground ??
+                        (fill == null
+                            ? Theme.of(context).colorScheme.onSurface
+                            : Theme.of(context)
+                                  .extension<GameThemeTokens>()!
+                                  .foregroundFor(fill!)),
+                  ),
                 ),
               ),
         ),

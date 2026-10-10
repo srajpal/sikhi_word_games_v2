@@ -29,6 +29,12 @@ immutable entry identity and script; plain/source copies remain separate.
 pool when the spelling setting is unchanged. Dictionary and guess membership
 continue to include all supplied entries.
 
+Bujho keeps its unsubmitted guess as local presentation state. The board renders
+its written units in the first unsubmitted row; accepted turns still come from
+the domain evaluator. No result feedback is inferred from draft letters, and
+rejected submissions retain their draft. Keyboard composition and deletion use
+the shared grapheme-safe functions. Accepted-turn persistence is unchanged.
+
 `GameThemeTokens` owns panel, control and tile treatment. `GameArtwork` provides
 decorative library previews, and `QuestLantern` draws a secular countdown from
 the active color scheme. All three game modes use the active theme; Word Quest does not maintain

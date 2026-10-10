@@ -6,6 +6,34 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 10 direct-grid Bujho input: candidate 1.18.2+34
+
+- [x] Put typed letters directly in the active grid row and remove the separate
+  guess display, retaining Enter submission and editable rejected guesses.
+- [x] Enlarge Bujho keyboard labels with keys at least 44px high; retain
+  Gurmukhi composition, whole-unit backspace and scrollable long keyboards.
+- [x] Announce the current row/value for assistive technology and restore
+  hardware focus when that row is tapped. Keep draft letters unevaluated.
+- [x] Use the app's configured fonts for shared Gurmukhi keyboard labels.
+- [x] Update help, documentation and the reviewed phone/tablet visual baselines.
+
+Formatting and analysis pass. All 486 tests pass, including 52 Windows golden
+tests; reviewed the changed/new Bujho captures in every theme and the separate
+English/Gurmukhi phone layouts. Input cases cover draft typing, length limits,
+rejection without advancing, deletion, next-row submission, completion and
+accessible current values. Existing native conjunct/attached-mark tests now
+check the visible grid. English has no scroll at 320x568, 390x844 and 1024x768;
+Punjabi keyboards remain reachable at 200% text. Submitted-round persistence,
+word rules and approved dictionaries are unchanged.
+
+The final 1.18.2+34 web package builds successfully with 96 offline-cache files
+and verified integrity/attributions for the unchanged 20,601 records. Activated
+the preview update on port 8921 without clearing storage. Real-browser checks
+verify on-screen/hardware typing, hardware deletion, current-row announcements,
+Gurmukhi sign attachment into one tile and whole-unit deletion, readable larger
+key labels and no console errors. Native devices remain on their earlier builds:
+tablet 1.18.1+33, Pixel 1.18.0+32; no new native install is claimed for this change.
+
 ## October 10 tablet launch delay: candidate 1.18.1+33
 
 - [x] Show an opaque destination/loading frame before vocabulary preparation;

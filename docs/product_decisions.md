@@ -2,6 +2,15 @@
 
 ## October 10 mobile quality of life
 
+Bujho enters the unfinished guess directly into its current grid row, with no
+separate guess field. Letters receive result colors/icons only on accepted
+submission. Backspace removes one complete written unit; vowel marks/conjuncts
+continue attaching within the current Gurmukhi tile, including at the tile cap.
+Rejected guesses stay editable in place. The active row announces its current
+value to assistive technology and can be tapped to restore hardware-key focus.
+The freed space supports larger keyboard labels and at least 44px-high keys;
+long keyboards and large text remain scrollable.
+
 Game routes appear immediately without a fade, with an opaque loading frame
 before vocabulary preparation. This acknowledges New game even when its answer
 pool is not ready. Other pages retain the short, reduced-motion-aware fade.

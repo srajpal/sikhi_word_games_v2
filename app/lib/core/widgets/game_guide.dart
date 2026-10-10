@@ -96,7 +96,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
   GameKind.guessTheWord => const [
     (
       title: 'Guess the hidden word',
-      body: 'Use the on-screen letters or a physical keyboard to enter a complete word, then press Enter. You have six accepted guesses. A word that is not accepted does not use a guess.',
+      body: 'Use the on-screen letters or a physical keyboard to fill the current grid row, then press Enter. Backspace removes the last letter group. You have six accepted guesses. A word that is not accepted stays in the row to edit and does not use a guess.',
     ),
     (
       title: 'Read the tile clues',
