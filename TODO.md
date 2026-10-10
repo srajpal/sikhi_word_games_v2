@@ -26,6 +26,11 @@ The 1.16.1+30 web ZIP and debug APK are built, and source integrity still verifi
 and was updated with `adb install -r`; version 1.16.1/code 30 and launch PID 21859
 were verified on October 9, retaining app data.
 
+The install-record CI exposed a Khoj celebration test that dragged beneath a
+still-visible success snack bar. The test now verifies each intermediate find
+and expires feedback before the next drag; app code and the installed APK are
+unchanged. The isolated reproduction and all six game celebration tests pass.
+
 ## October 9 Shabad Banao: candidate 1.16.0+29
 
 - [x] Add Word Scramble / Shabad Banao as the sixth equal library card with
