@@ -6,6 +6,24 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 9 Gurmukhi scramble labels: candidate 1.16.1+30
+
+- [x] Show shared Romanized pronunciation labels beneath Gurmukhi units in
+  shuffled, placed, hinted and completed tiles, including spoken labels.
+- [x] Reserve space for enlarged labels without splitting native written groups.
+- [x] Validate phone/theme/large-text captures, rebuild and refresh the preview,
+  and update connected testing devices.
+- [ ] Install build 30 on Pixel when it reconnects; it remains on build 27.
+
+Build 30 evidence: 394 tests, including 40 visual baselines, passed; analysis is
+clean and 159 Dart files are formatted. Reviewed actual-font normal/200% Gurmukhi
+captures and checked labels through placement, hint locks and completion in all
+themes. The packaged browser at 390x780 resumed the existing two-tile ਬੁੱਧੀ round
+with Bu/Dhee captions and spoken labels, without changing the round or progress.
+The 1.16.1+30 web ZIP and debug APK are built, and source integrity still verifies
+20,601 unchanged approved records. K70 PRO installed with data retained; version
+1.16.1/code 30 and launch PID 5425 were verified. Pixel was not connected.
+
 ## October 9 Shabad Banao: candidate 1.16.0+29
 
 - [x] Add Word Scramble / Shabad Banao as the sixth equal library card with
@@ -16,7 +34,7 @@ source snapshot; integrity checks do not reopen editorial approval.
   statistics, add ten badges and include the new owned key in app-wide reset.
 - [x] Complete full analysis/tests, reviewed visual baselines and release builds.
 - [x] Verify the actual packaged web preview and install on the connected tablet.
-- [ ] Install build 29 on Pixel when it reconnects; it remains on build 27.
+- [x] Supersede the pending Pixel build 29 install with build 30 above.
 
 Build 29 evidence: 391 Flutter tests, including 40 visual baselines, passed.
 Analysis is clean and 159 Dart files are formatted. Reviewed phone captures

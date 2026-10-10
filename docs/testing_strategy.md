@@ -323,3 +323,9 @@ Gurmukhi layout. Five new font-loaded visual baselines cover three themes,
 Gurmukhi groups and enlarged text; review the updated library and badge gallery
 captures too. Actual packaged-browser persistence, font rendering and device
 installation are separate evidence recorded in TODO.md.
+
+Gurmukhi tile-label regressions verify visible and spoken Romanization in the
+tray, after placement, after a hint lock and after completion across all three
+themes. Empty spaces and English tiles reveal no pronunciation labels. Enlarged
+Gurmukhi text remains scrollable without splitting a written unit; actual-font
+phone and 200% captures must be reviewed after changes to label sizing.

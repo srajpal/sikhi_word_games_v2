@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/content/vocabulary_repository.dart';
+import '../../../core/language/gurmukhi_romanization.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../../core/themes/game_ui.dart';
 import '../../../core/themes/paper_letter_tile.dart';
@@ -282,6 +283,10 @@ class _WordScramblePageState extends State<WordScramblePage> {
     final fitted =
         (trayWidth - (game.units.length - 1) * 10) / game.units.length;
     var tileSize = max(44.0 + scale.scale(30) - 30, min(60.0, fitted));
+    final romanizations = [
+      for (final unit in game.units)
+        _mode == LanguageMode.gurmukhi ? romanizeGurmukhiGrapheme(unit) : null,
+    ];
     for (final unit in game.units) {
       final painter = TextPainter(
         text: TextSpan(
@@ -297,6 +302,27 @@ class _WordScramblePageState extends State<WordScramblePage> {
       tileSize = max(tileSize, painter.width + 12);
       painter.dispose();
     }
+    for (final romanization in romanizations.whereType<String>()) {
+      final painter = TextPainter(
+        text: TextSpan(
+          text: romanization,
+          style: theme.textTheme.labelSmall?.copyWith(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            height: 1.2,
+          ),
+        ),
+        textDirection: Directionality.of(context),
+        textScaler: scale,
+      )..layout();
+      tileSize = max(tileSize, painter.width + 12);
+      painter.dispose();
+    }
+    final tileHeight = PaperLetterTile.heightFor(
+      context,
+      tileSize,
+      withRomanization: _mode == LanguageMode.gurmukhi,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -334,7 +360,11 @@ class _WordScramblePageState extends State<WordScramblePage> {
               PaperLetterTile(
                 key: ValueKey('scramble-slot-$i'),
                 size: tileSize,
+                height: tileHeight,
                 text: game.slots[i] == null ? null : game.units[game.slots[i]!],
+                romanization: game.slots[i] == null
+                    ? null
+                    : romanizations[game.slots[i]!],
                 correct: game.isComplete,
                 locked: game.locked.contains(i),
                 label: game.slots[i] == null
@@ -373,7 +403,7 @@ class _WordScramblePageState extends State<WordScramblePage> {
                 final rows = (game.units.length / perRow).ceil();
                 return ConstrainedBox(
                   constraints: BoxConstraints(
-                    minHeight: rows * (tileSize + 8) + (rows - 1) * 12,
+                    minHeight: rows * tileHeight + (rows - 1) * 12,
                   ),
                   child: Wrap(
                     alignment: WrapAlignment.center,
@@ -386,7 +416,9 @@ class _WordScramblePageState extends State<WordScramblePage> {
                           child: PaperLetterTile(
                             key: ValueKey('scramble-tile-$id'),
                             text: game.units[id],
+                            romanization: romanizations[id],
                             size: tileSize,
+                            height: tileHeight,
                             label: 'Place ${game.units[id]} tile ${id + 1}',
                             onPressed: () => _place(id),
                           ),

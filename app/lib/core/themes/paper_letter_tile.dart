@@ -9,6 +9,8 @@ class PaperLetterTile extends StatelessWidget {
     required this.label,
     required this.size,
     this.text,
+    this.romanization,
+    this.height,
     this.onPressed,
     this.correct = false,
     this.locked = false,
@@ -16,9 +18,25 @@ class PaperLetterTile extends StatelessWidget {
   });
   final String label;
   final double size;
+  final double? height;
   final String? text;
+  final String? romanization;
   final VoidCallback? onPressed;
   final bool correct, locked;
+
+  static double heightFor(
+    BuildContext context,
+    double size, {
+    bool withRomanization = false,
+  }) {
+    final scale = MediaQuery.textScalerOf(context);
+    final contentHeight =
+        scale.scale(24) * 1.2 +
+        (withRomanization ? 2 + scale.scale(11) * 1.2 : 0) +
+        20;
+    return contentHeight > size + 8 ? contentHeight : size + 8;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -29,13 +47,15 @@ class PaperLetterTile extends StatelessWidget {
         : theme.colorScheme.onSurface;
     final action = InteractionSounds.letterAction(context, onPressed);
     return Semantics(
-      label: label,
+      label: romanization == null ? label : '$label, $romanization',
       button: onPressed != null,
       onTap: action,
       excludeSemantics: true,
       child: SizedBox(
         width: size,
-        height: size + 8,
+        height:
+            height ??
+            heightFor(context, size, withRomanization: romanization != null),
         child: DecoratedBox(
           decoration: tokens.tileDecoration(
             fill,
@@ -64,6 +84,20 @@ class PaperLetterTile extends StatelessWidget {
                     color: ink,
                   ),
                 ),
+                if (romanization != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    romanization!,
+                    softWrap: false,
+                    maxLines: 1,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      height: 1.2,
+                      color: ink,
+                    ),
+                  ),
+                ],
                 if (locked || correct)
                   Icon(
                     correct ? Icons.check : Icons.lock_outline,
