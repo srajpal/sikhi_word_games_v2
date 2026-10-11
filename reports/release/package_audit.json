@@ -1,12 +1,14 @@
 {
-  "version": "1.13.0+25",
-  "archive": "app\\dist\\sikhi-word-games-web-1.13.0+25.zip",
-  "bytes": 21316167,
-  "sha256": "bc5f3b7dd048e81262da0a34e17517c036c17a30847908786c89fab13ad867c2",
+  "version": "1.18.4+36",
+  "source_commit": "e520a24",
+  "archive": "app\\dist\\sikhi-word-games-web-1.18.4+36.zip",
+  "bytes": 21697904,
+  "sha256": "805a672b972b5f3bc6ffd29223d1d80ba29b2ec0c0555e9adf28414f8ca0f58b",
   "runtime_files": 7,
-  "entry_count": 113,
+  "entry_count": 106,
   "verified_byte_identical_runtime": true,
   "root_index_relative_base": true,
   "authoring_assets_absent": true,
-  "credits_and_font_licenses_present": true
+  "credits_and_font_licenses_present": true,
+  "uncompressed_bytes": 62535565
 }

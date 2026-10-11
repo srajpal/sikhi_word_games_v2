@@ -1,3 +1,8 @@
+import '../../achievements/presentation/achievement_feedback.dart';
+
+import 'package:go_router/go_router.dart';
+
+import '../../../core/widgets/game_menu.dart';
 import '../../../core/themes/paper_page.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../../../core/themes/game_heading.dart';
@@ -17,11 +22,13 @@ class LearnLettersPage extends StatefulWidget {
   const LearnLettersPage({
     required this.repository,
     this.startFresh = false,
+    this.initialPracticeMode = LetterPracticeMode.listening,
     super.key,
   });
 
   final LearnLettersRepository repository;
   final bool startFresh;
+  final LetterPracticeMode initialPracticeMode;
 
   @override
   State<LearnLettersPage> createState() => _LearnLettersPageState();
@@ -37,7 +44,7 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
     super.initState();
     _game =
         (widget.startFresh ? null : widget.repository.restore()) ??
-        widget.repository.newGame();
+        widget.repository.newGame(practiceMode: widget.initialPracticeMode);
     if (_game.answered) {
       _feedback = 'Correct! This letter is ${_game.currentLetter.name}.';
     }
@@ -45,9 +52,13 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
   }
 
   Future<void> _save() async {
+    final completed = _game.isComplete;
     try {
       await widget.repository.save(_game);
-      if (mounted) setState(() => _saveError = null);
+      if (mounted) {
+        setState(() => _saveError = null);
+        if (completed) AchievementFeedback.check(context);
+      }
     } on Object {
       if (mounted) {
         setState(
@@ -87,7 +98,9 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
   void _next() {
     setState(() {
       _game.next();
-      _feedback = 'Choose the name that matches this letter.';
+      _feedback = _game.practiceMode == LetterPracticeMode.listening
+          ? 'Listen, then find the letter.'
+          : 'Choose the name that matches this letter.';
     });
     _save();
   }
@@ -183,6 +196,8 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
             onSelected: (action) {
               InteractionSounds.button(context);
               switch (action) {
+                case 'dictionary':
+                  context.push('/dictionary');
                 case 'new':
                   _newRound();
                 case 'help':
@@ -195,19 +210,14 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                   VictoryCelebration.showSettings(context);
               }
             },
-            itemBuilder: (_) => const [
-              PopupMenuItem(value: 'new', child: Text('New round')),
-              PopupMenuItem(value: 'practice', child: Text('Game settings')),
-              PopupMenuItem(value: 'help', child: Text('Help')),
-              PopupMenuItem(
-                value: 'statistics',
-                child: Text('Letter progress'),
-              ),
-              PopupMenuItem(
-                value: 'celebration',
-                child: Text('Celebration settings'),
-              ),
-            ],
+            itemBuilder: (_) => gameMenuItems(
+              newGame: 'new',
+              settings: 'practice',
+              help: 'help',
+              statistics: 'statistics',
+              dictionary: 'dictionary',
+              celebrations: 'celebration',
+            ),
           ),
         ],
       ),
@@ -318,14 +328,6 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                                 style: theme.textTheme.titleLarge,
                               ),
                             ],
-                            if (_game.practiceMode ==
-                                    LetterPracticeMode.listening &&
-                                !_game.answered)
-                              Icon(
-                                Icons.hearing,
-                                size: 64,
-                                color: theme.colorScheme.primary,
-                              ),
                             const SizedBox(height: 8),
                             LetterPronunciationButton(
                               key: ValueKey(
@@ -360,6 +362,14 @@ class _LearnLettersPageState extends State<LearnLettersPage> {
                                   ? choice.gurmukhi
                                   : choice.name,
                               textAlign: TextAlign.center,
+                              style:
+                                  _game.practiceMode ==
+                                      LetterPracticeMode.listening
+                                  ? theme.textTheme.displaySmall?.copyWith(
+                                      fontSize: 48,
+                                      height: 1.35,
+                                    )
+                                  : null,
                             ),
                           ),
                         ),

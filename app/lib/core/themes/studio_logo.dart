@@ -42,7 +42,7 @@ class StudioLogo extends StatelessWidget {
                         angle: .12,
                         child: _tile(
                           context,
-                          'ਕ',
+                          'ਗ',
                           colors.secondaryContainer,
                           colors.onSecondaryContainer,
                           compact,

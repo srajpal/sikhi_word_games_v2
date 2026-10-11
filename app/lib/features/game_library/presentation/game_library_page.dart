@@ -3,8 +3,8 @@ import '../../../core/themes/studio_navigation.dart';
 import '../../../core/audio/interaction_sounds.dart';
 import '../../../core/themes/game_heading.dart';
 import '../../learn_letters/data/learn_letters_repository.dart';
+import '../../learn_letters/domain/learn_letters_game.dart';
 import '../../word_scramble/data/word_scramble_repository.dart';
-import '../../../core/widgets/game_guide.dart';
 import '../../../core/themes/game_artwork.dart';
 
 import 'package:flutter/material.dart';
@@ -78,6 +78,10 @@ class GameLibraryPage extends StatelessWidget {
   };
 
   Future<void> _showNewGameOptions(BuildContext context, GameKind kind) async {
+    if (kind == GameKind.learnLetters) {
+      await _showLetterOptions(context);
+      return;
+    }
     if (kind == GameKind.wordBridges) {
       await _showBridgesOptions(context);
       return;
@@ -184,6 +188,69 @@ class GameLibraryPage extends StatelessWidget {
       if (!context.mounted) return;
       context.push(_pathFor(kind), extra: options);
     }
+  }
+
+  Future<void> _showLetterOptions(BuildContext context) async {
+    var selected = launchPreferencesRepository
+        .load(GameKind.learnLetters)
+        .letterPracticeMode;
+    final mode = await showModalBottomSheet<LetterPracticeMode>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, update) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Learn Letters game type',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 12),
+                  RadioGroup<LetterPracticeMode>(
+                    groupValue: selected,
+                    onChanged: (value) {
+                      if (value != null) update(() => selected = value);
+                    },
+                    child: const Column(
+                      children: [
+                        RadioListTile(
+                          value: LetterPracticeMode.listening,
+                          title: Text('Listen and find the letter'),
+                          secondary: Icon(Icons.hearing),
+                        ),
+                        RadioListTile(
+                          value: LetterPracticeMode.name,
+                          title: Text('See the letter and find its name'),
+                          secondary: Icon(Icons.text_fields),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  GameGradientButton(
+                    label: 'Start new game',
+                    icon: const Icon(Icons.play_arrow),
+                    onPressed: () => Navigator.pop(context, selected),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    if (mode == null || !context.mounted) return;
+    final options = GameLaunchOptions(
+      language: LanguageMode.gurmukhi,
+      letterPracticeMode: mode,
+    );
+    await _saveLaunchPreferences(context, GameKind.learnLetters, options);
+    if (context.mounted) context.push('/learn-letters', extra: options);
   }
 
   Future<void> _saveLaunchPreferences(
@@ -454,8 +521,10 @@ class GameLibraryPage extends StatelessWidget {
                               _continueGame(context, GameKind.learnLetters),
                           onNewGame: () =>
                               _startNewGame(context, GameKind.learnLetters),
-                          onNewGameOptions: () =>
-                              showGameHelp(context, GameKind.learnLetters),
+                          onNewGameOptions: () => _showNewGameOptions(
+                            context,
+                            GameKind.learnLetters,
+                          ),
                         ),
                         _GameCard(
                           grid: twoColumns,
@@ -472,12 +541,20 @@ class GameLibraryPage extends StatelessWidget {
                           ),
                         ),
                       ];
+                      final height = cards
+                          .cast<_GameCard>()
+                          .map((card) => card.cardHeight(context, cardWidth))
+                          .reduce((a, b) => a > b ? a : b);
                       return Wrap(
                         spacing: 16,
                         runSpacing: 16,
                         children: [
                           for (final card in cards)
-                            SizedBox(width: cardWidth, child: card),
+                            SizedBox(
+                              width: cardWidth,
+                              height: height,
+                              child: card,
+                            ),
                         ],
                       );
                     },
@@ -539,6 +616,72 @@ class _GameCard extends StatelessWidget {
   final VoidCallback? onNewGame;
   final VoidCallback? onNewGameOptions;
 
+  double cardHeight(BuildContext context, double width) {
+    final theme = Theme.of(context);
+    final identity = GameIdentity.forGame(gameKind);
+    final largeText = MediaQuery.textScalerOf(context).scale(14) > 21;
+    final scenic = grid && !largeText;
+    final artworkSize = largeText ? 64.0 : 92.0;
+    final copyWidth = scenic
+        ? (width - 34) * .59 - 28
+        : width - 26 - artworkSize - 14;
+    double measure(String text, TextStyle? style, [double? availableWidth]) {
+      final painter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        textDirection: Directionality.of(context),
+        textScaler: MediaQuery.textScalerOf(context),
+      )..layout(maxWidth: availableWidth ?? copyWidth);
+      final result = painter.height;
+      painter.dispose();
+      return result;
+    }
+
+    final copyHeight =
+        measure(
+          identity.englishTitle,
+          theme.textTheme.labelMedium?.copyWith(letterSpacing: .5),
+        ) +
+        2 +
+        measure(
+          identity.punjabiName,
+          theme.textTheme.displaySmall?.copyWith(
+            fontSize: !grid && !largeText ? 22 : 27,
+            fontWeight: FontWeight.w900,
+            height: 1.25,
+          ),
+        ) +
+        6 +
+        measure(
+          description,
+          !grid && !largeText
+              ? theme.textTheme.bodySmall
+              : theme.textTheme.bodyMedium,
+        );
+    // Reserve the same action space even when only one card has a Continue save.
+    final actionsWidth = width - (scenic ? 34 : 26);
+    final allFit = actionsWidth >= 238 && !largeText;
+    final buttonWidth = allFit
+        ? (actionsWidth - 64) / 2 - 16
+        : actionsWidth - 72;
+    final labelHeight = ['Play ${identity.punjabiName}', 'Continue', 'New game']
+        .map(
+          (text) => measure(
+            text,
+            theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+            buttonWidth,
+          ),
+        )
+        .reduce((a, b) => a > b ? a : b);
+    final buttonHeight = labelHeight + 22 < 48 ? 48.0 : labelHeight + 22;
+    final actionHeight = allFit ? buttonHeight : buttonHeight * 2 + 8;
+    return scenic
+        ? (copyHeight < 138 ? 138 : copyHeight) + 28 + 34 + 26 + actionHeight
+        : (copyHeight < artworkSize ? artworkSize : copyHeight) +
+              26 +
+              12 +
+              actionHeight;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -589,7 +732,7 @@ class _GameCard extends StatelessWidget {
             : null;
         final options = IconButton.filledTonal(
           tooltip: gameKind == GameKind.learnLetters
-              ? 'How to play'
+              ? 'Game type'
               : 'New game options',
           onPressed: InteractionSounds.buttonAction(context, onNewGameOptions),
           style: IconButton.styleFrom(
@@ -597,12 +740,7 @@ class _GameCard extends StatelessWidget {
             backgroundColor: theme.colorScheme.surface,
             foregroundColor: theme.colorScheme.primary,
           ),
-          icon: Icon(
-            gameKind == GameKind.learnLetters
-                ? Icons.help_outline
-                : Icons.tune_rounded,
-            size: 20,
-          ),
+          icon: const Icon(Icons.tune_rounded, size: 20),
         );
         final allFit = constraints.maxWidth >= 238 && !largeText;
         return Column(
@@ -644,6 +782,7 @@ class _GameCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             LayoutBuilder(

@@ -22,6 +22,48 @@ void solve(WordScrambleGame game) {
 }
 
 void main() {
+  test('targeted moves swap repeated tiles and recall preserves progress', () {
+    final game = scramble();
+    expect(game.moveTo(1, 3), isTrue);
+    expect(game.moveTo(2, 3), isTrue);
+    expect(game.slots[3], 2);
+    expect(game.tray, contains(1));
+    expect(game.moveTo(1, 0), isTrue);
+    expect(game.moveTo(2, 0), isTrue);
+    expect(game.slots[0], 2);
+    expect(game.slots[3], 1);
+    expect(game.moveTo(9, 0), isFalse);
+    expect(game.moveTo(1, -1), isFalse);
+    expect(game.hint(), isTrue);
+    expect(game.recall(), isTrue);
+    expect(game.slots.every((tile) => tile == null), isTrue);
+    expect(game.tray.toSet(), {0, 1, 2, 3, 4});
+    expect(game.usedHint, isTrue);
+    expect(game.checks, 0);
+    expect(game.recall(), isFalse);
+    final restored = WordScrambleGame.fromJson(game.toJson());
+    expect(restored.tray, game.tray);
+    solve(game);
+    expect(game.moveTo(0, 1), isFalse);
+    expect(game.recall(), isFalse);
+  });
+
+  test('recall and drag preserve a legacy locked Gurmukhi unit', () {
+    final game = scramble('ਕਰੇਲਾ');
+    game.moveTo(1, 1);
+    game.moveTo(2, 0);
+    final json = game.toJson();
+    json['locked'] = [1];
+    json['clueRevealed'] = true;
+    final restored = WordScrambleGame.fromJson(json);
+    expect(restored.units, ['ਕ', 'ਰੇ', 'ਲਾ']);
+    expect(restored.moveTo(1, 2), isFalse);
+    expect(restored.moveTo(2, 1), isFalse);
+    expect(restored.recall(), isTrue);
+    expect(restored.slots, [null, 1, null]);
+    expect(restored.tray.toSet(), {0, 2});
+    expect(restored.canRecall, isFalse);
+  });
   test(
     'duplicate letters are independent and a solved round cannot change',
     () {

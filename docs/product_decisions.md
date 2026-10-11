@@ -1,5 +1,74 @@
 # Sikhi Word Games V2 — Product Decisions
 
+## October 10 developer-email feedback
+
+Share feedback uses the developer address **khalsagamestudio.apps@gmail.com**.
+Offer an email draft with the current app version and game/language/device
+prompts, plus a selectable address and Copy email address. Missing mail handlers
+or clipboard access must leave a usable manual fallback. Opening the draft does
+not send it automatically. The prior public GitHub issue form is retired from
+this player-facing action.
+
+## October 10 bilingual identity and launcher label
+
+The approved Paper & Play app mark is two overlapping tiles: English **S** and
+Gurmukhi **ਗ** (gagga), representing Sikhi + Games. Use the same letters in the
+shared, theme-aware in-app wordmark and platform icons. The canonical launcher
+art uses teal, warm peach and cream; retain Modern, Sikhi and Dark inside the app.
+This supersedes the older SWG/sprout launcher identity. Keep **Sikhi Word Games**
+as the full in-app/product title and **Khalsa Game Studio** as the publisher.
+Use **SikhiGames** for Android/iOS launcher labels, installed web `name`/`short_name`
+and Apple web shortcut titles. Application identifiers and storage keys stay
+unchanged. The icon exporter generates font-independent letter paths, maskable
+web artwork and opaque square iOS icons. The release cover now lists six games;
+fresh real-gameplay promotional screenshots remain a separate release task.
+
+## October 10 mobile quality of life
+
+Bujho enters the unfinished guess directly into its current grid row, with no
+separate guess field. Letters receive result colors/icons only on accepted
+submission. Backspace removes one complete written unit; vowel marks/conjuncts
+continue attaching within the current Gurmukhi tile, including at the tile cap.
+Rejected guesses stay editable in place. The active row announces its current
+value to assistive technology and can be tapped to restore hardware-key focus.
+The freed space supports larger keyboard labels and at least 44px-high keys;
+long keyboards and large text remain scrollable.
+
+Game routes appear immediately without a fade, with an opaque loading frame
+before vocabulary preparation. This acknowledges New game even when its answer
+pool is not ready. Other pages retain the short, reduced-motion-aware fade.
+Normalization skips text that needs no conversion; shared mechanical eligibility
+decisions and Bujho solution pools are reused without changing approved content,
+accepted guesses, written units or answer rules. Native performance checks use
+the real bundled dictionaries with in-memory test saves; optimized profile builds
+are preferred for testing navigation speed on slower Android devices.
+
+- All six library cards have one measured height on phone, tablet and web, including
+  cards with Continue actions. Large accessibility text can still use one column.
+- Learn Letters offers Listen and find the letter / See the letter and find its
+  name from the library's Game type button. Listening is the default for new
+  players; a saved round retains its mode. Listening choices use larger glyphs
+  without a large ear illustration; visual naming retains the large target.
+- Game headings show the launch language during loading, or Choosing language
+  for random/restore launches until their language is known. Never flash English
+  as a placeholder for another language.
+- Every game menu uses this order and shared icons: New game, Game settings,
+  How to play, Statistics, Dictionary, Celebration settings. Bujho's Copy result
+  follows these common actions. New game retains the current game settings.
+- Shabad Banao supports tray-to-space, space-to-tray and space-to-space dragging,
+  alongside tap and accessible activation. Dropping on an occupied space swaps
+  placed tiles or returns its displaced tile to the tray. Recall tiles returns
+  all movable tiles; historical hint locks remain fixed. Written units stay whole.
+- Quest places the lantern beside the alphabet on wide screens with ordinary
+  text sizes. Narrow/large-text screens retain the stacked, scrollable layout.
+- Newly earned, persisted achievements announce their title and description in
+  a colorful game-local banner. Multiple awards queue; existing awards do not
+  replay on launch. Dismiss and View badges remain accessible, with no automatic
+  dismissal for accessible navigation. The three existing themes supply colors.
+- Non-game navigation uses a short 120 ms fade, or no transition with reduced motion.
+  The asset repository starts its cached dictionary load after the first home
+  frame so the first game need not initiate the asset download/decoder.
+
 ## Confirmed scope
 
 - Build V2 as a clean Flutter/Dart application rather than modifying V1 in place.
@@ -403,7 +472,8 @@ The library shows a compact studio byline and an explicit external website link;
 if no browser can launch, the address remains selectable. Opening the website is
 optional and does not participate in gameplay, storage, or offline startup.
 Web title, description, loading copy and release cover repeat the attribution.
-The app retains its existing SWG tile/garden icon and its three themes. The studio
+At that milestone the app retained its SWG tile/garden icon; the October 10
+bilingual-identity decision above supersedes that icon. The studio
 identity is a text wordmark, not an invented replacement for an official logo.
 The supplied site could not be retrieved during implementation; this change does
 not claim website deployment, domain health or store publication.

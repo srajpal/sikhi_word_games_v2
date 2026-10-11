@@ -7,106 +7,105 @@ for setup, validation, versioning, and itch.io release steps.
 - [Architecture](../docs/architecture.md)
 - [Testing strategy](../docs/testing_strategy.md)
 - [Current work and release gaps](../TODO.md)
-- [Dictionary review workflow](../docs/dictionary_review_tool.md)
 
 Run Flutter and Dart commands from this directory. Approved content must be
 imported through `tool/build_release_content.dart`, never edited by hand.
 
-## Public playtest page copy
+## itch.io page copy
 
 **Title:** Sikhi Word Games
 
 **Publisher:** Khalsa Game Studio ([khalsagamestudio.com](https://khalsagamestudio.com/))
 
-**Short description:** Six relaxed word and letter games with English, Punjabi and Gurmukhi.
+**Short description:** Six relaxed word and letter games in English, Romanized Punjabi and Gurmukhi.
 
-Take your time with six ways to play:
+### Six relaxed ways to play
 
-- **Bujho: Guess the Word:** Find the hidden word using letter clues.
-- **Khoj: Word Search:** Find six words running across, down, or diagonally.
-- **Chardi Kala: Word Quest:** Read a clue and choose letters to complete a paper lantern.
-- **Jodo: Word Bridges (ਜੋੜੋ):** Match four words with their English meanings, without a timer. Randomized sets support English, Romanized Punjabi and Gurmukhi.
-- **Akhar Pachhaan: Learn Letters:** Practice the names of 35 Gurmukhi letters in five-question rounds, with gentle retries and saved practice progress.
-- **Shabad Banao: Word Scramble (ਸ਼ਬਦ ਬਣਾਓ):** Read a meaning and arrange shuffled tiles into a word. Tap to place or return tiles, with one optional hint and no timer.
+Build words, discover Punjabi, and collect badges in an illustrated Paper & Play world.
 
-The word games offer language choices; Bujho and Word Quest support four
-to six written letters. Khoj, Jodo and Shabad Banao use mixed approved sizes in their language. Choose Modern, Sikhi or Dark theme. Use the
-Dictionary to look up words and meanings. No account, ads, or payment is needed
-to play. Unfinished games are saved in this browser.
+- **Guess the Word / Bujho:** Find the hidden word with coloured letter clues. Your letters go straight into the grid.
+- **Word Search / Khoj:** Find six hidden words across, down and diagonally, forwards or backwards.
+- **Word Quest / Chardi Kala:** Read a clue and deduce the word from the full alphabet before your misses run out. An easier letter bank is also available.
+- **Word Bridges / Jodo (ਜੋੜੋ):** Match four words with their meanings in a fresh randomized set.
+- **Learn Letters / Akhar Pachhaan (ਅੱਖਰ ਪਛਾਣ):** Listen and find a Gurmukhi letter, or practice recognizing its name. Explore 35 letters in five-question rounds.
+- **Word Scramble / Shabad Banao (ਸ਼ਬਦ ਬਣਾਓ):** Unscramble the tiles. Reveal the meaning as an optional hint. Tap or drag tiles both ways, or recall them all to start again.
 
-This is **public playtest 1.9.0 (build 17)**. Words and meanings are still being
-reviewed. Some vocabulary is uncommon or historical. Report confusing clues or
-problems through **Share feedback** in the game library or the game page's
-comments. The feedback link opens a public GitHub issue form and requires a
-GitHub account; playing does not.
+### Your way to play
 
-Learn Letters includes computer-generated pronunciation previews for feedback.
-They have not been approved by a fluent speaker as teaching audio. Words and
-meanings are not yet comprehensively reviewed for children.
+The word games offer **English, Romanized Punjabi and Gurmukhi**. Choose simple Romanized Punjabi or the original accented spelling in Settings. Gurmukhi tiles keep written letter clusters together and show pronunciation labels.
+
+Choose **Modern, Sikhi or Dark**, explore the Dictionary, follow your Progress, and earn **60 achievement badges**. No account, ads or payment is needed. Games are untimed and unfinished rounds are saved in this browser.
+
+### Playtest 1.18.4 (build 36)
+
+This build includes the October 9 owner-approved vocabulary release: **20,601 Dictionary entries** across the three languages. Learn Letters pronunciation is computer-generated preview audio and still awaits fluent-speaker review.
 
 ### Controls
 
-- Bujho: use the on-screen keys or a physical keyboard. Enter submits a guess;
-  Backspace removes the last visible letter.
-- Khoj: drag from the first letter to the last. With a keyboard, move with arrow
-  keys, choose each end with Enter or Space, and cancel with Escape. Words can
-  run forward or backward.
-- Word Quest: choose letters on screen or type letters on a physical keyboard.
-  The lightbulb reveals a letter. The keyboard button switches between the
-  smaller letter bank and all letters.
-- Gurmukhi: use the on-screen keys. Pronunciation labels appear below the letters.
-- Jodo: select a word and its matching meaning, in either order.
-- Learn Letters: select a letter name, retry if needed, then choose Next.
-  Use Hear below each prompt or in Letter progress to play the audio preview.
-- Theme and feedback settings are in the game library. Each game's menu contains
-  its help and settings.
+- Use on-screen tiles or a physical keyboard where supported. In Bujho, Enter submits and Backspace removes the last written unit.
+- In Khoj, drag from the first letter to the last. Keyboard players can use arrow keys, Enter or Space for endpoints, and Escape to cancel.
+- In Quest, choose letters and use hints when available. Switch to the easier bank from the game controls.
+- In Jodo, choose a word and its meaning in either order.
+- In Learn Letters, Hear repeats the prompt. Choose the matching letter or name, then continue.
+- In Scramble, tap or drag tiles into and out of the word. Recall all tiles clears your arrangement; Hint reveals the meaning.
 
-### Known limits for the page
+Game menus include help and options. Settings apply immediately, with separate controls for letter clicks, button clicks, sounds and celebrations.
 
-Browser storage can be cleared or restricted, and saved games are not shared
-between devices. The first load needs a connection. Offline reload depends on
-successful browser caching and the host's storage policy; do not advertise it
-as guaranteed in the itch.io frame until the uploaded draft is verified.
-Mobile browser and real screen-reader testing are still pending. Jodo uses
-randomized sets from the full approved language bank. Sound and celebration particles can be
-disabled in App settings or the game menu.
+### Saves and browser support
 
-### Khalsa Game Studio draft setup
+Progress stays in this browser and does not sync between devices. Clearing browser data removes saves. The first load needs a connection. Offline reload depends on completed caching and browser storage policy; it is not guaranteed inside the itch.io frame. Mobile-browser and screen-reader testing are still in progress.
 
-An unpublished project is prepared under the existing `khalsagamestudio` account:
-[draft editor](https://itch.io/game/edit/5023423) and
-[owner preview](https://khalsagamestudio.itch.io/sikhi-word-games).
-The existing Seva Jump project is unchanged. Settings: **Sikhi Word Games**,
-kind **HTML**, **In development**, free access, and **Draft** visibility.
+### Feedback and credits
 
-Upload `dist/sikhi-word-games-web-1.9.0+17.zip` and mark it playable in browser.
-Use a 960 by 720 embedded viewport, click-to-play and the fullscreen button.
-Leave Mobile Friendly off until actual mobile-browser testing passes.
-Use the cover below; refresh gameplay screenshots from the current package
-before uploading them because the existing screenshot set predates Learn Letters.
+Use Share feedback in the game or email [khalsagamestudio.apps@gmail.com](mailto:khalsagamestudio.apps@gmail.com). Please include the game, language and what happened.
 
-Before changing visibility to Public, test all six games and Dictionary in the
-actual draft iframe, keyboard/focus, Hear audio, saved progress after reload,
-Gurmukhi fonts and offline restart. Resolve the content/audio review gates in
-`../TODO.md`. Preserve the previous ZIP for rollback. Draft preparation is not
-public publication; visibility must remain Draft until release review completes.
+Vocabulary sources include Princeton WordNet 3.0 and Wiktionary. The game includes source attribution and full licenses, plus bundled Noto font notices. Code, original artwork, sounds and some text were developed with AI assistance.
 
-Upload settings follow the [itch.io HTML5 guide](https://itch.io/docs/creators/html5).
-The archive audit is recorded in `../reports/release/package_audit.json`.
+Created by **Khalsa Game Studio**. Thank you for helping us test.
 
-### Release artwork and credits
+## Current itch.io public playtest
+
+Updated October 10, 2026 in project **5023423**:
+[editor](https://itch.io/game/edit/5023423) and
+[public page](https://khalsagamestudio.itch.io/sikhi-word-games).
+The existing Seva Jump project is unchanged. This is an HTML, In development,
+free-access project with **Public** visibility, published October 10, 2026
+after the owner's explicit request. The reloaded page shows PUBLISHED.
+
+The playable ZIP is `dist/sikhi-word-games-web-1.18.4+36.zip`.
+The previous 1.9.0+17 ZIP remains uploaded, hidden and non-playable for rollback.
+The embed is 960 by 720, click-to-play, with a fullscreen button. Mobile Friendly
+remains off pending physical mobile-browser checks. Screenshots use the visible
+Sidebar layout; cream surfaces and teal links match the Paper & Play identity.
+
+The actual uploaded Chromium iframe launched all six games and Dictionary.
+Bujho accepted a physical-keyboard guess and restored it after a full page reload.
+Quest opened with the full alphabet and retained all four lantern lights on a
+correct guess. Jodo matched a pair; Scramble placed and recalled a tile with its
+meaning hidden; the existing Learn Letters round survived the update and entered
+the Stop audio state after Hear. Gurmukhi dictionary queries and fonts render.
+Audio control state is not proof of speaker audibility or pronunciation quality.
+itch.io emitted an unsupported desktop orientation-lock error during fullscreen,
+but fullscreen and the games remained usable. Physical browsers, screen readers
+and hosted offline restart remain separate open checks in `../TODO.md`.
+
+## Release artwork and credits
 
 Use `reports/release/itch-cover-630x500.png` at the repository root for the cover.
-The original editable artwork is in `branding/`. Rebuild it with
-`node app/tool/create_brand_assets.cjs` from the root in a Node environment with
-`sharp` installed. The small web icons are generated from the same mark.
-Artwork uses letter tiles and a plant; sacred marks are not gameplay objects.
+Editable artwork is in `branding/`; regenerate it with
+`node app/tool/create_brand_assets.cjs` in a Node environment with `sharp`.
+The approved mark pairs English S and Gurmukhi ਗ for Sikhi + Games.
 
-Keep the Princeton WordNet license, Wiktionary CC BY-SA 4.0 attribution,
-Shutterstock screening-list CC BY 4.0 credits and bundled-font notices in the game and ZIP.
-Their source links and licenses are listed in `THIRD_PARTY_NOTICES.txt`.
-Add actual gameplay screenshots from the final package, not mockups.
+The seven current real browser screenshots at the repository root are
+`reports/release/library-current.jpg`, `bujho-current.jpg`, `khoj-current.jpg`,
+`quest-current.jpg`, `jodo-current.jpg`, `letters-current.jpg` and
+`scramble-current.jpg`. Bujho was captured in the uploaded fullscreen game;
+the remaining captures use an isolated HTTP preview of the exact uploaded ZIP.
+Older PNG screenshots are historical and must not be used for this release.
 
-
-
-Version 1.9.0 adds Akhar Pachhaan: Learn Letters, with five-question letter-name recognition rounds, saved practice progress and 35 offline generated pronunciation previews. All five games support victory particles, a trophy banner and the original bundled chime. Use each game's Celebration settings or the home App settings for sound and particle controls. Reduce motion suppresses the visual celebration. Typing Challenge is no longer shown as an upcoming game.
+Preserve the three approved masters, their supplied attribution and full licenses
+in `assets/content/release/`, including Princeton WordNet 3.0 and Wiktionary
+CC BY-SA 4.0 notices, plus the Noto font notices in `THIRD_PARTY_NOTICES.txt`.
+Do not substitute retired vocabulary provenance for the current release.
+Archive integrity is recorded in `../reports/release/package_audit.json`;
+actual browser evidence is recorded separately in `../reports/release/browser_qa.json`.

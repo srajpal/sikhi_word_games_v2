@@ -316,7 +316,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Khoj: Word Search menu'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Language'));
+    await tester.tap(find.text('Game settings'));
     await tester.pumpAndSettle();
     final gurmukhi = find.text('Gurmukhi').last;
     await tester.ensureVisible(gurmukhi);
@@ -709,7 +709,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('four-letter board leaves space above the guess display', (
+  testWidgets('four-letter board leaves space above the keyboard', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -727,10 +727,9 @@ void main() {
     await _applyGameSettings(tester, length: '4 letters');
 
     final lastTile = tester.getRect(find.byKey(const ValueKey('tile-5-0')));
-    final guessDisplay = tester.getRect(
-      find.byKey(const ValueKey('guess-display')),
-    );
-    expect(guessDisplay.top - lastTile.bottom, greaterThanOrEqualTo(6));
+    final keyboard = tester.getRect(find.byKey(const ValueKey('key-Q')));
+    expect(keyboard.top - lastTile.bottom, greaterThanOrEqualTo(6));
+    expect(find.byKey(const ValueKey('guess-display')), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -924,6 +923,12 @@ void main() {
     await tester.pump();
     expect(find.text('You found it!'), findsOneWidget);
     expect(find.text('A round fruit'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(find.text('First discovery'), findsOneWidget);
+    while (find.byTooltip('Dismiss achievement').evaluate().isNotEmpty) {
+      await tester.tap(find.byTooltip('Dismiss achievement'));
+      await tester.pumpAndSettle();
+    }
     expect(find.byIcon(Icons.check), findsNWidgets(6));
     expect(find.byIcon(Icons.swap_horiz), findsNWidgets(2));
     expect(find.byIcon(Icons.close), findsNWidgets(2));
@@ -977,11 +982,21 @@ void main() {
     expect(find.text('Ee'), findsWidgets);
     await _tapVisible(tester, find.byKey(const ValueKey('key-ਕ')));
     await _tapVisible(tester, find.byKey(const ValueKey('key-ੀ')));
-    var value = tester.widget<Text>(find.byKey(const ValueKey('guess-value')));
-    expect(value.data, 'ਕੀ');
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('tile-0-0')),
+        matching: find.text('ਕੀ'),
+      ),
+      findsOneWidget,
+    );
     await _tapVisible(tester, find.byKey(const ValueKey('key-backspace')));
-    value = tester.widget<Text>(find.byKey(const ValueKey('guess-value')));
-    expect(value.data, ' ');
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('tile-0-0')),
+        matching: find.byType(Text),
+      ),
+      findsNothing,
+    );
 
     for (final character in ['ਕ', 'ੀ', 'ਰ', 'ਤ', 'ਨ']) {
       await _tapVisible(tester, find.byKey(ValueKey('key-$character')));

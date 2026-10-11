@@ -1,12 +1,202 @@
 # Sikhi Word Games V2 TODO
 
-This is the current checklist, reconciled on October 9, 2026. Open boxes describe
+This is the current checklist, reconciled on October 10, 2026. Open boxes describe
 remaining work. Completed milestones are evidence, not sign-off for a newer
 package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
-## October 9 review fixes and follow-ups: candidate 1.17.0+31
+## October 10 itch.io publication: public playtest 1.18.4+36
+
+- [x] Publish the updated itch.io page after the owner's explicit request.
+  Verified PUBLISHED on the reloaded page; build 36, six-game copy and seven
+  screenshot links remain present. Free access and In development are preserved.
+  Earlier draft-refresh checks below describe the pre-publication validation.
+
+- [x] Upload the validated current ZIP to existing itch.io project 5023423 and
+  make it browser-playable. Retain build 17 hidden/non-playable for rollback.
+- [x] Replace the cover and capture/upload seven real screenshots: library and
+  all six games, including Gurmukhi and Simple Romanized Punjabi.
+- [x] Update the tagline, game descriptions, build number, Dictionary count,
+  credits, controls, badges, developer email and truthful audio/offline limits.
+- [x] Enable the visible screenshot sidebar and cream/teal page colors.
+- [x] Smoke-test all six games and Dictionary in the actual Chromium iframe,
+  including fullscreen, Bujho keyboard input/reload restoration, Quest default
+  alphabet/correct input, Jodo matching, Scramble placement/recall, old letter
+  practice restoration/audio controls and Gurmukhi fonts/query results.
+
+Draft visibility and Mobile Friendly-off are preserved. The current archive is
+21,697,904 bytes, SHA-256
+`805a672b972b5f3bc6ffd29223d1d80ba29b2ec0c0555e9adf28414f8ca0f58b`.
+It contains 106 files, including the three unchanged approved masters and
+attribution/licenses; 96 files are in the offline-cache manifest. The same
+application source/package had already passed 490 tests including 52 goldens,
+formatting, analysis and the release packager. This refresh changes distribution
+artwork/page copy and release documentation, not application source.
+`reports/release/browser_qa.json` separates current hosted evidence from older
+local/offline evidence. Actual host offline restart, physical mobile browsers,
+Firefox/Safari, screen readers, audible output and fluent pronunciation approval
+remain open. itch.io's desktop orientation-lock request emitted NotSupportedError;
+fullscreen and gameplay remained usable. No fresh hosted offline claim is made.
+
+## October 10 developer-email feedback: candidate 1.18.4+36
+
+- [x] Replace the player-facing GitHub feedback URL with
+  khalsagamestudio.apps@gmail.com and an Email feedback action.
+- [x] Include the current app version and game/language/device prompts in the
+  draft; retain a copy-address/manual fallback without sending automatically.
+
+All five targeted feedback tests pass: successful launch, unavailable/throwing
+mail handlers, plain-address copying and blocked clipboard fallback. Formatting
+and analysis pass; all 490 tests pass, including the 52 Windows golden tests.
+The release web package and normal arm64 profile/AOT APK build successfully.
+The web cache includes 96 files; integrity checks preserve all 20,601 records
+and their source attribution/licenses. aapt confirms version 1.18.4/code 36 and
+the SikhiGames launcher label. This candidate is not installed on devices;
+the tablet has 1.18.3+35 and Pixel 6 has 1.18.2+34.
+Activated 1.18.4+36 in the local web preview without clearing storage. The
+feedback dialog visibly shows the developer email, version, Copy email address
+and Email feedback actions, with no GitHub-account copy or console errors.
+No actual feedback email was sent during verification.
+
+## October 10 approved bilingual branding: candidate 1.18.3+35
+
+- [x] Use English S + Gurmukhi ਗ (Sikhi + Games) in the shared wordmark and
+  regenerate all Android, iOS and web launcher icons from font-derived paths.
+- [x] Use SikhiGames for Android/iOS launcher labels, web name/short_name and
+  Apple web shortcut titles; retain the full in-app title and application IDs.
+- [x] Refresh the release cover to the approved cream/teal/tile identity and
+  correctly list all six games. Keep the exporter as the source of future assets.
+- [x] Review the updated phone/tablet library goldens across all three themes.
+
+Formatting and analysis pass; all 486 tests pass, including the 52 golden tests.
+All 19 iOS catalog entries and five Android density exports have the expected
+dimensions; iOS PNGs are opaque. The complete maskable mark fits inside the
+central safe circle (measured radius 196.0px versus 204.8px at 512px).
+The 1.18.3+35 release web package builds with 96 offline-cache files and unchanged
+integrity/attribution checks for all 20,601 vocabulary records. The normal arm64
+profile/AOT APK builds successfully; aapt confirms version 1.18.3/code 35,
+launcher label SikhiGames and the existing application ID. iOS assets/labels
+are checked at source/export level; native iOS compilation is unavailable here.
+The K70 PRO tablet was updated on October 10 from 1.18.2+34 to the normal arm64
+profile/AOT 1.18.3+35 APK built from a54bbb3. Used `adb install -r` to preserve
+app data. Android confirms version 1.18.3/code 35 and a successful cold
+MainActivity launch; running PID 4664 was verified. The APK launcher label is
+SikhiGames. Hands-on launcher/icon checks remain a player check. Pixel 6 still
+has the previously installed 1.18.2+34 candidate.
+Activated the updated local web preview on port 8921 without clearing storage;
+the new Gurmukhi ਗ wordmark renders, existing Continue actions remain, Settings
+opens and returns, and the browser reports no console errors.
+Real-gameplay promotional screenshots still need the refresh tracked in the
+release checklist below; the updated golden images are test evidence.
+
+## October 10 direct-grid Bujho input: candidate 1.18.2+34
+
+- [x] Put typed letters directly in the active grid row and remove the separate
+  guess display, retaining Enter submission and editable rejected guesses.
+- [x] Enlarge Bujho keyboard labels with keys at least 44px high; retain
+  Gurmukhi composition, whole-unit backspace and scrollable long keyboards.
+- [x] Announce the current row/value for assistive technology and restore
+  hardware focus when that row is tapped. Keep draft letters unevaluated.
+- [x] Use the app's configured fonts for shared Gurmukhi keyboard labels.
+- [x] Update help, documentation and the reviewed phone/tablet visual baselines.
+
+Formatting and analysis pass. All 486 tests pass, including 52 Windows golden
+tests; reviewed the changed/new Bujho captures in every theme and the separate
+English/Gurmukhi phone layouts. Input cases cover draft typing, length limits,
+rejection without advancing, deletion, next-row submission, completion and
+accessible current values. Existing native conjunct/attached-mark tests now
+check the visible grid. English has no scroll at 320x568, 390x844 and 1024x768;
+Punjabi keyboards remain reachable at 200% text. Submitted-round persistence,
+word rules and approved dictionaries are unchanged.
+
+The final 1.18.2+34 web package builds successfully with 96 offline-cache files
+and verified integrity/attributions for the unchanged 20,601 records. Activated
+the preview update on port 8921 without clearing storage. Real-browser checks
+verify on-screen/hardware typing, hardware deletion, current-row announcements,
+Gurmukhi sign attachment into one tile and whole-unit deletion, readable larger
+key labels and no console errors.
+
+Pixel 6 was updated on October 10 from 1.18.0+32 to the normal arm64 profile/AOT
+APK built from commit a557fad, using `adb install -r` to preserve existing app
+data. Android confirms 1.18.2/code 34; MainActivity was brought to the foreground
+successfully and running PID 22762 was verified. Hands-on direct-grid testing
+remains a player check.
+
+The K70 PRO tablet was then updated from 1.18.1+33 to the same normal arm64
+profile/AOT APK using `adb install -r`, preserving app data. Android confirms
+1.18.2/code 34; a cold MainActivity launch succeeded and running PID 27234 was
+verified. Both devices now have the direct-grid build; hands-on tablet checks
+remain separate from these installation and launch confirmations.
+
+## October 10 tablet launch delay: candidate 1.18.1+33
+
+- [x] Show an opaque destination/loading frame before vocabulary preparation;
+  remove the game-route fade that initially concealed that acknowledgement.
+- [x] Skip unnecessary normalization, reuse eligibility decisions and Bujho
+  solution pools, and retain the pool when its spelling setting is unchanged.
+- [x] Add warm-content loading regressions and a real-dictionary Android launch
+  benchmark using in-memory saves, without reading or resetting player data.
+- [x] Validate and install the normal optimized app on the K70 PRO tablet.
+
+Formatting and analysis pass; all 480 tests pass, including the unchanged 50
+Windows goldens. The release web package for 1.18.1+33 builds successfully with
+96 offline-cache files. Vocabulary/attribution integrity passes for all 20,601
+unchanged records. No vocabulary or answer eligibility rules were changed.
+
+The K70 PRO debug benchmark reduced English Bujho pool preparation from 3,565
+to 171 ms and Gurmukhi from 12,542 to 378 ms for the same multi-length workload.
+The final profile integration run passed all six game launches after the tablet
+was unlocked. Tap plus first pump / settled timings, in milliseconds, were
+Bujho 112/611, Search 471/909, Quest 82/451, Bridges 95/842, Learn Letters
+103/333 and Scramble 98/535. These include test-harness/rendering work and are
+not guaranteed touch-to-display latency; hands-on feedback remains necessary.
+
+The temporary benchmark was replaced with the normal `lib/main.dart` arm64
+profile APK using `adb install -r`, preserving existing app data. Android
+reports version 1.18.1/code 33; MainActivity launch succeeded and running PID
+24758 was verified. Profile/AOT is used because local release-signing keys are
+not configured. The Pixel remains on 1.18.0+32. The rebuilt web package has not
+had a fresh browser playthrough; the earlier 1.18.0 checks below are historical.
+
+## October 10 mobile quality of life: candidate 1.18.0+32
+
+- [x] Equal phone/tablet/web library card heights, including Continue and wrapped text.
+- [x] Learn Letters Game type on Play, listening default and larger choice glyphs.
+- [x] Selected-language loading headers instead of an English placeholder.
+- [x] Scramble recall and dragging both ways, swaps and preserved legacy locks.
+- [x] Shared menu labels, icons and order for all six games.
+- [x] Wide Quest lantern beside the alphabet, retained when toggling input modes.
+- [x] Named, colorful achievement banners after successful persistence, with queue.
+- [x] Short route fades and dictionary preloading from Play.
+- [x] Complete full checks, visual review and release web preview validation.
+
+Formatting and analysis pass. The full suite passes 474 tests, including all
+50 Windows goldens; reviewed the changed/new images across all three themes,
+phone/tablet layouts and large text. The release web package passes vocabulary
+and attribution integrity for the unchanged 20,601 records and contains 96
+offline-cache files. The cache-worker behavior check also passes.
+Verified version 1.18.0+32 in the browser at 1024x768 and 390x844: Learn Letters
+mode selection/listening layout, shared menu, Quest lantern with both input
+banks, Scramble placement/recall and mouse dragging both ways at the normal web
+size, and Settings navigation. Browser console reported no errors. The updated
+preview is open on port 8921 after allowing its offline update to activate;
+port 8920 retains the previous preview's separate saved data. Real-device
+navigation latency and native touch dragging still need device testing.
+
+Pixel 6 was updated on October 10 with the arm64 debug testing APK from commit
+1803f94 using `adb install -r`, preserving existing app data. Android reports
+version 1.18.0/code 32; launching MainActivity succeeded and running PID 15571
+was verified. This supersedes its previous 1.16.2+31 installation. Hands-on
+touch dragging and navigation-speed checks remain pending.
+
+The K70 PRO tablet was also updated on October 10 using `adb install -r`,
+preserving existing app data. Android reports version 1.18.0/code 32;
+MainActivity launch succeeded and running PID 21298 was verified. This
+supersedes its previous 1.16.1+30 installation. Tablet layout and touch
+interaction playtesting remain hands-on checks.
+
+## October 9 review fixes and follow-ups: released 1.17.0+31
 
 - [x] Follow-up 3.1: ignore lone Gurmukhi vowel signs in Quest hardware input and
   the engine without consuming misses; cover unchanged counts and marked tiles.
@@ -338,27 +528,21 @@ release. They are retired follow-ups, not unfinished approval gates for build 25
 
 ## Current state
 
-- GitHub issue-review baseline: PR #1 merged into `main` at
-  `8056a0525ba9ffe0224bee6cffb1989002c87d93`.
-  GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
-  from that review. The focused save/restore and keyboard fixes are in
-  `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.15.1+28, Paper & Play. The September 18 ZIP and uploaded
-  itch.io draft remain 1.9.0+17 and
-  predate the subsequent audit fixes and October vocabulary recheck. They are
-  historical artifacts, not packages of current source. Increment both version
-  sources and the build number when producing the next distributed package.
-- The itch.io project is still a draft: project 5023423,
-  <https://khalsagamestudio.itch.io/sikhi-word-games>. No public release is recorded.
-- Pixel 6 last verified installation: 1.9.0+16 on September 13, preserving data.
-  The old request to install build 8 is superseded by verified installs of newer
-  builds; current-source device validation remains open below.
-- Latest completed baseline before dictionary v2: 343 Flutter tests and
-  successful analysis, web and Android builds (PR #12). Current dictionary v2
-  validation is recorded in the milestone above.
-- All five games, shared content/settings/statistics, offline save handling,
-  Modern/Sikhi/Dark themes, responsive shells and Unicode-safe matching exist.
-  Reusing these foundations is completed work, not an outstanding new module.
+- Current application/source candidate and public itch.io playtest: **1.18.4+36**.
+  PR #23 (`codex/mobile-qol-updates`) remains open and unmerged for owner review.
+- itch.io project 5023423 is Public, published October 10 at the owner's request:
+  <https://khalsagamestudio.itch.io/sikhi-word-games>. Current build 36, cover,
+  seven screenshots and six-game page copy replaced the September build 17
+  presentation. The older ZIP is retained hidden for rollback.
+- K70 PRO tablet last verified installation: **1.18.3+35**; Pixel 6:
+  **1.18.2+34**. Build 36 has not been installed on either device.
+- Current automated application validation: 490 tests including 52 Windows
+  goldens, clean format/analyze, release web packaging and arm64 profile/AOT APK.
+- All six games, shared themes/content/settings/statistics, offline save handling,
+  responsive shells, achievements and Unicode-safe matching exist. Current
+  vocabulary is the October 9 owner-approved 20,601-entry release snapshot.
+- Earlier issue reviews and milestones below remain historical evidence. They
+  do not establish newer physical/browser/accessibility or pronunciation QA.
 
 ## October 8 Paper & Play reference correction: 1.10.1+20
 
@@ -464,28 +648,27 @@ human review evidence.
 
 ## Next itch.io playtest gates
 
-- [x] Build a new candidate from validated current source with a new build number
-  using `app/tool/build_itch_io.ps1`. Inspect the actual ZIP, relative paths,
-  two release banks, attribution, fonts, all 35 offline letter clips and two
-  click sounds. Record the build 23 ZIP/APK in `reports/release/package_audit.json`.
-- [ ] Upload the validated new draft candidate to itch.io; the existing uploaded
-  build 17 remains historical.
-- [ ] Test all five games in the final uploaded iframe on Chromium, Firefox and
-  Safari, plus Android/iOS mobile browsers. Cover first launch, focus, keyboard,
-  touch/drag, fullscreen, clipboard/feedback, narrow layouts and Gurmukhi fonts.
-- [ ] Verify real storage and offline reload/restart on that uploaded candidate:
-  interrupted and completed rounds, Continue, reset, update/reopen, cache
-  completion and restrictive browser/iframe storage behavior. Localhost and
-  widget tests are separate evidence.
-- [ ] Verify audible output/volume, victory sound, opt-outs and physical haptics.
-  Obtain owner/fluent-speaker review of all 35 letter names and generated
-  pronunciations before treating them as approved teaching content.
-- [ ] Complete representative TalkBack/VoiceOver and keyboard-only play across
-  games, walkthroughs and dialogs. Include 200% text, Gurmukhi focus/activation,
-  Jodo selection, restore, completion accounting and repeat-play variety.
-- [ ] Refresh screenshots from the final candidate; verify studio website
-  availability, support details, page copy and disclosure accuracy. Public
-  visibility requires the owner's approval after the release gates are met.
+- [x] Package validated 1.18.4+36 with the approved three masters, relative root
+  index, local renderer, attribution/licenses, fonts and offline sounds.
+  Inspect actual archive bytes and record `reports/release/package_audit.json`.
+- [x] Upload build 36 to the existing draft and preserve build 17 for rollback.
+- [x] Refresh cover, seven gameplay screenshots, page copy, support email,
+  vocabulary/font credits and AI disclosure. Keep visibility Draft.
+- [x] Smoke-test all six games and Dictionary in the actual uploaded Chromium
+  iframe, including fullscreen and one real saved-round reload/restore flow.
+- [ ] Complete the full uploaded-iframe matrix on Firefox/Safari and physical
+  Android/iOS browsers: touch/drag, keyboard/focus, narrow layouts and clipboard.
+- [ ] Verify hosted storage and offline reload/restart more broadly: completed
+  rounds, reset, update/reopen, cache completion and restrictive iframe storage.
+  One online Bujho restore is verified; localhost/widget checks are separate.
+- [ ] Verify speaker output/volume, opt-outs, victory sound and physical haptics.
+  Obtain fluent-speaker/owner approval of generated letter-name pronunciations
+  before treating them as approved teaching audio.
+- [ ] Complete representative TalkBack/VoiceOver and keyboard-only play, 200%
+  text, Gurmukhi focus/activation, restore and completion accounting.
+- [x] Publish the existing page after the owner's explicit publication request.
+  Verify the reloaded page shows PUBLISHED and retains current release assets.
+- [ ] Verify studio website availability before broader promotion.
 
 Historical hosted evidence: September build 17 launched all five library cards.
 Fullscreen Learn Letters accepted Chhachha, entered the Stop audio UI state and

@@ -74,7 +74,7 @@ void main() {
       ]) {
         await _tapKey(tester, character);
       }
-      expect(_text(tester, 'guess-value'), 'ਪ੍ਰਾਕ੍ਰਿਤਿਕ');
+      expect(_draft(tester), 'ਪ੍ਰਾਕ੍ਰਿਤਿਕ');
       await _tapKey(tester, 'enter');
       await tester.pumpAndSettle();
       expect(find.text('You found it!'), findsOneWidget);
@@ -97,11 +97,11 @@ void main() {
         expect(key.hitTestable(), findsOneWidget);
         await tester.tap(key);
         await tester.pump();
-        expect(_text(tester, 'guess-value'), unit);
+        expect(_draft(tester), unit);
         await tester.ensureVisible(find.byKey(const ValueKey('key-backspace')));
         await tester.tap(find.byKey(const ValueKey('key-backspace')));
         await tester.pump();
-        expect(_text(tester, 'guess-value'), ' ');
+        expect(_draft(tester), '');
         expect(tester.takeException(), isNull);
       },
     );
@@ -179,17 +179,17 @@ void main() {
       for (final character in ['A', 'B', 'B', 'A', '\u0304', '\u0303']) {
         await _type(tester, character);
       }
-      expect(_text(tester, 'guess-value'), 'ABBĀ̃');
+      expect(_draft(tester), 'ABBĀ̃');
       await _type(tester, 'B');
-      expect(_text(tester, 'guess-value'), 'ABBĀ̃');
+      expect(_draft(tester), 'ABBĀ̃');
       await tester.ensureVisible(find.byKey(const ValueKey('key-backspace')));
       await tester.tap(find.byKey(const ValueKey('key-backspace')));
       await tester.pump();
-      expect(_text(tester, 'guess-value'), 'ABB');
+      expect(_draft(tester), 'ABB');
       await tester.ensureVisible(find.byKey(const ValueKey('key-Ā̃')));
       await tester.tap(find.byKey(const ValueKey('key-Ā̃')));
       await tester.pump();
-      expect(_text(tester, 'guess-value'), 'ABBĀ̃');
+      expect(_draft(tester), 'ABBĀ̃');
       expect(tester.takeException(), isNull);
     },
   );
@@ -202,14 +202,14 @@ void main() {
       for (final character in ['ਕ', 'ਲ', 'ਮ', 'ਪ', '੍', 'ਰ', 'ਿ']) {
         await _type(tester, character);
       }
-      expect(_text(tester, 'guess-value'), 'ਕਲਮਪ੍ਰਿ');
-      expect(wordUnitCount(_text(tester, 'guess-value')), 4);
+      expect(_draft(tester), 'ਕਲਮਪ੍ਰਿ');
+      expect(wordUnitCount(_draft(tester)), 4);
       await _type(tester, 'ਆ');
-      expect(_text(tester, 'guess-value'), 'ਕਲਮਪ੍ਰਿ');
+      expect(_draft(tester), 'ਕਲਮਪ੍ਰਿ');
       await tester.ensureVisible(find.byKey(const ValueKey('key-backspace')));
       await tester.tap(find.byKey(const ValueKey('key-backspace')));
       await tester.pump();
-      expect(_text(tester, 'guess-value'), 'ਕਲਮ');
+      expect(_draft(tester), 'ਕਲਮ');
       expect(tester.takeException(), isNull);
     },
   );
@@ -331,6 +331,16 @@ Future<void> _tapKey(WidgetTester tester, String character) async {
   await tester.tap(key);
   await tester.pump();
 }
+
+String _draft(WidgetTester tester) => tester
+    .widgetList<Text>(
+      find.descendant(
+        of: find.byKey(const ValueKey('guess-active-row')),
+        matching: find.byType(Text),
+      ),
+    )
+    .map((text) => text.data ?? '')
+    .join();
 
 String _text(WidgetTester tester, String key) =>
     tester.widget<Text>(find.byKey(ValueKey(key))).data!;

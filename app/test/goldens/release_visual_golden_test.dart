@@ -52,6 +52,48 @@ void main() {
     )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
   });
 
+  for (final mode in [LanguageMode.english, LanguageMode.gurmukhi]) {
+    testWidgets('Bujho pending ${mode.name} row on a phone', (tester) async {
+      _setGoldenSurface(tester);
+      tester.view.physicalSize = const Size(390, 844);
+      final store = MemoryKeyValueStore();
+      await tester.pumpWidget(
+        MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppThemes.forChoice(AppThemeChoice.sikhi),
+          home: GuessTheWordPage(
+            vocabularyRepository: mode == LanguageMode.english
+                ? _vocabulary
+                : _nativeVocabulary,
+            statisticsRepository: GuessStatisticsRepository(store),
+            gameRepository: GuessGameRepository(store),
+            solutionHistoryRepository: SolutionHistoryRepository(store),
+            hapticLevel: HapticFeedbackLevel.off,
+            reducedMotion: true,
+            initialMode: mode,
+            initialWordLength: mode == LanguageMode.english ? 5 : 4,
+            startFresh: true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      for (final character
+          in mode == LanguageMode.english ? ['A', 'P', 'P'] : ['ਕ', 'ੀ', 'ਰ']) {
+        await tester.sendKeyEvent(
+          LogicalKeyboardKey.keyA,
+          character: character,
+        );
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('images/bujho_pending_phone_${mode.name}.png'),
+      );
+      expect(tester.takeException(), isNull);
+    }, tags: 'golden');
+  }
+
   testWidgets('Word Quest starts with the full alphabet on a phone', (
     tester,
   ) async {
@@ -266,6 +308,17 @@ void main() {
       await expectLater(
         find.byType(Scaffold),
         matchesGoldenFile('images/bujho_restored_$themeName.png'),
+      );
+      for (final character in ['A', 'P', 'P']) {
+        await tester.sendKeyEvent(
+          LogicalKeyboardKey.keyA,
+          character: character,
+        );
+      }
+      await tester.pumpAndSettle();
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('images/bujho_pending_$themeName.png'),
       );
     }, tags: 'golden');
 
@@ -489,6 +542,23 @@ const _vocabulary = MemoryVocabularyRepository([
     acceptedGuess: true,
     solutionEligible: true,
     reviewStatus: ReviewStatus.machineChecked,
+    source: 'Project editorial definition; original text for Sikhi Word Games',
+  ),
+]);
+
+const _nativeVocabulary = MemoryVocabularyRepository([
+  VocabularyEntry(
+    id: 'native_kirtan',
+    language: VocabularyLanguage.panjabi,
+    script: VocabularyScript.gurmukhi,
+    latin: 'kirtan',
+    gurmukhi: 'ਕੀਰਤਨ',
+    englishDefinition: 'Sikh devotional music',
+    latinLength: 6,
+    gurmukhiLength: 4,
+    acceptedGuess: true,
+    solutionEligible: true,
+    reviewStatus: ReviewStatus.editorApproved,
     source: 'Project editorial definition; original text for Sikhi Word Games',
   ),
 ]);

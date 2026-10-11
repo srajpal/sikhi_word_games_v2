@@ -18,6 +18,23 @@ Native platforms decode and construct entries in a `compute` isolate. Web yields
 before each JSON shard and every 250 constructed records; individual shard JSON
 parsing still runs on the browser thread. Malformed records report their IDs.
 
+Game routes use `NoTransitionPage` so their loading header is opaque on its first
+frame. `showGameLoadingFrame` waits for frame submission and an event-loop turn
+before cached vocabulary Futures resume preparation. Quest and Bridges loaders
+also defer their shared construction. Non-game routes keep the 120 ms fade.
+Normalization checks whether conversion/joining is necessary before walking
+code points or replacing marks. `AnswerEligibility` weakly caches decisions per
+immutable entry identity and script; plain/source copies remain separate.
+`WordPool` caches its solution lists by language/length, and Bujho retains its
+pool when the spelling setting is unchanged. Dictionary and guess membership
+continue to include all supplied entries.
+
+Bujho keeps its unsubmitted guess as local presentation state. The board renders
+its written units in the first unsubmitted row; accepted turns still come from
+the domain evaluator. No result feedback is inferred from draft letters, and
+rejected submissions retain their draft. Keyboard composition and deletion use
+the shared grapheme-safe functions. Accepted-turn persistence is unchanged.
+
 `GameThemeTokens` owns panel, control and tile treatment. `GameArtwork` provides
 decorative library previews, and `QuestLantern` draws a secular countdown from
 the active color scheme. All three game modes use the active theme; Word Quest does not maintain
@@ -302,6 +319,13 @@ in its existing state. Repeated completion IDs remain inert. Missing new fields
 in older states mean zero; malformed new fields fall back safely. App-wide reset
 already owns these keys. Achievement IDs/goals live in a pure Dart catalog.
 
+`AchievementFeedback` takes a baseline of persisted facts when a game route opens.
+Successful page writes check that projection and enqueue only newly earned badges
+for that game. Its colorful banner and timer belong to the route; no extra totals
+or earned-badge store are introduced. Failed writes cannot announce unsaved facts.
+Accessible navigation retains each banner until dismissed; reduced motion removes
+its scale animation. Existing earned badges do not replay after relaunch.
+
 Quest session schema 2 enforces 3/4/5 misses. Schema 1 still enforces the previous
 5/6/7 budget for valid unfinished legacy rounds and is retained on their next save.
 New rounds always use schema 2. This preserves played moves without accepting
@@ -313,6 +337,22 @@ arbitrary custom budgets as app sessions.
 pages. Its explicit destination drives selected state, and `context.go` replaces
 the primary selection; game routes remain focused. `PaperPage` accepts an optional
 primary destination so Settings/game-details do not acquire the library bar.
+
+Game menus use `gameMenuItems` for shared labels, icon treatment and ordering.
+Library cards measure all six titles, descriptions and action labels to
+reserve one common height, including Continue. Learn Letters' optional launch
+preference `letterPracticeMode` defaults to listening in older preferences;
+session restoration continues to honor the saved round's mode.
+Router pages use a 120 ms fade with zero duration for reduced motion, preserving
+ordinary Navigator back behavior. Bundled vocabulary starts loading after the
+first library frame through the existing cached, retryable repository.
+
+Scramble drag payloads carry a round ID and stable tile ID. Drops onto occupied
+spaces swap placed tiles or return displaced tray placements. Returning and
+recalling tiles retain legacy locks, hints and check counts. Completion and
+cross-round drops cannot alter the permutation; tap controls remain available.
+Quest uses a side-by-side alphabet/lantern layout at wide widths and ordinary
+text scales, with a stacked scrollable fallback for narrow or enlarged text.
 
 `InteractionSounds` encloses the Navigator in the app builder. Accepted letter
 and button callbacks request independent short, low-volume bundled WAVs. Disabled

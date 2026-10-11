@@ -8,10 +8,11 @@ import '../audio/interaction_sounds.dart';
 /// Compact language information inside the shared paper game title.
 class GameLanguageHeader extends StatelessWidget {
   const GameLanguageHeader({required this.mode, this.wordLength, super.key});
-  final LanguageMode mode;
+  final LanguageMode? mode;
   final int? wordLength;
-  String get label =>
-      '${mode.label}${wordLength == null ? '' : ' · $wordLength letters'}';
+  String get label => mode == null
+      ? 'Choosing language…'
+      : '${mode!.label}${wordLength == null ? '' : ' · $wordLength letters'}';
   @override
   Widget build(BuildContext context) => Text(
     label,

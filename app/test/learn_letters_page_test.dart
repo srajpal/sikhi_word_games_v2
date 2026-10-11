@@ -15,7 +15,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppThemes.forChoice(AppThemeChoice.modern),
-        home: LearnLettersPage(repository: repository),
+        home: LearnLettersPage(
+          repository: repository,
+          initialPracticeMode: LetterPracticeMode.name,
+        ),
       ),
     );
     await tester.pumpAndSettle();

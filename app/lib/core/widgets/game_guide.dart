@@ -62,7 +62,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
     ),
     (
       title: 'Check and discover',
-      body: 'Choose Check word when every space is filled. A wrong order lets you keep trying. Hint reveals the meaning without moving tiles. Use Next word after solving. Touch, keyboard and screen-reader activation work. In Game settings, Apply a different language starts a new word; Cancel keeps this one.',
+      body: 'Tap or drag tiles into spaces, drag between spaces to swap, and return tiles to the tray. Recall tiles returns every movable tile. Choose Check word when every space is filled. Hint reveals the meaning without moving tiles. Use Next word after solving. Keyboard and screen-reader activation work too. In Game settings, Apply a different language starts a new word; Cancel keeps this one.',
     ),
   ],
   GameKind.learnLetters => const [
@@ -96,7 +96,7 @@ List<_GuideStep> _steps(GameKind game) => switch (game) {
   GameKind.guessTheWord => const [
     (
       title: 'Guess the hidden word',
-      body: 'Use the on-screen letters or a physical keyboard to enter a complete word, then press Enter. You have six accepted guesses. A word that is not accepted does not use a guess.',
+      body: 'Use the on-screen letters or a physical keyboard to fill the current grid row, then press Enter. Backspace removes the last letter group. You have six accepted guesses. A word that is not accepted stays in the row to edit and does not use a guess.',
     ),
     (
       title: 'Read the tile clues',

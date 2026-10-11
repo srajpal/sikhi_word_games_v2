@@ -53,6 +53,69 @@ Widget scramblePage(
   ),
 );
 void main() {
+  for (final mode in [LanguageMode.english, LanguageMode.gurmukhi]) {
+    testWidgets('drag, swap, return and recall persist whole units in $mode', (
+      tester,
+    ) async {
+      final repo = WordScrambleRepository(MemoryKeyValueStore());
+      await tester.pumpWidget(
+        scramblePage(
+          repo,
+          mode: mode,
+          spelling: mode == LanguageMode.gurmukhi ? 'ਕਰੇਲਾ' : 'APPLE',
+        ),
+      );
+      await tester.pumpAndSettle();
+      Future<void> drag(Finder from, Finder to) async {
+        await tester.drag(from, tester.getCenter(to) - tester.getCenter(from));
+        await tester.pumpAndSettle();
+      }
+
+      await drag(
+        find.byKey(const ValueKey('scramble-tile-1')),
+        find.byKey(const ValueKey('scramble-slot-2')),
+      );
+      expect(repo.restore()!.game.slots[2], 1);
+      await drag(
+        find.byKey(const ValueKey('scramble-tile-0')),
+        find.byKey(const ValueKey('scramble-slot-0')),
+      );
+      await drag(
+        find.byKey(const ValueKey('scramble-slot-2')),
+        find.byKey(const ValueKey('scramble-slot-0')),
+      );
+      expect(repo.restore()!.game.slots[0], 1);
+      expect(repo.restore()!.game.slots[2], 0);
+      await drag(
+        find.byKey(const ValueKey('scramble-slot-0')),
+        find.byKey(const ValueKey('scramble-tile-2')),
+      );
+      expect(repo.restore()!.game.tray, contains(1));
+      await tester.tap(find.byKey(const ValueKey('scramble-recall')));
+      await tester.pumpAndSettle();
+      expect(repo.restore()!.game.slots.every((id) => id == null), isTrue);
+      expect(
+        repo.restore()!.game.tray.toSet().length,
+        mode == LanguageMode.gurmukhi ? 3 : 5,
+      );
+      if (mode == LanguageMode.gurmukhi) {
+        expect(find.text('ਰੇ'), findsOneWidget);
+        expect(find.text('Re'), findsOneWidget);
+      }
+      for (final id in repo.restore()!.game.tray) {
+        await tester.tap(find.byKey(ValueKey('scramble-tile-$id')));
+        await tester.pumpAndSettle();
+      }
+      expect(repo.restore()!.game.tray, isEmpty);
+      final returnedId = repo.restore()!.game.slots[0]!;
+      await drag(
+        find.byKey(const ValueKey('scramble-slot-0')),
+        find.text('Drop tiles here to return them'),
+      );
+      expect(repo.restore()!.game.tray, [returnedId]);
+      expect(tester.takeException(), isNull);
+    });
+  }
   testWidgets(
     'meaning is hidden, hint persists and the next word starts hidden',
     (tester) async {
@@ -361,7 +424,7 @@ void main() {
       expect(repo.restore()!.game.slots[0], 1);
       await tester.tap(find.byTooltip('Shabad Banao menu'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('New word'));
+      await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
       expect(repo.restore()!.game.spelling, 'ASAN');
       expect(repo.restore()!.simpleRomanized, isTrue);

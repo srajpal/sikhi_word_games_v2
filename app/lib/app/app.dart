@@ -1,4 +1,9 @@
+import '../core/widgets/game_loading.dart';
 import '../features/achievements/domain/player_progress.dart';
+
+import 'dart:async';
+
+import '../features/achievements/presentation/achievement_feedback.dart';
 import '../features/achievements/presentation/achievements_page.dart';
 import '../features/game_library/presentation/progress_page.dart';
 import '../features/settings/presentation/settings_page.dart';
@@ -110,154 +115,208 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
   void initState() {
     super.initState();
     _settings = widget.settingsRepository.load();
+    // Decode the bundled dictionary while the player is on Play, rather than
+    // making the first game tap wait for the asset download/isolate startup.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && widget.vocabularyRepository is AssetVocabularyRepository) {
+        unawaited(
+          widget.vocabularyRepository.load().then<void>(
+            (_) {},
+            onError: (Object error, StackTrace stack) {},
+          ),
+        );
+      }
+    });
     _router = GoRouter(
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => GameLibraryPage(
-            onThemeChanged: _changeTheme,
-            settings: _settings,
-            onFeedbackSettingsChanged: _changeFeedbackSettings,
-            guessGameRepository: widget.gameRepository,
-            guessStatisticsRepository: widget.statisticsRepository,
-            wordSearchSessionRepository: widget.wordSearchSessionRepository,
-            wordQuestSessionRepository: widget.wordQuestSessionRepository,
-            launchPreferencesRepository: widget.launchPreferencesRepository,
-            wordBridgesRepository: widget.wordBridgesRepository,
-            learnLettersRepository: widget.learnLettersRepository,
-            wordScrambleRepository: widget.wordScrambleRepository,
-            loadWordBridgesContent: _wordBridgesContent,
-            onResetAllData: _resetAllData,
+          pageBuilder: (context, state) => _page(
+            context,
+            state,
+            GameLibraryPage(
+              onThemeChanged: _changeTheme,
+              settings: _settings,
+              onFeedbackSettingsChanged: _changeFeedbackSettings,
+              guessGameRepository: widget.gameRepository,
+              guessStatisticsRepository: widget.statisticsRepository,
+              wordSearchSessionRepository: widget.wordSearchSessionRepository,
+              wordQuestSessionRepository: widget.wordQuestSessionRepository,
+              launchPreferencesRepository: widget.launchPreferencesRepository,
+              wordBridgesRepository: widget.wordBridgesRepository,
+              learnLettersRepository: widget.learnLettersRepository,
+              wordScrambleRepository: widget.wordScrambleRepository,
+              loadWordBridgesContent: _wordBridgesContent,
+              onResetAllData: _resetAllData,
+            ),
           ),
           routes: [
             GoRoute(
               path: 'word-scramble',
-              builder: (context, state) => _gameShell(
-                game: GameKind.wordScramble,
-                child: WordScramblePage(
-                  vocabularyRepository: widget.vocabularyRepository,
-                  repository: widget.wordScrambleRepository,
-                  simpleRomanized: _settings.simpleRomanizedPunjabi,
-                  initialMode: _launchOptions(state).language,
-                  startFresh:
-                      !_launchOptions(state).continueGame &&
-                      state.extra is GameLaunchOptions,
+              pageBuilder: (context, state) => _gamePage(
+                context,
+                state,
+                _gameShell(
+                  game: GameKind.wordScramble,
+                  child: WordScramblePage(
+                    vocabularyRepository: widget.vocabularyRepository,
+                    repository: widget.wordScrambleRepository,
+                    simpleRomanized: _settings.simpleRomanizedPunjabi,
+                    initialMode: _launchOptions(state).language,
+                    startFresh:
+                        !_launchOptions(state).continueGame &&
+                        state.extra is GameLaunchOptions,
+                  ),
                 ),
               ),
             ),
             GoRoute(
               path: 'learn-letters',
-              builder: (context, state) => _gameShell(
-                game: GameKind.learnLetters,
-                child: LearnLettersPage(
-                  repository: widget.learnLettersRepository,
-                  startFresh:
-                      !_launchOptions(state).continueGame &&
-                      state.extra is GameLaunchOptions,
+              pageBuilder: (context, state) => _gamePage(
+                context,
+                state,
+                _gameShell(
+                  game: GameKind.learnLetters,
+                  child: LearnLettersPage(
+                    repository: widget.learnLettersRepository,
+                    initialPracticeMode: _launchOptions(state)
+                        .letterPracticeMode,
+                    startFresh:
+                        !_launchOptions(state).continueGame &&
+                        state.extra is GameLaunchOptions,
+                  ),
                 ),
               ),
             ),
             GoRoute(
               path: 'word-bridges',
-              builder: (context, state) => _gameShell(
-                game: GameKind.wordBridges,
+              pageBuilder: (context, state) => _gamePage(
+                context,
+                state,
+                _gameShell(
+                  game: GameKind.wordBridges,
 
-                child: WordBridgesPage(
-                  simpleRomanized: _settings.simpleRomanizedPunjabi,
-                  vocabularyRepository: widget.vocabularyRepository,
-                  repository: widget.wordBridgesRepository,
-                  contentFuture: _wordBridgesContent(),
-                  initialMode: _launchOptions(state).language,
-                  startFresh:
-                      !_launchOptions(state).continueGame &&
-                      state.extra is GameLaunchOptions,
+                  child: WordBridgesPage(
+                    simpleRomanized: _settings.simpleRomanizedPunjabi,
+                    vocabularyRepository: widget.vocabularyRepository,
+                    repository: widget.wordBridgesRepository,
+                    contentFuture: _wordBridgesContent(),
+                    initialMode: _launchOptions(state).language,
+                    startFresh:
+                        !_launchOptions(state).continueGame &&
+                        state.extra is GameLaunchOptions,
+                  ),
                 ),
               ),
             ),
             GoRoute(
               path: 'guess-the-word',
-              builder: (context, state) => _gameShell(
-                game: GameKind.guessTheWord,
+              pageBuilder: (context, state) => _gamePage(
+                context,
+                state,
+                _gameShell(
+                  game: GameKind.guessTheWord,
 
-                child: GuessTheWordPage(
-                  simpleRomanized: _settings.simpleRomanizedPunjabi,
-                  vocabularyRepository: widget.vocabularyRepository,
-                  statisticsRepository: widget.statisticsRepository,
-                  gameRepository: widget.gameRepository,
-                  solutionHistoryRepository: widget.solutionHistoryRepository,
-                  hapticLevel: _settings.hapticLevel,
-                  reducedMotion:
-                      _settings.reducedMotion ||
-                      MediaQuery.disableAnimationsOf(context),
-                  initialMode: _launchOptions(state).language,
-                  initialWordLength: _launchOptions(state).wordSize,
-                  startFresh:
-                      !_launchOptions(state).continueGame &&
-                      state.extra is GameLaunchOptions,
+                  child: GuessTheWordPage(
+                    simpleRomanized: _settings.simpleRomanizedPunjabi,
+                    vocabularyRepository: widget.vocabularyRepository,
+                    statisticsRepository: widget.statisticsRepository,
+                    gameRepository: widget.gameRepository,
+                    solutionHistoryRepository: widget.solutionHistoryRepository,
+                    hapticLevel: _settings.hapticLevel,
+                    reducedMotion:
+                        _settings.reducedMotion ||
+                        MediaQuery.disableAnimationsOf(context),
+                    initialMode: _launchOptions(state).language,
+                    initialWordLength: _launchOptions(state).wordSize,
+                    startFresh:
+                        !_launchOptions(state).continueGame &&
+                        state.extra is GameLaunchOptions,
+                  ),
                 ),
               ),
             ),
             GoRoute(
               path: 'settings',
-              builder: (context, state) => SettingsPage(
-                settings: _settings,
-                onChanged: _changeFeedbackSettings,
-                onResetAllData: _resetAllData,
+              pageBuilder: (context, state) => _page(
+                context,
+                state,
+                SettingsPage(
+                  settings: _settings,
+                  onChanged: _changeFeedbackSettings,
+                  onResetAllData: _resetAllData,
+                ),
               ),
             ),
             GoRoute(
               path: 'progress',
-              builder: (context, state) => ProgressPage(progress: _progress()),
+              pageBuilder: (context, state) =>
+                  _page(context, state, ProgressPage(progress: _progress())),
             ),
             GoRoute(
               path: 'achievements',
-              builder: (context, state) =>
-                  AchievementsPage(progress: _progress()),
+              pageBuilder: (context, state) => _page(
+                context,
+                state,
+                AchievementsPage(progress: _progress()),
+              ),
             ),
             GoRoute(
               path: 'dictionary',
-              builder: (context, state) => DictionaryPage(
-                key: ValueKey(_settings.simpleRomanizedPunjabi),
-                simpleRomanized: _settings.simpleRomanizedPunjabi,
-                vocabularyRepository: widget.vocabularyRepository,
+              pageBuilder: (context, state) => _page(
+                context,
+                state,
+                DictionaryPage(
+                  key: ValueKey(_settings.simpleRomanizedPunjabi),
+                  simpleRomanized: _settings.simpleRomanizedPunjabi,
+                  vocabularyRepository: widget.vocabularyRepository,
+                ),
               ),
             ),
             GoRoute(
               path: 'word-search',
-              builder: (context, state) => _gameShell(
-                game: GameKind.wordSearch,
+              pageBuilder: (context, state) => _gamePage(
+                context,
+                state,
+                _gameShell(
+                  game: GameKind.wordSearch,
 
-                child: WordSearchPage(
-                  simpleRomanized: _settings.simpleRomanizedPunjabi,
-                  vocabularyRepository: widget.vocabularyRepository,
-                  sessionRepository: widget.wordSearchSessionRepository,
-                  initialMode: _launchOptions(state).language,
-                  initialWordSize: _launchOptions(state).wordSize,
-                  startFresh:
-                      !_launchOptions(state).continueGame &&
-                      state.extra is GameLaunchOptions,
+                  child: WordSearchPage(
+                    simpleRomanized: _settings.simpleRomanizedPunjabi,
+                    vocabularyRepository: widget.vocabularyRepository,
+                    sessionRepository: widget.wordSearchSessionRepository,
+                    initialMode: _launchOptions(state).language,
+                    initialWordSize: _launchOptions(state).wordSize,
+                    startFresh:
+                        !_launchOptions(state).continueGame &&
+                        state.extra is GameLaunchOptions,
+                  ),
                 ),
               ),
             ),
             GoRoute(
               path: 'word-quest',
-              builder: (context, state) => _gameShell(
-                game: GameKind.wordQuest,
+              pageBuilder: (context, state) => _gamePage(
+                context,
+                state,
+                _gameShell(
+                  game: GameKind.wordQuest,
 
-                child: WordQuestPage(
-                  simpleRomanized: _settings.simpleRomanizedPunjabi,
-                  vocabularyRepository: widget.vocabularyRepository,
-                  sessionRepository: widget.wordQuestSessionRepository,
-                  vocabularyFuture: _wordQuestVocabulary(),
-                  hapticLevel: _settings.hapticLevel,
-                  reducedMotion:
-                      _settings.reducedMotion ||
-                      MediaQuery.disableAnimationsOf(context),
-                  initialMode: _launchOptions(state).language,
-                  initialWordSize: _launchOptions(state).wordSize,
-                  startFresh:
-                      !_launchOptions(state).continueGame &&
-                      state.extra is GameLaunchOptions,
+                  child: WordQuestPage(
+                    simpleRomanized: _settings.simpleRomanizedPunjabi,
+                    vocabularyRepository: widget.vocabularyRepository,
+                    sessionRepository: widget.wordQuestSessionRepository,
+                    vocabularyFuture: _wordQuestVocabulary(),
+                    hapticLevel: _settings.hapticLevel,
+                    reducedMotion:
+                        _settings.reducedMotion ||
+                        MediaQuery.disableAnimationsOf(context),
+                    initialMode: _launchOptions(state).language,
+                    initialWordSize: _launchOptions(state).wordSize,
+                    startFresh:
+                        !_launchOptions(state).continueGame &&
+                        state.extra is GameLaunchOptions,
+                  ),
                 ),
               ),
             ),
@@ -266,6 +325,33 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
       ],
     );
   }
+
+  // The first loading frame must be opaque. A fade starting at zero would
+  // conceal acknowledgement while preparation resumes after that frame.
+  NoTransitionPage<void> _gamePage(
+    BuildContext context,
+    GoRouterState state,
+    Widget child,
+  ) => NoTransitionPage<void>(key: state.pageKey, child: child);
+
+  CustomTransitionPage<void> _page(
+    BuildContext context,
+    GoRouterState state,
+    Widget child,
+  ) => CustomTransitionPage<void>(
+    key: state.pageKey,
+    child: child,
+    transitionDuration:
+        _settings.reducedMotion || MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : const Duration(milliseconds: 120),
+    reverseTransitionDuration:
+        _settings.reducedMotion || MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : const Duration(milliseconds: 120),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+        FadeTransition(opacity: animation, child: child),
+  );
 
   PlayerProgress _progress() => PlayerProgress(
     bujho: widget.statisticsRepository.load(),
@@ -278,26 +364,38 @@ class _SikhiWordGamesAppState extends State<SikhiWordGamesApp> {
 
   Widget _gameShell({required GameKind game, required Widget child}) =>
       ScaffoldMessenger(
-        child: VictoryCelebration(
+        child: AchievementFeedback(
           game: game,
-          settings: _settings,
-          onSettingsChanged: _changeFeedbackSettings,
-          child: GameGuide(
+          facts: () => _progress().facts,
+          reducedMotion: _settings.reducedMotion,
+          child: VictoryCelebration(
             game: game,
-            repository: widget.guideRepository,
-            child: child,
+            settings: _settings,
+            onSettingsChanged: _changeFeedbackSettings,
+            child: GameGuide(
+              game: game,
+              repository: widget.guideRepository,
+              child: child,
+            ),
           ),
         ),
       );
   Future<WordBridgesContent> _wordBridgesContent() =>
       _wordBridgesContentFuture ??=
-          widget.wordBridgesContentFuture ??
-          WordBridgesContent.load(widget.vocabularyRepository);
+          widget.wordBridgesContentFuture ?? _prepareWordBridges();
+
+  Future<WordBridgesContent> _prepareWordBridges() async {
+    await showGameLoadingFrame();
+    return WordBridgesContent.load(widget.vocabularyRepository);
+  }
 
   Future<WordQuestVocabulary> _wordQuestVocabulary() =>
-      _wordQuestVocabularyFuture ??= WordQuestVocabulary.load(
-        widget.vocabularyRepository,
-      );
+      _wordQuestVocabularyFuture ??= _prepareWordQuest();
+
+  Future<WordQuestVocabulary> _prepareWordQuest() async {
+    await showGameLoadingFrame();
+    return WordQuestVocabulary.load(widget.vocabularyRepository);
+  }
 
   GameLaunchOptions _launchOptions(GoRouterState state) =>
       state.extra is GameLaunchOptions

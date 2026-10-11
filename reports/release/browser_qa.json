@@ -1,40 +1,93 @@
 {
-  "version": "1.3.0+5",
+  "version": "1.18.4+36",
+  "date": "2026-10-10",
+  "source_commit": "e520a24",
   "browser": "Codex in-app Chromium",
-  "viewport": [
-    1280,
+  "archive_sha256": "805a672b972b5f3bc6ffd29223d1d80ba29b2ec0c0555e9adf28414f8ca0f58b",
+  "itch_project_id": 5023423,
+  "visibility": "Public",
+  "smoke_test_visibility": "Draft",
+  "publication": {
+    "authorized_by": "Owner explicit publication request",
+    "published_at_utc": "2026-10-11 00:40 UTC (page timestamp)",
+    "screenshot": "itch-published-current.jpg",
+    "verification": "Reloaded owner page shows PUBLISHED, build 36 copy and seven screenshot links",
+    "anonymous_fetch": "Not verified: web lookup tool could not access the page"
+  },
+  "uploaded_iframe": "https://html-classic.itch.zone/html/19683741/index.html",
+  "embed": [
+    960,
     720
   ],
-  "serverHeaders": "Cache-Control: no-store",
-  "offline": [
-    "online cache-ready DOM signal true",
-    "online tab closed",
-    "preview server stopped and direct HTTP request failed",
-    "new tab loaded cached nested URL",
-    "Bujho saved game restored and APPLE guess accepted",
-    "Gurmukhi Khoj puzzle generated and fonts rendered",
-    "Word Quest LOGIC completed using on-screen and physical input"
+  "hosted_checks": [
+    "All six games and Dictionary launched in the uploaded iframe",
+    "Bujho physical keyboard APPLE accepted in direct grid; first submitted row and attempt 2 restored after full owner-page reload",
+    "Fullscreen entered and remained usable",
+    "Quest starts full alphabet with 4 misses / 1 hint; correct F revealed twice without losing lights",
+    "Jodo matched THUMB with its definition",
+    "Existing Learn Letters Chhachha round from the older upload restored at 20%; Hear entered Stop audio state",
+    "Scramble clue hidden at start; placing C enabled Recall tiles; recall returned it to bank",
+    "English Dictionary query MICE returned entry; Gurmukhi keyboard and query results rendered with bundled fonts",
+    "Six-game copy, support mailto and 7 screenshot links persisted after save/reload",
+    "Screenshot layout changed from Auto(hidden) to Sidebar"
   ],
-  "screenshots": [
-    "library-sikhi.png",
-    "bujho-sikhi.png",
-    "khoj-gurmukhi-sikhi.png",
-    "word-quest-sikhi.png"
+  "console_observations": [
+    "itch.io emitted NotSupportedError for unsupported desktop screen.orientation.lock during fullscreen; fullscreen and gameplay remained usable"
   ],
+  "screenshots": {
+    "library-current.jpg": "Exact ZIP HTTP preview, Sikhi tablet portrait 1024x1366 viewport",
+    "bujho-current.jpg": "Actual uploaded itch.io game, fullscreen, accepted keyboard guess",
+    "khoj-current.jpg": "Exact ZIP HTTP preview, Gurmukhi Sikhi, selected JANAB",
+    "quest-current.jpg": "Exact ZIP HTTP preview, English Sikhi, full alphabet and lantern, W/R revealed",
+    "jodo-current.jpg": "Exact ZIP HTTP preview, Simple Romanized Punjabi Modern, SARAF pair matched",
+    "letters-current.jpg": "Exact ZIP HTTP preview, Modern listening mode, larger Gurmukhi choices",
+    "scramble-current.jpg": "Exact ZIP HTTP preview, Gurmukhi Modern, meaning hidden and one cluster placed"
+  },
   "remaining": [
-    "actual itch.io iframe",
-    "physical Android and iOS browsers",
-    "Firefox and Safari",
-    "screen reader and haptics",
-    "cold startup on modest phone",
-    "semantic and family-suitability review"
+    "Hosted offline reload/restart and restrictive storage behavior",
+    "Full end-to-end completion/reset matrix on current host",
+    "Physical Android/iOS mobile browsers, Firefox and Safari",
+    "Screen readers, touch drag and 200% text on physical browsers",
+    "Speaker audibility, haptics and fluent pronunciation review"
   ],
-  "finalArchiveOfflineShellVerified": true,
-  "finalArchiveSha256": "7bb2edd756988fd289e4ee79d29d3dadd0732f9adc0eef151c6a12f0f3993e87",
-  "hostedIntegration": {
-    "result": "passed",
-    "commit": "8492ec5",
-    "run": "https://github.com/srajpal/sikhi_word_games_v2/actions/runs/34671765499",
-    "coverage": "in-memory preferences and interrupted Bujho restoration on release web build"
+  "historical_evidence": {
+    "version": "1.3.0+5",
+    "browser": "Codex in-app Chromium",
+    "viewport": [
+      1280,
+      720
+    ],
+    "serverHeaders": "Cache-Control: no-store",
+    "offline": [
+      "online cache-ready DOM signal true",
+      "online tab closed",
+      "preview server stopped and direct HTTP request failed",
+      "new tab loaded cached nested URL",
+      "Bujho saved game restored and APPLE guess accepted",
+      "Gurmukhi Khoj puzzle generated and fonts rendered",
+      "Word Quest LOGIC completed using on-screen and physical input"
+    ],
+    "screenshots": [
+      "library-sikhi.png",
+      "bujho-sikhi.png",
+      "khoj-gurmukhi-sikhi.png",
+      "word-quest-sikhi.png"
+    ],
+    "remaining": [
+      "actual itch.io iframe",
+      "physical Android and iOS browsers",
+      "Firefox and Safari",
+      "screen reader and haptics",
+      "cold startup on modest phone",
+      "semantic and family-suitability review"
+    ],
+    "finalArchiveOfflineShellVerified": true,
+    "finalArchiveSha256": "7bb2edd756988fd289e4ee79d29d3dadd0732f9adc0eef151c6a12f0f3993e87",
+    "hostedIntegration": {
+      "result": "passed",
+      "commit": "8492ec5",
+      "run": "https://github.com/srajpal/sikhi_word_games_v2/actions/runs/34671765499",
+      "coverage": "in-memory preferences and interrupted Bujho restoration on release web build"
+    }
   }
 }

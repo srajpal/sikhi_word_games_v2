@@ -25,7 +25,7 @@ class GurmukhiKeyLabel extends StatelessWidget {
       children: [
         Text(
           grapheme,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
             fontSize: gurmukhiFontSize,
             fontWeight: FontWeight.w900,
             color: color,
@@ -33,7 +33,7 @@ class GurmukhiKeyLabel extends StatelessWidget {
         ),
         Text(
           romanizeGurmukhiGrapheme(grapheme),
-          style: TextStyle(
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
             fontSize: romanizationFontSize,
             fontWeight: FontWeight.w700,
             color: color.withValues(alpha: .75),

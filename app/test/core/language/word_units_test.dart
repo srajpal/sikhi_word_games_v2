@@ -3,6 +3,20 @@ import 'package:sikhi_word_games_v2/core/language/word_units.dart';
 
 void main() {
   test(
+    'unlinked units remain grapheme-safe for marks, emoji and line breaks',
+    () {
+      expect(wordUnits('ਕਾਰੇਲਾ'), ['ਕਾ', 'ਰੇ', 'ਲਾ']);
+      expect(wordUnits('a\u0304\u0303👨‍👩‍👧‍👦\r\n'), [
+        'a\u0304\u0303',
+        '👨‍👩‍👧‍👦',
+        '\r\n',
+      ]);
+      expect(wordUnits(''), isEmpty);
+      expect(normalizeRomanizedInput('APPLE\r\n'), 'APPLE\r\n');
+      expect(simplifyRomanizedPunjabi('APPLE\r\n'), 'APPLE\r\n');
+    },
+  );
+  test(
     'Gurmukhi written tiles retain subjoined letters and attached marks',
     () {
       expect(wordUnits('ਅਪ੍ਰੈਲ'), ['ਅ', 'ਪ੍ਰੈ', 'ਲ']);

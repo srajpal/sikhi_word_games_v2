@@ -1,3 +1,6 @@
+import '../../../core/widgets/game_loading.dart';
+import '../../achievements/presentation/achievement_feedback.dart';
+import '../../../core/widgets/game_menu.dart';
 import '../../../core/language/hardware_input.dart';
 import '../../../core/content/romanized_vocabulary_views.dart';
 import '../../../core/themes/paper_page.dart';
@@ -73,7 +76,7 @@ class GuessTheWordPage extends StatefulWidget {
 }
 
 class _GuessTheWordPageState extends State<GuessTheWordPage> {
-  final _controller = TextEditingController();
+  String _pendingGuess = '';
   final _gameFocusNode = FocusNode(debugLabel: 'Guess game keyboard');
   final _random = math.Random.secure();
   late final NonRepeatingWordSelector _selector;
@@ -102,7 +105,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
 
   @override
   void dispose() {
-    _controller.dispose();
     _gameFocusNode.dispose();
     super.dispose();
   }
@@ -148,6 +150,8 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
 
   Future<void> _loadVocabulary() async {
     try {
+      await showGameLoadingFrame();
+      if (!mounted) return;
       final entries = await widget.vocabularyRepository.load();
       if (!mounted) return;
       _views = RomanizedVocabularyViews(entries);
@@ -186,7 +190,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
         _wordLength = restored.game.wordLength;
         _solutionEntry = solutionEntry;
         _game = restored.game;
-        _controller.clear();
+        _pendingGuess = '';
         _message = null;
         _loading = false;
       });
@@ -243,6 +247,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   }
 
   void _useSpelling(bool simple) {
+    if (_pool != null && _simpleRomanized == simple) return;
     _simpleRomanized = simple;
     _pool = WordPool(_views!.entries(simple: simple));
   }
@@ -270,7 +275,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     setState(() {
       _solutionEntry = entry;
       _game = GuessGame(solution: spelling, acceptedGuesses: accepted);
-      _controller.clear();
+      _pendingGuess = '';
       _message = null;
       _loading = false;
     });
@@ -298,7 +303,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   void _submit() {
     final game = _game;
     if (game == null) return;
-    final guess = _controller.text;
+    final guess = _pendingGuess;
     final result = game.submit(guess);
     if (!result.isAccepted) {
       _performHaptic(isError: true);
@@ -324,6 +329,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           widget.gameRepository.clear(
             after: widget.statisticsRepository.save(_statistics),
           ),
+          checkAchievements: true,
         );
       } else {
         _persist(
@@ -334,7 +340,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           ),
         );
       }
-      _controller.clear();
+      _pendingGuess = '';
       _message = null;
     });
     _performHaptic();
@@ -348,7 +354,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
   }
 
   void _appendCharacter(String character) {
-    final current = _controller.text;
+    final current = _pendingGuess;
     final appended = '$current$character';
     final candidate = _mode == LanguageMode.romanizedPanjabi
         ? (_simpleRomanized
@@ -356,23 +362,20 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
               : normalizeRomanizedInput(appended))
         : normalizeGurmukhi(appended);
     if (wordUnitCount(candidate) > _wordLength) return;
-    _controller.value = TextEditingValue(
-      text: candidate,
-      selection: TextSelection.collapsed(offset: candidate.length),
-    );
-    setState(() => _message = null);
+    setState(() {
+      _pendingGuess = candidate;
+      _message = null;
+    });
     _performHaptic(isKey: true);
     _focusInput();
   }
 
   void _backspace() {
-    if (_controller.text.isEmpty) return;
-    final shortened = withoutLastWordUnit(_controller.text);
-    _controller.value = TextEditingValue(
-      text: shortened,
-      selection: TextSelection.collapsed(offset: shortened.length),
-    );
-    setState(() => _message = null);
+    if (_pendingGuess.isEmpty) return;
+    setState(() {
+      _pendingGuess = withoutLastWordUnit(_pendingGuess);
+      _message = null;
+    });
     _performHaptic(isKey: true);
     _focusInput();
   }
@@ -536,9 +539,13 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
     }
   }
 
-  Future<void> _persist(Future<void> write) async {
+  Future<void> _persist(
+    Future<void> write, {
+    bool checkAchievements = false,
+  }) async {
     try {
       await write;
+      if (mounted && checkAchievements) AchievementFeedback.check(context);
     } on Object {
       if (!mounted) return;
       showGameSnackBar(
@@ -561,7 +568,7 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
           identity: GameIdentity.bujho,
           compact: true,
           subtitle: GameLanguageHeader(
-            mode: _mode,
+            mode: _loading ? widget.initialMode : _mode,
             wordLength: game?.wordLength,
           ),
         ),
@@ -571,60 +578,22 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
             key: const ValueKey('game-menu'),
             tooltip: 'Game menu',
             onSelected: _handleMenuAction,
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: _GameMenuAction.newGame,
-                child: ListTile(
-                  leading: Icon(Icons.refresh),
-                  title: Text('New game'),
-                  subtitle: Text('Keep current settings'),
+            itemBuilder: (_) => gameMenuItems(
+              newGame: _GameMenuAction.newGame,
+              settings: _GameMenuAction.settings,
+              help: _GameMenuAction.help,
+              statistics: _GameMenuAction.statistics,
+              dictionary: _GameMenuAction.dictionary,
+              celebrations: _GameMenuAction.celebrations,
+              extra: [
+                gameMenuItem(
+                  _GameMenuAction.copyResult,
+                  'Copy result',
+                  Icons.copy,
+                  enabled: isComplete && game != null,
                 ),
-              ),
-              const PopupMenuDivider(),
-              const PopupMenuItem(
-                value: _GameMenuAction.settings,
-                child: ListTile(
-                  leading: Icon(Icons.tune),
-                  title: Text('Game settings'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _GameMenuAction.celebrations,
-                child: ListTile(
-                  leading: Icon(Icons.celebration_outlined),
-                  title: Text('Celebration settings'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _GameMenuAction.help,
-                child: ListTile(
-                  leading: Icon(Icons.help_outline),
-                  title: Text('How to play'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _GameMenuAction.statistics,
-                child: ListTile(
-                  leading: Icon(Icons.bar_chart),
-                  title: Text('Statistics'),
-                ),
-              ),
-              const PopupMenuItem(
-                value: _GameMenuAction.dictionary,
-                child: ListTile(
-                  leading: Icon(Icons.menu_book_outlined),
-                  title: Text('Dictionary'),
-                ),
-              ),
-              PopupMenuItem(
-                value: _GameMenuAction.copyResult,
-                enabled: isComplete && game != null,
-                child: const ListTile(
-                  leading: Icon(Icons.copy),
-                  title: Text('Copy result'),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -646,8 +615,6 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                       )
                     : LayoutBuilder(
                         builder: (context, constraints) {
-                          final tokens = Theme.of(context)
-                              .extension<GameThemeTokens>()!;
                           final compact = constraints.maxHeight < 650;
                           final extendedKeyboard =
                               _mode == LanguageMode.gurmukhi ||
@@ -680,6 +647,9 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                           wordLength: game.wordLength,
                                           maximumAttempts: game.maximumAttempts,
                                           reducedMotion: widget.reducedMotion,
+                                          pendingGuess: _pendingGuess,
+                                          playing: !isComplete,
+                                          onFocus: _focusInput,
                                         ),
                                       ),
                                     ),
@@ -699,50 +669,10 @@ class _GuessTheWordPageState extends State<GuessTheWordPage> {
                                       ),
                                       const SizedBox(height: 6),
                                     ],
-                                    if (!isComplete)
-                                      Semantics(
-                                        textField: true,
-                                        readOnly: true,
-                                        label: _mode == LanguageMode.gurmukhi
-                                            ? 'Gurmukhi guess'
-                                            : 'Your guess',
-                                        value: _controller.text,
-                                        child: GestureDetector(
-                                          key: const ValueKey('guess-display'),
-                                          onTap: _focusInput,
-                                          child: InputDecorator(
-                                            isFocused: _gameFocusNode.hasFocus,
-                                            decoration: InputDecoration(
-                                              labelText:
-                                                  _mode == LanguageMode.gurmukhi
-                                                  ? 'Gurmukhi guess'
-                                                  : 'Your guess',
-                                              border: OutlineInputBorder(
-                                                borderRadius: tokens.tileRadius,
-                                              ),
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 12,
-                                                    vertical: 8,
-                                                  ),
-                                            ),
-                                            child: Text(
-                                              _controller.text.isEmpty
-                                                  ? ' '
-                                                  : _controller.text,
-                                              key: const ValueKey(
-                                                'guess-value',
-                                              ),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
                                     if (!isComplete) ...[
                                       SizedBox(height: compact ? 4 : 8),
                                       GameKeyboard(
+                                        largeKeys: true,
                                         simpleRomanized: _simpleRomanized,
                                         mode: _mode,
                                         additionalCharacters: _pool!
@@ -878,16 +808,23 @@ class _Board extends StatelessWidget {
     required this.wordLength,
     required this.maximumAttempts,
     required this.reducedMotion,
+    required this.pendingGuess,
+    required this.playing,
+    required this.onFocus,
   });
 
   final List<GuessTurn> turns;
   final int wordLength;
   final int maximumAttempts;
   final bool reducedMotion;
+  final String pendingGuess;
+  final bool playing;
+  final VoidCallback onFocus;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
+      final pendingUnits = wordUnits(pendingGuess);
       final spacing = constraints.maxHeight < 240
           ? 3.0
           : wordLength == 6
@@ -909,23 +846,50 @@ class _Board extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: row < maximumAttempts - 1 ? spacing : 0,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var column = 0; column < wordLength; column++) ...[
-                    _Tile(
-                      key: ValueKey('tile-$row-$column'),
-                      size: size,
-                      row: row,
-                      column: column,
-                      reducedMotion: reducedMotion,
-                      letter: row < turns.length
-                          ? turns[row].evaluation[column]
-                          : null,
-                    ),
-                    if (column < wordLength - 1) SizedBox(width: spacing),
-                  ],
-                ],
+              child: Semantics(
+                container: playing && row == turns.length,
+                excludeSemantics: playing && row == turns.length,
+                button: playing && row == turns.length,
+                liveRegion: playing && row == turns.length,
+                label: playing && row == turns.length
+                    ? 'Current guess, attempt ${row + 1}, '
+                          '${pendingGuess.isEmpty ? 'blank' : pendingGuess}'
+                    : null,
+                child: GestureDetector(
+                  key: playing && row == turns.length
+                      ? const ValueKey('guess-active-row')
+                      : null,
+                  onTap: playing && row == turns.length ? onFocus : null,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var column = 0; column < wordLength; column++) ...[
+                        _Tile(
+                          key: ValueKey('tile-$row-$column'),
+                          size: size,
+                          row: row,
+                          column: column,
+                          reducedMotion: reducedMotion,
+                          letter: row < turns.length
+                              ? turns[row].evaluation[column]
+                              : null,
+                          draftLetter:
+                              playing &&
+                                  row == turns.length &&
+                                  column < pendingUnits.length
+                              ? pendingUnits[column]
+                              : null,
+                          active:
+                              playing &&
+                              row == turns.length &&
+                              column ==
+                                  math.min(pendingUnits.length, wordLength - 1),
+                        ),
+                        if (column < wordLength - 1) SizedBox(width: spacing),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ),
         ],
@@ -941,6 +905,8 @@ class _Tile extends StatelessWidget {
     required this.column,
     required this.reducedMotion,
     this.letter,
+    this.draftLetter,
+    this.active = false,
     super.key,
   });
 
@@ -949,6 +915,8 @@ class _Tile extends StatelessWidget {
   final int column;
   final bool reducedMotion;
   final EvaluatedLetter? letter;
+  final String? draftLetter;
+  final bool active;
 
   @override
   Widget build(BuildContext context) {
@@ -973,7 +941,8 @@ class _Tile extends StatelessWidget {
     };
     return Semantics(
       label: letter == null
-          ? 'Attempt ${row + 1}, letter ${column + 1}, blank'
+          ? 'Attempt ${row + 1}, letter ${column + 1}, '
+                '${draftLetter == null ? 'blank' : '$draftLetter, not submitted'}'
           : 'Attempt ${row + 1}, letter ${column + 1}, '
                 '${letter!.grapheme}, $status',
       excludeSemantics: true,
@@ -988,10 +957,22 @@ class _Tile extends StatelessWidget {
           alignment: Alignment.center,
           decoration: tokens.tileDecoration(
             color,
-            border: letter == null ? tokens.tileBorder : color,
+            border: active
+                ? Theme.of(context).colorScheme.primary
+                : letter == null
+                ? tokens.tileBorder
+                : color,
           ),
           child: statusIcon == null
-              ? const SizedBox.shrink()
+              ? draftLetter == null
+                    ? const SizedBox.shrink()
+                    : Center(
+                        child: Text(
+                          draftLetter!,
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                      )
               : Column(
                   children: [
                     Expanded(

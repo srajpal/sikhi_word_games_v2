@@ -3,15 +3,24 @@ import 'dart:convert';
 import '../../../core/persistence/key_value_store.dart';
 import '../../guess_the_word/domain/language_mode.dart';
 import '../domain/game_launch_options.dart';
+import '../../learn_letters/domain/learn_letters_game.dart';
 
 class GameLaunchPreferences {
-  const GameLaunchPreferences({required this.language, required this.wordSize});
+  const GameLaunchPreferences({
+    required this.language,
+    required this.wordSize,
+    this.letterPracticeMode = LetterPracticeMode.listening,
+  });
 
   final LanguageMode? language;
   final int? wordSize;
+  final LetterPracticeMode letterPracticeMode;
 
-  GameLaunchOptions get options =>
-      GameLaunchOptions(language: language, wordSize: wordSize);
+  GameLaunchOptions get options => GameLaunchOptions(
+    language: language,
+    wordSize: wordSize,
+    letterPracticeMode: letterPracticeMode,
+  );
 }
 
 class GameLaunchPreferencesRepository {
@@ -55,6 +64,10 @@ class GameLaunchPreferencesRepository {
       return GameLaunchPreferences(
         language: language,
         wordSize: rawWordSize as int?,
+        letterPracticeMode: LetterPracticeMode.values.firstWhere(
+          (mode) => mode.name == values['letterPracticeMode'],
+          orElse: () => LetterPracticeMode.listening,
+        ),
       );
     } on Object catch (_) {
       return defaultPreferences;
@@ -78,6 +91,7 @@ class GameLaunchPreferencesRepository {
         preferences[kind.name] = {
           'language': options.language?.name,
           'wordSize': options.wordSize,
+          'letterPracticeMode': options.letterPracticeMode.name,
         };
         await _store.setString(storageKey, jsonEncode(preferences));
       });

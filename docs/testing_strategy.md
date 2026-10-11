@@ -2,11 +2,45 @@
 
 ## Coverage and limits
 
+Feedback regressions verify the exact developer mail recipient, percent-encoded
+draft prompts, successful email-app launch, missing/throwing mail handlers, plain
+address copying, and a selectable fallback when the clipboard is unavailable.
+These checks do not send email or establish a user's installed mail-app setup.
+
+`game_loading_test.dart` verifies that every vocabulary-game destination submits
+its loading header and indicator before consulting warm content, with no ancestor
+route fade hiding the acknowledgement. Unicode regressions include attached
+marks, Gurmukhi links, emoji families and CRLF graphemes.
+`integration_test/game_launch_performance_test.dart` measures actual bundled
+dictionary preparation and all six launches on an Android device, using fresh
+decoded identities for the route samples and exclusively in-memory saves.
+It reports timings instead of imposing a device-dependent CI threshold. Compare
+debug measurements with debug; use profile builds for realistic rendering costs.
+Test-driver pump/settle timings include harness work and animation settling,
+so they are evidence rather than guaranteed touch-to-display latency.
+
+Bujho direct-grid input regressions cover on-screen and hardware typing, the
+tile cap, unchanged rejected guesses, complete-unit deletion, accepted row
+advancement, neutral draft tiles, active-row semantics and completion. Existing
+Romanized combining-mark and Gurmukhi conjunct cases now assert the actual grid
+contents. English fit checks include 320x568, 390x844 and tablet landscape;
+Punjabi keyboards remain reachable at 200% text. Visual baselines cover draft
+rows in all themes, with separate English/Gurmukhi phone captures.
+
+October 10 quality-of-life regressions cover equal phone/tablet card heights with a
+Continue save at 1x/1.5x/2x text, both Learn Letters launch types and continuation,
+selected-language loading frames in all five vocabulary games, shared menu order
+and icons in all six games, visible wide Quest alphabet/lantern, badge queue and
+no-replay behavior, and Scramble dragging/swapping/recall of whole Gurmukhi units.
+Domain tests retain legacy locked hints and tile permutation/persistence invariants.
+Navigation timing checks verify the configured transition; actual device latency
+and pronunciation quality remain separate manual checks.
+
 - Pure Dart unit tests cover game rules, content transformations, pool selection,
   source written units, scoring, and persistence serialization.
 - Flutter widget tests cover launch preferences, navigation, input, completed
   games, semantics, and selected responsive sizes.
-- Forty-two Windows golden image tests cover Modern, Sikhi, and Dark. They run
+- Fifty Windows golden image tests cover Modern, Sikhi, and Dark. They run
   separately from Linux unit/widget checks to keep rendering baselines consistent.
 - The integration fixture covers preferences and interrupted Bujho restoration
   with an in-memory store. It does not establish browser restart persistence.
@@ -236,8 +270,12 @@ schema. Two 360-pixel golden fixtures cover English and Gurmukhi phone layouts.
 Studio branding checks verify that the website action uses the supplied HTTPS
 address and offers a selectable fallback when browser launch is unavailable.
 Library golden references include the byline and studio link in all three themes.
-Android launcher artwork is regenerated from the existing SWG vector source;
-Android packaging is separate from physical-device or store-listing validation.
+Launcher artwork is regenerated from the approved S + ਗ font-derived vector
+source for Android, iOS and web. Verify the export dimensions, opaque iOS icons,
+maskable safe area, and SikhiGames display labels separately from widget tests.
+Library golden references cover the shared wordmark in all three themes on
+phones and tablets. Packaging is separate from physical-device launcher or
+store-listing validation.
 
 Reset coverage includes cancel preservation, exact owned-key deletion, defaults and first-launch guide restoration, pending-write ordering across repository instances, storage failure recovery, and retry. Real user-device data must not be cleared merely to exercise this feature.
 

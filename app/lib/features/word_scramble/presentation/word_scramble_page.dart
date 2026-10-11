@@ -1,3 +1,7 @@
+import '../../../core/widgets/game_loading.dart';
+import '../../achievements/presentation/achievement_feedback.dart';
+import '../../../core/widgets/game_menu.dart';
+
 import 'dart:math';
 
 import '../../../core/language/player_text.dart';
@@ -54,6 +58,8 @@ class _WordScramblePageState extends State<WordScramblePage> {
 
   Future<void> _load() async {
     try {
+      await showGameLoadingFrame();
+      if (!mounted) return;
       final words = WordScrambleVocabulary(
         await widget.vocabularyRepository.load(),
       );
@@ -152,6 +158,7 @@ class _WordScramblePageState extends State<WordScramblePage> {
   Future<void> _save({bool resetHistory = false}) async {
     if (!mounted || _game == null) return;
     final game = _game!, mode = _mode, simple = _simple;
+    final completed = game.isComplete;
     setState(() => _pending++);
     try {
       await widget.repository.save(
@@ -160,7 +167,10 @@ class _WordScramblePageState extends State<WordScramblePage> {
         simpleRomanized: simple,
         resetHistory: resetHistory,
       );
-      if (mounted) setState(() => _saveError = null);
+      if (mounted) {
+        setState(() => _saveError = null);
+        if (completed) AchievementFeedback.check(context);
+      }
     } on Object {
       if (mounted) {
         setState(
@@ -187,6 +197,59 @@ class _WordScramblePageState extends State<WordScramblePage> {
     setState(() => _message = 'Try another arrangement.');
     _save();
   }
+
+  void _move(int id, int slot) {
+    if (!_game!.moveTo(id, slot)) return;
+    InteractionSounds.letter(context);
+    setState(
+      () => _message = _game!.canCheck
+          ? 'Ready? Check your word.'
+          : 'Keep going!',
+    );
+    _save();
+  }
+
+  void _recall() {
+    if (!_game!.recall()) return;
+    setState(() => _message = 'Tiles returned. Try a fresh arrangement.');
+    _save();
+  }
+
+  Widget _draggable(int id, Widget tile) => Draggable<(String, int)>(
+    data: (_game!.roundId, id),
+    maxSimultaneousDrags:
+        _game!.isComplete ||
+            _game!.locked.any((slot) => _game!.slots[slot] == id)
+        ? 0
+        : 1,
+    feedback: Material(
+      type: MaterialType.transparency,
+      child: IgnorePointer(child: tile),
+    ),
+    childWhenDragging: Opacity(opacity: .3, child: tile),
+    child: tile,
+  );
+
+  Widget _dropSpace(int slot, Widget tile) => DragTarget<(String, int)>(
+    onWillAcceptWithDetails: (details) =>
+        details.data.$1 == _game!.roundId &&
+        _game!.canMoveTo(details.data.$2, slot),
+    onAcceptWithDetails: (details) {
+      if (details.data.$1 == _game!.roundId) _move(details.data.$2, slot);
+    },
+    builder: (context, candidates, rejected) => DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: candidates.isEmpty
+            ? null
+            : Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 3,
+              ),
+      ),
+      child: tile,
+    ),
+  );
 
   void _shuffle() {
     if (!_game!.shuffle(_random)) return;
@@ -401,29 +464,41 @@ class _WordScramblePageState extends State<WordScramblePage> {
           runSpacing: 12,
           children: [
             for (var i = 0; i < game.units.length; i++)
-              PaperLetterTile(
-                key: ValueKey('scramble-slot-$i'),
-                size: tileSize,
-                height: tileHeight,
-                text: game.slots[i] == null ? null : game.units[game.slots[i]!],
-                romanization: game.slots[i] == null
-                    ? null
-                    : romanizations[game.slots[i]!],
-                correct: game.isComplete,
-                locked: game.locked.contains(i),
-                label: game.slots[i] == null
-                    ? 'Empty space ${i + 1}'
-                    : '${game.units[game.slots[i]!]} in space ${i + 1}${game.locked.contains(i)
-                          ? ', hint tile'
-                          : game.isComplete
-                          ? ', correct'
-                          : ', tap to return'}',
-                onPressed:
-                    game.isComplete ||
-                        game.locked.contains(i) ||
-                        game.slots[i] == null
-                    ? null
-                    : () => _remove(i),
+              Builder(
+                builder: (context) {
+                  final tile = PaperLetterTile(
+                    key: ValueKey('scramble-slot-$i'),
+                    size: tileSize,
+                    height: tileHeight,
+                    text: game.slots[i] == null
+                        ? null
+                        : game.units[game.slots[i]!],
+                    romanization: game.slots[i] == null
+                        ? null
+                        : romanizations[game.slots[i]!],
+                    correct: game.isComplete,
+                    locked: game.locked.contains(i),
+                    label: game.slots[i] == null
+                        ? 'Empty space ${i + 1}'
+                        : '${game.units[game.slots[i]!]} in space ${i + 1}${game.locked.contains(i)
+                              ? ', hint tile'
+                              : game.isComplete
+                              ? ', correct'
+                              : ', tap to return'}',
+                    onPressed:
+                        game.isComplete ||
+                            game.locked.contains(i) ||
+                            game.slots[i] == null
+                        ? null
+                        : () => _remove(i),
+                  );
+                  return _dropSpace(
+                    i,
+                    game.slots[i] == null
+                        ? tile
+                        : _draggable(game.slots[i]!, tile),
+                  );
+                },
               ),
           ],
         ),
@@ -431,46 +506,65 @@ class _WordScramblePageState extends State<WordScramblePage> {
         Text(
           game.isComplete
               ? 'All the pieces found their place.'
-              : 'Tap tiles to place or return them.',
+              : 'Tap or drag tiles to place or return them.',
           textAlign: TextAlign.center,
           style: theme.textTheme.bodySmall,
         ),
         const SizedBox(height: 16),
         if (!game.isComplete) ...[
-          GamePanel(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-            child: LayoutBuilder(
-              builder: (context, box) {
-                final perRow = ((box.maxWidth + 10) / (tileSize + 10))
-                    .floor()
-                    .clamp(1, game.units.length);
-                final rows = (game.units.length / perRow).ceil();
-                return ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: rows * tileHeight + (rows - 1) * 12,
-                  ),
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 10,
-                    runSpacing: 12,
-                    children: [
-                      for (final id in game.tray)
-                        Transform.rotate(
-                          angle: id.isEven ? -.035 : .035,
-                          child: PaperLetterTile(
-                            key: ValueKey('scramble-tile-$id'),
-                            text: game.units[id],
-                            romanization: romanizations[id],
-                            size: tileSize,
-                            height: tileHeight,
-                            label: 'Place ${game.units[id]} tile ${id + 1}',
-                            onPressed: () => _place(id),
+          DragTarget<(String, int)>(
+            onWillAcceptWithDetails: (details) =>
+                details.data.$1 == game.roundId &&
+                game.slots.contains(details.data.$2) &&
+                !game.locked.contains(game.slots.indexOf(details.data.$2)),
+            onAcceptWithDetails: (details) {
+              if (details.data.$1 != game.roundId || game.isComplete) return;
+              InteractionSounds.letter(context);
+              _remove(game.slots.indexOf(details.data.$2));
+            },
+            builder: (context, candidates, rejected) => GamePanel(
+              color: candidates.isEmpty
+                  ? null
+                  : theme.colorScheme.primaryContainer,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              child: LayoutBuilder(
+                builder: (context, box) {
+                  final perRow = ((box.maxWidth + 10) / (tileSize + 10))
+                      .floor()
+                      .clamp(1, game.units.length);
+                  final rows = (game.units.length / perRow).ceil();
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: rows * tileHeight + (rows - 1) * 12,
+                    ),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 10,
+                      runSpacing: 12,
+                      children: [
+                        if (game.tray.isEmpty)
+                          const Text('Drop tiles here to return them'),
+                        for (final id in game.tray)
+                          Transform.rotate(
+                            angle: id.isEven ? -.035 : .035,
+                            child: _draggable(
+                              id,
+                              PaperLetterTile(
+                                key: ValueKey('scramble-tile-$id'),
+                                text: game.units[id],
+                                romanization: romanizations[id],
+                                size: tileSize,
+                                height: tileHeight,
+                                label: 'Place ${game.units[id]} tile ${id + 1}',
+                                onPressed: () => _place(id),
+                              ),
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
-                );
-              },
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -485,6 +579,14 @@ class _WordScramblePageState extends State<WordScramblePage> {
                 compact: true,
                 prominent: false,
                 onPressed: game.canShuffle ? _shuffle : null,
+              ),
+              GameGradientButton(
+                key: const ValueKey('scramble-recall'),
+                label: 'Recall tiles',
+                icon: const Icon(Icons.undo_rounded, size: 18),
+                compact: true,
+                prominent: false,
+                onPressed: game.canRecall ? _recall : null,
               ),
               GameGradientButton(
                 key: const ValueKey('scramble-hint'),
@@ -547,7 +649,7 @@ class _WordScramblePageState extends State<WordScramblePage> {
         context,
         identity: GameIdentity.scramble,
         subtitleText: GameLanguageHeader(
-          mode: _mode,
+          mode: _game == null ? widget.initialMode : _mode,
           wordLength: _game?.units.length,
         ).label,
       ),
@@ -555,7 +657,7 @@ class _WordScramblePageState extends State<WordScramblePage> {
         identity: GameIdentity.scramble,
         compact: true,
         subtitle: GameLanguageHeader(
-          mode: _mode,
+          mode: _game == null ? widget.initialMode : _mode,
           wordLength: _game?.units.length,
         ),
       ),
@@ -581,17 +683,14 @@ class _WordScramblePageState extends State<WordScramblePage> {
                 VictoryCelebration.showSettings(context);
             }
           },
-          itemBuilder: (_) => const [
-            PopupMenuItem(value: 'new', child: Text('New word')),
-            PopupMenuItem(value: 'settings', child: Text('Game settings')),
-            PopupMenuItem(value: 'help', child: Text('How to play')),
-            PopupMenuItem(value: 'statistics', child: Text('Statistics')),
-            PopupMenuItem(value: 'dictionary', child: Text('Dictionary')),
-            PopupMenuItem(
-              value: 'celebrations',
-              child: Text('Celebration settings'),
-            ),
-          ],
+          itemBuilder: (_) => gameMenuItems(
+            newGame: 'new',
+            settings: 'settings',
+            help: 'help',
+            statistics: 'statistics',
+            dictionary: 'dictionary',
+            celebrations: 'celebrations',
+          ),
         ),
       ],
     ),

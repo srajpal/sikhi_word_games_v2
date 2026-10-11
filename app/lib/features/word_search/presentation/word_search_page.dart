@@ -1,3 +1,6 @@
+import '../../../core/widgets/game_loading.dart';
+import '../../achievements/presentation/achievement_feedback.dart';
+import '../../../core/widgets/game_menu.dart';
 import '../../../core/content/romanized_vocabulary_views.dart';
 import '../../../core/content/answer_eligibility.dart';
 import '../../../core/themes/game_heading.dart';
@@ -89,6 +92,8 @@ class _WordSearchPageState extends State<WordSearchPage> {
 
   Future<void> _load() async {
     try {
+      await showGameLoadingFrame();
+      if (!mounted) return;
       _views = RomanizedVocabularyViews(
         await widget.vocabularyRepository.load(),
       );
@@ -367,6 +372,7 @@ class _WordSearchPageState extends State<WordSearchPage> {
             wordsFound: puzzle.words.length,
           ),
         ),
+        checkAchievements: true,
       );
     } else {
       _persist(
@@ -465,9 +471,13 @@ class _WordSearchPageState extends State<WordSearchPage> {
 
   void _showHelp() => showGameHelp(context, GameKind.wordSearch);
 
-  Future<void> _persist(Future<void> write) async {
+  Future<void> _persist(
+    Future<void> write, {
+    bool checkAchievements = false,
+  }) async {
     try {
       await write;
+      if (mounted && checkAchievements) AchievementFeedback.check(context);
     } on Object {
       if (!mounted) return;
       showGameSnackBar(
@@ -495,7 +505,9 @@ class _WordSearchPageState extends State<WordSearchPage> {
         title: GameHeading(
           identity: GameIdentity.khoj,
           compact: true,
-          subtitle: GameLanguageHeader(mode: _mode),
+          subtitle: GameLanguageHeader(
+            mode: _puzzle == null ? widget.initialMode : _mode,
+          ),
         ),
         actions: [
           PopupMenuButton<_WordSearchAction>(
@@ -525,50 +537,14 @@ class _WordSearchPageState extends State<WordSearchPage> {
                   context.push('/dictionary');
               }
             },
-            itemBuilder: (context) => const [
-              PopupMenuItem(
-                value: _WordSearchAction.newPuzzle,
-                child: ListTile(
-                  leading: Icon(Icons.refresh),
-                  title: Text('New puzzle'),
-                ),
-              ),
-              PopupMenuItem(
-                value: _WordSearchAction.language,
-                child: ListTile(
-                  leading: Icon(Icons.language),
-                  title: Text('Language'),
-                ),
-              ),
-              PopupMenuItem(
-                value: _WordSearchAction.statistics,
-                child: ListTile(
-                  leading: Icon(Icons.bar_chart),
-                  title: Text('Statistics'),
-                ),
-              ),
-              PopupMenuItem(
-                value: _WordSearchAction.celebrations,
-                child: ListTile(
-                  leading: Icon(Icons.celebration_outlined),
-                  title: Text('Celebration settings'),
-                ),
-              ),
-              PopupMenuItem(
-                value: _WordSearchAction.help,
-                child: ListTile(
-                  leading: Icon(Icons.help_outline),
-                  title: Text('How to play'),
-                ),
-              ),
-              PopupMenuItem(
-                value: _WordSearchAction.dictionary,
-                child: ListTile(
-                  leading: Icon(Icons.menu_book_outlined),
-                  title: Text('Dictionary'),
-                ),
-              ),
-            ],
+            itemBuilder: (_) => gameMenuItems(
+              newGame: _WordSearchAction.newPuzzle,
+              settings: _WordSearchAction.language,
+              help: _WordSearchAction.help,
+              statistics: _WordSearchAction.statistics,
+              dictionary: _WordSearchAction.dictionary,
+              celebrations: _WordSearchAction.celebrations,
+            ),
           ),
         ],
       ),
