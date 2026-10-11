@@ -6,6 +6,34 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
+## October 10 itch.io refresh: draft 1.18.4+36
+
+- [x] Upload the validated current ZIP to existing itch.io project 5023423 and
+  make it browser-playable. Retain build 17 hidden/non-playable for rollback.
+- [x] Replace the cover and capture/upload seven real screenshots: library and
+  all six games, including Gurmukhi and Simple Romanized Punjabi.
+- [x] Update the tagline, game descriptions, build number, Dictionary count,
+  credits, controls, badges, developer email and truthful audio/offline limits.
+- [x] Enable the visible screenshot sidebar and cream/teal page colors.
+- [x] Smoke-test all six games and Dictionary in the actual Chromium iframe,
+  including fullscreen, Bujho keyboard input/reload restoration, Quest default
+  alphabet/correct input, Jodo matching, Scramble placement/recall, old letter
+  practice restoration/audio controls and Gurmukhi fonts/query results.
+
+Draft visibility and Mobile Friendly-off are preserved. The current archive is
+21,697,904 bytes, SHA-256
+`805a672b972b5f3bc6ffd29223d1d80ba29b2ec0c0555e9adf28414f8ca0f58b`.
+It contains 106 files, including the three unchanged approved masters and
+attribution/licenses; 96 files are in the offline-cache manifest. The same
+application source/package had already passed 490 tests including 52 goldens,
+formatting, analysis and the release packager. This refresh changes distribution
+artwork/page copy and release documentation, not application source.
+`reports/release/browser_qa.json` separates current hosted evidence from older
+local/offline evidence. Actual host offline restart, physical mobile browsers,
+Firefox/Safari, screen readers, audible output and fluent pronunciation approval
+remain open. itch.io's desktop orientation-lock request emitted NotSupportedError;
+fullscreen and gameplay remained usable. No fresh hosted offline claim is made.
+
 ## October 10 developer-email feedback: candidate 1.18.4+36
 
 - [x] Replace the player-facing GitHub feedback URL with
@@ -495,27 +523,21 @@ release. They are retired follow-ups, not unfinished approval gates for build 25
 
 ## Current state
 
-- GitHub issue-review baseline: PR #1 merged into `main` at
-  `8056a0525ba9ffe0224bee6cffb1989002c87d93`.
-  GitHub issues #3, #4, #5, #6 and #8 are closed as completed; no PR remains open
-  from that review. The focused save/restore and keyboard fixes are in
-  `eab3f11bc1adc83a0959d962bf1b94bff6104d5f`.
-- Current Android testing version: 1.15.1+28, Paper & Play. The September 18 ZIP and uploaded
-  itch.io draft remain 1.9.0+17 and
-  predate the subsequent audit fixes and October vocabulary recheck. They are
-  historical artifacts, not packages of current source. Increment both version
-  sources and the build number when producing the next distributed package.
-- The itch.io project is still a draft: project 5023423,
-  <https://khalsagamestudio.itch.io/sikhi-word-games>. No public release is recorded.
-- Pixel 6 last verified installation: 1.9.0+16 on September 13, preserving data.
-  The old request to install build 8 is superseded by verified installs of newer
-  builds; current-source device validation remains open below.
-- Latest completed baseline before dictionary v2: 343 Flutter tests and
-  successful analysis, web and Android builds (PR #12). Current dictionary v2
-  validation is recorded in the milestone above.
-- All five games, shared content/settings/statistics, offline save handling,
-  Modern/Sikhi/Dark themes, responsive shells and Unicode-safe matching exist.
-  Reusing these foundations is completed work, not an outstanding new module.
+- Current application/source candidate and itch.io draft: **1.18.4+36**.
+  PR #23 (`codex/mobile-qol-updates`) remains open and unmerged for owner review.
+- itch.io project 5023423 remains Draft:
+  <https://khalsagamestudio.itch.io/sikhi-word-games>. Current build 36, cover,
+  seven screenshots and six-game page copy replaced the September build 17
+  presentation. The older ZIP is retained hidden for rollback.
+- K70 PRO tablet last verified installation: **1.18.3+35**; Pixel 6:
+  **1.18.2+34**. Build 36 has not been installed on either device.
+- Current automated application validation: 490 tests including 52 Windows
+  goldens, clean format/analyze, release web packaging and arm64 profile/AOT APK.
+- All six games, shared themes/content/settings/statistics, offline save handling,
+  responsive shells, achievements and Unicode-safe matching exist. Current
+  vocabulary is the October 9 owner-approved 20,601-entry release snapshot.
+- Earlier issue reviews and milestones below remain historical evidence. They
+  do not establish newer physical/browser/accessibility or pronunciation QA.
 
 ## October 8 Paper & Play reference correction: 1.10.1+20
 
@@ -621,28 +643,26 @@ human review evidence.
 
 ## Next itch.io playtest gates
 
-- [x] Build a new candidate from validated current source with a new build number
-  using `app/tool/build_itch_io.ps1`. Inspect the actual ZIP, relative paths,
-  two release banks, attribution, fonts, all 35 offline letter clips and two
-  click sounds. Record the build 23 ZIP/APK in `reports/release/package_audit.json`.
-- [ ] Upload the validated new draft candidate to itch.io; the existing uploaded
-  build 17 remains historical.
-- [ ] Test all five games in the final uploaded iframe on Chromium, Firefox and
-  Safari, plus Android/iOS mobile browsers. Cover first launch, focus, keyboard,
-  touch/drag, fullscreen, clipboard/feedback, narrow layouts and Gurmukhi fonts.
-- [ ] Verify real storage and offline reload/restart on that uploaded candidate:
-  interrupted and completed rounds, Continue, reset, update/reopen, cache
-  completion and restrictive browser/iframe storage behavior. Localhost and
-  widget tests are separate evidence.
-- [ ] Verify audible output/volume, victory sound, opt-outs and physical haptics.
-  Obtain owner/fluent-speaker review of all 35 letter names and generated
-  pronunciations before treating them as approved teaching content.
-- [ ] Complete representative TalkBack/VoiceOver and keyboard-only play across
-  games, walkthroughs and dialogs. Include 200% text, Gurmukhi focus/activation,
-  Jodo selection, restore, completion accounting and repeat-play variety.
-- [ ] Refresh screenshots from the final candidate; verify studio website
-  availability, support details, page copy and disclosure accuracy. Public
-  visibility requires the owner's approval after the release gates are met.
+- [x] Package validated 1.18.4+36 with the approved three masters, relative root
+  index, local renderer, attribution/licenses, fonts and offline sounds.
+  Inspect actual archive bytes and record `reports/release/package_audit.json`.
+- [x] Upload build 36 to the existing draft and preserve build 17 for rollback.
+- [x] Refresh cover, seven gameplay screenshots, page copy, support email,
+  vocabulary/font credits and AI disclosure. Keep visibility Draft.
+- [x] Smoke-test all six games and Dictionary in the actual uploaded Chromium
+  iframe, including fullscreen and one real saved-round reload/restore flow.
+- [ ] Complete the full uploaded-iframe matrix on Firefox/Safari and physical
+  Android/iOS browsers: touch/drag, keyboard/focus, narrow layouts and clipboard.
+- [ ] Verify hosted storage and offline reload/restart more broadly: completed
+  rounds, reset, update/reopen, cache completion and restrictive iframe storage.
+  One online Bujho restore is verified; localhost/widget checks are separate.
+- [ ] Verify speaker output/volume, opt-outs, victory sound and physical haptics.
+  Obtain fluent-speaker/owner approval of generated letter-name pronunciations
+  before treating them as approved teaching audio.
+- [ ] Complete representative TalkBack/VoiceOver and keyboard-only play, 200%
+  text, Gurmukhi focus/activation, restore and completion accounting.
+- [ ] Verify studio website availability before public promotion. Public
+  visibility still needs an explicit owner publication request/release decision.
 
 Historical hosted evidence: September build 17 launched all five library cards.
 Fullscreen Learn Letters accepted Chhachha, entered the Stop audio UI state and

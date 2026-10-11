@@ -18,8 +18,9 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.18.4` (build `36`). The uploaded web draft remains
-`1.9.0+17`; native test installs do not update it. The version follows
+The current testing build is `1.18.4` (build `36`). The itch.io draft was updated
+to the same `1.18.4+36` package on October 10, 2026. Native test installs and
+web uploads are tracked separately in `TODO.md`. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
 release, and the major version for breaking product or data changes. Increment
@@ -80,15 +81,17 @@ validation. Web builds do not require these credentials.
 
 ## itch.io release workflow
 
-The existing itch.io **draft** uses 1.9.0+17, uploaded September 18. It predates
-the later audit fixes and October vocabulary recheck. A commit or successful CI
-run does not publish or replace that uploaded game. For the next distributed
-candidate, change both version sources together, increment the build number and
-rebuild from validated current source. Do not reset the version history because
-itch.io is a new host.
+The existing itch.io **draft** uses 1.18.4+36, uploaded October 10, 2026,
+with seven current gameplay screenshots, the S + ਗ cover and six-game copy.
+The older 1.9.0+17 ZIP remains hidden for rollback. The actual uploaded Chromium
+iframe was smoke-tested; detailed browser evidence and open checks are in
+`reports/release/browser_qa.json` and `TODO.md`. Public visibility is unchanged.
+For a new application build, change both version sources together and increment
+the build number. Updating page artwork/copy does not require recompiling the app.
 
-1. Resolve the release blockers in [TODO.md](TODO.md), including definition
-   suitability and content provenance. Passing tests alone is insufficient.
+1. Review the current release checks in [TODO.md](TODO.md). Vocabulary is the
+   owner-approved snapshot; automated integrity checks do not reopen editorial
+   approval. Audio teaching approval and device/accessibility QA remain separate.
 2. Run the validation gates, then run `./tool/build_itch_io.ps1` from `app/`.
    This checks the compact release vocabulary before compiling; authoring imports
    and editorial queues are not distributed.
@@ -137,7 +140,7 @@ Test the actual host before advertising offline reload there.
   baselines and a browser integration target supplement unit/widget tests.
 
 The historical `app/dist/sikhi-word-games-web-1.9.0+17.zip` is not a package of
-current source. Use the newly validated, versioned ZIP for the next draft upload.
+current source. The current draft uses `app/dist/sikhi-word-games-web-1.18.4+36.zip`.
 The directory is ignored by Git. Artwork sources
 live in `branding/`; cover and real gameplay screenshots live in `reports/release/`.
 The launcher display name is **SikhiGames** on Android, iOS and installed web
