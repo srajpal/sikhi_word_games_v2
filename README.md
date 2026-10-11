@@ -18,8 +18,8 @@ An offline collection of English, romanized Punjabi, and Gurmukhi word games fro
 
 ## App versioning
 
-The current testing build is `1.18.4` (build `36`). The itch.io draft was updated
-to the same `1.18.4+36` package on October 10, 2026. Native test installs and
+The current testing build is `1.18.4` (build `36`). The itch.io page was updated
+to the same `1.18.4+36` package and published on October 10, 2026. Native test installs and
 web uploads are tracked separately in `TODO.md`. The version follows
 `major.minor.patch+build` format: increment the minor version for a compatible
 user-facing feature release, the patch version for a compatible fix-only
@@ -81,11 +81,12 @@ validation. Web builds do not require these credentials.
 
 ## itch.io release workflow
 
-The existing itch.io **draft** uses 1.18.4+36, uploaded October 10, 2026,
+The public itch.io playtest uses 1.18.4+36, uploaded and published October 10, 2026,
 with seven current gameplay screenshots, the S + ਗ cover and six-game copy.
 The older 1.9.0+17 ZIP remains hidden for rollback. The actual uploaded Chromium
 iframe was smoke-tested; detailed browser evidence and open checks are in
-`reports/release/browser_qa.json` and `TODO.md`. Public visibility is unchanged.
+`reports/release/browser_qa.json` and `TODO.md`. The owner authorized publication;
+the page is Public and the release status remains In development.
 For a new application build, change both version sources together and increment
 the build number. Updating page artwork/copy does not require recompiling the app.
 
@@ -140,7 +141,7 @@ Test the actual host before advertising offline reload there.
   baselines and a browser integration target supplement unit/widget tests.
 
 The historical `app/dist/sikhi-word-games-web-1.9.0+17.zip` is not a package of
-current source. The current draft uses `app/dist/sikhi-word-games-web-1.18.4+36.zip`.
+current source. The public playtest uses `app/dist/sikhi-word-games-web-1.18.4+36.zip`.
 The directory is ignored by Git. Artwork sources
 live in `branding/`; cover and real gameplay screenshots live in `reports/release/`.
 The launcher display name is **SikhiGames** on Android, iOS and installed web

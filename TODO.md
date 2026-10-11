@@ -6,7 +6,12 @@ package. Keep one task per outcome; update counts from fresh reports instead of
 copying old audits. The current dictionaries are an explicitly owner-approved
 source snapshot; integrity checks do not reopen editorial approval.
 
-## October 10 itch.io refresh: draft 1.18.4+36
+## October 10 itch.io publication: public playtest 1.18.4+36
+
+- [x] Publish the updated itch.io page after the owner's explicit request.
+  Verified PUBLISHED on the reloaded page; build 36, six-game copy and seven
+  screenshot links remain present. Free access and In development are preserved.
+  Earlier draft-refresh checks below describe the pre-publication validation.
 
 - [x] Upload the validated current ZIP to existing itch.io project 5023423 and
   make it browser-playable. Retain build 17 hidden/non-playable for rollback.
@@ -523,9 +528,9 @@ release. They are retired follow-ups, not unfinished approval gates for build 25
 
 ## Current state
 
-- Current application/source candidate and itch.io draft: **1.18.4+36**.
+- Current application/source candidate and public itch.io playtest: **1.18.4+36**.
   PR #23 (`codex/mobile-qol-updates`) remains open and unmerged for owner review.
-- itch.io project 5023423 remains Draft:
+- itch.io project 5023423 is Public, published October 10 at the owner's request:
   <https://khalsagamestudio.itch.io/sikhi-word-games>. Current build 36, cover,
   seven screenshots and six-game page copy replaced the September build 17
   presentation. The older ZIP is retained hidden for rollback.
@@ -661,8 +666,9 @@ human review evidence.
   before treating them as approved teaching audio.
 - [ ] Complete representative TalkBack/VoiceOver and keyboard-only play, 200%
   text, Gurmukhi focus/activation, restore and completion accounting.
-- [ ] Verify studio website availability before public promotion. Public
-  visibility still needs an explicit owner publication request/release decision.
+- [x] Publish the existing page after the owner's explicit publication request.
+  Verify the reloaded page shows PUBLISHED and retains current release assets.
+- [ ] Verify studio website availability before broader promotion.
 
 Historical hosted evidence: September build 17 launched all five library cards.
 Fullscreen Learn Letters accepted Chhachha, entered the Stop audio UI state and

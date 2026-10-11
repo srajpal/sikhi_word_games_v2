@@ -63,13 +63,14 @@ Vocabulary sources include Princeton WordNet 3.0 and Wiktionary. The game includ
 
 Created by **Khalsa Game Studio**. Thank you for helping us test.
 
-## Current itch.io draft
+## Current itch.io public playtest
 
 Updated October 10, 2026 in project **5023423**:
 [editor](https://itch.io/game/edit/5023423) and
-[owner preview](https://khalsagamestudio.itch.io/sikhi-word-games).
+[public page](https://khalsagamestudio.itch.io/sikhi-word-games).
 The existing Seva Jump project is unchanged. This is an HTML, In development,
-free-access project with **Draft** visibility.
+free-access project with **Public** visibility, published October 10, 2026
+after the owner's explicit request. The reloaded page shows PUBLISHED.
 
 The playable ZIP is `dist/sikhi-word-games-web-1.18.4+36.zip`.
 The previous 1.9.0+17 ZIP remains uploaded, hidden and non-playable for rollback.

@@ -5,7 +5,15 @@
   "browser": "Codex in-app Chromium",
   "archive_sha256": "805a672b972b5f3bc6ffd29223d1d80ba29b2ec0c0555e9adf28414f8ca0f58b",
   "itch_project_id": 5023423,
-  "visibility": "Draft",
+  "visibility": "Public",
+  "smoke_test_visibility": "Draft",
+  "publication": {
+    "authorized_by": "Owner explicit publication request",
+    "published_at_utc": "2026-10-11 00:40 UTC (page timestamp)",
+    "screenshot": "itch-published-current.jpg",
+    "verification": "Reloaded owner page shows PUBLISHED, build 36 copy and seven screenshot links",
+    "anonymous_fetch": "Not verified: web lookup tool could not access the page"
+  },
   "uploaded_iframe": "https://html-classic.itch.zone/html/19683741/index.html",
   "embed": [
     960,
